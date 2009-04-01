@@ -1,0 +1,49 @@
+/*
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License version 2 as published by the Free Software Foundation.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.
+*/
+
+#ifndef MANAGER_HPP
+#define MANAGER_HPP
+
+// #include <SFML/Graphics.hpp>
+
+#include "theme.hpp"
+#include "window.hpp"
+#include "../parser.hpp"
+
+namespace gui
+{
+
+class CManager
+{
+  public:
+    CManager();
+
+    bool draw( void* game_ );
+    bool proofMouseClick ( const sf::Event::EventType type_, const sf::Mouse::Button button_, const unsigned int x_, const unsigned int y_ );
+
+
+    gui::CWindow* newWindow( sf::Vector2f position_ = sf::Vector2f( 0.f, 0.f ), sf::Vector2f size_ = sf::Vector2f( 0.f, 0.f ) );
+
+  private:
+    gui::CTheme theme;
+
+    std::vector<gui::CWindow*> windowList;
+
+};
+
+} // namespace gui
+
+#endif // MANAGER_HPP

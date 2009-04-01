@@ -1,0 +1,102 @@
+/*
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License version 2 as published by the Free Software Foundation.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.
+*/
+
+#include "theme.hpp"
+#include "../settings.hpp"
+
+namespace gui
+{
+
+
+CTheme::CTheme()
+{
+  winMinSize = sf::Vector2f( 10.f, 10.f );
+  winMaxSize = sf::Vector2f( 5000.f, 5000.f );
+
+  winBackground.SetScale ( 1.f, 1.f );
+  winBackgroundColor = winBorderColor = sf::Color( 100, 100, 100 );
+  winTitlebarColor = sf::Color( 0, 0, 100 );
+
+  winBorder = 1;
+  winTitlebar = 10;
+
+}
+
+
+void CTheme::open( std::string filename )
+{
+  themeFile.open( filename );
+
+  std::stringstream stream;
+  std::string strTemp;
+
+  stream.str( "" ); stream.clear();
+  strTemp = themeFile.getValue( "WINDOW", "minSize" );
+
+  if ( !strTemp.empty() )
+    stream << strTemp && stream >> winMinSize.x >> winMinSize.y;
+
+  stream.str( "" ); stream.clear();
+  strTemp = themeFile.getValue( "WINDOW", "maxSize" );
+  if ( !strTemp.empty() )
+    stream << strTemp && stream >> winMaxSize.x >> winMaxSize.y;
+
+  stream.str( "" ); stream.clear();
+  strTemp = themeFile.getValue( "WINDOW", "backgroundColor" );
+  if ( !strTemp.empty() )
+    stream << strTemp && stream >> winBackgroundColor.r >> winBackgroundColor.g
+    >> winBackgroundColor.b >> winBackgroundColor.a;
+
+  stream.str( "" ); stream.clear();
+  strTemp = themeFile.getValue( "WINDOW", "backgroundImage" );
+  if ( !strTemp.empty() ) {
+    sf::Image Image;
+
+    if ( !Image.LoadFromFile( settings::getPath() + "/themes/" + settings::getTheme() + "/" + strTemp ) ) { // TODO logfile
+      std::cerr << "Error loading backgroundimage: " << strTemp << std::endl;
+    }
+
+    winBackground.SetImage( Image );
+
+  }
+
+  stream.str( "" ); stream.clear();
+  strTemp = themeFile.getValue( "WINDOW", "border" );
+
+  if ( !strTemp.empty() )
+    stream << strTemp && stream >> winBorder;
+
+  stream.str( "" ); stream.clear();
+  strTemp = themeFile.getValue( "WINDOW", "borderColor" );
+  if ( !strTemp.empty() )
+    stream << strTemp && stream >> winBorderColor.r >> winBorderColor.g
+    >> winBorderColor.b >> winBorderColor.a;
+
+  stream.str( "" ); stream.clear();
+  strTemp = themeFile.getValue( "WINDOW", "titlebar" );
+  if ( !strTemp.empty() )
+    stream << strTemp && stream >> winTitlebar;
+
+  stream.str( "" ); stream.clear();
+  strTemp = themeFile.getValue( "WINDOW", "titlebarColor" );
+  if ( !strTemp.empty() )
+    stream << strTemp && stream >> winTitlebarColor.r >> winTitlebarColor.g
+    >> winTitlebarColor.b >> winTitlebarColor.a;
+
+}
+
+
+} // namespace gui

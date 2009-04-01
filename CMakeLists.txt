@@ -1,0 +1,3 @@
+PROJECT(ufs)
+
+ADD_SUBDIRECTORY(src)
