@@ -1,1 +1,0 @@
-ADD_EXECUTABLE(ufs parser.cpp input.cpp main.cpp util.cpp config.cpp settings.cpp game.cpp gui/manager.cpp gui/window.cpp gui/theme.cpp )
