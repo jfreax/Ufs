@@ -50,10 +50,9 @@ CWindow::CWindow( CTheme *theme, sf::Vector2f position_, sf::Vector2f size_ )
 
 void CWindow::update( )
 {
-
   sf::Vector2f titlebarPosition( position.x, position.y - titlebar );
   sf::Vector2f titlebarEndPosition( position.x + curSize.x, position.y );
-  formTitlebar = sf::Shape::Rectangle( titlebarPosition, titlebarEndPosition, titlebarColor, border, titlebarColor );
+  formTitlebar = sf::Shape::Rectangle( titlebarPosition, titlebarEndPosition, titlebarColor );
 
   // Hintergrundbild / -Shape
 
