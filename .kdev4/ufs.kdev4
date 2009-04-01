@@ -10,6 +10,9 @@ CurrentBuildType=
 CurrentInstallDir=
 ProjectRootRelative=./
 
+[Project]
+VersionControlSupport=kdevgit
+
 [Run Options]
 Run Targets=debug
 

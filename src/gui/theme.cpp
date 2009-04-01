@@ -63,14 +63,14 @@ void CTheme::open( std::string filename )
   stream.str( "" ); stream.clear();
   strTemp = themeFile.getValue( "WINDOW", "backgroundImage" );
   if ( !strTemp.empty() ) {
-    sf::Image Image;
+    sf::Image *Image = new sf::Image;
 
-    if ( !Image.LoadFromFile( settings::getPath() + "/themes/" + settings::getTheme() + "/" + strTemp ) ) { // TODO logfile
+    if ( !Image->LoadFromFile( settings::getPath() + "/themes/" + settings::getTheme() + "/" + strTemp ) ) { // TODO logfile und Fehlermeldung (Failed to create image, its internal size is too high (300x230) ???? )
+
       std::cerr << "Error loading backgroundimage: " << strTemp << std::endl;
     } else {
-      winBackground.SetImage( Image );
+      winBackground.SetImage( *Image );
     }
-
   }
 
   stream.str( "" ); stream.clear();

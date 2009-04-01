@@ -29,7 +29,7 @@ CWindow::CWindow( CTheme *theme, sf::Vector2f position_, sf::Vector2f size_ )
   minSize = theme->winMinSize;
   maxSize = theme->winMaxSize;
 
-  background = theme->winBackground;;
+  background = theme->winBackground;
   backgroundColor = theme->winBackgroundColor;
 
   border = theme->winBorder;
@@ -50,11 +50,19 @@ CWindow::CWindow( CTheme *theme, sf::Vector2f position_, sf::Vector2f size_ )
 
 void CWindow::update( )
 {
-  formWin = sf::Shape::Rectangle( position, position + curSize, backgroundColor, border, borderColor );
 
   sf::Vector2f titlebarPosition( position.x, position.y - titlebar );
   sf::Vector2f titlebarEndPosition( position.x + curSize.x, position.y );
   formTitlebar = sf::Shape::Rectangle( titlebarPosition, titlebarEndPosition, titlebarColor, border, titlebarColor );
+
+  // Hintergrundbild / -Shape
+
+  if ( background.GetSize().x != 1.f ) {
+    background.SetPosition( position );
+    background.Resize( curSize );
+  } else {
+    formWin = sf::Shape::Rectangle( position, position + curSize, backgroundColor, border, borderColor );
+  }
 
 }
 
@@ -100,7 +108,7 @@ void CWindow::setPosition( sf::Vector2f position_ )
     position.x = - curSize.x;
 
   if ( position.y - titlebar  + curSize.y < 0 )
-    position.y = titlebar+1 - curSize.x ;
+    position.y = titlebar + 1 - curSize.x ;
 
   this->update();
 }
@@ -126,13 +134,13 @@ sf::Rect<float> CWindow::getTitlebarDimension()
 }
 
 
-void CWindow::setMoveWindow ( bool ison )
+void CWindow::setMoveWindow( bool ison )
 {
   moveWindow = ison;
 }
 
 
-bool CWindow::getMoveWindow ( )
+bool CWindow::getMoveWindow( )
 {
   return moveWindow;
 }
