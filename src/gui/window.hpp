@@ -19,7 +19,6 @@
 
 #include <SFML/Graphics.hpp>
 
-// #include "../game.hpp"
 
 namespace gui
 {
@@ -28,23 +27,30 @@ namespace gui
 class CWindow
 {
   public:
-    CWindow( class CTheme *theme, sf::Vector2f position_ = sf::Vector2f( 0.f, 0.f ), sf::Vector2f size_ = sf::Vector2f( 0.f, 0.f ) );
+    CWindow ( class CTheme *theme, sf::Vector2f position_ = sf::Vector2f ( 0.f, 0.f ), sf::Vector2f size_ = sf::Vector2f ( 0.f, 0.f ) );
 
     void update( );
-    void draw( void* game_ ); // FIXME
+    void draw ( );
 
-    void setSize( sf::Vector2f size_ );
-    void setPosition( sf::Vector2f position_ );
+    const unsigned int getId();
+
+    void setSize ( sf::Vector2f size_ );
+    void setSizeInPercent ( sf::Vector2f sizePercent_ );
+    void setPosition ( sf::Vector2f position_ );
     sf::Vector2f getPosition();
 
     sf::Rect<float> getWindowDimension();
     sf::Rect<float> getTitlebarDimension();
+    sf::Rect<float> getResizeArea();
 
-    void setMoveWindow( bool ison );
+    void setTitlebar ( unsigned int titlebar_ );
+
+    void setMoveWindow ( bool ison );
     bool getMoveWindow( );
 
   private:
-    static unsigned int id;
+    unsigned int id;
+
     sf::Shape formWin;
     sf::Shape formTitlebar;
 
@@ -65,6 +71,7 @@ class CWindow
     unsigned int titlebar;
     sf::Color titlebarColor;
 
+    bool closeAble;
     bool moveAble;
     bool resizeAble;
 };

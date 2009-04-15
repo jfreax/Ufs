@@ -17,6 +17,7 @@
 #ifndef SETTINGS_HPP
 #define SETTINGS_HPP
 
+#include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 
 namespace settings
@@ -24,12 +25,14 @@ namespace settings
 
 sf::VideoMode getVideo();
 sf::WindowSettings getWindowSettings();
+int getStyle();
 
 std::string getPath();
 void setPath( std::string path_ );
 
 bool getFullscreen();
 void setFullscreen( bool ison );
+void toggleFullscreen();
 
 bool showFps();
 void setShowFps( bool ison );

@@ -24,17 +24,28 @@
 
 #include "parser.hpp"
 
-class Input
+struct KeyHolder
+{
+  sf::Key::Code key;
+
+  bool strg;
+  bool alt;
+  bool shift;
+};
+
+
+class CInput
 {
   public:
-    Input( std::string file = "./keyboard.ini" );
+    CInput( std::string file = "./keyboard.ini" );
     bool loadKeys( std::string file );
 
-    bool events( class CGame* game );
+    bool testPressedKeys ( std::string keyName_ );
+    bool events( );
 
   private:
     std::map<std::string, sf::Key::Code> availableKeys;
-    std::map<std::string, sf::Key::Code> globalKeys;
+    std::map<std::string, KeyHolder> globalKeys;
     sf::Event event;
 
     class Parser keyfile;

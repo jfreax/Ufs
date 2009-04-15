@@ -18,9 +18,10 @@
 #include "parser.hpp"
 #include "game.hpp"
 #include "input.hpp"
+#include "util.hpp"
 
 
-Input::Input( std::string file )
+CInput::CInput ( std::string file )
 {
   availableKeys["A"] = sf::Key::A;
   availableKeys["B"] = sf::Key::B;
@@ -124,44 +125,100 @@ Input::Input( std::string file )
   availableKeys["F15"] = sf::Key::F15;
   availableKeys["Pause"] = sf::Key::Pause;
 
-  this->loadKeys( file );
+  this->loadKeys ( file );
 }
 
 
-bool Input::loadKeys( std::string file )
+bool CInput::loadKeys ( std::string file )
 {
-  bool ret = keyfile.open( file );
+  bool ret = keyfile.open ( file );
 
-  for ( int i = keyfile.countKeys( "GLOBAL" ) - 1; i >= 0 ; --i )
-    globalKeys[keyfile.getKey( "GLOBAL", i )] = availableKeys[keyfile.getValue( "GLOBAL", i )];
+  for ( int i = keyfile.countKeys ( "GLOBAL" ) - 1; i >= 0 ; --i ) {
+    KeyHolder keyHolder;
+    keyHolder.strg = keyHolder.shift = keyHolder.alt = 0;
 
+    std::string keysToPress = keyfile.getValue ( "GLOBAL", i );
+    keysToPress = "+" + keysToPress;
+    util::deleteChar ( keysToPress );
+
+
+    for ( size_t found = 0; found != std::string::npos; found = keysToPress.find ( '+', found + 1 ) ) {
+      std::string keyTmp = keysToPress.substr ( found + 1, keysToPress.find ( '+', found + 1 ) - found - 1 );
+
+      if ( keyTmp == "Strg" )
+        keyHolder.strg = true;
+      else if ( keyTmp == "Alt" )
+        keyHolder.alt = true;
+      else if ( keyTmp == "Shift" )
+        keyHolder.shift = true;
+      else
+        keyHolder.key = availableKeys[ keyTmp ];
+    }
+
+    globalKeys[keyfile.getKey ( "GLOBAL", i ) ] = keyHolder;
+  }
 
   return ret;
 }
 
 
-bool Input::events( CGame* game )
+bool CInput::testPressedKeys ( std::string keyName_ )
 {
+  bool ret;
+  std::string keyName = keyName_;
+
+  for ( int i = 0; globalKeys[keyName].key; keyName = keyName_ + "-" + lexical_cast_default<std::string> ( i ) ) {
+    ret = true;
+
+    if ( event.Key.Code != globalKeys[keyName].key )
+      ret = false;
+
+    if ( event.Key.Control != globalKeys[keyName].strg )
+      ret = false;
+
+    if ( event.Key.Alt != globalKeys[keyName].alt )
+      ret = false;
+
+    if ( event.Key.Shift != globalKeys[keyName].shift )
+      ret = false;
+
+    if ( ret )
+      return true;
+    else
+      ++i;
+  }
+
+  return false;
+}
+
+
+bool CInput::events ( )
+{
+  // lokale Variablen
+  gui::CManager *guiManager = getGameClass()->getGuiManager();
+  sf::RenderWindow *app = getGameClass()->getApp();
+
   // Mouse
-  game->getGuiManager()->proofMouseClick ( game->getApp()->GetInput() );
+  guiManager->proofMouseClick ( app->GetInput() );
 
 
   // Tastatur
-  while ( game->getApp()->GetEvent( event ) ) {
-    // ## Fenster schließen ##
+
+  while ( app->GetEvent ( event ) ) {
+    // ## Spiel beenden (aka Schließen) ##
     if ( event.Type == sf::Event::Closed )
-      game->stop();
+      getGameClass()->stop();
 
     // ## Tastendruck - global ##
     if ( event.Type == sf::Event::KeyPressed ) {
-      if ( event.Key.Code == globalKeys["quit"] ) {
-        game->stop();
-      }
+      if ( testPressedKeys ( "quit" ) )
+        getGameClass()->stop();
+      else if ( testPressedKeys ( "fullscreen" ) )
+        settings::toggleFullscreen();
+      else if ( testPressedKeys ( "close" ) )
+        guiManager->closeWindow ( );
 
     } // Tastendruck
-
-//     // ## Mausklick ##
-//     game->getGuiManager()->proofMouseClick ( event.Type, event.MouseButton.Button, Input.GetMouseX(), Input.GetMouseY() );
   }
 
   return false;

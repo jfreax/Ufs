@@ -20,7 +20,7 @@
 #include "util.hpp"
 #include "parser.hpp"
 
-bool Parser::open( std::string filename, bool index )
+bool Parser::open ( std::string filename, bool index )
 {
   if ( filename.empty() )
     return false;
@@ -30,7 +30,7 @@ bool Parser::open( std::string filename, bool index )
   // open inifile
   filename = settings::getPath() + filename;
 
-  std::ifstream file( filename.c_str(), std::ios::in );
+  std::ifstream file ( filename.c_str(), std::ios::in );
 
   if ( !file ) {
     std::cerr << "Could not open file: " << filename << std::endl;
@@ -43,106 +43,107 @@ bool Parser::open( std::string filename, bool index )
 
   std::string normalLine = line;
 
-  while ( getline( file, normalLine ) ) {
+  while ( getline ( file, normalLine ) ) {
     ++nr;
     line = normalLine;
 
-    pos = line.find_first_not_of( " \t" );
+    pos = line.find_first_not_of ( " \t" );
 
     if ( pos == std::string::npos ) {
       line.erase();
     } else {
-      line.erase( 0, pos );
+      line.erase ( 0, pos );
     }
 
-    if ( line.empty() || line.at( 0 ) == '#' ||  line.at( 0 ) == ';' ) {
+    if ( line.empty() || line.at ( 0 ) == '#' ||  line.at ( 0 ) == ';' ) {
     } else
-      if ( line.at( 0 ) == '[' ) {
+      if ( line.at ( 0 ) == '[' ) {
         // neue Sektion gefunden
-        pos = line.find( ']', 1 );
+        pos = line.find ( ']', 1 );
 
         if ( pos == std::string::npos ) {
           std::cerr << "Could not find ']'" << std::endl;
         }
 
-        sectionName = line.substr( 1, pos - 1 );
+        sectionName = line.substr ( 1, pos - 1 );
 
         if ( sectionName.length() == 0 ) {
-          std::cerr << std::string( "Empty Section Name" ) << std::endl;
+          std::cerr << std::string ( "Empty Section Name" ) << std::endl;
         } else {
           if ( index )
-            sectionName += "-" + lexical_cast_default<std::string>( nr );
+            sectionName += "-" + lexical_cast_default<std::string> ( nr );
 
-          headers.push_back( sectionName );
+          headers.push_back ( sectionName );
         }
 
         // neue Sektion hinzufügen
-        data.insert( std::make_pair( sectionName, Section() ) );
+        data.insert ( std::make_pair ( sectionName, Section() ) );
 
       } else {
         // neues key-value-Paar gefunden
-        pos = line.find( '=', 1 );
+        pos = line.find ( '=', 1 );
 
         if ( pos == std::string::npos ) {
-          std::cerr << std::string( "Could not find '='" ) << std::endl;
+          std::cerr << std::string ( "Could not find '='" ) << std::endl;
         }
 
-        std::string key = line.substr( 0, pos );
+        std::string key = line.substr ( 0, pos );
 
-        std::string value = line.substr( pos + 1, line.length() - pos - 1 );
+        std::string value = line.substr ( pos + 1, line.length() - pos - 1 );
 
         // unnötige leerzeichen am beginn und ende entfernen
-        key = key.substr( key.find_first_not_of( ' ', 0 ), key.length() );
-        key = key.substr( 0, key.find_first_of( ' ', 0 ) );
-        value = value.substr( value.find_first_not_of( ' ', 0 ), value.length() );
+        key = key.substr ( key.find_first_not_of ( ' ', 0 ), key.length() );
+        key = key.substr ( 0, key.find_first_of ( ' ', 0 ) );
+        value = value.substr ( value.find_first_not_of ( ' ', 0 ), value.length() );
 
         if ( key.length() == 0 || value.length() == 0 ) {
-          std::cerr << std::string( "Empty key or empty value" ) << std::endl;
+          std::cerr << std::string ( "Empty key or empty value" ) << std::endl;
         }
 
         // neues key-value-Paar hinzufügen
         if ( sectionName == "" ) {
-          std::cerr << std::string( "Key-Value-Pair without Section" ) << std::endl;
+          std::cerr << std::string ( "Key-Value-Pair without Section" ) << std::endl;
         }
 
         // mehrere Einträge (keys) mit dem gleichen Namen indexieren ( "-i" )
-        int countedKeys = countKeys( sectionName, key );
+        int countedKeys = countKeys ( sectionName, key );
 
         if ( countedKeys )
-          data[sectionName].insert( std::make_pair( key + "-" + lexical_cast_default<std::string>( countedKeys ), value ) );
+          data[sectionName].insert ( std::make_pair ( key + "-" + lexical_cast_default<std::string> ( countedKeys ), value ) );
         else
-          data[sectionName].insert( std::make_pair( key, value ) );
+          data[sectionName].insert ( std::make_pair ( key, value ) );
 
       }
   }
 }
 
 
-int Parser::countKeys( std::string searchSection, std::string searchedKey )
+int Parser::countKeys ( std::string searchSection, std::string searchedKey )
 {
   int i = 1;
-  for ( ; data[searchSection].count( searchedKey + "-" + lexical_cast_default<std::string>( i ) ); ++i );
 
-  return data[searchSection].count( searchedKey ) + i - 1;
+  for ( ; data[searchSection].count ( searchedKey + "-" + lexical_cast_default<std::string> ( i ) ); ++i );
+
+  return data[searchSection].count ( searchedKey ) + i - 1;
 }
 
 
-int Parser::countKeys( std::string searchSection )
+int Parser::countKeys ( std::string searchSection )
 {
   return data[searchSection].size();
 }
 
 
-int Parser::countKeys( unsigned int sectionNr )
+int Parser::countKeys ( unsigned int sectionNr )
 {
   return data[headers[sectionNr]].size();
 }
 
 
-std::string Parser::getValue( std::string section, std::string key )
+std::string Parser::getValue ( std::string section, std::string key )
 {
-  if ( data.count( section ) )  {
-    if ( data[section].count( key ) ) {
+  if ( data.count ( section ) )  {
+    if ( data[section].count ( key ) ) {
       return data[section][key];
     }
   }
@@ -152,16 +153,16 @@ std::string Parser::getValue( std::string section, std::string key )
 }
 
 
-std::string Parser::getValue( unsigned int sectionNr, std::string key )
+std::string Parser::getValue ( unsigned int sectionNr, std::string key )
 {
   if ( headers.size() <= sectionNr )
     return "";
 
-  return Parser::getValue( headers[sectionNr], key );
+  return Parser::getValue ( headers[sectionNr], key );
 }
 
 
-std::string Parser::getValue( unsigned int sectionNr, unsigned int keyNr )
+std::string Parser::getValue ( unsigned int sectionNr, unsigned int keyNr )
 {
   if ( headers.size() <= sectionNr )
     return "";
@@ -170,30 +171,34 @@ std::string Parser::getValue( unsigned int sectionNr, unsigned int keyNr )
     return "";
 
   std::map < std::string, std::string >::iterator it =  data[headers[sectionNr]].begin();
+
   int i = 0;
+
   for ( ; it != data[headers[sectionNr]].end() && i < keyNr; ++it, ++i );
 
   return it->second;
 }
 
 
-std::string Parser::getValue( std::string section, unsigned int keyNr )
+std::string Parser::getValue ( std::string section, unsigned int keyNr )
 {
-  if ( !data.count( section ) )
+  if ( !data.count ( section ) )
     return "";
 
   if ( section.size() <= keyNr )
     return "";
 
   std::map < std::string, std::string >::iterator it =  data[section].begin();
+
   int i = 0;
+
   for ( ; it != data[section].end() && i < keyNr; ++it, ++i );
 
   return it->second;
 }
 
 
-std::string Parser::getKey( unsigned int sectionNr, unsigned int keyNr )
+std::string Parser::getKey ( unsigned int sectionNr, unsigned int keyNr )
 {
   if ( headers.size() <= sectionNr )
     return "";
@@ -202,23 +207,27 @@ std::string Parser::getKey( unsigned int sectionNr, unsigned int keyNr )
     return "";
 
   std::map < std::string, std::string >::iterator it =  data[headers[sectionNr]].begin();
+
   int i = 0;
+
   for ( ; it != data[headers[sectionNr]].end() && i < keyNr; ++it, ++i );
 
   return it->first;
 }
 
 
-std::string Parser::getKey( std::string section, unsigned int keyNr )
+std::string Parser::getKey ( std::string section, unsigned int keyNr )
 {
-  if ( !data.count( section ) )
+  if ( !data.count ( section ) )
     return "";
 
   if ( section.size() <= keyNr )
     return "";
 
   std::map < std::string, std::string >::iterator it =  data[section].begin();
+
   int i = 0;
+
   for ( ; it != data[section].end() && i < keyNr; ++it, ++i );
 
   return it->first;

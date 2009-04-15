@@ -18,6 +18,7 @@
 
 #include "config.hpp"
 
+#include "game.hpp"
 #include "util.hpp"
 #include "settings.hpp"
 
@@ -43,6 +44,17 @@ sf::WindowSettings getWindowSettings()
 }
 
 
+int getStyle()
+{
+  int style = sf::Style::Close;
+
+  if ( getFullscreen() )
+    style |= sf::Style::Fullscreen;
+
+  return style;
+}
+
+
 std::string getPath()
 {
   return config.path;
@@ -64,6 +76,14 @@ bool getFullscreen()
 void setFullscreen( bool ison )
 {
   config.fullscreen = ison;
+  getGameClass()->initialize();
+}
+
+
+void toggleFullscreen()
+{
+  config.fullscreen = !config.fullscreen;
+  getGameClass()->initialize();
 }
 
 
@@ -100,6 +120,7 @@ int getWidth()
 void setWidth( int width_ )
 {
   config.video.Width = width_;
+  getGameClass()->getFpsStr()->SetPosition( settings::getWidth() - 70, 10 );
 }
 
 
@@ -123,7 +144,7 @@ std::string getTheme()
 
 void setTheme ( std::string theme_ )
 {
-  if ( isFile( "themes/" + theme_ + ".ini" ) )
+  if ( util::isFile( "themes/" + theme_ + ".ini" ) )
     config.theme = theme_;
   else
     std::cerr << "Theme-File not found: " << theme_ << std::endl;

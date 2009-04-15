@@ -15,6 +15,7 @@
 */
 
 #include "theme.hpp"
+#include "widget.hpp"
 
 #include "../collision.hpp"
 #include "../game.hpp"
@@ -27,23 +28,25 @@ namespace gui
 
 CManager::CManager()
 {
-  theme.open( "themes/" + settings::getTheme() + "/" + settings::getTheme() + ".ini" );
- 
+  theme.open ( "themes/" + settings::getTheme() + "/" + settings::getTheme() + ".ini" );
+
+
+  mousePos4WinMove = sf::Vector2f ( 0.f, 0.f );
 }
 
 
-bool CManager::draw( void* game_ )
+bool CManager::draw ( )
 {
-  CGame* game = ( CGame* )game_;
+  CGame* game = getGameClass();
 
   for ( std::vector<gui::CWindow*>::size_type i = windowList.size(); i; --i )
-    windowList[i-1]->draw( game_ );
+    windowList[i-1]->draw ( );
 
   return true;
 }
 
 
-bool CManager::proofMouseClick( const sf::Input& input )
+bool CManager::proofMouseClick ( const sf::Input& input )
 {
   bool ret = false;
   int x = input.GetMouseX();
@@ -51,24 +54,23 @@ bool CManager::proofMouseClick( const sf::Input& input )
 
   for ( std::vector<gui::CWindow*>::size_type i = windowList.size(); i; --i ) {
     // Auf Fenstertitelleiste geklickt?
-    static sf::Vector2f firstClickDist(0,0);
-    if ( isCollision( windowList[i-1]->getTitlebarDimension(), sf::Rect<float> ( x, y, x + 1, y + 1 ) ) || (firstClickDist.x && firstClickDist.y) ) {
-      if ( input.IsMouseButtonDown( sf::Mouse::Left ) ) {
+    if ( isCollision ( windowList[i-1]->getTitlebarDimension(), sf::Rect<float> ( x, y, x + 1, y + 1 ) ) || ( mousePos4WinMove.x && mousePos4WinMove.y ) ) {
+      if ( input.IsMouseButtonDown ( sf::Mouse::Left ) ) {
         ret = true;
         sf::Vector2f winPos = windowList[i-1]->getPosition();
 
-        if ( !firstClickDist.x && !firstClickDist.y ) {
-          firstClickDist.x = x - winPos.x; firstClickDist.y = y - winPos.y;
+        if ( !mousePos4WinMove.x && !mousePos4WinMove.y ) {
+          mousePos4WinMove.x = x - winPos.x; mousePos4WinMove.y = y - winPos.y;
         }
-         
-        windowList[i-1]->setPosition( sf::Vector2f( x - ( firstClickDist.x ), y - ( firstClickDist.y ) ) );
+
+        windowList[i-1]->setPosition ( sf::Vector2f ( x - ( mousePos4WinMove.x ), y - ( mousePos4WinMove.y ) ) );
       } else {
-        firstClickDist.x = firstClickDist.y = 0;
+        mousePos4WinMove.x = mousePos4WinMove.y = 0;
       }
     }
 
     // Fenster geklickt?
-    if ( isCollision( windowList[i-1]->getWindowDimension(), sf::Rect<float> ( x, y, x + 1, y + 1 ) ) ) {
+    if ( isCollision ( windowList[i-1]->getWindowDimension(), sf::Rect<float> ( x, y, x + 1, y + 1 ) ) ) {
       ret = true;
       // Prüfen ob Widgets geklickt wurden
     }
@@ -78,12 +80,40 @@ bool CManager::proofMouseClick( const sf::Input& input )
 }
 
 
-gui::CWindow* CManager::newWindow( sf::Vector2f position_, sf::Vector2f size_ )
+gui::CWindow* CManager::newWindow ( sf::Vector2f position_, sf::Vector2f size_ )
 {
-  gui::CWindow* win = new gui::CWindow( &theme );
-  windowList.push_back( win );
+  gui::CWindow* win = new gui::CWindow ( &theme );
+  windowList.push_back ( win );
 
   return win;
+}
+
+
+bool CManager::closeWindow ( gui::CWindow* window_ )
+{
+  if ( !window_ && windowList.size() ) {
+    delete this->getActiveWindow();
+
+    windowList.pop_back();
+  } else {
+    std::vector<gui::CWindow*>::iterator iter = windowList.begin();
+    for( ; iter != windowList.end(); ++iter ) {
+      if ( (*iter)->getId() == window_->getId() ) {
+        windowList.erase ( iter );
+        delete (*iter);
+
+        iter = windowList.end()-1;
+      }
+    }
+
+  }
+
+}
+
+
+gui::CWindow* CManager::getActiveWindow()
+{
+  return windowList[windowList.size()-1];
 }
 
 

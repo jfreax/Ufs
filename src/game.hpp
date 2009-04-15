@@ -28,17 +28,23 @@ class CGame
     CGame( int argc, char **argv );
     bool initialize();
 
+    bool IsVideoModeValid();
+
     void start();
     void stop();
+
+    void draw();
 
     sf::RenderWindow* getApp();
     gui::CManager* getGuiManager();
 
-    void draw();
-
     void calcFPS();
 
+    sf::String* getFpsStr();
+
   private:
+    sf::RenderWindow App;
+
     const int argc_;
     int arg_;
     const char* const * const argv_;
@@ -47,12 +53,14 @@ class CGame
 
     sf::View viewPoint;
 
-    sf::RenderWindow App;
     gui::CManager guiManager;
-    Input input;
+    CInput input;
 
     sf::String fpsStr;
 
 };
+
+
+CGame* getGameClass();
 
 #endif // GAME_HPP

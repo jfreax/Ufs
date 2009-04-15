@@ -38,7 +38,7 @@ class CTheme
     sf::Vector2f winMaxSize;
 
     sf::Color winBackgroundColor;
-    sf::Sprite winBackground;
+    sf::Image winBackground;
 
     unsigned int winBorder;
     sf::Color winBorderColor;

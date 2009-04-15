@@ -15,21 +15,23 @@
 */
 
 #include "window.hpp"
+#include "manager.hpp"
 
 #include "../game.hpp"
+#include "../settings.hpp"
 
 namespace gui
 {
 
-CWindow::CWindow( CTheme *theme, sf::Vector2f position_, sf::Vector2f size_ )
+CWindow::CWindow ( CTheme *theme, sf::Vector2f position_, sf::Vector2f size_ )
 {
-  static unsigned int id = 0;
-  ++id;
+  static unsigned int globalId = 0;
+  id = ++globalId;
 
   minSize = theme->winMinSize;
   maxSize = theme->winMaxSize;
 
-  background = theme->winBackground;
+  background.SetImage ( theme->winBackground );
   backgroundColor = theme->winBackgroundColor;
 
   border = theme->winBorder;
@@ -38,11 +40,12 @@ CWindow::CWindow( CTheme *theme, sf::Vector2f position_, sf::Vector2f size_ )
   titlebar = theme->winTitlebar;
   titlebarColor = theme->winTitlebarColor;
 
+  closeAble = true;
   moveAble = true;
   resizeAble = true;
 
-  setPosition( position_ );
-  setSize( size_ );
+  this->setPosition ( position_ );
+  this->setSize ( size_ );
 
   this->update();
 }
@@ -50,36 +53,42 @@ CWindow::CWindow( CTheme *theme, sf::Vector2f position_, sf::Vector2f size_ )
 
 void CWindow::update( )
 {
-  sf::Vector2f titlebarPosition( position.x, position.y - titlebar );
-  sf::Vector2f titlebarEndPosition( position.x + curSize.x, position.y );
-  formTitlebar = sf::Shape::Rectangle( titlebarPosition, titlebarEndPosition, titlebarColor );
+  sf::Vector2f titlebarPosition ( position.x, position.y - titlebar );
+  sf::Vector2f titlebarEndPosition ( position.x + curSize.x, position.y );
+  formTitlebar = sf::Shape::Rectangle ( titlebarPosition, titlebarEndPosition, titlebarColor );
 
   // Hintergrundbild / -Shape
 
   if ( background.GetSize().x != 1.f ) {
-    background.SetPosition( position );
-    background.Resize( curSize );
+    background.SetPosition ( position );
+    background.Resize ( curSize );
   } else {
-    formWin = sf::Shape::Rectangle( position, position + curSize, backgroundColor, border, borderColor );
+    formWin = sf::Shape::Rectangle ( position, position + curSize, backgroundColor, border, borderColor );
   }
 
 }
 
 
-void CWindow::draw( void* game_ )
+void CWindow::draw ( )
 {
-  CGame* game = ( CGame* )game_;
+  CGame* game = getGameClass();
 
   if ( background.GetSize().x != 1.f )
-    game->getApp()->Draw( background );
+    game->getApp()->Draw ( background );
   else
-    game->getApp()->Draw( formWin );
+    game->getApp()->Draw ( formWin );
 
-  game->getApp()->Draw( formTitlebar );
+  game->getApp()->Draw ( formTitlebar );
 }
 
 
-void CWindow::setSize( sf::Vector2f size_ )
+const unsigned int CWindow::getId()
+{
+  return id;
+}
+
+
+void CWindow::setSize ( sf::Vector2f size_ )
 {
   curSize = size_;
 
@@ -99,15 +108,27 @@ void CWindow::setSize( sf::Vector2f size_ )
 }
 
 
-void CWindow::setPosition( sf::Vector2f position_ )
+void CWindow::setSizeInPercent ( sf::Vector2f sizePercent_ )
+{
+  this->setSize ( sf::Vector2f ( settings::getWidth() * sizePercent_.x * 0.01, settings::getHeight() * sizePercent_.y * 0.01 ) );
+}
+
+
+void CWindow::setPosition ( sf::Vector2f position_ )
 {
   position = position_;
 
   if ( position.x + curSize.x < 0 )
-    position.x = - curSize.x;
+    position.x = - curSize.x + 10;
 
-  if ( position.y - titlebar  + curSize.y < 0 )
-    position.y = titlebar + 1 - curSize.x ;
+  if ( position.x > settings::getWidth() - 10 )
+    position.x = settings::getWidth() - 10;
+
+  if ( position.y - titlebar < 0 )
+    position.y = titlebar + 1;
+
+  if ( position.y > settings::getHeight() )
+    position.y = settings::getHeight();
 
   this->update();
 }
@@ -127,13 +148,27 @@ sf::Rect<float> CWindow::getWindowDimension()
 
 sf::Rect<float> CWindow::getTitlebarDimension()
 {
-  sf::Vector2f titlePos( position.x, position.y - titlebar );
-  sf::Vector2f titleEndPos( position.x + curSize.x, position.y );
+  sf::Vector2f titlePos ( position.x, position.y - titlebar );
+  sf::Vector2f titleEndPos ( position.x + curSize.x, position.y );
   return sf::Rect<float> ( titlePos.x , titlePos.y, titleEndPos.x, titleEndPos.y );
 }
 
 
-void CWindow::setMoveWindow( bool ison )
+sf::Rect<float> CWindow::getResizeArea()
+{
+
+
+}
+
+
+void CWindow::setTitlebar ( unsigned int titlebar_ )
+{
+  titlebar = titlebar_;
+  this->update();
+}
+
+
+void CWindow::setMoveWindow ( bool ison )
 {
   moveWindow = ison;
 }

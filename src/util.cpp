@@ -19,14 +19,30 @@
 #include "util.hpp"
 #include "settings.hpp"
 
+namespace util
+{
+
 bool isFile ( std::string filename )
 {
   filename = settings::getPath() + filename;
 
-  std::ifstream file( filename.c_str(), std::ios::in );
+  std::ifstream file ( filename.c_str(), std::ios::in );
 
   if ( !file )
     return false;
   else
     return true;
+}
+
+
+void deleteChar ( std::string &stringToReplace, char delThis )
+{
+  std::string::size_type pos = stringToReplace.find ( delThis, 0 );
+
+  while ( std::string::npos != pos ) {
+    stringToReplace.replace ( pos, 1, "" );
+    pos = stringToReplace.find ( delThis, pos + 1 );
+  }
+}
+
 }

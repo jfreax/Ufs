@@ -34,9 +34,12 @@ To lexical_cast_default( From a, To def = To() )
   }
 }
 
+namespace util
+{
 
 bool isFile ( std::string filename );
+void deleteChar ( std::string &stringToReplace, char delThis = ' ' );
 
-
+}
 
 #endif // UTIL_HPP

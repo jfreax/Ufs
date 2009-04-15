@@ -31,16 +31,19 @@ class CManager
   public:
     CManager();
 
-    bool draw( void* game_ );
+    bool draw ( );
     bool proofMouseClick ( const sf::Input& input );
 
+    gui::CWindow* newWindow ( sf::Vector2f position_ = sf::Vector2f ( 0.f, 0.f ), sf::Vector2f size_ = sf::Vector2f ( 0.f, 0.f ) );
+    bool closeWindow ( gui::CWindow* window_ = NULL ); // NULL -> schlieﬂt das letzte Fenster
 
-    gui::CWindow* newWindow( sf::Vector2f position_ = sf::Vector2f( 0.f, 0.f ), sf::Vector2f size_ = sf::Vector2f( 0.f, 0.f ) );
+    gui::CWindow* getActiveWindow();
 
   private:
     gui::CTheme theme;
-
     std::vector<gui::CWindow*> windowList;
+
+    sf::Vector2f mousePos4WinMove;
 
 };
 

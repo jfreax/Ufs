@@ -26,7 +26,6 @@ CTheme::CTheme()
   winMinSize = sf::Vector2f( 10.f, 10.f );
   winMaxSize = sf::Vector2f( 5000.f, 5000.f );
 
-  winBackground.SetScale ( 1.f, 1.f );
   winBackgroundColor = winBorderColor = sf::Color( 100, 100, 100 );
   winTitlebarColor = sf::Color( 0, 0, 100 );
 
@@ -63,13 +62,9 @@ void CTheme::open( std::string filename )
   stream.str( "" ); stream.clear();
   strTemp = themeFile.getValue( "WINDOW", "backgroundImage" );
   if ( !strTemp.empty() ) {
-    sf::Image *Image = new sf::Image;
-
-    if ( !Image->LoadFromFile( settings::getPath() + "/themes/" + settings::getTheme() + "/" + strTemp ) ) { // TODO logfile und Fehlermeldung (Failed to create image, its internal size is too high (300x230) ???? )
-
+    if ( !winBackground.LoadFromFile( settings::getPath() + "/themes/" + settings::getTheme() + "/" + strTemp ) ) { 
+      // TODO logfile und Fehlermeldung (Failed to create image, its internal size is too high (300x230) ???? )
       std::cerr << "Error loading backgroundimage: " << strTemp << std::endl;
-    } else {
-      winBackground.SetImage( *Image );
     }
   }
 
