@@ -337,6 +337,30 @@ src/CMakeFiles/ufs.dir/gui/widget.o.provides: src/CMakeFiles/ufs.dir/gui/widget.
 src/CMakeFiles/ufs.dir/gui/widget.o.provides.build: src/CMakeFiles/ufs.dir/gui/widget.o
 .PHONY : src/CMakeFiles/ufs.dir/gui/widget.o.provides.build
 
+src/CMakeFiles/ufs.dir/gui/button.o: src/CMakeFiles/ufs.dir/flags.make
+src/CMakeFiles/ufs.dir/gui/button.o: ../src/gui/button.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/jens/C++/UfS/build/CMakeFiles $(CMAKE_PROGRESS_13)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object src/CMakeFiles/ufs.dir/gui/button.o"
+	cd /home/jens/C++/UfS/build/src && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/ufs.dir/gui/button.o -c /home/jens/C++/UfS/src/gui/button.cpp
+
+src/CMakeFiles/ufs.dir/gui/button.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ufs.dir/gui/button.i"
+	cd /home/jens/C++/UfS/build/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/jens/C++/UfS/src/gui/button.cpp > CMakeFiles/ufs.dir/gui/button.i
+
+src/CMakeFiles/ufs.dir/gui/button.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ufs.dir/gui/button.s"
+	cd /home/jens/C++/UfS/build/src && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/jens/C++/UfS/src/gui/button.cpp -o CMakeFiles/ufs.dir/gui/button.s
+
+src/CMakeFiles/ufs.dir/gui/button.o.requires:
+.PHONY : src/CMakeFiles/ufs.dir/gui/button.o.requires
+
+src/CMakeFiles/ufs.dir/gui/button.o.provides: src/CMakeFiles/ufs.dir/gui/button.o.requires
+	$(MAKE) -f src/CMakeFiles/ufs.dir/build.make src/CMakeFiles/ufs.dir/gui/button.o.provides.build
+.PHONY : src/CMakeFiles/ufs.dir/gui/button.o.provides
+
+src/CMakeFiles/ufs.dir/gui/button.o.provides.build: src/CMakeFiles/ufs.dir/gui/button.o
+.PHONY : src/CMakeFiles/ufs.dir/gui/button.o.provides.build
+
 # Object files for target ufs
 ufs_OBJECTS = \
 "CMakeFiles/ufs.dir/collision.o" \
@@ -350,7 +374,8 @@ ufs_OBJECTS = \
 "CMakeFiles/ufs.dir/gui/manager.o" \
 "CMakeFiles/ufs.dir/gui/window.o" \
 "CMakeFiles/ufs.dir/gui/theme.o" \
-"CMakeFiles/ufs.dir/gui/widget.o"
+"CMakeFiles/ufs.dir/gui/widget.o" \
+"CMakeFiles/ufs.dir/gui/button.o"
 
 # External object files for target ufs
 ufs_EXTERNAL_OBJECTS =
@@ -367,6 +392,7 @@ src/ufs: src/CMakeFiles/ufs.dir/gui/manager.o
 src/ufs: src/CMakeFiles/ufs.dir/gui/window.o
 src/ufs: src/CMakeFiles/ufs.dir/gui/theme.o
 src/ufs: src/CMakeFiles/ufs.dir/gui/widget.o
+src/ufs: src/CMakeFiles/ufs.dir/gui/button.o
 src/ufs: src/CMakeFiles/ufs.dir/build.make
 src/ufs: src/CMakeFiles/ufs.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --red --bold "Linking CXX executable ufs"
@@ -388,6 +414,7 @@ src/CMakeFiles/ufs.dir/requires: src/CMakeFiles/ufs.dir/gui/manager.o.requires
 src/CMakeFiles/ufs.dir/requires: src/CMakeFiles/ufs.dir/gui/window.o.requires
 src/CMakeFiles/ufs.dir/requires: src/CMakeFiles/ufs.dir/gui/theme.o.requires
 src/CMakeFiles/ufs.dir/requires: src/CMakeFiles/ufs.dir/gui/widget.o.requires
+src/CMakeFiles/ufs.dir/requires: src/CMakeFiles/ufs.dir/gui/button.o.requires
 .PHONY : src/CMakeFiles/ufs.dir/requires
 
 src/CMakeFiles/ufs.dir/clean:

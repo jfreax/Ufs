@@ -14,35 +14,14 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef WIDGET_HPP
-#define WIDGET_HPP
-
-#include <SFML/Graphics.hpp>
-#include "window.hpp"
+#include "button.hpp"
 
 namespace gui
 {
 
 
-class CWidget
+bool CButton::draw()
 {
-  public:
-//     CWidget ( gui::CWindow* motherWin_, sf::Vector2f position_ = sf::Vector2f ( 0.f, 0.f ), sf::Vector2f size_ = sf::Vector2f ( 0.f, 0.f ) );
 
-    virtual bool draw() = 0;
+}
 
-    void setPosition ( sf::Vector2f position_ );
-    void setSize ( sf::Vector2f size_ );
-
-  private:
-    unsigned int id;
-
-    sf::Vector2f position;
-    sf::Vector2f size;
-
-};
-
-
-} // namespace gui
-
-#endif // WIDGET_HPP

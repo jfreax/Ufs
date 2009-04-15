@@ -18,6 +18,11 @@ src/CMakeFiles/ufs.dir/game.o
  /home/jens/C++/UfS/src/parser.hpp
  /home/jens/C++/UfS/src/settings.hpp
  /home/jens/C++/UfS/src/util.hpp
+src/CMakeFiles/ufs.dir/gui/button.o
+ /home/jens/C++/UfS/src/gui/button.cpp
+ /home/jens/C++/UfS/src/gui/button.hpp
+ /home/jens/C++/UfS/src/gui/widget.hpp
+ /home/jens/C++/UfS/src/gui/window.hpp
 src/CMakeFiles/ufs.dir/gui/manager.o
  /home/jens/C++/UfS/src/gui/../collision.hpp
  /home/jens/C++/UfS/src/gui/../game.hpp

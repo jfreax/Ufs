@@ -158,6 +158,21 @@ game.s:
 .PHONY : game.s
 
 # target to build an object file
+gui/button.o:
+	cd /home/jens/C++/UfS/build && $(MAKE) -f src/CMakeFiles/ufs.dir/build.make src/CMakeFiles/ufs.dir/gui/button.o
+.PHONY : gui/button.o
+
+# target to preprocess a source file
+gui/button.i:
+	cd /home/jens/C++/UfS/build && $(MAKE) -f src/CMakeFiles/ufs.dir/build.make src/CMakeFiles/ufs.dir/gui/button.i
+.PHONY : gui/button.i
+
+# target to generate assembly for a file
+gui/button.s:
+	cd /home/jens/C++/UfS/build && $(MAKE) -f src/CMakeFiles/ufs.dir/build.make src/CMakeFiles/ufs.dir/gui/button.s
+.PHONY : gui/button.s
+
+# target to build an object file
 gui/manager.o:
 	cd /home/jens/C++/UfS/build && $(MAKE) -f src/CMakeFiles/ufs.dir/build.make src/CMakeFiles/ufs.dir/gui/manager.o
 .PHONY : gui/manager.o
@@ -310,6 +325,9 @@ help:
 	@echo "... game.o"
 	@echo "... game.i"
 	@echo "... game.s"
+	@echo "... gui/button.o"
+	@echo "... gui/button.i"
+	@echo "... gui/button.s"
 	@echo "... gui/manager.o"
 	@echo "... gui/manager.i"
 	@echo "... gui/manager.s"

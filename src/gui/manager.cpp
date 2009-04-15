@@ -29,8 +29,6 @@ namespace gui
 CManager::CManager()
 {
   theme.open ( "themes/" + settings::getTheme() + "/" + settings::getTheme() + ".ini" );
-
-
   mousePos4WinMove = sf::Vector2f ( 0.f, 0.f );
 }
 

@@ -11,6 +11,7 @@ FILE(REMOVE_RECURSE
   "CMakeFiles/ufs.dir/gui/window.o"
   "CMakeFiles/ufs.dir/gui/theme.o"
   "CMakeFiles/ufs.dir/gui/widget.o"
+  "CMakeFiles/ufs.dir/gui/button.o"
   "ufs.pdb"
   "ufs"
 )

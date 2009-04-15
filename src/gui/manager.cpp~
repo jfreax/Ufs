@@ -15,6 +15,7 @@
 */
 
 #include "theme.hpp"
+#include "widget.hpp"
 
 #include "../collision.hpp"
 #include "../game.hpp"

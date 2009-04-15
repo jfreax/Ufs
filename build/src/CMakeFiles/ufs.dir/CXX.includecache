@@ -96,6 +96,14 @@ SFML/Window.hpp
 SFML/Graphics.hpp
 -
 
+/home/jens/C++/UfS/src/gui/button.cpp
+button.hpp
+/home/jens/C++/UfS/src/gui/button.hpp
+
+/home/jens/C++/UfS/src/gui/button.hpp
+widget.hpp
+/home/jens/C++/UfS/src/gui/widget.hpp
+
 /home/jens/C++/UfS/src/gui/manager.cpp
 theme.hpp
 /home/jens/C++/UfS/src/gui/theme.hpp

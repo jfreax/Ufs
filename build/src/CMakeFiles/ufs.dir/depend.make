@@ -18,6 +18,11 @@ src/CMakeFiles/ufs.dir/game.o: ../src/parser.hpp
 src/CMakeFiles/ufs.dir/game.o: ../src/settings.hpp
 src/CMakeFiles/ufs.dir/game.o: ../src/util.hpp
 
+src/CMakeFiles/ufs.dir/gui/button.o: ../src/gui/button.cpp
+src/CMakeFiles/ufs.dir/gui/button.o: ../src/gui/button.hpp
+src/CMakeFiles/ufs.dir/gui/button.o: ../src/gui/widget.hpp
+src/CMakeFiles/ufs.dir/gui/button.o: ../src/gui/window.hpp
+
 src/CMakeFiles/ufs.dir/gui/manager.o: ../src/gui/../collision.hpp
 src/CMakeFiles/ufs.dir/gui/manager.o: ../src/gui/../game.hpp
 src/CMakeFiles/ufs.dir/gui/manager.o: ../src/gui/../gui/manager.hpp

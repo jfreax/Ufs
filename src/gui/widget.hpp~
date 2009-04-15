@@ -27,7 +27,7 @@ namespace gui
 class CWidget
 {
   public:
-    CWidget ( gui::CWindow* motherWin_, sf::Vector2f position_ = sf::Vector2f ( 0.f, 0.f ), sf::Vector2f size_ = sf::Vector2f ( 0.f, 0.f ) );
+//     CWidget ( gui::CWindow* motherWin_, sf::Vector2f position_ = sf::Vector2f ( 0.f, 0.f ), sf::Vector2f size_ = sf::Vector2f ( 0.f, 0.f ) );
 
     virtual bool draw();
 

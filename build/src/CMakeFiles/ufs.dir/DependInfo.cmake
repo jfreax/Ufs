@@ -7,6 +7,7 @@ SET(CMAKE_DEPENDS_CHECK_CXX
   "/home/jens/C++/UfS/src/collision.cpp" "/home/jens/C++/UfS/build/src/CMakeFiles/ufs.dir/collision.o"
   "/home/jens/C++/UfS/src/config.cpp" "/home/jens/C++/UfS/build/src/CMakeFiles/ufs.dir/config.o"
   "/home/jens/C++/UfS/src/game.cpp" "/home/jens/C++/UfS/build/src/CMakeFiles/ufs.dir/game.o"
+  "/home/jens/C++/UfS/src/gui/button.cpp" "/home/jens/C++/UfS/build/src/CMakeFiles/ufs.dir/gui/button.o"
   "/home/jens/C++/UfS/src/gui/manager.cpp" "/home/jens/C++/UfS/build/src/CMakeFiles/ufs.dir/gui/manager.o"
   "/home/jens/C++/UfS/src/gui/theme.cpp" "/home/jens/C++/UfS/build/src/CMakeFiles/ufs.dir/gui/theme.o"
   "/home/jens/C++/UfS/src/gui/widget.cpp" "/home/jens/C++/UfS/build/src/CMakeFiles/ufs.dir/gui/widget.o"
