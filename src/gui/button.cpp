@@ -14,14 +14,29 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "../game.hpp"
+
 #include "button.hpp"
 
 namespace gui
 {
 
 
+CButton::CButton ( class CWindow* motherWin_, sf::Vector2f position_, sf::Vector2f size_ ) : CWidget ( motherWin_, position_, size_ )
+{
+}
+
+
 bool CButton::draw()
 {
+  sf::RenderWindow* app = getGameClass()->getApp();
+
+  if ( background.GetSize().x != 1.f ) {
+    app->Draw ( background );
+//     std::cout << "naaaja/**/jajaa ein Bild " << std::endl;/**/
+  } else {
+//   /**/  std::cout << "keine bild!" << std::endl;/**/
+  }
 
 }
 

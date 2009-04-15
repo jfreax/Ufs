@@ -20,7 +20,7 @@
 #include "util.hpp"
 #include "parser.hpp"
 
-bool Parser::open ( std::string filename, bool index )
+bool Parser::open ( std::string filename, bool index, bool make_lower )
 {
   if ( filename.empty() )
     return false;
@@ -76,6 +76,10 @@ bool Parser::open ( std::string filename, bool index )
           headers.push_back ( sectionName );
         }
 
+        if ( make_lower ) {
+          util::lowercase ( sectionName );
+        }
+
         // neue Sektion hinzufügen
         data.insert ( std::make_pair ( sectionName, Section() ) );
 
@@ -88,7 +92,6 @@ bool Parser::open ( std::string filename, bool index )
         }
 
         std::string key = line.substr ( 0, pos );
-
         std::string value = line.substr ( pos + 1, line.length() - pos - 1 );
 
         // unnötige leerzeichen am beginn und ende entfernen
@@ -108,10 +111,16 @@ bool Parser::open ( std::string filename, bool index )
         // mehrere Einträge (keys) mit dem gleichen Namen indexieren ( "-i" )
         int countedKeys = countKeys ( sectionName, key );
 
-        if ( countedKeys )
+        if ( make_lower ) {
+          util::lowercase ( key );
+          util::lowercase ( value );
+        }
+
+        if ( countedKeys ) {
           data[sectionName].insert ( std::make_pair ( key + "-" + lexical_cast_default<std::string> ( countedKeys ), value ) );
-        else
+        } else {
           data[sectionName].insert ( std::make_pair ( key, value ) );
+        }
 
       }
   }

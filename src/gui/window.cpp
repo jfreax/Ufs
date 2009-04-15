@@ -14,11 +14,14 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "window.hpp"
+// #include "widget.hpp"
 #include "manager.hpp"
 
 #include "../game.hpp"
+#include "../resource.hpp"
 #include "../settings.hpp"
+
+#include "window.hpp"
 
 namespace gui
 {
@@ -28,17 +31,17 @@ CWindow::CWindow ( CTheme *theme, sf::Vector2f position_, sf::Vector2f size_ )
   static unsigned int globalId = 0;
   id = ++globalId;
 
-  minSize = theme->winMinSize;
-  maxSize = theme->winMaxSize;
+  minSize = theme->window.minSize;
+  maxSize = theme->window.maxSize;
 
-  background.SetImage ( theme->winBackground );
-  backgroundColor = theme->winBackgroundColor;
+  background.SetImage ( *getGameClass()->getImgResource()->get( "/themes/" + settings::getTheme() + "/" + theme->window.background ) );
+  backgroundColor = theme->window.backgroundColor;
 
-  border = theme->winBorder;
-  borderColor = theme->winBorderColor;
+  border = theme->window.border;
+  borderColor = theme->window.borderColor;
 
-  titlebar = theme->winTitlebar;
-  titlebarColor = theme->winTitlebarColor;
+  titlebar = theme->window.titlebar;
+  titlebarColor = theme->window.titlebarColor;
 
   closeAble = true;
   moveAble = true;
@@ -48,6 +51,12 @@ CWindow::CWindow ( CTheme *theme, sf::Vector2f position_, sf::Vector2f size_ )
   this->setSize ( size_ );
 
   this->update();
+}
+
+
+const unsigned int CWindow::getId()
+{
+  return id;
 }
 
 
@@ -71,20 +80,25 @@ void CWindow::update( )
 
 void CWindow::draw ( )
 {
-  CGame* game = getGameClass();
+  sf::RenderWindow* app = getGameClass()->getApp();
 
-  if ( background.GetSize().x != 1.f )
-    game->getApp()->Draw ( background );
-  else
-    game->getApp()->Draw ( formWin );
+  app->Draw ( formTitlebar );
 
-  game->getApp()->Draw ( formTitlebar );
+  if ( background.GetSize().x && background.GetSize().x != 1.f ) {
+    app->Draw ( background );
+  } else {
+    app->Draw ( formWin );
+  }
+
+  for ( std::vector<gui::CWidget*>::size_type i = widgetList.size(); i; --i ) {
+    widgetList[i-1]->draw();
+  }
 }
 
 
-const unsigned int CWindow::getId()
+void CWindow::addWidget ( CWidget* widget_ )
 {
-  return id;
+  widgetList.push_back ( widget_ );
 }
 
 
@@ -92,17 +106,18 @@ void CWindow::setSize ( sf::Vector2f size_ )
 {
   curSize = size_;
 
-  if ( curSize.x < minSize.x )
+  if ( curSize.x < minSize.x ) {
     curSize.x = minSize.x;
-
-  if ( curSize.y < minSize.y )
+  }
+  if ( curSize.y < minSize.y ) {
     curSize.y = minSize.y;
-
-  if ( curSize.x > maxSize.x )
+  }
+  if ( curSize.x > maxSize.x ) {
     curSize.x = maxSize.x;
-
-  if ( curSize.y > maxSize.y )
+  }
+  if ( curSize.y > maxSize.y ) {
     curSize.y = maxSize.y;
+  }
 
   this->update();
 }
@@ -111,6 +126,12 @@ void CWindow::setSize ( sf::Vector2f size_ )
 void CWindow::setSizeInPercent ( sf::Vector2f sizePercent_ )
 {
   this->setSize ( sf::Vector2f ( settings::getWidth() * sizePercent_.x * 0.01, settings::getHeight() * sizePercent_.y * 0.01 ) );
+}
+
+
+sf::Vector2f CWindow::getSize()
+{
+  return curSize;
 }
 
 

@@ -21,6 +21,7 @@
 #include "gui/manager.hpp"
 
 #include "input.hpp"
+#include "resource.hpp"
 
 class CGame
 {
@@ -37,6 +38,7 @@ class CGame
 
     sf::RenderWindow* getApp();
     gui::CManager* getGuiManager();
+    CResource< sf::Image >* getImgResource();
 
     void calcFPS();
 
@@ -48,12 +50,12 @@ class CGame
     const int argc_;
     int arg_;
     const char* const * const argv_;
-
     bool run;
 
     sf::View viewPoint;
 
     gui::CManager guiManager;
+    CResource < sf::Image > imgResource;
     CInput input;
 
     sf::String fpsStr;

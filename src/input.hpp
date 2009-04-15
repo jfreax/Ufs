@@ -17,9 +17,7 @@
 #ifndef INPUT_HPP
 #define INPUT_HPP
 
-#include <iostream>
 #include <map>
-
 #include <SFML/Graphics.hpp>
 
 #include "parser.hpp"
@@ -48,7 +46,7 @@ class CInput
     std::map<std::string, KeyHolder> globalKeys;
     sf::Event event;
 
-    class Parser keyfile;
+    Parser keyfile;
 };
 
 #endif // INPUT_HPP

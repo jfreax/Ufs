@@ -14,6 +14,8 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include <typeinfo>
+
 #include "theme.hpp"
 #include "../settings.hpp"
 
@@ -23,74 +25,94 @@ namespace gui
 
 CTheme::CTheme()
 {
-  winMinSize = sf::Vector2f( 10.f, 10.f );
-  winMaxSize = sf::Vector2f( 5000.f, 5000.f );
+  window.minSize = sf::Vector2f ( 10.f, 10.f );
+  window.maxSize = sf::Vector2f ( 5000.f, 5000.f );
+  window.backgroundColor = window.borderColor = sf::Color ( 100, 100, 100 );
+  window.titlebarColor = sf::Color ( 0, 0, 100 );
+  window.border = 1;
+  window.titlebar = 10;
 
-  winBackgroundColor = winBorderColor = sf::Color( 100, 100, 100 );
-  winTitlebarColor = sf::Color( 0, 0, 100 );
+  button.minSize = sf::Vector2f ( 5.f, 2.f );
+  button.maxSize = sf::Vector2f ( 5000.f, 5000.f );
+  button.backgroundColor = window.borderColor = sf::Color ( 200, 200, 200 );
+  button.border = 0;
 
-  winBorder = 1;
-  winTitlebar = 10;
+
+  headerList.insert ( std::make_pair< std::string, ThemeHolder* > ( "window", &window ) );
+  headerList.insert ( std::make_pair< std::string, ThemeHolder* > ( "button", &button ) );
+
+  std::map< std::string, ThemeHolder* >::iterator iter = headerList.begin();
+  std::map< std::string, ThemeHolder* >::iterator iterEnd = headerList.end();
+  for ( ; iter != iterEnd; iter++ ) {
+    paramList.push_back ( Parameter ( "minsize", &iter->second->ThemeHolder::minSize ) );
+    paramList.push_back ( Parameter ( "maxsize", &iter->second->ThemeHolder::maxSize ) );
+    paramList.push_back ( Parameter ( "backgroundimage", &iter->second->ThemeHolder::background ) );
+    paramList.push_back ( Parameter ( "backgroundcolor", &iter->second->ThemeHolder::backgroundColor ) );
+    paramList.push_back ( Parameter ( "titlebarcolor", &iter->second->ThemeHolder::titlebarColor ) );
+    paramList.push_back ( Parameter ( "border", &iter->second->ThemeHolder::border ) );
+    paramList.push_back ( Parameter ( "titlebar", &iter->second->ThemeHolder::titlebar ) );
+  }
 
 }
 
 
-void CTheme::open( std::string filename )
+void CTheme::open ( std::string filename )
 {
-  themeFile.open( filename );
+  themeFile.open ( filename, false, true );
 
   std::stringstream stream;
   std::string strTemp;
 
-  stream.str( "" ); stream.clear();
-  strTemp = themeFile.getValue( "WINDOW", "minSize" );
+  std::map< std::string, ThemeHolder* >::iterator iter = headerList.begin();
+  std::map< std::string, ThemeHolder* >::iterator iterEnd = headerList.end();
 
-  if ( !strTemp.empty() )
-    stream << strTemp && stream >> winMinSize.x >> winMinSize.y;
+  for ( ; iter != iterEnd; iter++ ) {
+    std::string headerName = iter->first;
+    ThemeHolder* headerTheme = iter->second;
 
-  stream.str( "" ); stream.clear();
-  strTemp = themeFile.getValue( "WINDOW", "maxSize" );
-  if ( !strTemp.empty() )
-    stream << strTemp && stream >> winMaxSize.x >> winMaxSize.y;
+    std::vector< Parameter >::iterator paramIter = paramList.begin();
+    std::vector< Parameter >::iterator paramIterEnd = paramList.end();
 
-  stream.str( "" ); stream.clear();
-  strTemp = themeFile.getValue( "WINDOW", "backgroundColor" );
-  if ( !strTemp.empty() )
-    stream << strTemp && stream >> winBackgroundColor.r >> winBackgroundColor.g
-    >> winBackgroundColor.b >> winBackgroundColor.a;
+    for ( ; paramIter != paramIterEnd; paramIter++ ) {
+      stream.str ( "" );
+      stream.clear();
 
-  stream.str( "" ); stream.clear();
-  strTemp = themeFile.getValue( "WINDOW", "backgroundImage" );
-  if ( !strTemp.empty() ) {
-    if ( !winBackground.LoadFromFile( settings::getPath() + "/themes/" + settings::getTheme() + "/" + strTemp ) ) { 
-      // TODO logfile und Fehlermeldung (Failed to create image, its internal size is too high (300x230) ???? )
-      std::cerr << "Error loading backgroundimage: " << strTemp << std::endl;
+      strTemp = themeFile.getValue ( headerName, paramIter->name );
+
+      if ( !strTemp.empty() ) {
+        switch ( paramIter->type ) {
+          case INTEGER:
+            stream << strTemp && stream >> *paramIter->i;
+            break;
+          case FLOAT:
+            stream << strTemp && stream >> *paramIter->f;
+            break;
+          case STRING:
+           *paramIter->s = strTemp;
+            break;
+          case COLOR:
+            stream << strTemp && stream >> paramIter->c->r >> paramIter->c->g >> paramIter->c->b >> paramIter->c->a;
+            break;
+          case IMAGE:
+            if ( !paramIter->img->LoadFromFile ( settings::getPath() + "/themes/" + settings::getTheme() + "/" + strTemp ) ) {
+              // TODO Resourcenmanager
+              std::cerr << "Error loading backgroundimage: " << strTemp << std::endl;
+            }
+            break;
+          case VECTOR_INTEGER:
+            stream << strTemp && stream >> paramIter->vi->x >> paramIter->vi->y;
+            break;
+          case VECTOR_FLOAT:
+            stream << strTemp && stream >> paramIter->vf->x >> paramIter->vf->y;
+            break;
+
+          default:
+            *paramIter->s = strTemp;
+            break;
+        }
+      }
     }
   }
-
-  stream.str( "" ); stream.clear();
-  strTemp = themeFile.getValue( "WINDOW", "border" );
-
-  if ( !strTemp.empty() )
-    stream << strTemp && stream >> winBorder;
-
-  stream.str( "" ); stream.clear();
-  strTemp = themeFile.getValue( "WINDOW", "borderColor" );
-  if ( !strTemp.empty() )
-    stream << strTemp && stream >> winBorderColor.r >> winBorderColor.g
-    >> winBorderColor.b >> winBorderColor.a;
-
-  stream.str( "" ); stream.clear();
-  strTemp = themeFile.getValue( "WINDOW", "titlebar" );
-  if ( !strTemp.empty() )
-    stream << strTemp && stream >> winTitlebar;
-
-  stream.str( "" ); stream.clear();
-  strTemp = themeFile.getValue( "WINDOW", "titlebarColor" );
-  if ( !strTemp.empty() )
-    stream << strTemp && stream >> winTitlebarColor.r >> winTitlebarColor.g
-    >> winTitlebarColor.b >> winTitlebarColor.a;
-
 }
 
 

@@ -1,8 +1,7 @@
 [WINDOW]
-minSize = 200 50
+minSize = 100 50
 borderColor = 255 10 10
 border = 20
 backgroundImage = main.png
 
 [BUTTON]
-backgroundImage = button.png

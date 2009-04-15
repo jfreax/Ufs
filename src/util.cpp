@@ -45,4 +45,11 @@ void deleteChar ( std::string &stringToReplace, char delThis )
   }
 }
 
+void lowercase ( std::string& str )
+{
+  for ( int i = 0; str[i] != '\0'; i++ ) {
+    str[i] = tolower ( str[i] );
+  }
+}
+
 }

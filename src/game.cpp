@@ -17,10 +17,12 @@
 
 #include "util.hpp"
 #include "settings.hpp"
+#include "resource.hpp"
 #include "game.hpp"
 
 #include "gui/window.hpp"
 #include "gui/manager.hpp"
+#include "gui/button.hpp"
 
 
 CGame* game = NULL;
@@ -105,7 +107,7 @@ bool CGame::initialize()
     App.Create ( settings::getVideo(), "Game" , settings::getStyle(), settings::getWindowSettings() );
   }
 
-  App.UseVerticalSync ( false );
+  App.UseVerticalSync ( true );
   App.EnableKeyRepeat ( true );
 
   fpsStr.SetSize ( 12 );
@@ -127,16 +129,25 @@ void CGame::start()
 // guiManager.newWindow();/**/
 // guiManager.newWindow();
 // guiManager.newWindow();/**/
-// guiManager.newWindow();
-// guiManager.newWindow();
-  newWin->setSizeInPercent ( sf::Vector2f ( 100, 100 ) );
-  newWin->setTitlebar ( 0 );
-  newWin->setPosition ( sf::Vector2f ( 0, 0 ) );
+guiManager.newWindow();
+guiManager.newWindow();
+  newWin->setSizeInPercent ( sf::Vector2f ( 90, 90 ) );
+  newWin->setTitlebar ( 10 );
+  newWin->setPosition ( sf::Vector2f ( 20, 100 ) );
+
+  gui::CWindow* newWin2 = guiManager.newWindow();
+  newWin2->setSizeInPercent ( sf::Vector2f ( 20, 20 ) );
+  newWin2->setTitlebar ( 10 );
+  newWin2->setPosition ( sf::Vector2f ( 0, 50 ) );
+
+  gui::CButton* newButton = new gui::CButton ( newWin );
+
 
   while ( run ) {
     input.events();
 
     this->draw();
+
 
   }
 }
@@ -175,6 +186,12 @@ sf::RenderWindow* CGame::getApp ()
 gui::CManager* CGame::getGuiManager ()
 {
   return &guiManager;
+}
+
+
+CResource< sf::Image >* CGame::getImgResource()
+{
+  return &imgResource;
 }
 
 

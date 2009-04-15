@@ -20,6 +20,16 @@
 #include <iostream>
 #include <sstream>
 
+enum TYPES {
+  INTEGER,
+  FLOAT,
+  STRING,
+  COLOR,
+  IMAGE,
+  VECTOR_INTEGER,
+  VECTOR_FLOAT,
+};
+
 
 template<typename To, typename From>
 To lexical_cast_default( From a, To def = To() )
@@ -39,6 +49,7 @@ namespace util
 
 bool isFile ( std::string filename );
 void deleteChar ( std::string &stringToReplace, char delThis = ' ' );
+void lowercase ( std::string& str );
 
 }
 

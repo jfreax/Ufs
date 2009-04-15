@@ -34,14 +34,16 @@ class CManager
     bool draw ( );
     bool proofMouseClick ( const sf::Input& input );
 
-    gui::CWindow* newWindow ( sf::Vector2f position_ = sf::Vector2f ( 0.f, 0.f ), sf::Vector2f size_ = sf::Vector2f ( 0.f, 0.f ) );
-    bool closeWindow ( gui::CWindow* window_ = NULL ); // NULL -> schlieﬂt das letzte Fenster
+    CWindow* newWindow ( sf::Vector2f position_ = sf::Vector2f ( 0.f, 0.f ), sf::Vector2f size_ = sf::Vector2f ( 0.f, 0.f ) );
+    bool closeWindow ( CWindow* window_ = NULL ); // NULL -> schlieﬂt das letzte Fenster
+    bool bringToFront ( std::vector< CWindow* >::iterator iter_ );
 
-    gui::CWindow* getActiveWindow();
+    CTheme* getTheme();
+    CWindow* getActiveWindow();
 
   private:
-    gui::CTheme theme;
-    std::vector<gui::CWindow*> windowList;
+    CTheme theme;
+    std::vector< CWindow* > windowList;
 
     sf::Vector2f mousePos4WinMove;
 

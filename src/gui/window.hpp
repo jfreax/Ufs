@@ -18,6 +18,7 @@
 #define WINDOW_HPP
 
 #include <SFML/Graphics.hpp>
+#include "widget.hpp"
 
 
 namespace gui
@@ -28,14 +29,17 @@ class CWindow
 {
   public:
     CWindow ( class CTheme *theme, sf::Vector2f position_ = sf::Vector2f ( 0.f, 0.f ), sf::Vector2f size_ = sf::Vector2f ( 0.f, 0.f ) );
+    const unsigned int getId();
 
     void update( );
     void draw ( );
 
-    const unsigned int getId();
+    void addWidget ( CWidget* widget_ );
 
     void setSize ( sf::Vector2f size_ );
     void setSizeInPercent ( sf::Vector2f sizePercent_ );
+    sf::Vector2f getSize();
+
     void setPosition ( sf::Vector2f position_ );
     sf::Vector2f getPosition();
 
@@ -48,8 +52,11 @@ class CWindow
     void setMoveWindow ( bool ison );
     bool getMoveWindow( );
 
+
   private:
     unsigned int id;
+
+    std::vector<gui::CWidget*> widgetList;
 
     sf::Shape formWin;
     sf::Shape formTitlebar;
@@ -62,6 +69,7 @@ class CWindow
     sf::Vector2f minSize;
     sf::Vector2f maxSize;
 
+    sf::Image bg_img;
     sf::Sprite background;
     sf::Color backgroundColor;
 

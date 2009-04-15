@@ -17,15 +17,19 @@
 #ifndef BUTTON_HPP
 #define BUTTON_HPP
 
+#include <iostream>
+
 #include "widget.hpp"
 
 namespace gui
 {
 
 
-class CButton : CWidget
+class CButton : public CWidget
 {
   public:
+    CButton ( class CWindow* motherWin_, sf::Vector2f position_ = sf::Vector2f ( 0.f, 0.f ), sf::Vector2f size_ = sf::Vector2f ( 0.f, 0.f ) );
+
     virtual bool draw();
 };
 

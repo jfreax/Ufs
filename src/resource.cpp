@@ -14,38 +14,4 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef WIDGET_HPP
-#define WIDGET_HPP
-
-#include <SFML/Graphics.hpp>
-
-namespace gui
-{
-
-
-class CWidget
-{
-  public:
-    CWidget ( class CWindow* motherWin_, sf::Vector2f position_, sf::Vector2f size_ );
-
-    virtual bool draw() = 0;
-
-    void setPosition ( sf::Vector2f position_ );
-    void setSize ( sf::Vector2f size_ );
-
-  protected:
-    unsigned int id;
-    class CWindow* motherWin;
-
-    sf::Vector2f position;
-    sf::Vector2f size;
-
-    sf::Sprite background;
-    sf::Color backgroundColor;
-
-};
-
-
-} // namespace gui
-
-#endif // WIDGET_HPP
+#include "resource.hpp"

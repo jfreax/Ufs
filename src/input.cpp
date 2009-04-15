@@ -23,107 +23,107 @@
 
 CInput::CInput ( std::string file )
 {
-  availableKeys["A"] = sf::Key::A;
-  availableKeys["B"] = sf::Key::B;
-  availableKeys["C"] = sf::Key::C;
-  availableKeys["D"] = sf::Key::D;
-  availableKeys["E"] = sf::Key::E;
-  availableKeys["F"] = sf::Key::F;
-  availableKeys["G"] = sf::Key::G;
-  availableKeys["H"] = sf::Key::H;
-  availableKeys["I"] = sf::Key::I;
-  availableKeys["J"] = sf::Key::J;
-  availableKeys["K"] = sf::Key::K;
-  availableKeys["L"] = sf::Key::L;
-  availableKeys["M"] = sf::Key::M;
-  availableKeys["N"] = sf::Key::N;
-  availableKeys["O"] = sf::Key::O;
-  availableKeys["P"] = sf::Key::P;
-  availableKeys["Q"] = sf::Key::Q;
-  availableKeys["R"] = sf::Key::R;
-  availableKeys["S"] = sf::Key::S;
-  availableKeys["T"] = sf::Key::T;
-  availableKeys["U"] = sf::Key::U;
-  availableKeys["V"] = sf::Key::V;
-  availableKeys["W"] = sf::Key::W;
-  availableKeys["X"] = sf::Key::X;
-  availableKeys["Y"] = sf::Key::Y;
-  availableKeys["Z"] = sf::Key::Z;
-  availableKeys["Num0"] = sf::Key::Num0;
-  availableKeys["Num1"] = sf::Key::Num1;
-  availableKeys["Num2"] = sf::Key::Num2;
-  availableKeys["Num3"] = sf::Key::Num3;
-  availableKeys["Num4"] = sf::Key::Num4;
-  availableKeys["Num5"] = sf::Key::Num5;
-  availableKeys["Num6"] = sf::Key::Num6;
-  availableKeys["Num7"] = sf::Key::Num7;
-  availableKeys["Num8"] = sf::Key::Num8;
-  availableKeys["Num9"] = sf::Key::Num9;
-  availableKeys["Escape"] = sf::Key::Escape;
-  availableKeys["LControl"] = sf::Key::LControl;
-  availableKeys["LShift"] = sf::Key::LShift;
-  availableKeys["LAlt"] = sf::Key::LAlt;
-  availableKeys["LSystem"] = sf::Key::LSystem;
-  availableKeys["RControl"] = sf::Key::RControl;
-  availableKeys["RShift"] = sf::Key::RShift;
-  availableKeys["RAlt"] = sf::Key::RAlt;
-  availableKeys["RSystem"] = sf::Key::RSystem;
-  availableKeys["Menu"] = sf::Key::Menu;
-  availableKeys["LBracket"] = sf::Key::LBracket;
-  availableKeys["RBracket"] = sf::Key::RBracket;
-  availableKeys["SemiColon"] = sf::Key::SemiColon;
-  availableKeys["Comma"] = sf::Key::Comma;
-  availableKeys["Period"] = sf::Key::Period;
-  availableKeys["Quote"] = sf::Key::Quote;
-  availableKeys["Slash"] = sf::Key::Slash;
-  availableKeys["BackSlash"] = sf::Key::BackSlash;
-  availableKeys["Tilde"] = sf::Key::Tilde;
-  availableKeys["Equal"] = sf::Key::Equal;
-  availableKeys["Dash"] = sf::Key::Dash;
-  availableKeys["Space"] = sf::Key::Space;
-  availableKeys["Return"] = sf::Key::Return;
-  availableKeys["Back"] = sf::Key::Back;
-  availableKeys["Tab"] = sf::Key::Tab;
-  availableKeys["PageUp"] = sf::Key::PageUp;
-  availableKeys["PageDown"] = sf::Key::PageDown;
-  availableKeys["End"] = sf::Key::End;
-  availableKeys["Home"] = sf::Key::Home;
-  availableKeys["Insert"] = sf::Key::Insert;
-  availableKeys["Delete"] = sf::Key::Delete;
-  availableKeys["Add"] = sf::Key::Add;
-  availableKeys["Subtract"] = sf::Key::Subtract;
-  availableKeys["Multiply"] = sf::Key::Multiply;
-  availableKeys["Divide"] = sf::Key::Divide;
-  availableKeys["Left"] = sf::Key::Left;
-  availableKeys["Right"] = sf::Key::Right;
-  availableKeys["Up"] = sf::Key::Up;
-  availableKeys["Down"] = sf::Key::Down;
-  availableKeys["Numpad0"] = sf::Key::Numpad0;
-  availableKeys["Numpad1"] = sf::Key::Numpad1;
-  availableKeys["Numpad2"] = sf::Key::Numpad2;
-  availableKeys["Numpad3"] = sf::Key::Numpad3;
-  availableKeys["Numpad4"] = sf::Key::Numpad4;
-  availableKeys["Numpad5"] = sf::Key::Numpad5;
-  availableKeys["Numpad6"] = sf::Key::Numpad6;
-  availableKeys["Numpad7"] = sf::Key::Numpad7;
-  availableKeys["Numpad8"] = sf::Key::Numpad8;
-  availableKeys["Numpad9"] = sf::Key::Numpad9;
-  availableKeys["F1"] = sf::Key::F1;
-  availableKeys["F2"] = sf::Key::F2;
-  availableKeys["F3"] = sf::Key::F3;
-  availableKeys["F4"] = sf::Key::F4;
-  availableKeys["F5"] = sf::Key::F5;
-  availableKeys["F6"] = sf::Key::F6;
-  availableKeys["F7"] = sf::Key::F7;
-  availableKeys["F8"] = sf::Key::F8;
-  availableKeys["F9"] = sf::Key::F9;
-  availableKeys["F10"] = sf::Key::F10;
-  availableKeys["F11"] = sf::Key::F11;
-  availableKeys["F12"] = sf::Key::F12;
-  availableKeys["F13"] = sf::Key::F13;
-  availableKeys["F14"] = sf::Key::F14;
-  availableKeys["F15"] = sf::Key::F15;
-  availableKeys["Pause"] = sf::Key::Pause;
+  availableKeys["a"] = sf::Key::A;
+  availableKeys["b"] = sf::Key::B;
+  availableKeys["c"] = sf::Key::C;
+  availableKeys["d"] = sf::Key::D;
+  availableKeys["e"] = sf::Key::E;
+  availableKeys["f"] = sf::Key::F;
+  availableKeys["g"] = sf::Key::G;
+  availableKeys["h"] = sf::Key::H;
+  availableKeys["i"] = sf::Key::I;
+  availableKeys["j"] = sf::Key::J;
+  availableKeys["k"] = sf::Key::K;
+  availableKeys["l"] = sf::Key::L;
+  availableKeys["m"] = sf::Key::M;
+  availableKeys["n"] = sf::Key::N;
+  availableKeys["o"] = sf::Key::O;
+  availableKeys["p"] = sf::Key::P;
+  availableKeys["q"] = sf::Key::Q;
+  availableKeys["r"] = sf::Key::R;
+  availableKeys["s"] = sf::Key::S;
+  availableKeys["t"] = sf::Key::T;
+  availableKeys["u"] = sf::Key::U;
+  availableKeys["v"] = sf::Key::V;
+  availableKeys["w"] = sf::Key::W;
+  availableKeys["x"] = sf::Key::X;
+  availableKeys["y"] = sf::Key::Y;
+  availableKeys["z"] = sf::Key::Z;
+  availableKeys["num0"] = sf::Key::Num0;
+  availableKeys["num1"] = sf::Key::Num1;
+  availableKeys["num2"] = sf::Key::Num2;
+  availableKeys["num3"] = sf::Key::Num3;
+  availableKeys["num4"] = sf::Key::Num4;
+  availableKeys["num5"] = sf::Key::Num5;
+  availableKeys["num6"] = sf::Key::Num6;
+  availableKeys["num7"] = sf::Key::Num7;
+  availableKeys["num8"] = sf::Key::Num8;
+  availableKeys["num9"] = sf::Key::Num9;
+  availableKeys["escape"] = sf::Key::Escape;
+  availableKeys["lcontrol"] = sf::Key::LControl;
+  availableKeys["lshift"] = sf::Key::LShift;
+  availableKeys["lalt"] = sf::Key::LAlt;
+  availableKeys["lsystem"] = sf::Key::LSystem;
+  availableKeys["rcontrol"] = sf::Key::RControl;
+  availableKeys["rshift"] = sf::Key::RShift;
+  availableKeys["ralt"] = sf::Key::RAlt;
+  availableKeys["rsystem"] = sf::Key::RSystem;
+  availableKeys["menu"] = sf::Key::Menu;
+  availableKeys["lbracket"] = sf::Key::LBracket;
+  availableKeys["rbracket"] = sf::Key::RBracket;
+  availableKeys["semicolon"] = sf::Key::SemiColon;
+  availableKeys["comma"] = sf::Key::Comma;
+  availableKeys["period"] = sf::Key::Period;
+  availableKeys["quote"] = sf::Key::Quote;
+  availableKeys["slash"] = sf::Key::Slash;
+  availableKeys["backSlash"] = sf::Key::BackSlash;
+  availableKeys["tilde"] = sf::Key::Tilde;
+  availableKeys["equal"] = sf::Key::Equal;
+  availableKeys["dash"] = sf::Key::Dash;
+  availableKeys["space"] = sf::Key::Space;
+  availableKeys["return"] = sf::Key::Return;
+  availableKeys["back"] = sf::Key::Back;
+  availableKeys["tab"] = sf::Key::Tab;
+  availableKeys["pageup"] = sf::Key::PageUp;
+  availableKeys["pagedown"] = sf::Key::PageDown;
+  availableKeys["end"] = sf::Key::End;
+  availableKeys["home"] = sf::Key::Home;
+  availableKeys["insert"] = sf::Key::Insert;
+  availableKeys["delete"] = sf::Key::Delete;
+  availableKeys["add"] = sf::Key::Add;
+  availableKeys["subtract"] = sf::Key::Subtract;
+  availableKeys["multiply"] = sf::Key::Multiply;
+  availableKeys["divide"] = sf::Key::Divide;
+  availableKeys["left"] = sf::Key::Left;
+  availableKeys["right"] = sf::Key::Right;
+  availableKeys["up"] = sf::Key::Up;
+  availableKeys["down"] = sf::Key::Down;
+  availableKeys["numpad0"] = sf::Key::Numpad0;
+  availableKeys["numpad1"] = sf::Key::Numpad1;
+  availableKeys["numpad2"] = sf::Key::Numpad2;
+  availableKeys["numpad3"] = sf::Key::Numpad3;
+  availableKeys["numpad4"] = sf::Key::Numpad4;
+  availableKeys["numpad5"] = sf::Key::Numpad5;
+  availableKeys["numpad6"] = sf::Key::Numpad6;
+  availableKeys["numpad7"] = sf::Key::Numpad7;
+  availableKeys["numpad8"] = sf::Key::Numpad8;
+  availableKeys["numpad9"] = sf::Key::Numpad9;
+  availableKeys["f1"] = sf::Key::F1;
+  availableKeys["f2"] = sf::Key::F2;
+  availableKeys["f3"] = sf::Key::F3;
+  availableKeys["f4"] = sf::Key::F4;
+  availableKeys["f5"] = sf::Key::F5;
+  availableKeys["f6"] = sf::Key::F6;
+  availableKeys["f7"] = sf::Key::F7;
+  availableKeys["f8"] = sf::Key::F8;
+  availableKeys["f9"] = sf::Key::F9;
+  availableKeys["f10"] = sf::Key::F10;
+  availableKeys["f11"] = sf::Key::F11;
+  availableKeys["f12"] = sf::Key::F12;
+  availableKeys["f13"] = sf::Key::F13;
+  availableKeys["f14"] = sf::Key::F14;
+  availableKeys["f15"] = sf::Key::F15;
+  availableKeys["pause"] = sf::Key::Pause;
 
   this->loadKeys ( file );
 }
@@ -131,13 +131,13 @@ CInput::CInput ( std::string file )
 
 bool CInput::loadKeys ( std::string file )
 {
-  bool ret = keyfile.open ( file );
+  bool ret = keyfile.open ( file, false, true );
 
-  for ( int i = keyfile.countKeys ( "GLOBAL" ) - 1; i >= 0 ; --i ) {
+  for ( int i = keyfile.countKeys ( "global" ) - 1; i >= 0 ; --i ) {
     KeyHolder keyHolder;
     keyHolder.strg = keyHolder.shift = keyHolder.alt = 0;
 
-    std::string keysToPress = keyfile.getValue ( "GLOBAL", i );
+    std::string keysToPress = keyfile.getValue ( "global", i );
     keysToPress = "+" + keysToPress;
     util::deleteChar ( keysToPress );
 
@@ -145,17 +145,17 @@ bool CInput::loadKeys ( std::string file )
     for ( size_t found = 0; found != std::string::npos; found = keysToPress.find ( '+', found + 1 ) ) {
       std::string keyTmp = keysToPress.substr ( found + 1, keysToPress.find ( '+', found + 1 ) - found - 1 );
 
-      if ( keyTmp == "Strg" )
+      if ( keyTmp == "strg" )
         keyHolder.strg = true;
-      else if ( keyTmp == "Alt" )
+      else if ( keyTmp == "alt" )
         keyHolder.alt = true;
-      else if ( keyTmp == "Shift" )
+      else if ( keyTmp == "shift" )
         keyHolder.shift = true;
       else
         keyHolder.key = availableKeys[ keyTmp ];
     }
 
-    globalKeys[keyfile.getKey ( "GLOBAL", i ) ] = keyHolder;
+    globalKeys[keyfile.getKey ( "global", i ) ] = keyHolder;
   }
 
   return ret;

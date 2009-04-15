@@ -28,7 +28,7 @@ class Parser
   public:
     std::stringstream operator[]( std::string headerName );
 
-    bool open( std::string filename = "", bool index = false );
+    bool open( std::string filename = "", bool index = false, bool make_lower = false );
     bool save( std::string file );
 
     int countKeys( std::string searchSection, std::string searchedKey );
