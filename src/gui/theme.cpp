@@ -23,19 +23,20 @@ namespace gui
 {
 
 
-CTheme::CTheme()
+CTheme::CTheme ( void )
 {
-  window.minSize = sf::Vector2f ( 10.f, 10.f );
-  window.maxSize = sf::Vector2f ( 5000.f, 5000.f );
-  window.backgroundColor = window.borderColor = sf::Color ( 100, 100, 100 );
-  window.titlebarColor = sf::Color ( 0, 0, 100 );
-  window.border = 1;
-  window.titlebar = 10;
+  ThemeHolder defaultforall; // Standardeigenschaften für _alle_ GUI Objekte
 
-  button.minSize = sf::Vector2f ( 5.f, 2.f );
-  button.maxSize = sf::Vector2f ( 5000.f, 5000.f );
-  button.backgroundColor = window.borderColor = sf::Color ( 200, 200, 200 );
-  button.border = 0;
+  defaultforall.minSize = sf::Vector2f ( 10.f, 10.f );
+  defaultforall.maxSize = sf::Vector2f ( 5000.f, 5000.f );
+  defaultforall.backgroundColor = window.borderColor = sf::Color ( 100, 100, 100 );
+  defaultforall.titlebarColor = sf::Color ( 0, 0, 100 );
+  defaultforall.border = 1;
+  defaultforall.titlebar = 10;
+  defaultforall.fontSize = 12;
+  defaultforall.iconClose = sf::Vector3f ( -20, -2, 5 );
+
+  window = button = defaultforall;
 
 
   headerList.insert ( std::make_pair< std::string, ThemeHolder* > ( "window", &window ) );
@@ -43,76 +44,93 @@ CTheme::CTheme()
 
   std::map< std::string, ThemeHolder* >::iterator iter = headerList.begin();
   std::map< std::string, ThemeHolder* >::iterator iterEnd = headerList.end();
-  for ( ; iter != iterEnd; iter++ ) {
-    paramList.push_back ( Parameter ( "minsize", &iter->second->ThemeHolder::minSize ) );
-    paramList.push_back ( Parameter ( "maxsize", &iter->second->ThemeHolder::maxSize ) );
-    paramList.push_back ( Parameter ( "backgroundimage", &iter->second->ThemeHolder::background ) );
-    paramList.push_back ( Parameter ( "backgroundcolor", &iter->second->ThemeHolder::backgroundColor ) );
-    paramList.push_back ( Parameter ( "titlebarcolor", &iter->second->ThemeHolder::titlebarColor ) );
-    paramList.push_back ( Parameter ( "border", &iter->second->ThemeHolder::border ) );
-    paramList.push_back ( Parameter ( "titlebar", &iter->second->ThemeHolder::titlebar ) );
+
+  for ( ; iter != iterEnd; ++iter )
+  {
+    paramList.insert ( std::make_pair< std::string, Parameter > ( iter->first, Parameter ( "minsize", &iter->second->ThemeHolder::minSize ) ) );
+    paramList.insert ( std::make_pair< std::string, Parameter > ( iter->first, Parameter ( "maxsize", &iter->second->ThemeHolder::maxSize ) ) );
+    paramList.insert ( std::make_pair< std::string, Parameter > ( iter->first, Parameter ( "backgroundimage", &iter->second->ThemeHolder::background ) ) );
+    paramList.insert ( std::make_pair< std::string, Parameter > ( iter->first, Parameter ( "backgroundcolor", &iter->second->ThemeHolder::backgroundColor ) ) );
+    paramList.insert ( std::make_pair< std::string, Parameter > ( iter->first, Parameter ( "titlebarcolor", &iter->second->ThemeHolder::titlebarColor ) ) );
+    paramList.insert ( std::make_pair< std::string, Parameter > ( iter->first, Parameter ( "border", &iter->second->ThemeHolder::border ) ) );
+    paramList.insert ( std::make_pair< std::string, Parameter > ( iter->first, Parameter ( "titlebar", &iter->second->ThemeHolder::titlebar ) ) );
+    paramList.insert ( std::make_pair< std::string, Parameter > ( iter->first, Parameter ( "fontsize", &iter->second->ThemeHolder::fontSize ) ) );
+    paramList.insert ( std::make_pair< std::string, Parameter > ( iter->first, Parameter ( "close", &iter->second->ThemeHolder::iconClose ) ) );
   }
 
 }
 
 
-void CTheme::open ( std::string filename )
+void CTheme::Open ( std::string filename )
 {
-  themeFile.open ( filename, false, true );
+  themeFile.Open ( filename, false, true );
 
   std::stringstream stream;
   std::string strTemp;
 
   std::map< std::string, ThemeHolder* >::iterator iter = headerList.begin();
   std::map< std::string, ThemeHolder* >::iterator iterEnd = headerList.end();
+  std::map< std::string, Parameter >::iterator paramIter = paramList.begin();
+  std::map< std::string, Parameter >::iterator paramIterEnd = paramList.end();
 
-  for ( ; iter != iterEnd; iter++ ) {
-    std::string headerName = iter->first;
-    ThemeHolder* headerTheme = iter->second;
+  for ( ; paramIter != paramIterEnd; paramIter++ )
+  {
+    stream.str ( "" );
+    stream.clear();
 
-    std::vector< Parameter >::iterator paramIter = paramList.begin();
-    std::vector< Parameter >::iterator paramIterEnd = paramList.end();
+    strTemp = themeFile.GetValue ( paramIter->first, paramIter->second.name );
 
-    for ( ; paramIter != paramIterEnd; paramIter++ ) {
-      stream.str ( "" );
-      stream.clear();
+    if ( !strTemp.empty() )
+    {
+      switch ( paramIter->second.type )
+      {
 
-      strTemp = themeFile.getValue ( headerName, paramIter->name );
+        case INTEGER:
+          stream << strTemp && stream >> *paramIter->second.i;
+          break;
 
-      if ( !strTemp.empty() ) {
-        switch ( paramIter->type ) {
-          case INTEGER:
-            stream << strTemp && stream >> *paramIter->i;
-            break;
-          case FLOAT:
-            stream << strTemp && stream >> *paramIter->f;
-            break;
-          case STRING:
-           *paramIter->s = strTemp;
-            break;
-          case COLOR:
-            stream << strTemp && stream >> paramIter->c->r >> paramIter->c->g >> paramIter->c->b >> paramIter->c->a;
-            break;
-          case IMAGE:
-            if ( !paramIter->img->LoadFromFile ( settings::getPath() + "/themes/" + settings::getTheme() + "/" + strTemp ) ) {
-              // TODO Resourcenmanager
-              std::cerr << "Error loading backgroundimage: " << strTemp << std::endl;
-            }
-            break;
-          case VECTOR_INTEGER:
-            stream << strTemp && stream >> paramIter->vi->x >> paramIter->vi->y;
-            break;
-          case VECTOR_FLOAT:
-            stream << strTemp && stream >> paramIter->vf->x >> paramIter->vf->y;
-            break;
+        case FLOAT:
+          stream << strTemp && stream >> *paramIter->second.f;
+          break;
 
-          default:
-            *paramIter->s = strTemp;
-            break;
-        }
+        case STRING:
+          *paramIter->second.s = strTemp;
+          break;
+
+        case COLOR:
+          stream << strTemp && stream >> paramIter->second.c->r >> paramIter->second.c->g >> paramIter->second.c->b >> paramIter->second.c->a;
+          break;
+
+        case IMAGE:
+
+          if ( !paramIter->second.img->LoadFromFile ( settings::GetThemePath() + strTemp ) )
+          {
+            // TODO Resourcenmanager
+            std::cerr << "Error loading backgroundimage: " << strTemp << std::endl;
+          }
+
+          break;
+
+        case VECTOR_INTEGER:
+          stream << strTemp && stream >> paramIter->second.vi->x >> paramIter->second.vi->y;
+          break;
+
+        case VECTOR_FLOAT:
+          stream << strTemp && stream >> paramIter->second.vf->x >> paramIter->second.vf->y;
+          break;
+
+        case VECTOR3_FLOAT:
+          stream << strTemp && stream >> paramIter->second.v3f->x >> paramIter->second.v3f->y >> paramIter->second.v3f->z;
+          break;
+
+        default:
+          *paramIter->second.s = strTemp;
+          break;
       }
     }
   }
+
+//   }
 }
 
 

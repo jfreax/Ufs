@@ -24,23 +24,36 @@ namespace gui
 
 CButton::CButton ( class CWindow* motherWin_, sf::Vector2f position_, sf::Vector2f size_ ) : CWidget ( motherWin_, position_, size_ )
 {
+  CTheme* theme = GetGameClass()->GetGuiManager()->GetTheme();
+
+  this->noUpdate = true;
+  {
+    background.SetImage ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/" + theme->button.background ) );
+    this->SetBackgroundColor ( theme->button.backgroundColor );
+    this->SetFontSize ( theme->button.fontSize );
+  }
+
+  this->noUpdate = false;
+  this->Update();
 }
 
 
-bool CButton::draw()
+void CButton::Render ( void ) const
 {
-  sf::RenderWindow* app = getGameClass()->getApp();
+  sf::RenderWindow* app = GetGameClass()->GetApp();
 
-  if ( background.GetSize().x != 1.f ) {
+  if ( background.GetSize().x != 1.f )
+  {
     app->Draw ( background );
-//     std::cout << "naaaja/**/jajaa ein Bild " << std::endl;/**/
-  } else {
-//   /**/  std::cout << "keine bild!" << std::endl;/**/
+  }
+  else
+  {
+
   }
 
+  app->Draw ( text );
 }
 
 
 
 } // namespace gui
-

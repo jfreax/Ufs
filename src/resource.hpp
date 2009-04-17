@@ -34,21 +34,21 @@ template < typename T >
 class CResource
 {
   public:
-    T* get ( std::string name_ ) {
+    T* Get ( std::string name_ ) {
       if ( !data [ name_ ] ) {
-        return push ( name_ );
+        return Push ( name_ );
       } else {
         return data [ name_ ];
       }
     }
 
 
-    T* push ( std::string filename_ ) {
+    T* Push ( std::string filename_ ) {
       if ( typeid ( T ).name() == typeid ( sf::Image ).name() ) {
 
         sf::Image* img = new sf::Image;
 
-        if ( !img->LoadFromFile ( settings::getPath() + filename_ ) ) {
+        if ( !img->LoadFromFile ( settings::GetPath() + filename_ ) ) {
           // TODO Logfile
           std::cerr << "Error loading backgroundimage: " << filename_ << std::endl;
         }

@@ -19,35 +19,40 @@
 
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
+#include "util.hpp"
 
 namespace settings
 {
 
-sf::VideoMode getVideo();
-sf::WindowSettings getWindowSettings();
-int getStyle();
+sf::VideoMode GetVideo ( void );
+sf::WindowSettings GetWindowSettings ( void );
+int GetStyle ( void );
 
-std::string getPath();
-void setPath( std::string path_ );
+std::string GetPath ( void );
+std::string GetThemePath ( void );
+void SetPath ( std::string path_ );
 
-bool getFullscreen();
-void setFullscreen( bool ison );
-void toggleFullscreen();
+bool GetFullscreen ( void );
+void SetFullscreen ( bool ison );
+void ToggleFullscreen ( void );
 
-bool showFps();
-void setShowFps( bool ison );
+bool GetShowFps ( void );
+void SetShowFps ( bool ison );
 
-int getHeight();
-void setHeight( int height_ );
+int GetHeight ( void );
+void SetHeight ( int height_ );
 
-int getWidth();
-void setWidth( int width_ );
+int GetWidth ( void );
+void SetWidth ( int width_ );
 
-int getBpp();
-void setBpp( int bpp_ );
+int GetBpp ( void );
+void SetBpp ( int bpp_ );
 
-std::string getTheme();
-void setTheme ( std::string theme_ );
+std::string GetTheme ( void );
+void SetTheme ( std::string theme_ );
+
+MOUSESCOPE GetMouseScope ( void );
+void SetMouseScope ( MOUSESCOPE mousescope_ );
 
 }
 

@@ -18,6 +18,7 @@
 #define CONFIG_HPP
 
 #include <SFML/Graphics.hpp>
+#include "util.hpp"
 
 class Config
 {
@@ -33,6 +34,8 @@ class Config
     sf::VideoMode video;
 
     std::string theme;
+
+    MOUSESCOPE mousescope;
 };
 
 #endif // CONFIG_HPP

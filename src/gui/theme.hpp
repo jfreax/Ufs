@@ -40,6 +40,10 @@ struct ThemeHolder {
 
   int titlebar;
   sf::Color titlebarColor;
+
+  int fontSize;
+
+  sf::Vector3f iconClose;
 };
 
 
@@ -67,6 +71,9 @@ class Parameter
     Parameter ( std::string name_, sf::Vector2f* x ) : name ( name_ ), vf ( x ) {
       type = VECTOR_FLOAT;
     }
+    Parameter ( std::string name_, sf::Vector3f* x ) : name ( name_ ), v3f ( x ) {
+      type = VECTOR3_FLOAT;
+    }
 
     TYPES type;
     std::string name;
@@ -79,20 +86,20 @@ class Parameter
     sf::Image* img;
     sf::Vector2f* vf;
     sf::Vector2i* vi;
+    sf::Vector3f* v3f;
 };
 
 
 class CTheme
 {
   public:
-    CTheme ();
-    void open ( std::string filename );
-
-    Parser themeFile;
+    CTheme ( void );
+    void Open ( std::string filename );
 
     std::map< std::string, ThemeHolder* > headerList;
-    std::vector< Parameter > paramList;
+    std::multimap< std::string, Parameter > paramList;
 
+    Parser themeFile;
     ThemeHolder window;
     ThemeHolder button;
 };

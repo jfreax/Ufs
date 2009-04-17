@@ -22,30 +22,33 @@
 
 #include "input.hpp"
 #include "resource.hpp"
+#include "animation.hpp"
 
 class CGame
 {
+
   public:
-    CGame( int argc, char **argv );
-    bool initialize();
+    CGame ( int argc, char **argv );
+    bool Initialize ( void );
 
-    bool IsVideoModeValid();
+    bool IsVideoModeValid ( void );
 
-    void start();
-    void stop();
+    void Start ( void );
+    void Stop ( void );
 
-    void draw();
+    void Render ( void );
 
-    sf::RenderWindow* getApp();
-    gui::CManager* getGuiManager();
-    CResource< sf::Image >* getImgResource();
+    sf::RenderWindow* GetApp ( void );
+    gui::CManager* GetGuiManager ( void );
+    CResource< sf::Image >* GetImgResource ( void );
 
-    void calcFPS();
+    void CalcFPS();
 
-    sf::String* getFpsStr();
+    std::map< MOUSESCOPE, CAnimation*> GetCursor ( void );
+    sf::String* GetFpsStr ( void );
 
   private:
-    sf::RenderWindow App;
+    sf::RenderWindow app;
 
     const int argc_;
     int arg_;
@@ -58,11 +61,12 @@ class CGame
     CResource < sf::Image > imgResource;
     CInput input;
 
+    std::map< MOUSESCOPE, CAnimation*> cursor;
+
     sf::String fpsStr;
 
 };
 
-
-CGame* getGameClass();
+CGame* GetGameClass ( void );
 
 #endif // GAME_HPP

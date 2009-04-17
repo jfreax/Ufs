@@ -24,7 +24,7 @@ namespace util
 
 bool isFile ( std::string filename )
 {
-  filename = settings::getPath() + filename;
+  filename = settings::GetPath() + filename;
 
   std::ifstream file ( filename.c_str(), std::ios::in );
 

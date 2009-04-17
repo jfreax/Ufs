@@ -28,42 +28,100 @@ CWidget::CWidget ( CWindow* motherWin_, sf::Vector2f position_, sf::Vector2f siz
   static unsigned int globalId = 0;
   id = ++globalId;
 
-  CTheme* theme = getGameClass()->getGuiManager()->getTheme();
+  CTheme* theme = GetGameClass()->GetGuiManager()->GetTheme();
 
   motherWin = motherWin_;
-  motherWin->addWidget ( this );
+  motherWin->AddWidget ( this );
 
-//   background.SetImage ( theme->button.background );
-  backgroundColor = theme->button.backgroundColor;
+  this->noUpdate = true;
+  {
+    this->SetPosition ( position_ );
+    this->SetSize ( size_ );
+  }
 
-  this->setPosition ( position_ );
-  this->setSize ( size_ );
+  this->noUpdate = false;
+  this->Update();
 }
 
 
-void CWidget::setPosition ( sf::Vector2f position_ )
+bool CWidget::Update ( void )
+{
+  if ( noUpdate )
+  {
+    return false;
+  }
+
+  if ( background.GetSize().x != 1.f )
+  {
+    background.SetPosition ( position + motherWin->GetPosition() );
+    background.Resize ( curSize );
+  }
+  else
+  {
+    form = sf::Shape::Rectangle ( position, position + curSize, backgroundColor, border, borderColor );
+  }
+
+  sf::Vector2f textPos ( ( curSize.x - text.GetRect().GetWidth() ) * 0.5f, ( curSize.y - text.GetRect().GetHeight() ) * 0.5f );
+
+  text.SetPosition ( position + motherWin->GetPosition() + textPos );
+
+  return true;
+}
+
+
+
+void CWidget::SetPosition ( sf::Vector2f position_ )
 {
   position = position_;
 
-  if ( position.x < 0 ) {
-    position.x += motherWin->getSize().x;
-  } else while ( position.x >= motherWin->getSize().x ) {
-      position.x -= motherWin->getSize().x;
+  if ( position.x < 0 )
+  {
+    position.x += motherWin->GetSize().x;
+  }
+  else if ( position.x >= motherWin->GetSize().x )
+  {
+    position.x -= motherWin->GetSize().x;
   }
 
-  if ( position.y < 0 ) {
-    position.y += motherWin->getSize().y;
-  } else while ( position.y >= motherWin->getSize().y ) {
-      position.y -= motherWin->getSize().y;
+  if ( position.y < 0 )
+  {
+    position.y += motherWin->GetSize().y;
   }
+  else if ( position.y >= motherWin->GetSize().y )
+  {
+    position.y -= motherWin->GetSize().y;
+  }
+
+  this->Update();
 }
 
 
-void CWidget::setSize ( sf::Vector2f size_ )
+void CWidget::SetSize ( sf::Vector2f size_ )
 {
-  size = size_;
+  curSize = size_;
+  this->Update();
 }
 
+
+void CWidget::SetName ( std::string name_ )
+{
+  name = name_;
+  text.SetText ( name );
+
+  this->Update();
+}
+
+
+void CWidget::SetFontSize ( int size_ )
+{
+  text.SetSize ( size_ );
+}
+
+
+void CWidget::SetBackgroundColor ( sf::Color color_ )
+{
+  backgroundColor = color_;
+}
 
 
 

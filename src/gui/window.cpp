@@ -31,11 +31,16 @@ CWindow::CWindow ( CTheme *theme, sf::Vector2f position_, sf::Vector2f size_ )
   static unsigned int globalId = 0;
   id = ++globalId;
 
+  CGame* game = GetGameClass();
+
   minSize = theme->window.minSize;
   maxSize = theme->window.maxSize;
 
-  background.SetImage ( *getGameClass()->getImgResource()->get( "/themes/" + settings::getTheme() + "/" + theme->window.background ) );
+  background.SetImage ( *game->GetImgResource()->Get( settings::GetThemePath() + theme->window.background ) );
   backgroundColor = theme->window.backgroundColor;
+
+  iconCloseImg.SetImage( *game->GetImgResource()->Get( settings::GetThemePath() + "close.png" ) );
+  this->SetIconClose ( theme->window.iconClose );
 
   border = theme->window.border;
   borderColor = theme->window.borderColor;
@@ -47,27 +52,26 @@ CWindow::CWindow ( CTheme *theme, sf::Vector2f position_, sf::Vector2f size_ )
   moveAble = true;
   resizeAble = true;
 
-  this->setPosition ( position_ );
-  this->setSize ( size_ );
+  this->SetPosition ( position_ );
+  this->SetSize ( size_ );
 
-  this->update();
+  this->Update();
 }
 
 
-const unsigned int CWindow::getId()
+const unsigned int CWindow::GetId ( void ) const
 {
   return id;
 }
 
 
-void CWindow::update( )
+void CWindow::Update ( void )
 {
   sf::Vector2f titlebarPosition ( position.x, position.y - titlebar );
   sf::Vector2f titlebarEndPosition ( position.x + curSize.x, position.y );
   formTitlebar = sf::Shape::Rectangle ( titlebarPosition, titlebarEndPosition, titlebarColor );
 
   // Hintergrundbild / -Shape
-
   if ( background.GetSize().x != 1.f ) {
     background.SetPosition ( position );
     background.Resize ( curSize );
@@ -75,14 +79,27 @@ void CWindow::update( )
     formWin = sf::Shape::Rectangle ( position, position + curSize, backgroundColor, border, borderColor );
   }
 
+  // Titelbar
+  int iCx = iconClose.x < 0 ? iconClose.x + GetSize().x : iconClose.x;
+  int iCy = iconClose.y - titlebar;
+  iconCloseImg.SetPosition( iCx + GetPosition().x, iCy + GetPosition().y );
+
+  // Inhalte ebenfalls aktualisieren
+  for ( std::vector<gui::CWidget*>::size_type i = widgetList.size(); i; --i ) {
+    widgetList.at( i-1 )->Update();
+  }
 }
 
 
-void CWindow::draw ( )
+bool CWindow::Render ( void )
 {
-  sf::RenderWindow* app = getGameClass()->getApp();
+  sf::RenderWindow* app = GetGameClass()->GetApp();
 
+  // Titlebar + icons
   app->Draw ( formTitlebar );
+  app->Draw ( iconCloseImg );
+
+
 
   if ( background.GetSize().x && background.GetSize().x != 1.f ) {
     app->Draw ( background );
@@ -91,18 +108,18 @@ void CWindow::draw ( )
   }
 
   for ( std::vector<gui::CWidget*>::size_type i = widgetList.size(); i; --i ) {
-    widgetList[i-1]->draw();
+    widgetList[i-1]->Render();
   }
 }
 
 
-void CWindow::addWidget ( CWidget* widget_ )
+void CWindow::AddWidget ( CWidget* widget_ )
 {
   widgetList.push_back ( widget_ );
 }
 
 
-void CWindow::setSize ( sf::Vector2f size_ )
+void CWindow::SetSize ( sf::Vector2f size_ )
 {
   curSize = size_;
 
@@ -119,85 +136,99 @@ void CWindow::setSize ( sf::Vector2f size_ )
     curSize.y = maxSize.y;
   }
 
-  this->update();
+  this->Update();
 }
 
 
-void CWindow::setSizeInPercent ( sf::Vector2f sizePercent_ )
+void CWindow::SetSizeInPercent ( sf::Vector2f sizePercent_ )
 {
-  this->setSize ( sf::Vector2f ( settings::getWidth() * sizePercent_.x * 0.01, settings::getHeight() * sizePercent_.y * 0.01 ) );
+  this->SetSize ( sf::Vector2f ( settings::GetWidth() * sizePercent_.x * 0.01, settings::GetHeight() * sizePercent_.y * 0.01 ) );
 }
 
 
-sf::Vector2f CWindow::getSize()
+sf::Vector2f CWindow::GetSize ( void ) const
 {
   return curSize;
 }
 
 
-void CWindow::setPosition ( sf::Vector2f position_ )
+void CWindow::SetPosition ( sf::Vector2f position_ )
 {
   position = position_;
 
   if ( position.x + curSize.x < 0 )
     position.x = - curSize.x + 10;
 
-  if ( position.x > settings::getWidth() - 10 )
-    position.x = settings::getWidth() - 10;
+  if ( position.x > settings::GetWidth() - 10 )
+    position.x = settings::GetWidth() - 10;
 
   if ( position.y - titlebar < 0 )
     position.y = titlebar + 1;
 
-  if ( position.y > settings::getHeight() )
-    position.y = settings::getHeight();
+  if ( position.y > settings::GetHeight() )
+    position.y = settings::GetHeight();
 
-  this->update();
+  this->Update();
 }
 
 
-sf::Vector2f CWindow::getPosition()
+sf::Vector2f CWindow::GetPosition ( void ) const
 {
   return position;
 }
 
 
-sf::Rect<float> CWindow::getWindowDimension()
+sf::Rect<float> CWindow::GetWindowDimension ( void ) const
 {
   return sf::Rect<float> ( position.x, position.y, position.x + curSize.x, position.y + curSize.y );
 }
 
 
-sf::Rect<float> CWindow::getTitlebarDimension()
+sf::Rect<float> CWindow::GetTitlebarDimension ( void ) const
 {
   sf::Vector2f titlePos ( position.x, position.y - titlebar );
   sf::Vector2f titleEndPos ( position.x + curSize.x, position.y );
-  return sf::Rect<float> ( titlePos.x , titlePos.y, titleEndPos.x, titleEndPos.y );
+  return sf::Rect<float> ( titlePos.x, titlePos.y, titleEndPos.x, titleEndPos.y );
 }
 
 
-sf::Rect<float> CWindow::getResizeArea()
+sf::Rect<float> CWindow::GetResizeArea ( void ) const
 {
+  sf::Vector2f point = GetPosition() + GetSize() - sf::Vector2f ( 2, 2 );
 
-
+  return sf::Rect<float> ( point.x, point.y, point.x + 3, point.y + 3 );
 }
 
 
-void CWindow::setTitlebar ( unsigned int titlebar_ )
+sf::Rect<float> CWindow::GetIconCloseCoord ( void ) const
+{
+  return sf::Rect<float> ( iconCloseImg.GetPosition().x, iconCloseImg.GetPosition().y,
+    iconCloseImg.GetPosition().x + iconCloseImg.GetSize().x, iconCloseImg.GetPosition().y + iconCloseImg.GetSize().y );
+}
+
+
+void CWindow::SetTitlebar ( unsigned int titlebar_ )
 {
   titlebar = titlebar_;
-  this->update();
+  this->Update();
 }
 
 
-void CWindow::setMoveWindow ( bool ison )
+void CWindow::SetMoveWindow ( bool ison )
 {
   moveWindow = ison;
 }
 
 
-bool CWindow::getMoveWindow( )
+bool CWindow::GetMoveWindow ( void ) const
 {
   return moveWindow;
+}
+
+
+void CWindow::SetIconClose ( sf::Vector3f position_ )
+{
+  iconClose = position_;
 }
 
 

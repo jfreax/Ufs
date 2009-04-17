@@ -29,34 +29,36 @@ class CWindow
 {
   public:
     CWindow ( class CTheme *theme, sf::Vector2f position_ = sf::Vector2f ( 0.f, 0.f ), sf::Vector2f size_ = sf::Vector2f ( 0.f, 0.f ) );
-    const unsigned int getId();
+    const unsigned int GetId() const;
 
-    void update( );
-    void draw ( );
+    void Update ( void );
+    bool Render ( void );
 
-    void addWidget ( CWidget* widget_ );
+    void AddWidget ( CWidget* widget_ );
 
-    void setSize ( sf::Vector2f size_ );
-    void setSizeInPercent ( sf::Vector2f sizePercent_ );
-    sf::Vector2f getSize();
+    void SetSize ( sf::Vector2f size_ );
+    void SetSizeInPercent ( sf::Vector2f sizePercent_ );
+    sf::Vector2f GetSize ( void ) const;
 
-    void setPosition ( sf::Vector2f position_ );
-    sf::Vector2f getPosition();
+    void SetPosition ( sf::Vector2f position_ );
+    sf::Vector2f GetPosition ( void ) const;
 
-    sf::Rect<float> getWindowDimension();
-    sf::Rect<float> getTitlebarDimension();
-    sf::Rect<float> getResizeArea();
+    sf::Rect<float> GetWindowDimension ( void ) const;
+    sf::Rect<float> GetTitlebarDimension ( void ) const ;
+    sf::Rect<float> GetResizeArea ( void ) const;
+    sf::Rect<float> GetIconCloseCoord ( void ) const;
 
-    void setTitlebar ( unsigned int titlebar_ );
+    void SetTitlebar ( unsigned int titlebar_ );
 
-    void setMoveWindow ( bool ison );
-    bool getMoveWindow( );
+    void SetMoveWindow ( bool ison );
+    bool GetMoveWindow ( void ) const;
 
+    void SetIconClose ( sf::Vector3f position_ );
 
   private:
     unsigned int id;
 
-    std::vector<gui::CWidget*> widgetList;
+    std::vector< gui::CWidget* > widgetList;
 
     sf::Shape formWin;
     sf::Shape formTitlebar;
@@ -68,6 +70,9 @@ class CWindow
     sf::Vector2f curSize;
     sf::Vector2f minSize;
     sf::Vector2f maxSize;
+
+    sf::Vector3f iconClose;
+    sf::Sprite iconCloseImg;
 
     sf::Image bg_img;
     sf::Sprite background;

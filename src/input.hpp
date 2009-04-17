@@ -35,11 +35,11 @@ struct KeyHolder
 class CInput
 {
   public:
-    CInput( std::string file = "./keyboard.ini" );
-    bool loadKeys( std::string file );
+    CInput ( std::string file = "./keyboard.ini" );
+    bool LoadKeys ( std::string file );
 
-    bool testPressedKeys ( std::string keyName_ );
-    bool events( );
+    bool TestPressedKeys ( std::string keyName_ );
+    bool Events ( void );
 
   private:
     std::map<std::string, sf::Key::Code> availableKeys;

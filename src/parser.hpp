@@ -28,20 +28,20 @@ class Parser
   public:
     std::stringstream operator[]( std::string headerName );
 
-    bool open( std::string filename = "", bool index = false, bool make_lower = false );
-    bool save( std::string file );
+    bool Open( std::string filename = "", bool index = false, bool make_lower = false );
+    bool Save( std::string file );
 
-    int countKeys( std::string searchSection, std::string searchedKey );
-    int countKeys( std::string searchSection );
-    int countKeys( unsigned int sectionNr );
+    int CountKeys( std::string searchSection, std::string searchedKey );
+    int CountKeys( std::string searchSection );
+    int CountKeys( unsigned int sectionNr );
 
-    std::string getValue( std::string section, std::string key );
-    std::string getValue( unsigned int sectionNr, std::string key );
-    std::string getValue( unsigned int sectionNr, unsigned int keyNr );
-    std::string getValue( std::string section, unsigned int keyNr );
+    std::string GetValue( std::string section, std::string key );
+    std::string GetValue( unsigned int sectionNr, std::string key );
+    std::string GetValue( unsigned int sectionNr, unsigned int keyNr );
+    std::string GetValue( std::string section, unsigned int keyNr );
 
-    std::string getKey( unsigned int sectionNr, unsigned int keyNr );
-    std::string getKey( std::string section, unsigned int keyNr );
+    std::string GetKey( unsigned int sectionNr, unsigned int keyNr );
+    std::string GetKey( std::string section, unsigned int keyNr );
 
   private:
     std::vector

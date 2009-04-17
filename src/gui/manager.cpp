@@ -26,74 +26,146 @@
 namespace gui
 {
 
-CManager::CManager()
+CManager::CManager ( void )
 {
-  theme.open ( "themes/" + settings::getTheme() + "/" + settings::getTheme() + ".ini" );
-  mousePos4WinMove.x = mousePos4WinMove.y = 0;
+  theme.Open ( settings::GetThemePath() + settings::GetTheme() + ".ini" );
+
+  previousMouseScope = NONE;
+  previousMousePos.x = previousMousePos.y = 0;
 }
 
 
-bool CManager::draw ( )
+bool CManager::Render ( void )
 {
   std::vector<gui::CWindow*>::iterator iter = windowList.begin();
   std::vector<gui::CWindow*>::iterator iterEnd = windowList.end();
-  for ( int i = 0; iter != iterEnd; ++iter ) {
-    ( *iter )->draw();
+
+  for ( int i = 0; iter != iterEnd; ++iter )
+  {
+    ( *iter )->Render();
   }
 
   return true;
 }
 
 
-bool CManager::proofMouseClick ( const sf::Input& input )
+bool CManager::MouseLClick ( const sf::Input& input )
 {
-  bool ret = false;
+  CGame* game = GetGameClass();
+
   int x = input.GetMouseX();
   int y = input.GetMouseY();
+  sf::Vector2f mouse ( x, y );
+  sf::Rect< float > mouseRect ( x, y, x + 1, y + 1 );
+
+  MOUSESCOPE highestMouseScope = NONE;
+
 
   std::vector< CWindow* >::iterator iter = --windowList.end();
   std::vector< CWindow* >::iterator iterBegin = windowList.begin();
-  for ( ; iter+1 != iterBegin; --iter ) {
+
+  for ( ; iter + 1 != iterBegin; --iter )
+  {
+
     // Auf Fenstertitelleiste geklickt?
-    if ( isCollision ( ( *iter )->getTitlebarDimension(), sf::Rect<float> ( x, y, x + 1, y + 1 ) ) || ( mousePos4WinMove.x && mousePos4WinMove.y ) ) {
-      if ( input.IsMouseButtonDown ( sf::Mouse::Left ) ) {
-        if ( iter == --windowList.end() ) { // nur letztes (im Vordergrundstehendes) Fenster
-          ret = true;
-          sf::Vector2f winPos = ( *iter )->getPosition();
+    if ( isCollision ( ( *iter )->GetTitlebarDimension(), mouseRect )
+         && previousMouseScope == NONE || previousMouseScope == TITLE )
+    {
+      previousMouseScope = TITLE;
 
-          if ( !mousePos4WinMove.x && !mousePos4WinMove.y ) {
-            mousePos4WinMove.x = x - winPos.x; mousePos4WinMove.y = y - winPos.y;
-          }
+      if ( iter == --windowList.end() )   // nur letztes (im Vordergrundstehendes) Fenster
+      {
+        sf::Vector2f winPos = ( *iter )->GetPosition();
 
-          ( *iter )->setPosition ( sf::Vector2f ( x - ( mousePos4WinMove.x ), y - ( mousePos4WinMove.y ) ) );
-        } else if ( iter != windowList.end() ) { // nur letztes (im Vordergrundstehendes) Fenster
-          this->bringToFront ( iter );
-          return true;
+        if ( !previousMousePos.x && !previousMousePos.y )   // Maus wurde zuvor hier nicht geklickt
+        {
+          previousMousePos.x = x - winPos.x;
+          previousMousePos.y = y - winPos.y;
         }
-        return true;
-      } else {
-          mousePos4WinMove.x = mousePos4WinMove.y = 0;
+
+        ( *iter )->SetPosition ( sf::Vector2f ( x - ( previousMousePos.x ), y - ( previousMousePos.y ) ) ); // verschieben
       }
+      else if ( iter != windowList.end() )   // ansonsten das Fenster in den Vordergrund holen
+      {
+        this->BringToFront ( iter );
+        return true;
+      }
+
+      return true;
+    }
+
+    // Fenster vergrößern/verkleinern?
+    else if ( isCollision ( ( *iter )->GetResizeArea(), mouseRect )
+              && previousMouseScope == NONE || previousMouseScope == RESIZE )
+    {
+      previousMouseScope = RESIZE;
+
+      if ( iter == --windowList.end() )   // nur letztes (im Vordergrundstehendes) Fenster
+      {
+        sf::Vector2f winPos = ( *iter )->GetPosition();
+
+        if ( !previousMousePos.x && !previousMousePos.y )
+        {
+          previousMousePos.x = x - winPos.x;
+          previousMousePos.y = y - winPos.y;
+        }
+
+        ( *iter )->SetSize ( mouse - ( *iter )->GetPosition() );
+      }
+      else if ( iter != windowList.end() )   // ansonsten das Fenster in den Vordergrund holen
+      {
+        this->BringToFront ( iter );
+        return true;
+      }
+
+      return true;
     }
 
     // Fenster geklickt?
-    if ( isCollision ( ( *iter )->getWindowDimension(), sf::Rect<float> ( x, y, x + 1, y + 1 ) ) ) {
-      if ( input.IsMouseButtonDown ( sf::Mouse::Left ) ) {
-        if ( iter != windowList.end() ) { // Fenster in den Vordergrund holen
-          this->bringToFront ( iter );
-          return true;
-        }
+    else if ( isCollision ( ( *iter )->GetWindowDimension(), mouseRect )
+              && previousMouseScope == NONE || previousMouseScope == WINDOW )
+    {
+      previousMouseScope = WINDOW;
 
-//         // Prüfen ob Widgets geklickt wurden
+      if ( iter != windowList.end() )   // Fenster in den Vordergrund holen
+      {
+        this->BringToFront ( iter );
+        return true;
       }
+
+      // TODO Prüfen ob Widgets geklickt wurden
     }
   }
 
-  return ret;
+  settings::SetMouseScope ( highestMouseScope );
+
+  return false;
 }
 
 
-gui::CWindow* CManager::newWindow ( sf::Vector2f position_, sf::Vector2f size_ )
+bool CManager::MouseHover ( const sf::Input& input )
+{
+
+//  else {
+//       mouseScope = NONE;
+//       mousePos.x = mousePos.y = 0;
+//
+//       if ( isCollision ( ( *iter )->GetTitlebarDimension(), mouseRect ) ) {  // Titelbar
+//         if ( isCollision ( ( *iter )->GetIconCloseCoord(), mouseRect ) ) { // schließen
+// //           highestMouseScope = BUTTON > highestMouseScope ? BUTTON : highestMouseScope;
+//         }
+//       } else if ( isCollision ( ( *iter )->GetWindowDimension(), mouseRect ) ) { // Maus über Fenster?
+//         highestMouseScope = WINDOW > highestMouseScope ? WINDOW : highestMouseScope;
+//
+//       } else {
+//
+//
+//       }
+//     }
+}
+
+
+gui::CWindow* CManager::NewWindow ( sf::Vector2f position_, sf::Vector2f size_ )
 {
   gui::CWindow* win = new gui::CWindow ( &theme );
   windowList.push_back ( win );
@@ -102,16 +174,22 @@ gui::CWindow* CManager::newWindow ( sf::Vector2f position_, sf::Vector2f size_ )
 }
 
 
-bool CManager::closeWindow ( gui::CWindow* window_ )
+bool CManager::CloseWindow ( gui::CWindow* window_ )
 {
-  if ( !window_ && windowList.size() ) {
-    delete this->getActiveWindow();
+  if ( !window_ && windowList.size() )
+  {
+    delete this->GetActiveWindow();
 
     windowList.pop_back();
-  } else {
+  }
+  else
+  {
     std::vector<gui::CWindow*>::iterator iter = windowList.begin();
-    for ( ; iter != windowList.end(); ++iter ) {
-      if ( ( *iter )->getId() == window_->getId() ) {
+
+    for ( ; iter != windowList.end(); ++iter )
+    {
+      if ( ( *iter )->GetId() == window_->GetId() )
+      {
         windowList.erase ( iter );
         delete ( *iter );
 
@@ -122,22 +200,22 @@ bool CManager::closeWindow ( gui::CWindow* window_ )
 }
 
 
-bool CManager::bringToFront ( std::vector< CWindow* >::iterator iter_ )
+bool CManager::BringToFront ( std::vector< CWindow* >::iterator iter_ )
 {
   CWindow* tmp = *iter_;
 
   windowList.erase ( iter_ );
-  windowList.push_back( ( tmp ) );
+  windowList.push_back ( ( tmp ) );
 }
 
 
-CTheme* CManager::getTheme()
+CTheme* CManager::GetTheme ( void )
 {
   return &theme;
 }
 
 
-gui::CWindow* CManager::getActiveWindow()
+gui::CWindow* CManager::GetActiveWindow ( void )
 {
   return windowList[windowList.size()-1];
 }

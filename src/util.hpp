@@ -28,6 +28,17 @@ enum TYPES {
   IMAGE,
   VECTOR_INTEGER,
   VECTOR_FLOAT,
+  VECTOR3_FLOAT
+};
+
+
+enum MOUSESCOPE
+{
+  NONE,
+  TITLE,
+  RESIZE,
+  WINDOW,
+  BUTTON
 };
 
 

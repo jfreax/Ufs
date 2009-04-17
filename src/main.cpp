@@ -6,8 +6,8 @@ int main( int argc, char **argv )
 {
   CGame game( argc, argv );
 
-  if ( game.initialize() )
-    game.start();
+  if ( game.Initialize() )
+    game.Start();
   else
     return 1;
 

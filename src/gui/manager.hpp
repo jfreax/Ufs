@@ -26,27 +26,30 @@
 namespace gui
 {
 
+
 class CManager
 {
+
   public:
-    CManager();
+    CManager ( void );
 
-    bool draw ( );
-    bool proofMouseClick ( const sf::Input& input );
+    bool Render ( void );
+    bool MouseLClick ( const sf::Input& input );
+    bool MouseHover ( const sf::Input& input );
 
-    CWindow* newWindow ( sf::Vector2f position_ = sf::Vector2f ( 0.f, 0.f ), sf::Vector2f size_ = sf::Vector2f ( 0.f, 0.f ) );
-    bool closeWindow ( CWindow* window_ = NULL ); // NULL -> schlieﬂt das letzte Fenster
-    bool bringToFront ( std::vector< CWindow* >::iterator iter_ );
+    CWindow* NewWindow ( sf::Vector2f position_ = sf::Vector2f ( 0.f, 0.f ), sf::Vector2f size_ = sf::Vector2f ( 0.f, 0.f ) );
+    bool CloseWindow ( CWindow* window_ = NULL ); // NULL -> schlieﬂt das letzte Fenster
+    bool BringToFront ( std::vector< CWindow* >::iterator iter_ );
 
-    CTheme* getTheme();
-    CWindow* getActiveWindow();
+    CTheme* GetTheme ( void );
+    CWindow* GetActiveWindow ( void );
 
   private:
     CTheme theme;
     std::vector< CWindow* > windowList;
 
-    sf::Vector2f mousePos4WinMove;
-
+    sf::Vector2f previousMousePos;
+    MOUSESCOPE previousMouseScope;
 };
 
 } // namespace gui

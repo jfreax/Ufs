@@ -28,20 +28,34 @@ class CWidget
   public:
     CWidget ( class CWindow* motherWin_, sf::Vector2f position_, sf::Vector2f size_ );
 
-    virtual bool draw() = 0;
+    bool noUpdate; // kein "update()" mehr machen! Vorsicht! Aufjedenfall wieder zurücksetzen...
+    virtual bool Update ( void );
+    virtual void Render ( void ) const = 0;
 
-    void setPosition ( sf::Vector2f position_ );
-    void setSize ( sf::Vector2f size_ );
+    void SetPosition ( sf::Vector2f position_ );
+    void SetSize ( sf::Vector2f size_ );
+
+    void SetName ( std::string name_ );
+    void SetFontSize ( int size_ );
+
+    void SetBackgroundColor ( sf::Color color_ );
 
   protected:
     unsigned int id;
     class CWindow* motherWin;
 
+    std::string name;
+    sf::String text;
+
     sf::Vector2f position;
-    sf::Vector2f size;
+    sf::Vector2f curSize;
 
     sf::Sprite background;
     sf::Color backgroundColor;
+    sf::Shape form;
+
+    unsigned int border;
+    sf::Color borderColor;
 
 };
 
