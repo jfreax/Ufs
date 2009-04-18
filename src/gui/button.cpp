@@ -15,6 +15,7 @@
 */
 
 #include "../game.hpp"
+#include "../action.hpp"
 
 #include "button.hpp"
 
@@ -22,36 +23,37 @@ namespace gui
 {
 
 
-CButton::CButton ( class CWindow* motherWin_, sf::Vector2f position_, sf::Vector2f size_ ) : CWidget ( motherWin_, position_, size_ )
+CButton::CButton ( class CWindow* motherWin, sf::Vector2f position, sf::Vector2f size ) : CWidget ( motherWin, position, size )
 {
-  CTheme* theme = GetGameClass()->GetGuiManager()->GetTheme();
+	CTheme* theme = GetGameClass()->GetGuiManager()->GetTheme();
 
-  this->noUpdate = true;
-  {
-    background.SetImage ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/" + theme->button.background ) );
-    this->SetBackgroundColor ( theme->button.backgroundColor );
-    this->SetFontSize ( theme->button.fontSize );
-  }
-
-  this->noUpdate = false;
-  this->Update();
+	this->NoUpdate ( true );
+	{
+		background_.SetImage ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/" + theme->button_.background ) );
+		this->SetBackgroundColor ( theme->button_.backgroundColor );
+		this->SetFontSize ( theme->button_.fontSize );
+	}
+	this->NoUpdate ( false );
 }
 
 
-void CButton::Render ( void ) const
+void CButton::Render ( void )
 {
-  sf::RenderWindow* app = GetGameClass()->GetApp();
+	sf::RenderWindow* app = GetGameClass()->GetApp();
+	
+	Calc();
 
-  if ( background.GetSize().x != 1.f )
-  {
-    app->Draw ( background );
-  }
-  else
-  {
+	if ( background_.GetSize().x != 1.f )
+	{
+		app->Draw ( background_ );
+	}
+	else
+	{
 
-  }
+	}
 
-  app->Draw ( text );
+	app->Draw ( text_ );
+
 }
 
 

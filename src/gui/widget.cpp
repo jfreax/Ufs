@@ -14,6 +14,8 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include <list>
+
 #include "../game.hpp"
 
 #include "window.hpp"
@@ -23,106 +25,320 @@ namespace gui
 {
 
 
-CWidget::CWidget ( CWindow* motherWin_, sf::Vector2f position_, sf::Vector2f size_ )
+CWidget::CWidget ( CWindow* motherWin, sf::Vector2f position, sf::Vector2f size )
 {
-  static unsigned int globalId = 0;
-  id = ++globalId;
+	static unsigned int globalId = 0;
+	id_ = ++globalId;
 
-  CTheme* theme = GetGameClass()->GetGuiManager()->GetTheme();
+	CTheme* theme = GetGameClass()->GetGuiManager()->GetTheme();
 
-  motherWin = motherWin_;
-  motherWin->AddWidget ( this );
+	motherWin_ = motherWin;
+	motherWin_->AddWidget ( this );
 
-  this->noUpdate = true;
-  {
-    this->SetPosition ( position_ );
-    this->SetSize ( size_ );
-  }
+	this->NoUpdate ( true );
+	{
+		this->SetPosition ( position );
+		this->SetSize ( size );
+	}
 
-  this->noUpdate = false;
-  this->Update();
+	this->NoUpdate ( false );
+
+	isMouseHere = wasMouseHere = false;
 }
 
 
 bool CWidget::Update ( void )
 {
-  if ( noUpdate )
-  {
-    return false;
-  }
+	if ( noUpdate_ )
+	{
+		return false;
+	}
 
-  if ( background.GetSize().x != 1.f )
-  {
-    background.SetPosition ( position + motherWin->GetPosition() );
-    background.Resize ( curSize );
-  }
-  else
-  {
-    form = sf::Shape::Rectangle ( position, position + curSize, backgroundColor, border, borderColor );
-  }
+	position_.x = fakePosition_.x < 0 ? fakePosition_.x + motherWin_->GetSize().x : fakePosition_.x;
+	position_.y = fakePosition_.y + motherWin_->GetTitlebarDimension().GetHeight() < 0 ? fakePosition_.y + motherWin_->GetSize().y : fakePosition_.y;
 
-  sf::Vector2f textPos ( ( curSize.x - text.GetRect().GetWidth() ) * 0.5f, ( curSize.y - text.GetRect().GetHeight() ) * 0.5f );
+	if ( background_.GetSize().x != 1.f )
+	{
+		background_.SetPosition ( position_ + motherWin_->GetPosition() );
+		background_.Resize ( curSize_ );
+	}
+	else
+	{
+		form_ = sf::Shape::Rectangle ( position_, position_ + curSize_, backgroundColor_, border_, borderColor_ );
+	}
 
-  text.SetPosition ( position + motherWin->GetPosition() + textPos );
+	sf::Vector2f textPos ( ( curSize_.x - text_.GetRect().GetWidth() ) * 0.5f, ( curSize_.y - text_.GetRect().GetHeight() ) * 0.5f );
 
-  return true;
+	text_.SetPosition ( position_ + motherWin_->GetPosition() + textPos );
+
+	return true;
 }
 
 
-
-void CWidget::SetPosition ( sf::Vector2f position_ )
+void CWidget::Calc ( void )
 {
-  position = position_;
+	// Funktionsanrufe tätigen
+	this->Call();
 
-  if ( position.x < 0 )
-  {
-    position.x += motherWin->GetSize().x;
-  }
-  else if ( position.x >= motherWin->GetSize().x )
-  {
-    position.x -= motherWin->GetSize().x;
-  }
+	//
+	if ( !isMouseHere && wasMouseHere )
+	{
+		this->UnMouseHover();
+		wasMouseHere = false;
+	}
 
-  if ( position.y < 0 )
-  {
-    position.y += motherWin->GetSize().y;
-  }
-  else if ( position.y >= motherWin->GetSize().y )
-  {
-    position.y -= motherWin->GetSize().y;
-  }
-
-  this->Update();
+	isMouseHere = false;
 }
 
 
-void CWidget::SetSize ( sf::Vector2f size_ )
+
+void CWidget::NoUpdate ( bool ison )
 {
-  curSize = size_;
-  this->Update();
+	noUpdate_ = ison;
+	if ( !ison )
+	{
+		this->Update();
+	}
 }
 
 
-void CWidget::SetName ( std::string name_ )
+bool CWidget::Call ( void )
 {
-  name = name_;
-  text.SetText ( name );
+	bool ret = true;
 
-  this->Update();
+	std::list< Arguments_* >::iterator iter = callThis_.begin();
+	for ( ; iter != callThis_.end(); ++iter )
+	{
+		if ( ( *iter )->delNow )
+		{ // Dieses Objekt soll hier nicht mehr sein. Weg damit!
+			Arguments_* delPtr = NULL;
+			if ( ( *iter )->shouldDelete )
+			{
+				delPtr = ( *iter );
+			}
+			iter = callThis_.erase ( iter );
+			delete delPtr;
+		}
+		else if ( ( *iter )->wait <= ( *iter )->timer.GetElapsedTime() )
+		{  // Nur nach bestimmter Zeit starten!
+			( *iter )->timer.Reset();
+			if ( ! ( *iter )->function ( this, ( *iter )->args ) )
+			{ // Die Anweisung sagt ich soll dich löschen - schade für dich , aber was sein muss...
+				Arguments_* delPtr = NULL;
+				if ( ( *iter )->shouldDelete )
+				{
+					delPtr = ( *iter );
+				}
+				iter = callThis_.erase ( iter );
+				delete delPtr;
+			}
+		}
+	}
+
+	return ret;
 }
 
 
-void CWidget::SetFontSize ( int size_ )
+bool CWidget::Mouse ( std::vector< Arguments_* >* mouseArgs )
 {
-  text.SetSize ( size_ );
+	bool ret = true;
+
+	for ( std::vector< Arguments_* >::size_type i = mouseArgs->size(); i; --i )
+	{
+		if ( mouseArgs->at ( i - 1 )->wait <= mouseArgs->at ( i - 1 )->timer.GetElapsedTime() )
+		{  // Nur nach bestimmter Zeit starten!
+			mouseArgs->at ( i - 1 )->timer.Reset();
+
+			if ( ! mouseArgs->at ( i - 1 )->function ( this, mouseArgs->at ( i - 1 )->args ) )
+			{
+				ret = false;
+			}
+			else
+			{ // Aktion auch nach dem Klick weiter ausführen!
+				callThis_.push_back ( mouseArgs->at ( i - 1 ) );
+				ret = true;
+			}
+		}
+	}
+
+	return ret;
 }
 
 
-void CWidget::SetBackgroundColor ( sf::Color color_ )
+bool CWidget::MouseClick ( sf::Mouse::Button button )
 {
-  backgroundColor = color_;
+	std::vector< Arguments_* >* mouseArgs = NULL;
+
+	switch ( button )
+	{
+		case sf::Mouse::Left:
+			mouseArgs = &mouseLClick_;
+			break;
+		case sf::Mouse::Right:
+			mouseArgs = &mouseRClick_;
+			break;
+		case sf::Mouse::Middle:
+			mouseArgs = &mouseMClick_;
+			break;
+	}
+
+	return Mouse ( mouseArgs );
 }
 
+
+bool CWidget::MouseHover ( void )
+{
+	isMouseHere = wasMouseHere = true;
+
+	return Mouse ( &mouseHover_ );
+}
+
+
+bool CWidget::UnMouseHover ( void )
+{
+	for ( std::vector< Arguments_* >::size_type i = mouseHover_.size(); i; --i )
+	{ // Alle MouseHovers stoppen
+		mouseHover_.at ( i - 1 )->delNow = true;
+	}
+
+	return Mouse ( &mouseUnHover_ );
+}
+
+
+util::DataHolder* CWidget::AddCall ( bool ( *mouseClick ) ( CWidget*, util::DataHolder& ), float wait )
+{
+	Arguments_* newCall_ = new Arguments_;
+	newCall_->function = mouseClick;
+	newCall_->wait = wait;
+	newCall_->shouldDelete = true;
+
+	callThis_.push_back ( newCall_ );
+
+	return &newCall_->args;
+}
+
+
+util::DataHolder* CWidget::AddMouseClick ( bool ( *mouseClick ) ( CWidget*, util::DataHolder& ), sf::Mouse::Button button, float wait )
+{
+	Arguments_* newMouseAction = new Arguments_;
+	newMouseAction->function = mouseClick;
+	newMouseAction->wait = wait;
+	newMouseAction->shouldDelete = false;
+
+	switch ( button )
+	{
+		default:
+		case sf::Mouse::Left:
+			mouseLClick_.push_back ( newMouseAction );
+			break;
+		case sf::Mouse::Right:
+			mouseRClick_.push_back ( newMouseAction );
+			break;
+		case sf::Mouse::Middle:
+			mouseMClick_.push_back ( newMouseAction );
+			break;
+	}
+
+	return &newMouseAction->args;
+}
+
+
+util::DataHolder* CWidget::AddMouseHover ( bool ( *mouseHover ) ( CWidget*, util::DataHolder& ), float wait )
+{
+	Arguments_* newMouseHover = new Arguments_;
+	newMouseHover->function = mouseHover;
+	newMouseHover->wait = wait;
+	newMouseHover->shouldDelete = false;
+
+	mouseHover_.push_back ( newMouseHover );
+
+	return &newMouseHover->args;
+}
+
+
+util::DataHolder* CWidget::AddUnMouseHover ( bool ( *mouseUnHover ) ( CWidget*, util::DataHolder& ), float wait )
+{
+	Arguments_* newUnMouseHover = new Arguments_;
+	newUnMouseHover->function = mouseUnHover;
+	newUnMouseHover->wait = wait;
+	newUnMouseHover->shouldDelete = false;
+
+	mouseUnHover_.push_back ( newUnMouseHover );
+
+	return &newUnMouseHover->args;
+}
+
+
+void CWidget::SetPosition ( sf::Vector2f position )
+{
+	fakePosition_ = position;
+	this->Update();
+}
+
+
+void CWidget::SetSize ( sf::Vector2f size )
+{
+	curSize_ = size;
+	this->Update();
+}
+
+
+void CWidget::SetName ( std::string name )
+{
+	name_ = name;
+	text_.SetText ( name );
+
+	this->Update();
+}
+
+
+void CWidget::SetFontSize ( int size )
+{
+	text_.SetSize ( size );
+}
+
+
+void CWidget::SetBackground ( sf::Sprite background )
+{
+	background_ = background;
+}
+
+
+sf::Sprite* CWidget::GetBackground ( void )
+{
+	return &background_;
+}
+
+
+void CWidget::SetBackground ( sf::Image* background )
+{
+	background_.SetImage ( *background );
+}
+
+
+void CWidget::SetBackgroundColor ( sf::Color color )
+{
+	backgroundColor_ = color;
+}
+
+
+sf::Color CWidget::GetBackgroundColor ( void )
+{
+	return backgroundColor_;
+}
+
+
+CWindow* CWidget::GetMotherWin ( void )
+{
+	return motherWin_;
+}
+
+
+sf::Rect< float > CWidget::GetDimensionInScreen ( void )
+{
+	sf::Vector2f motherPosition = motherWin_->GetPosition();
+	return sf::Rect< float > ( motherPosition.x + position_.x, motherPosition.y + position_.y, motherPosition.x + position_.x + curSize_.x, motherPosition.y + position_.y + curSize_.y );
+}
 
 
 } // namespace gui

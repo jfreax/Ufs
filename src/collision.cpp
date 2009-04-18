@@ -21,28 +21,28 @@
 
 bool isCollision ( sf::Rect<float> rect1, sf::Rect<float> rect2 )
 {
-  /*R1P1
-    #################
-    #               #
-    #               #
-    #         R2P1 #
-    #          #################
-    #          #++++#          #
-    #          #++++#          #
-    #################          #
-               #    R1P2       #
-               #               #
-               #               #
-               #################
-                              R2P2
-  */
-  if ( rect2.Left <= rect1.Right )
-    if ( rect2.Right >= rect1.Left )
-      if ( rect2.Bottom >= rect1.Top )
-        if ( rect2.Top <= rect1.Bottom )
-        {
-          return true;
-        }
+	/*R1P1
+	  #################
+	  #               #
+	  #               #
+	  #         R2P1 #
+	  #          #################
+	  #          #++++#          #
+	  #          #++++#          #
+	  #################          #
+	             #    R1P2       #
+	             #               #
+	             #               #
+	             #################
+	                            R2P2
+	*/
+	if ( rect2.Left <= rect1.Right )
+		if ( rect2.Right >= rect1.Left )
+			if ( rect2.Bottom >= rect1.Top )
+				if ( rect2.Top <= rect1.Bottom )
+				{
+					return true;
+				}
 
-  return false;
+	return false;
 }

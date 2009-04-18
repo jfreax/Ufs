@@ -20,80 +20,80 @@
 #include "animation.hpp"
 
 CAnimation::CAnimation ( sf::Image* image_, int frames_, float timePerFrame_ ) :
-    image ( image_ ), frames ( frames_ ), timePerFrame ( timePerFrame_ ), frame ( 1 ), startAt ( 1 )
+		image ( image_ ), frames ( frames_ ), timePerFrame ( timePerFrame_ ), frame ( 1 ), startAt ( 1 )
 {
-  frameWidth = image->GetWidth() / frames;
-  clipArea = sf::IntRect ( 0, 0, frameWidth, image->GetHeight() );
+	frameWidth = image->GetWidth() / frames;
+	clipArea = sf::IntRect ( 0, 0, frameWidth, image->GetHeight() );
 
-  this->Start();
+	this->Start();
 }
-
+// // 
 
 void CAnimation::Start ( void )
 {
 //   timer.Reset();
-  frame = startAt;
-  run = true;
+	frame = startAt;
+	run = true;
 }
 
 
 void CAnimation::Stop ( void )
 {
-  run = false;
+	run = false;
 }
 
 
 void CAnimation::Update ( void )
 {
-  if ( timer.GetElapsedTime() >= timePerFrame )
-  {
-    timer.Reset();
+	if ( timer.GetElapsedTime() >= timePerFrame )
+	{
+		timer.Reset();
 
-    if ( ++frame > frames )
-    {
-      frame = startAt;
-    }
+		if ( ++frame > frames )
+		{
+			frame = startAt;
+		}
 
-    clipArea = sf::IntRect ( frameWidth * ( frame - 1 ), 0, frameWidth * frame, image->GetHeight() );
+		clipArea = sf::IntRect ( frameWidth * ( frame - 1 ), 0, frameWidth * frame, image->GetHeight() );
 
-  }
+	}
 }
 
 
 void CAnimation::Render ( sf::RenderTarget& ) const
 {
-  if ( run )
-  {
-    float width  = static_cast<float> ( clipArea.GetWidth() );
-    float height = static_cast<float> ( clipArea.GetHeight() );
+	if ( run )
+	{
+		float width  = static_cast<float> ( clipArea.GetWidth() );
+		float height = static_cast<float> ( clipArea.GetHeight() );
 
-    sf::FloatRect rect = image->GetTexCoords ( clipArea );
+		sf::FloatRect rect = image->GetTexCoords ( clipArea );
 
-    image->Bind();
+		image->Bind();
 
-    // Draw the animation's triangles
-    glBegin ( GL_QUADS );
-    {
-      glTexCoord2f ( rect.Left,  rect.Top );
-      glVertex2f ( 0,     0 );
+		// Draw the animation's triangles
+		glBegin ( GL_QUADS );
+		{
+			glTexCoord2f ( rect.Left,  rect.Top );
+			glVertex2f ( 0,     0 );
 
-      glTexCoord2f ( rect.Left,  rect.Bottom );
-      glVertex2f ( 0,     height );
+			glTexCoord2f ( rect.Left,  rect.Bottom );
+			glVertex2f ( 0,     height );
 
-      glTexCoord2f ( rect.Right, rect.Bottom );
-      glVertex2f ( width, height );
+			glTexCoord2f ( rect.Right, rect.Bottom );
+			glVertex2f ( width, height );
 
-      glTexCoord2f ( rect.Right, rect.Top );
-      glVertex2f ( width, 0 ) ;
-    }
-    glEnd();
-  }
+			glTexCoord2f ( rect.Right, rect.Top );
+			glVertex2f ( width, 0 ) ;
+		}
+		glEnd();
+	}
 }
 
 
 void CAnimation::SetStartAt ( int startAt_ )
 {
-  startAt = startAt_;
+	startAt = startAt_;
 }
 
 

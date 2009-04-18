@@ -17,50 +17,88 @@
 #ifndef UTIL_HPP
 #define UTIL_HPP
 
+#include <typeinfo>
 #include <iostream>
 #include <sstream>
 
-enum TYPES {
-  INTEGER,
-  FLOAT,
-  STRING,
-  COLOR,
-  IMAGE,
-  VECTOR_INTEGER,
-  VECTOR_FLOAT,
-  VECTOR3_FLOAT
+#include <SFML/Graphics.hpp>
+
+enum TYPES
+{
+	INTEGER,
+	FLOAT,
+	STRING,
+	COLOR,
+	IMAGE,
+	VECTOR_INTEGER,
+	VECTOR_FLOAT,
+	VECTOR3_FLOAT
 };
 
 
 enum MOUSESCOPE
 {
-  NONE,
-  TITLE,
-  RESIZE,
-  WINDOW,
-  BUTTON
+	NONE,
+	TITLE,
+	RESIZE,
+	WINDOW,
+	BUTTON
 };
 
-
-template<typename To, typename From>
-To lexical_cast_default( From a, To def = To() )
-{
-  To res;
-  std::stringstream str;
-
-  if ( !( str << a && str >> res ) ) {
-    return def;
-  } else {
-    return res;
-  }
-}
 
 namespace util
 {
 
+
+template<typename To, typename From>
+To lCast ( From a, To def = To() )
+{
+	To res;
+	std::stringstream str;
+
+	if ( ! ( str << a && str >> res ) )
+	{
+		return def;
+	}
+	else
+	{
+		return res;
+	}
+}
+
+
+class DataHolder
+{
+	public:
+		DataHolder ( void );
+
+		int frame;
+		
+		bool b;
+
+		int x;
+		int y;
+		int z;
+
+		double d;
+		float f;
+
+		std::string string_one;
+		std::string two;
+
+		sf::Color color_one;
+		sf::Color color_two;
+
+		sf::Sprite* sprite_one;
+		sf::Sprite* sprite_two;
+};
+
+
 bool isFile ( std::string filename );
 void deleteChar ( std::string &stringToReplace, char delThis = ' ' );
 void lowercase ( std::string& str );
+
+std::string colorToString ( sf::Color color );
 
 }
 

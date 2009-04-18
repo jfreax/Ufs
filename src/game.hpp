@@ -24,46 +24,46 @@
 #include "resource.hpp"
 #include "animation.hpp"
 
+
 class CGame
 {
+	public:
+		CGame ( int argc, char **argv );
+		bool Initialize ( void );
 
-  public:
-    CGame ( int argc, char **argv );
-    bool Initialize ( void );
+		bool IsVideoModeValid ( void );
 
-    bool IsVideoModeValid ( void );
+		bool Start ( void );
+		bool Stop ( void );
 
-    void Start ( void );
-    void Stop ( void );
+		void Render ( void );
 
-    void Render ( void );
+		sf::RenderWindow* GetApp ( void );
+		gui::CManager* GetGuiManager ( void );
+		CResource< sf::Image >* GetImgResource ( void );
 
-    sf::RenderWindow* GetApp ( void );
-    gui::CManager* GetGuiManager ( void );
-    CResource< sf::Image >* GetImgResource ( void );
+		void CalcFPS();
 
-    void CalcFPS();
+		std::map< MOUSESCOPE, CAnimation*> GetCursor ( void );
+		sf::String* GetFpsStr ( void );
 
-    std::map< MOUSESCOPE, CAnimation*> GetCursor ( void );
-    sf::String* GetFpsStr ( void );
+	private:
+		sf::RenderWindow app_;
 
-  private:
-    sf::RenderWindow app;
+		const int argc_;
+		int arg_;
+		const char* const * const argv_;
+		bool run_;
 
-    const int argc_;
-    int arg_;
-    const char* const * const argv_;
-    bool run;
+		sf::View viewPoint_;
 
-    sf::View viewPoint;
+		gui::CManager guiManager_;
+		CResource < sf::Image > imgResource_;
+		CInput input_;
 
-    gui::CManager guiManager;
-    CResource < sf::Image > imgResource;
-    CInput input;
+		std::map< MOUSESCOPE, CAnimation*> cursor_;
 
-    std::map< MOUSESCOPE, CAnimation*> cursor;
-
-    sf::String fpsStr;
+		sf::String fpsStr_;
 
 };
 

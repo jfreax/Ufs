@@ -24,133 +24,134 @@
 #include "gui/window.hpp"
 #include "gui/manager.hpp"
 #include "gui/button.hpp"
+#include "action.hpp"
 
 
 CGame* game = NULL;
 
 CGame* GetGameClass ( void )
 {
-  return game;
+	return game;
 }
 
 
 CGame::CGame ( int argc, char **argv ) :
-    argc_ ( argc ),
-    arg_ ( 1 ),
-    argv_ ( argv ),
-    run ( true ),
-    app ( sf::VideoMode::GetDesktopMode(), "Game" , sf::Style::Close )
+		argc_ ( argc ),
+		arg_ ( 1 ),
+		argv_ ( argv ),
+		run_ ( true ),
+		app_ ( sf::VideoMode::GetDesktopMode(), "Game" , sf::Style::Close )
 {
-  game = this;
+	game = this;
 
-  // Standardwerte
-  settings::SetWidth ( sf::VideoMode::GetDesktopMode().Width );
-  settings::SetHeight ( sf::VideoMode::GetDesktopMode().Height );
-  settings::SetBpp ( sf::VideoMode::GetDesktopMode().BitsPerPixel );
+	// Standardwerte
+	settings::SetWidth ( sf::VideoMode::GetDesktopMode().Width );
+	settings::SetHeight ( sf::VideoMode::GetDesktopMode().Height );
+	settings::SetBpp ( sf::VideoMode::GetDesktopMode().BitsPerPixel );
 
-  // Programmargumente
+	// Programmargumente
 
-  for ( arg_ = 1; arg_ != argc_; ++arg_ )
-  {
-    const std::string val ( argv_[arg_] );
+	for ( arg_ = 1; arg_ != argc_; ++arg_ )
+	{
+		const std::string val ( argv_[arg_] );
 
-    if ( val.empty() )
-    {
-      continue;
-    }
-    else if ( val == "-fps" | val == "--fps" )
-    {
-      settings::SetShowFps ( true );
-    }
-    else if ( val == "-fs" || val == "--fullscreen" )
-    {
-      settings::SetFullscreen ( true );
-    }
-    else if ( val == "-h" || val == "--height" || val == "-y" )
-    {
-      if ( arg_ + 1 != argc_ )
-      {
-        ++arg_;
-        settings::SetHeight ( lexical_cast_default<int> ( argv_[arg_], -1 ) );
-      }
-    }
-    else if ( val == "-w" || val == "--width" || val == "-x" )
-    {
-      if ( arg_ + 1 != argc_ )
-      {
-        ++arg_;
-        settings::SetWidth ( lexical_cast_default<int> ( argv_[arg_], -1 ) );
-      }
-    }
-    else if ( val == "-bpp" || val == "--bitsperpixel" )
-    {
-      if ( arg_ + 1 != argc_ )
-      {
-        ++arg_;
-        settings::SetBpp ( lexical_cast_default<int> ( argv_[arg_], -1 ) );
-      }
-    }
-    else if ( val == "--theme" )
-    {
-      if ( arg_ + 1 != argc_ )
-      {
-        ++arg_;
-        settings::SetTheme ( argv_[arg_] );
-      }
-    }
-    else if ( val == "--path" || val == "--data" )
-    {
-      if ( arg_ + 1 != argc_ )
-      {
-        ++arg_;
-        settings::SetPath ( argv_[arg_] );
-      }
-    }
-    else if ( val[0] == '-' || val[0] == '-' && val[1] == '-' )
-    {
-      std::cerr << "unknown option: " << val << std::endl;
-      // throw config::error( "unknown option" );
-    }
-  }
+		if ( val.empty() )
+		{
+			continue;
+		}
+		else if ( val == "-fps" | val == "--fps" )
+		{
+			settings::SetShowFps ( true );
+		}
+		else if ( val == "-fs" || val == "--fullscreen" )
+		{
+			settings::SetFullscreen ( true );
+		}
+		else if ( val == "-h" || val == "--height" || val == "-y" )
+		{
+			if ( arg_ + 1 != argc_ )
+			{
+				++arg_;
+				settings::SetHeight ( util::lCast<int> ( argv_[arg_], -1 ) );
+			}
+		}
+		else if ( val == "-w" || val == "--width" || val == "-x" )
+		{
+			if ( arg_ + 1 != argc_ )
+			{
+				++arg_;
+				settings::SetWidth ( util::lCast<int> ( argv_[arg_], -1 ) );
+			}
+		}
+		else if ( val == "-bpp" || val == "--bitsperpixel" )
+		{
+			if ( arg_ + 1 != argc_ )
+			{
+				++arg_;
+				settings::SetBpp ( util::lCast<int> ( argv_[arg_], -1 ) );
+			}
+		}
+		else if ( val == "--theme" )
+		{
+			if ( arg_ + 1 != argc_ )
+			{
+				++arg_;
+				settings::SetTheme ( argv_[arg_] );
+			}
+		}
+		else if ( val == "--path" || val == "--data" )
+		{
+			if ( arg_ + 1 != argc_ )
+			{
+				++arg_;
+				settings::SetPath ( argv_[arg_] );
+			}
+		}
+		else if ( val[0] == '-' || val[0] == '-' && val[1] == '-' )
+		{
+			std::cerr << "unknown option: " << val << std::endl;
+			// throw config::error( "unknown option" );
+		}
+	}
 }
 
 
 bool CGame::Initialize ( void )
 {
-  if ( !settings::GetVideo().IsValid() )
-  {
-    std::cerr
-      << "VideoMode ("
-      << settings::GetVideo().Width
-      << "x"
-      << settings::GetVideo().Height
-      << "x"
-      << settings::GetVideo().BitsPerPixel
-      << ") is not supported!"
-      << std::endl;
-    return false;
-  }
-  else
-  {
-    app.Create ( settings::GetVideo(), "Game" , settings::GetStyle(), settings::GetWindowSettings() );
-  }
+	if ( !settings::GetVideo().IsValid() )
+	{
+		std::cerr
+			<< "VideoMode ("
+			<< settings::GetVideo().Width
+			<< "x"
+			<< settings::GetVideo().Height
+			<< "x"
+			<< settings::GetVideo().BitsPerPixel
+			<< ") is not supported!"
+			<< std::endl;
+		return false;
+	}
+	else
+	{
+		app_.Create ( settings::GetVideo(), "Game" , settings::GetStyle(), settings::GetWindowSettings() );
+	}
 
-  app.UseVerticalSync ( true );
+	app_.UseVerticalSync ( true );
 
-  app.EnableKeyRepeat ( true );
+	app_.EnableKeyRepeat ( true );
 
-  fpsStr.SetSize ( 12 );
+	fpsStr_.SetSize ( 12 );
 
-  app.ShowMouseCursor ( false );
-  cursor[NONE] = new CAnimation ( GetImgResource()->Get ( settings::GetThemePath() + "arrow.png" ) , 36, 0.1f );
-  cursor[NONE]->Scale ( 0.6, 0.6 );
-  cursor[WINDOW] = new CAnimation ( GetImgResource()->Get ( settings::GetThemePath() + "hand.png" ) , 41, 0.08f );
-  cursor[WINDOW]->Scale ( 0.6, 0.6 );
-  cursor[WINDOW]->SetStartAt ( 6 );
+	app_.ShowMouseCursor ( false );
+	cursor_[NONE] = new CAnimation ( GetImgResource()->Get ( settings::GetThemePath() + "arrow.png" ) , 36, 0.1f );
+	cursor_[NONE]->Scale ( 0.6, 0.6 );
+	cursor_[WINDOW] = new CAnimation ( GetImgResource()->Get ( settings::GetThemePath() + "hand.png" ) , 41, 0.08f );
+	cursor_[WINDOW]->Scale ( 0.6, 0.6 );
+	cursor_[WINDOW]->SetStartAt ( 6 );
 //   cursor = cursors[0];
 //   cursor->Scale( 0.5f, 0.5f );
 
-  return true;
+	return true;
 }
 
 
@@ -161,115 +162,129 @@ bool CGame::IsVideoModeValid ( void ) // TODO in CGame::initialize und settings:
 }
 
 
-void CGame::Start ( void )
+bool CGame::Start ( void )
 {
-  gui::CWindow* newWin = guiManager.NewWindow();
-  guiManager.NewWindow();/**/
-// guiManager.newWindow();
-// guiManager.newWindow();/**/
-// guiManager.newWindow();
-// guiManager.newWindow();
-  newWin->SetSizeInPercent ( sf::Vector2f ( 90, 90 ) );
-  newWin->SetPosition ( sf::Vector2f ( 20, 100 ) );
+	gui::CWindow* newWin = guiManager_.NewWindow();
+	guiManager_.NewWindow();
+	guiManager_.NewWindow();
+
+	newWin->SetSizeInPercent ( sf::Vector2f ( 90, 90 ) );
+	newWin->SetPosition ( sf::Vector2f ( 20, 100 ) );
 //
 //   gui::CWindow* newWin2 = guiManager.newWindow();
 //   newWin2->setSizeInPercent ( sf::Vector2f ( 20, 20 ) );
 //   newWin2->setTitlebar ( 10 );
 //   newWin2->setPosition ( sf::Vector2f ( 0, 50 ) );
 
-  gui::CButton* newButton = new gui::CButton ( newWin );
-  newButton->SetName ( "TEST" );
-  newButton->SetSize ( sf::Vector2f ( 80, 20 ) );
+	gui::CButton* newButton = new gui::CButton ( newWin );
+	newButton->SetName ( "TEST" );
+	newButton->SetSize ( sf::Vector2f ( 80, 20 ) );
+	newButton->SetBackgroundColor ( sf::Color( 0, 0, 0, 0 ) );
+	
+	util::DataHolder* buttonSettings = newButton->AddMouseHover ( &action::gfx::inking, 0.1f );
+	buttonSettings->sprite_one = newButton->GetBackground();
+	buttonSettings->color_one = sf::Color ( 20, 1, 1 );
+	buttonSettings->color_two = sf::Color ( 10, 0, 0 );
+	buttonSettings->b = false;
 
+	util::DataHolder* buttonSettings2 = newButton->AddUnMouseHover ( &action::gfx::inking, 0.1f );
+	buttonSettings2->sprite_one = newButton->GetBackground();
+	buttonSettings2->color_one = sf::Color ( 245, 255, 255 );
+	buttonSettings2->color_two = sf::Color ( 10, 0, 0 );
+	buttonSettings2->b = true;
 
+	while ( run_ )
+	{
+		input_.Events();
 
-  while ( run )
-  {
-    input.Events();
+		this->Render();
+	}
 
-    this->Render();
-  }
+	return true;
 }
 
 
-void CGame::Stop ( void )
+bool CGame::Stop ( void )
 {
-  run = false;
+	run_ = false;
+	return true;
 }
 
 
 void CGame::Render ( void )
 {
-  // Bildschirm säubern
-  app.Clear();
+util::colorToString ( sf::Color ( 100, 200, 50, 10 ) );
 
-  // Gamegraphic
-  app.SetView ( viewPoint );
+	// Bildschirm säubern
+	app_.Clear();
 
-  // GUI
-  app.SetView ( app.GetDefaultView() );
-  guiManager.Render();
+	// Gamegraphic
+	app_.SetView ( viewPoint_ );
 
-  if ( settings::GetShowFps() )
-  {
-    this->CalcFPS();
-  }
+	// GUI
+	app_.SetView ( app_.GetDefaultView() );
+	guiManager_.Render();
 
-  // Mousecursor
-  cursor[settings::GetMouseScope() ]->SetPosition ( app.GetInput().GetMouseX(), app.GetInput().GetMouseY() );
-  cursor[settings::GetMouseScope() ]->Update();
-  app.Draw ( *cursor[settings::GetMouseScope() ] );
+	if ( settings::GetShowFps() )
+	{
+		this->CalcFPS();
+	}
 
-  app.Display();
+	// Mousecursor
+	cursor_[settings::GetMouseScope() ]->SetPosition ( app_.GetInput().GetMouseX(), app_.GetInput().GetMouseY() );
+	cursor_[settings::GetMouseScope() ]->Update();
+	app_.Draw ( *cursor_[settings::GetMouseScope() ] );
+
+	app_.Display();
 }
 
 
 sf::RenderWindow* CGame::GetApp ( void )
 {
-  return &app;
+	return &app_;
 }
 
 
 gui::CManager* CGame::GetGuiManager ( void )
 {
-  return &guiManager;
+	return &guiManager_;
 }
 
 
 CResource< sf::Image >* CGame::GetImgResource ( void )
 {
-  return &imgResource;
+	return &imgResource_;
 }
 
 
 void CGame::CalcFPS ( void )
 {
-  static int frame = -1;
-  static unsigned int fps = 0;
+	static int frame = -1;
+	static unsigned int fps = 0;
 
-  ++frame;
+	++frame;
 
-  if ( frame >= fps )
-  {
+	if ( frame >= fps )
+	{
 
-    fpsStr.SetText ( "FPS: " + lexical_cast_default<std::string> ( fps ) );
-    fps = 1.f / app.GetFrameTime();
-    frame = 0;
-  }
+		fpsStr_.SetText ( "FPS: " + util::lCast<std::string> ( fps ) );
+		fps = 1.f / app_.GetFrameTime();
+		frame = 0;
+	}
 
-  app.Draw ( fpsStr );
+	app_.Draw ( fpsStr_ );
 }
 
 
 std::map< MOUSESCOPE, CAnimation*> CGame::GetCursor ( void )
 {
-  return cursor;
+	return cursor_;
 }
 
 
 sf::String* CGame::GetFpsStr ( void )
 {
-  return &fpsStr;
+	return &fpsStr_;
 }
 
 

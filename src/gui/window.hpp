@@ -19,6 +19,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "widget.hpp"
+#include "button.hpp"
 
 
 namespace gui
@@ -27,66 +28,66 @@ namespace gui
 
 class CWindow
 {
-  public:
-    CWindow ( class CTheme *theme, sf::Vector2f position_ = sf::Vector2f ( 0.f, 0.f ), sf::Vector2f size_ = sf::Vector2f ( 0.f, 0.f ) );
-    const unsigned int GetId() const;
+	public:
+		CWindow ( class CTheme *theme, sf::Vector2f position = sf::Vector2f ( 0.f, 0.f ), sf::Vector2f size = sf::Vector2f ( 0.f, 0.f ) );
+		const unsigned int GetId() const;
 
-    void Update ( void );
-    bool Render ( void );
+		void Update ( void );
+		bool Render ( void );
 
-    void AddWidget ( CWidget* widget_ );
+		void AddWidget ( CWidget* widget );
+		
+		std::vector< gui::CWidget* >* GetWidgetList ( void );
 
-    void SetSize ( sf::Vector2f size_ );
-    void SetSizeInPercent ( sf::Vector2f sizePercent_ );
-    sf::Vector2f GetSize ( void ) const;
+		void SetSize ( sf::Vector2f size );
+		void SetSizeInPercent ( sf::Vector2f sizePercent );
+		sf::Vector2f GetSize ( void ) const;
 
-    void SetPosition ( sf::Vector2f position_ );
-    sf::Vector2f GetPosition ( void ) const;
+		void SetPosition ( sf::Vector2f position );
+		sf::Vector2f GetPosition ( void ) const;
 
-    sf::Rect<float> GetWindowDimension ( void ) const;
-    sf::Rect<float> GetTitlebarDimension ( void ) const ;
-    sf::Rect<float> GetResizeArea ( void ) const;
-    sf::Rect<float> GetIconCloseCoord ( void ) const;
+		sf::Rect<float> GetWindowDimension ( void ) const;
+		sf::Rect<float> GetTitlebarDimension ( void ) const ;
+		sf::Rect<float> GetResizeArea ( void ) const;
 
-    void SetTitlebar ( unsigned int titlebar_ );
+		void SetTitlebar ( unsigned int titlebar );
 
-    void SetMoveWindow ( bool ison );
-    bool GetMoveWindow ( void ) const;
+		void SetMoveWindow ( bool ison );
+		bool GetMoveWindow ( void ) const;
 
-    void SetIconClose ( sf::Vector3f position_ );
+	private:
+		unsigned int id_;
 
-  private:
-    unsigned int id;
+		std::vector< gui::CWidget* > widgetList_;
 
-    std::vector< gui::CWidget* > widgetList;
+		sf::Shape formWin_;
+		sf::Shape formTitlebar_;
 
-    sf::Shape formWin;
-    sf::Shape formTitlebar;
+		bool moveWindow_;
 
-    bool moveWindow;
+		sf::Vector2f position_;
 
-    sf::Vector2f position;
+		sf::Vector2f curSize_;
+		sf::Vector2f minSize_;
+		sf::Vector2f maxSize_;
 
-    sf::Vector2f curSize;
-    sf::Vector2f minSize;
-    sf::Vector2f maxSize;
+//     sf::Vector3f iconClose;
+//     sf::Sprite iconCloseImg;
+//     CButton* iconClose;
 
-    sf::Vector3f iconClose;
-    sf::Sprite iconCloseImg;
+		sf::Image* bg_img_;
+		sf::Sprite background_;
+		sf::Color backgroundColor_;
 
-    sf::Image bg_img;
-    sf::Sprite background;
-    sf::Color backgroundColor;
+		unsigned int border_;
+		sf::Color borderColor_;
 
-    unsigned int border;
-    sf::Color borderColor;
+		unsigned int titlebar_;
+		sf::Color titlebarColor_;
 
-    unsigned int titlebar;
-    sf::Color titlebarColor;
-
-    bool closeAble;
-    bool moveAble;
-    bool resizeAble;
+		bool closeAble_;
+		bool moveAble_;
+		bool resizeAble_;
 };
 
 } // namespace gui

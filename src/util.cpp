@@ -15,6 +15,9 @@
 */
 
 #include <fstream>
+#include <iostream>
+#include <iomanip>
+
 
 #include "util.hpp"
 #include "settings.hpp"
@@ -22,34 +25,59 @@
 namespace util
 {
 
+
+DataHolder::DataHolder ( void ) :
+		b ( true ),
+		x ( 0 ), y ( 0 ), z ( 0 ), d ( 0 ), f ( 0 ),
+		sprite_one ( NULL ), sprite_two ( NULL )
+{
+}
+
+
 bool isFile ( std::string filename )
 {
-  filename = settings::GetPath() + filename;
+	filename = settings::GetPath() + filename;
 
-  std::ifstream file ( filename.c_str(), std::ios::in );
+	std::ifstream file ( filename.c_str(), std::ios::in );
 
-  if ( !file )
-    return false;
-  else
-    return true;
+	if ( !file )
+		return false;
+	else
+		return true;
 }
 
 
 void deleteChar ( std::string &stringToReplace, char delThis )
 {
-  std::string::size_type pos = stringToReplace.find ( delThis, 0 );
+	std::string::size_type pos = stringToReplace.find ( delThis, 0 );
 
-  while ( std::string::npos != pos ) {
-    stringToReplace.replace ( pos, 1, "" );
-    pos = stringToReplace.find ( delThis, pos + 1 );
-  }
+	while ( std::string::npos != pos )
+	{
+		stringToReplace.replace ( pos, 1, "" );
+		pos = stringToReplace.find ( delThis, pos + 1 );
+	}
 }
 
 void lowercase ( std::string& str )
 {
-  for ( int i = 0; str[i] != '\0'; i++ ) {
-    str[i] = tolower ( str[i] );
-  }
+	for ( int i = 0; str[i] != '\0'; i++ )
+	{
+		str[i] = tolower ( str[i] );
+	}
 }
+
+
+std::string colorToString ( sf::Color color )
+{
+	std::stringstream stream;
+	static std::string string[4];
+
+	stream << ( int ) color.r << " " << ( int ) color.g << " " << ( int ) color.b << " " << color.a ;
+	stream >> string[0] >> string[1] >> string[2] >> string[3];
+
+	return " " + string[0] + " " + string[1] + " " + string[2] + " " + string[3] + " ";
+}
+
+
 
 }

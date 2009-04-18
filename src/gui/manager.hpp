@@ -30,26 +30,26 @@ namespace gui
 class CManager
 {
 
-  public:
-    CManager ( void );
+	public:
+		CManager ( void );
 
-    bool Render ( void );
-    bool MouseLClick ( const sf::Input& input );
-    bool MouseHover ( const sf::Input& input );
+		bool Render ( void );
+		bool MouseClick ( const int x, const int y, const sf::Mouse::Button button );
+		bool MouseHover ( const int x, const int y );
 
-    CWindow* NewWindow ( sf::Vector2f position_ = sf::Vector2f ( 0.f, 0.f ), sf::Vector2f size_ = sf::Vector2f ( 0.f, 0.f ) );
-    bool CloseWindow ( CWindow* window_ = NULL ); // NULL -> schlieﬂt das letzte Fenster
-    bool BringToFront ( std::vector< CWindow* >::iterator iter_ );
+		CWindow* NewWindow ( sf::Vector2f position = sf::Vector2f ( 0.f, 0.f ), sf::Vector2f size = sf::Vector2f ( 0.f, 0.f ) );
+		bool CloseWindow ( CWindow* window = NULL ); // NULL -> schlieﬂt das letzte Fenster
+		bool BringToFront ( std::vector< CWindow* >::iterator iter );
 
-    CTheme* GetTheme ( void );
-    CWindow* GetActiveWindow ( void );
+		CTheme* GetTheme ( void );
+		CWindow* GetActiveWindow ( void );
 
-  private:
-    CTheme theme;
-    std::vector< CWindow* > windowList;
+	private:
+		CTheme theme_;
+		std::vector< CWindow* > windowList_;
 
-    sf::Vector2f previousMousePos;
-    MOUSESCOPE previousMouseScope;
+		sf::Vector2f previousMousePos_;
+		MOUSESCOPE previousMouseScope_;
 };
 
 } // namespace gui

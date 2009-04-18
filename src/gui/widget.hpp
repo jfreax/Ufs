@@ -17,7 +17,10 @@
 #ifndef WIDGET_HPP
 #define WIDGET_HPP
 
+#include <list>
 #include <SFML/Graphics.hpp>
+
+#include "../util.hpp"
 
 namespace gui
 {
@@ -25,37 +28,87 @@ namespace gui
 
 class CWidget
 {
-  public:
-    CWidget ( class CWindow* motherWin_, sf::Vector2f position_, sf::Vector2f size_ );
+	private:
+		struct Arguments_
+		{
+			bool ( *function ) ( CWidget*, util::DataHolder& );
+			util::DataHolder args;
+			
+			float wait;
+			sf::Clock timer;
+			
+			bool isCalled;
+			bool delNow;
+			bool shouldDelete;
+		};
+	
 
-    bool noUpdate; // kein "update()" mehr machen! Vorsicht! Aufjedenfall wieder zurücksetzen...
-    virtual bool Update ( void );
-    virtual void Render ( void ) const = 0;
+	public:
+		CWidget ( class CWindow* motherWin, sf::Vector2f position, sf::Vector2f size );
 
-    void SetPosition ( sf::Vector2f position_ );
-    void SetSize ( sf::Vector2f size_ );
+		virtual void Render ( void ) = 0;
+		virtual bool Update ( void );
+		virtual void Calc ( void );
+		void NoUpdate ( bool ison );
 
-    void SetName ( std::string name_ );
-    void SetFontSize ( int size_ );
 
-    void SetBackgroundColor ( sf::Color color_ );
+		bool Call ( void );
+		bool Mouse ( std::vector< Arguments_* >* mouseArgs );
+		bool MouseClick ( sf::Mouse::Button button );
+		bool MouseHover ( void );
+		bool UnMouseHover ( void );
+		
+		util::DataHolder* AddCall ( bool ( *mouseClick ) ( CWidget*, util::DataHolder& ), float wait = 0.f );
+		util::DataHolder* AddMouseClick ( bool ( *mouseClick ) ( CWidget*, util::DataHolder& ), sf::Mouse::Button button = sf::Mouse::Left, float wait = 0.f );
+		util::DataHolder* AddMouseHover ( bool ( *mouseHover ) ( CWidget*, util::DataHolder& ), float wait = 0.f );
+		util::DataHolder* AddUnMouseHover ( bool ( *mouseUnHover ) ( CWidget*, util::DataHolder& ), float wait = 0.f  );
 
-  protected:
-    unsigned int id;
-    class CWindow* motherWin;
+		void SetPosition ( sf::Vector2f position );
+		void SetSize ( sf::Vector2f size );
 
-    std::string name;
-    sf::String text;
+		void SetName ( std::string name );
+		void SetFontSize ( int size );
 
-    sf::Vector2f position;
-    sf::Vector2f curSize;
+		void SetBackground ( sf::Sprite background );
+		sf::Sprite* GetBackground ( void );
+		void SetBackground ( sf::Image* background );
+		void SetBackgroundColor ( sf::Color color );
+		sf::Color GetBackgroundColor ( void );
 
-    sf::Sprite background;
-    sf::Color backgroundColor;
-    sf::Shape form;
+		class CWindow* GetMotherWin ( void );
+		sf::Rect< float > GetDimensionInScreen ( void );
 
-    unsigned int border;
-    sf::Color borderColor;
+	protected:
+		unsigned int id_;
+		class CWindow* motherWin_;
+
+		bool noUpdate_; // kein "update()" mehr machen! Vorsicht! Aufjedenfall wieder zurücksetzen...
+
+		std::vector< Arguments_* > mouseHover_;
+		std::vector< Arguments_* > mouseUnHover_;
+		std::vector< Arguments_* > mouseLClick_;
+		std::vector< Arguments_* > mouseRClick_;
+		std::vector< Arguments_* > mouseMClick_;
+
+		std::list< Arguments_* > callThis_;
+		
+		bool isMouseHere;
+		bool wasMouseHere;
+		
+		
+		std::string name_;
+		sf::String text_;
+
+		sf::Vector2f position_;
+		sf::Vector2f fakePosition_;
+		sf::Vector2f curSize_;
+
+		sf::Sprite background_;
+		sf::Color backgroundColor_;
+		sf::Shape form_;
+
+		unsigned int border_;
+		sf::Color borderColor_;
 
 };
 

@@ -28,80 +28,89 @@ namespace gui
 {
 
 
-struct ThemeHolder {
-  sf::Vector2f minSize;
-  sf::Vector2f maxSize;
+struct ThemeHolder
+{
+	sf::Vector2f minSize;
+	sf::Vector2f maxSize;
 
-  sf::Color backgroundColor;
-  std::string background;
+	sf::Color backgroundColor;
+	std::string background;
 
-  int border;
-  sf::Color borderColor;
+	int border;
+	sf::Color borderColor;
 
-  int titlebar;
-  sf::Color titlebarColor;
+	int titlebar;
+	sf::Color titlebarColor;
 
-  int fontSize;
+	int fontSize;
 
-  sf::Vector3f iconClose;
+	sf::Vector3f iconClose;
 };
 
 
 class Parameter
 {
-  public:
-    Parameter ( std::string name_, int* x ) : name ( name_ ), i ( x ) {
-      type = INTEGER;
-    }
-    Parameter ( std::string name_, float* x ) : name ( name_ ), f ( x ) {
-      type = FLOAT;
-    }
-    Parameter ( std::string name_, std::string* x ) : name ( name_ ), s ( x ) {
-      type = STRING;
-    }
-    Parameter ( std::string name_, sf::Color* x ) : name ( name_ ), c ( x ) {
-      type = COLOR;
-    }
-    Parameter ( std::string name_, sf::Image* x ) : name ( name_ ), img ( x ) {
-      type = IMAGE;
-    }
-    Parameter ( std::string name_, sf::Vector2i* x ) : name ( name_ ), vi ( x ) {
-      type = VECTOR_INTEGER;
-    }
-    Parameter ( std::string name_, sf::Vector2f* x ) : name ( name_ ), vf ( x ) {
-      type = VECTOR_FLOAT;
-    }
-    Parameter ( std::string name_, sf::Vector3f* x ) : name ( name_ ), v3f ( x ) {
-      type = VECTOR3_FLOAT;
-    }
+	public:
+		Parameter ( std::string name_, int* x ) : name ( name_ ), i ( x )
+		{
+			type = INTEGER;
+		}
+		Parameter ( std::string name_, float* x ) : name ( name_ ), f ( x )
+		{
+			type = FLOAT;
+		}
+		Parameter ( std::string name_, std::string* x ) : name ( name_ ), s ( x )
+		{
+			type = STRING;
+		}
+		Parameter ( std::string name_, sf::Color* x ) : name ( name_ ), c ( x )
+		{
+			type = COLOR;
+		}
+		Parameter ( std::string name_, sf::Image* x ) : name ( name_ ), img ( x )
+		{
+			type = IMAGE;
+		}
+		Parameter ( std::string name_, sf::Vector2i* x ) : name ( name_ ), vi ( x )
+		{
+			type = VECTOR_INTEGER;
+		}
+		Parameter ( std::string name_, sf::Vector2f* x ) : name ( name_ ), vf ( x )
+		{
+			type = VECTOR_FLOAT;
+		}
+		Parameter ( std::string name_, sf::Vector3f* x ) : name ( name_ ), v3f ( x )
+		{
+			type = VECTOR3_FLOAT;
+		}
 
-    TYPES type;
-    std::string name;
+		TYPES type;
+		std::string name;
 
-    int* i;
-    float* f;
-    std::string* s;
+		int* i;
+		float* f;
+		std::string* s;
 
-    sf::Color* c;
-    sf::Image* img;
-    sf::Vector2f* vf;
-    sf::Vector2i* vi;
-    sf::Vector3f* v3f;
+		sf::Color* c;
+		sf::Image* img;
+		sf::Vector2f* vf;
+		sf::Vector2i* vi;
+		sf::Vector3f* v3f;
 };
 
 
 class CTheme
 {
-  public:
-    CTheme ( void );
-    void Open ( std::string filename );
+	public:
+		CTheme ( void );
+		void Open ( std::string filename );
 
-    std::map< std::string, ThemeHolder* > headerList;
-    std::multimap< std::string, Parameter > paramList;
+		std::map< std::string, ThemeHolder* > headerList_;
+		std::multimap< std::string, Parameter > paramList_;
 
-    Parser themeFile;
-    ThemeHolder window;
-    ThemeHolder button;
+		Parser themeFile_;
+		ThemeHolder window_;
+		ThemeHolder button_;
 };
 
 

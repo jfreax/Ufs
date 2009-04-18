@@ -20,216 +20,223 @@
 #include "../game.hpp"
 #include "../resource.hpp"
 #include "../settings.hpp"
+#include "../action.hpp"
 
 #include "window.hpp"
 
 namespace gui
 {
 
-CWindow::CWindow ( CTheme *theme, sf::Vector2f position_, sf::Vector2f size_ )
+CWindow::CWindow ( CTheme *theme, sf::Vector2f position, sf::Vector2f size )
 {
-  static unsigned int globalId = 0;
-  id = ++globalId;
+	static unsigned int globalId = 0;
+	id_ = ++globalId;
 
-  CGame* game = GetGameClass();
+	CGame* game = GetGameClass();
 
-  minSize = theme->window.minSize;
-  maxSize = theme->window.maxSize;
+	minSize_ = theme->window_.minSize;
+	maxSize_ = theme->window_.maxSize;
 
-  background.SetImage ( *game->GetImgResource()->Get( settings::GetThemePath() + theme->window.background ) );
-  backgroundColor = theme->window.backgroundColor;
+	background_.SetImage ( *game->GetImgResource()->Get ( settings::GetThemePath() + theme->window_.background ) );
+	backgroundColor_ = theme->window_.backgroundColor;
 
-  iconCloseImg.SetImage( *game->GetImgResource()->Get( settings::GetThemePath() + "close.png" ) );
-  this->SetIconClose ( theme->window.iconClose );
+	border_ = theme->window_.border;
+	borderColor_ = theme->window_.borderColor;
 
-  border = theme->window.border;
-  borderColor = theme->window.borderColor;
+	{
+		titlebar_ = theme->window_.titlebar;
+		titlebarColor_ = theme->window_.titlebarColor;
 
-  titlebar = theme->window.titlebar;
-  titlebarColor = theme->window.titlebarColor;
+		sf::Vector2f closeButtonPosition ( theme->window_.iconClose.x, theme->window_.iconClose.y - titlebar_ );
+		sf::Vector2f closeButtonSize ( theme->window_.iconClose.z, theme->window_.iconClose.z );
 
-  closeAble = true;
-  moveAble = true;
-  resizeAble = true;
+		CButton* closeButton = new CButton ( this, closeButtonPosition, closeButtonSize );
+		closeButton->SetBackground ( *game->GetImgResource()->Get ( settings::GetThemePath() + "close.png" ) );
+		closeButton->AddMouseClick ( &action::closeWindow );
+	} // End Titlebar
 
-  this->SetPosition ( position_ );
-  this->SetSize ( size_ );
 
-  this->Update();
+	closeAble_ = true;
+	moveAble_ = true;
+	resizeAble_ = true;
+
+	this->SetPosition ( position );
+	this->SetSize ( size );
+
+	this->Update();
 }
 
 
 const unsigned int CWindow::GetId ( void ) const
 {
-  return id;
+	return id_;
 }
 
 
 void CWindow::Update ( void )
 {
-  sf::Vector2f titlebarPosition ( position.x, position.y - titlebar );
-  sf::Vector2f titlebarEndPosition ( position.x + curSize.x, position.y );
-  formTitlebar = sf::Shape::Rectangle ( titlebarPosition, titlebarEndPosition, titlebarColor );
+	sf::Vector2f titlebarPosition ( position_.x, position_.y - titlebar_ );
+	sf::Vector2f titlebarEndPosition ( position_.x + curSize_.x, position_.y );
+	formTitlebar_ = sf::Shape::Rectangle ( titlebarPosition, titlebarEndPosition, titlebarColor_ );
 
-  // Hintergrundbild / -Shape
-  if ( background.GetSize().x != 1.f ) {
-    background.SetPosition ( position );
-    background.Resize ( curSize );
-  } else {
-    formWin = sf::Shape::Rectangle ( position, position + curSize, backgroundColor, border, borderColor );
-  }
+	// Hintergrundbild / -Shape
+	if ( background_.GetSize().x != 1.f )
+	{
+		background_.SetPosition ( position_ );
+		background_.Resize ( curSize_ );
+	}
+	else
+	{
+		formWin_ = sf::Shape::Rectangle ( position_, position_ + curSize_, backgroundColor_, border_, borderColor_ );
+	}
 
-  // Titelbar
-  int iCx = iconClose.x < 0 ? iconClose.x + GetSize().x : iconClose.x;
-  int iCy = iconClose.y - titlebar;
-  iconCloseImg.SetPosition( iCx + GetPosition().x, iCy + GetPosition().y );
-
-  // Inhalte ebenfalls aktualisieren
-  for ( std::vector<gui::CWidget*>::size_type i = widgetList.size(); i; --i ) {
-    widgetList.at( i-1 )->Update();
-  }
+	// Inhalte ebenfalls aktualisieren
+	for ( std::vector<gui::CWidget*>::size_type i = widgetList_.size(); i; --i )
+	{
+		widgetList_.at ( i - 1 )->Update();
+	}
 }
 
 
 bool CWindow::Render ( void )
 {
-  sf::RenderWindow* app = GetGameClass()->GetApp();
+	sf::RenderWindow* app = GetGameClass()->GetApp();
 
-  // Titlebar + icons
-  app->Draw ( formTitlebar );
-  app->Draw ( iconCloseImg );
-
+	// Titlebar
+	app->Draw ( formTitlebar_ );
 
 
-  if ( background.GetSize().x && background.GetSize().x != 1.f ) {
-    app->Draw ( background );
-  } else {
-    app->Draw ( formWin );
-  }
+	if ( background_.GetSize().x && background_.GetSize().x != 1.f )
+	{
+		app->Draw ( background_ );
+	}
+	else
+	{
+		app->Draw ( formWin_ );
+	}
 
-  for ( std::vector<gui::CWidget*>::size_type i = widgetList.size(); i; --i ) {
-    widgetList[i-1]->Render();
-  }
+	for ( std::vector<gui::CWidget*>::size_type i = widgetList_.size(); i; --i )
+	{
+		widgetList_[i-1]->Render();
+	}
 }
 
 
 void CWindow::AddWidget ( CWidget* widget_ )
 {
-  widgetList.push_back ( widget_ );
+	widgetList_.push_back ( widget_ );
+}
+
+
+std::vector< gui::CWidget* >* CWindow::GetWidgetList ( void )
+{
+  return &widgetList_;
 }
 
 
 void CWindow::SetSize ( sf::Vector2f size_ )
 {
-  curSize = size_;
+	curSize_ = size_;
 
-  if ( curSize.x < minSize.x ) {
-    curSize.x = minSize.x;
-  }
-  if ( curSize.y < minSize.y ) {
-    curSize.y = minSize.y;
-  }
-  if ( curSize.x > maxSize.x ) {
-    curSize.x = maxSize.x;
-  }
-  if ( curSize.y > maxSize.y ) {
-    curSize.y = maxSize.y;
-  }
+	if ( curSize_.x < minSize_.x )
+	{
+		curSize_.x = minSize_.x;
+	}
+	if ( curSize_.y < minSize_.y )
+	{
+		curSize_.y = minSize_.y;
+	}
+	if ( curSize_.x > maxSize_.x )
+	{
+		curSize_.x = maxSize_.x;
+	}
+	if ( curSize_.y > maxSize_.y )
+	{
+		curSize_.y = maxSize_.y;
+	}
 
-  this->Update();
+	this->Update();
 }
 
 
-void CWindow::SetSizeInPercent ( sf::Vector2f sizePercent_ )
+void CWindow::SetSizeInPercent ( sf::Vector2f sizePercent )
 {
-  this->SetSize ( sf::Vector2f ( settings::GetWidth() * sizePercent_.x * 0.01, settings::GetHeight() * sizePercent_.y * 0.01 ) );
+	this->SetSize ( sf::Vector2f ( settings::GetWidth() * sizePercent.x * 0.01, settings::GetHeight() * sizePercent.y * 0.01 ) );
 }
 
 
 sf::Vector2f CWindow::GetSize ( void ) const
 {
-  return curSize;
+	return curSize_;
 }
 
 
-void CWindow::SetPosition ( sf::Vector2f position_ )
+void CWindow::SetPosition ( sf::Vector2f position )
 {
-  position = position_;
+	position_ = position;
 
-  if ( position.x + curSize.x < 0 )
-    position.x = - curSize.x + 10;
+	if ( position_.x + curSize_.x < 0 )
+		position_.x = - curSize_.x + 10;
 
-  if ( position.x > settings::GetWidth() - 10 )
-    position.x = settings::GetWidth() - 10;
+	if ( position_.x > settings::GetWidth() - 10 )
+		position_.x = settings::GetWidth() - 10;
 
-  if ( position.y - titlebar < 0 )
-    position.y = titlebar + 1;
+	if ( position_.y - titlebar_ < 0 )
+		position_.y = titlebar_ + 1;
 
-  if ( position.y > settings::GetHeight() )
-    position.y = settings::GetHeight();
+	if ( position_.y > settings::GetHeight() )
+		position_.y = settings::GetHeight();
 
-  this->Update();
+	this->Update();
 }
 
 
 sf::Vector2f CWindow::GetPosition ( void ) const
 {
-  return position;
+	return position_;
 }
 
 
 sf::Rect<float> CWindow::GetWindowDimension ( void ) const
 {
-  return sf::Rect<float> ( position.x, position.y, position.x + curSize.x, position.y + curSize.y );
+	return sf::Rect<float> ( position_.x, position_.y - titlebar_, position_.x + curSize_.x, position_.y + curSize_.y );
 }
 
 
 sf::Rect<float> CWindow::GetTitlebarDimension ( void ) const
 {
-  sf::Vector2f titlePos ( position.x, position.y - titlebar );
-  sf::Vector2f titleEndPos ( position.x + curSize.x, position.y );
-  return sf::Rect<float> ( titlePos.x, titlePos.y, titleEndPos.x, titleEndPos.y );
+	sf::Vector2f titlePos ( position_.x, position_.y - titlebar_ );
+	sf::Vector2f titleEndPos ( position_.x + curSize_.x, position_.y );
+	return sf::Rect<float> ( titlePos.x, titlePos.y, titleEndPos.x, titleEndPos.y );
 }
 
 
 sf::Rect<float> CWindow::GetResizeArea ( void ) const
 {
-  sf::Vector2f point = GetPosition() + GetSize() - sf::Vector2f ( 2, 2 );
+	sf::Vector2f point = GetPosition() + GetSize() - sf::Vector2f ( 2, 2 );
 
-  return sf::Rect<float> ( point.x, point.y, point.x + 3, point.y + 3 );
+	return sf::Rect<float> ( point.x, point.y, point.x + 3, point.y + 3 );
 }
 
 
-sf::Rect<float> CWindow::GetIconCloseCoord ( void ) const
+void CWindow::SetTitlebar ( unsigned int titlebar )
 {
-  return sf::Rect<float> ( iconCloseImg.GetPosition().x, iconCloseImg.GetPosition().y,
-    iconCloseImg.GetPosition().x + iconCloseImg.GetSize().x, iconCloseImg.GetPosition().y + iconCloseImg.GetSize().y );
-}
-
-
-void CWindow::SetTitlebar ( unsigned int titlebar_ )
-{
-  titlebar = titlebar_;
-  this->Update();
+	titlebar_ = titlebar;
+	this->Update();
 }
 
 
 void CWindow::SetMoveWindow ( bool ison )
 {
-  moveWindow = ison;
+	moveWindow_ = ison;
 }
 
 
 bool CWindow::GetMoveWindow ( void ) const
 {
-  return moveWindow;
+	return moveWindow_;
 }
 
-
-void CWindow::SetIconClose ( sf::Vector3f position_ )
-{
-  iconClose = position_;
-}
 
 
 } // namespace gui
