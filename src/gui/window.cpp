@@ -14,7 +14,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-// #include "widget.hpp"
+#include "widget.hpp"
 #include "manager.hpp"
 
 #include "../game.hpp"
@@ -22,6 +22,7 @@
 #include "../settings.hpp"
 #include "../action.hpp"
 
+#include "button.hpp"
 #include "window.hpp"
 
 namespace gui
@@ -52,7 +53,7 @@ CWindow::CWindow ( CTheme *theme, sf::Vector2f position, sf::Vector2f size )
 
 		CButton* closeButton = new CButton ( this, closeButtonPosition, closeButtonSize );
 		closeButton->SetBackground ( *game->GetImgResource()->Get ( settings::GetThemePath() + "close.png" ) );
-// 		closeButton->AddMouseEvent ( &action::closeWindow, action::LEFT );
+		closeButton->AddMouseEvent ( &action::closeWindow, MOUSE::LEFT );
 	} // End Titlebar
 
 

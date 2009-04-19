@@ -20,7 +20,9 @@
 #include <sstream>
 
 #include "gui/widget.hpp"
-#include "util.hpp"
+// #include "util.hpp"
+
+class CWidget;
 
 /*
  widget_ - Pointer auf Widgets das die Aktion ausf¸hrt
@@ -30,25 +32,15 @@
 namespace action
 {
 
-enum Mouse
-{
-	LEFT,
-	RIGHT,
-	MIDDLE,
-	HOVER,
-	UNHOVER
-};
 
-
-
-// bool quit ( class gui::CWidget* widget, util::DataHolder& args );
+bool quit ( CWidget* widget, util::DataHolder& args );
 
 /*
-  Funktion: Fenster schlieﬂen
-//   ---------
+ Funktion: Fenster schlieﬂen
+ ---------
  sprite_one -> Name des zu schlieﬂenden Fensters (optional)
 */
-// bool closeWindow ( gui::CWidget* widget, util::DataHolder& args );
+bool closeWindow ( gui::CWidget* widget, util::DataHolder& args );
 
 
 namespace gfx

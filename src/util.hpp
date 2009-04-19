@@ -23,6 +23,24 @@
 
 #include <SFML/Graphics.hpp>
 
+
+namespace MOUSE
+{
+
+enum TYPES
+{
+	LEFT,
+	RIGHT,
+	MIDDLE,
+	HOVER,
+	UNHOVER
+};
+
+TYPES sfMouseToMouse ( sf::Mouse::Button button );
+
+} // namespace MOUSE
+
+
 enum TYPES
 {
 	INTEGER,

@@ -22,6 +22,30 @@
 #include "util.hpp"
 #include "settings.hpp"
 
+
+
+namespace MOUSE
+{
+
+TYPES sfMouseToMouse ( sf::Mouse::Button button )
+{
+	if ( button == sf::Mouse::Left )
+	{
+		return MOUSE::LEFT;
+	}
+	else if ( button == sf::Mouse::Right )
+	{
+		return MOUSE::RIGHT;
+	}
+	else if ( button == sf::Mouse::Middle )
+	{
+		return MOUSE::MIDDLE;
+	}
+
+}
+
+} // namespace MOUSE
+
 namespace util
 {
 

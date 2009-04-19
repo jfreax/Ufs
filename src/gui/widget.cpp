@@ -84,7 +84,7 @@ void CWidget::Calc ( void )
 	//
 	if ( !isMouseHere && wasMouseHere )
 	{
-// 		this->UnMouseHover();
+		this->Mouse ( MOUSE::UNHOVER );
 		wasMouseHere = false;
 	}
 
@@ -140,26 +140,31 @@ bool CWidget::Call ( void )
 }
 
 
-bool CWidget::Mouse ( action::Mouse type )
+bool CWidget::Mouse ( MOUSE::TYPES type )
 {
 	std::vector< Arguments_* >* mouseArgs = NULL;
 
 	switch ( type )
 	{
-		case action::LEFT:
+		case MOUSE::LEFT:
 			mouseArgs = &mouseLClick_;
 			break;
-		case action::RIGHT:
+		case MOUSE::RIGHT:
 			mouseArgs = &mouseRClick_;
 			break;
-		case action::MIDDLE:
+		case MOUSE::MIDDLE:
 			mouseArgs = &mouseMClick_;
 			break;
-		case action::HOVER:
+		case MOUSE::HOVER:
 			mouseArgs = &mouseHover_;
+			isMouseHere = wasMouseHere = true;
 			break;
-		case action::UNHOVER:
+		case MOUSE::UNHOVER:
 			mouseArgs = &mouseUnHover_;
+			for ( std::vector< Arguments_* >::size_type i = mouseHover_.size(); i; --i )
+			{ // Alle MouseHovers stoppen
+				mouseHover_.at ( i - 1 )->delNow = true;
+			}
 			break;
 	}
 
@@ -193,46 +198,6 @@ bool CWidget::Mouse ( action::Mouse type )
 }
 
 
-// bool CWidget::MouseClick ( sf::Mouse::Button button )
-// {
-//  std::vector< Arguments_* >* mouseArgs = NULL;
-//
-//  switch ( button )
-//  {
-//   case sf::Mouse::Left:
-//    mouseArgs = &mouseLClick_;
-//    break;
-//   case sf::Mouse::Right:
-//    mouseArgs = &mouseRClick_;
-//    break;
-//   case sf::Mouse::Middle:
-//    mouseArgs = &mouseMClick_;
-//    break;
-//  }
-//
-//  return Mouse ( mouseArgs );
-// }
-//
-//
-// bool CWidget::MouseHover ( void )
-// {
-//  isMouseHere = wasMouseHere = true;
-//
-//  return Mouse ( &mouseHover_ );
-// }
-//
-//
-// bool CWidget::UnMouseHover ( void )
-// {
-//  for ( std::vector< Arguments_* >::size_type i = mouseHover_.size(); i; --i )
-//  { // Alle MouseHovers stoppen
-//   mouseHover_.at ( i - 1 )->delNow = true;
-//  }
-//
-//  return Mouse ( &mouseUnHover_ );
-// }
-
-
 util::DataHolder* CWidget::AddCall ( bool ( *mouseClick ) ( CWidget*, util::DataHolder& ), float wait )
 {
 	Arguments_* newCall_ = new Arguments_;
@@ -246,7 +211,7 @@ util::DataHolder* CWidget::AddCall ( bool ( *mouseClick ) ( CWidget*, util::Data
 }
 
 
-util::DataHolder* CWidget::AddMouseEvent ( bool ( *mouseClick ) ( CWidget*, util::DataHolder& ), action::Mouse type, float wait )
+util::DataHolder* CWidget::AddMouseEvent ( bool ( *mouseClick ) ( CWidget*, util::DataHolder& ), MOUSE::TYPES type, float wait )
 {
 	Arguments_* newMouseAction = new Arguments_;
 	newMouseAction->function = mouseClick;
@@ -256,51 +221,25 @@ util::DataHolder* CWidget::AddMouseEvent ( bool ( *mouseClick ) ( CWidget*, util
 	switch ( type )
 	{
 		default:
-		case action::LEFT:
+		case MOUSE::LEFT:
 			mouseLClick_.push_back ( newMouseAction );
 			break;
-		case action::RIGHT:
+		case MOUSE::RIGHT:
 			mouseRClick_.push_back ( newMouseAction );
 			break;
-		case action::MIDDLE:
+		case MOUSE::MIDDLE:
 			mouseMClick_.push_back ( newMouseAction );
 			break;
-		case action::HOVER:
+		case MOUSE::HOVER:
 			mouseHover_.push_back ( newMouseAction );
 			break;
-		case action::UNHOVER:
+		case MOUSE::UNHOVER:
 			mouseUnHover_.push_back ( newMouseAction );
 			break;
 	}
 
 	return &newMouseAction->args;
 }
-
-
-// util::DataHolder* CWidget::AddMouseHover ( bool ( *mouseHover ) ( CWidget*, util::DataHolder& ), float wait )
-// {
-//  Arguments_* newMouseHover = new Arguments_;
-//  newMouseHover->function = mouseHover;
-//  newMouseHover->wait = wait;
-//  newMouseHover->shouldDelete = false;
-//
-//  mouseHover_.push_back ( newMouseHover );
-//
-//  return &newMouseHover->args;
-// }
-//
-//
-// util::DataHolder* CWidget::AddUnMouseHover ( bool ( *mouseUnHover ) ( CWidget*, util::DataHolder& ), float wait )
-// {
-//  Arguments_* newUnMouseHover = new Arguments_;
-//  newUnMouseHover->function = mouseUnHover;
-//  newUnMouseHover->wait = wait;
-//  newUnMouseHover->shouldDelete = false;
-//
-//  mouseUnHover_.push_back ( newUnMouseHover );
-//
-//  return &newUnMouseHover->args;
-// }
 
 
 void CWidget::SetPosition ( sf::Vector2f position )

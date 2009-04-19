@@ -113,7 +113,7 @@ bool CManager::MouseClick ( const int x, const int y, const sf::Mouse::Button bu
 					if ( currentWidget->GetDimensionInScreen().Contains ( x, y ) )
 					{
 						previousMouseScope_ = NONE;
-// 						currentWidget->Mouse ( button );
+						currentWidget->Mouse ( MOUSE::sfMouseToMouse ( button ) );
 					}
 				}
 			}
@@ -163,7 +163,7 @@ bool CManager::MouseHover ( const int x, const int y )
 				if ( currentWidget->GetDimensionInScreen().Contains ( x, y ) )
 				{
 					previousMouseScope_ = NONE;
-					currentWidget->Mouse ( action::HOVER );
+					currentWidget->Mouse ( MOUSE::HOVER );
 				}
 			}
 		}
