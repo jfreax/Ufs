@@ -22,6 +22,21 @@
 
 #include "parser.hpp"
 
+
+namespace MOUSE
+{
+
+enum TYPES
+{
+	LEFT,
+	RIGHT,
+	MIDDLE,
+	HOVER,
+	UNHOVER
+};
+
+} // namespace MOUSE
+
 struct KeyHolder
 {
   sf::Key::Code key;

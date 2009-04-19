@@ -47,7 +47,7 @@ namespace gfx
 {
 
 /*
-  Funktion: Einfärben eines sf::Sprites
+  Funktion: Einfärben eines sf::Sprites in bestimmter Zeit oder bis bestimmte Farbe erreicht wurde
   ---------
  sprite_one -> Objekt das eingefärbt werden soll
  f -> Zeit in Millisekunden bis Ende (optional)
@@ -57,7 +57,7 @@ namespace gfx
  color_two -> Differenzfarbe (+)
 
 */
-bool inking ( gui::CWidget* widget, util::DataHolder& args );
+bool fadeInking ( gui::CWidget* widget, util::DataHolder& args );
 
 
 } // namespace action::gfx

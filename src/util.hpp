@@ -22,23 +22,7 @@
 #include <sstream>
 
 #include <SFML/Graphics.hpp>
-
-
-namespace MOUSE
-{
-
-enum TYPES
-{
-	LEFT,
-	RIGHT,
-	MIDDLE,
-	HOVER,
-	UNHOVER
-};
-
-TYPES sfMouseToMouse ( sf::Mouse::Button button );
-
-} // namespace MOUSE
+#include "input.hpp"
 
 
 enum TYPES
@@ -117,7 +101,7 @@ void deleteChar ( std::string &stringToReplace, char delThis = ' ' );
 void lowercase ( std::string& str );
 
 std::string colorToString ( sf::Color color );
-
+MOUSE::TYPES sfMouseToMouse ( sf::Mouse::Button button );
 }
 
 #endif // UTIL_HPP

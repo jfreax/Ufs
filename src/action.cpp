@@ -43,7 +43,7 @@ namespace gfx
 {
 
 
-bool inking ( gui::CWidget* widget, util::DataHolder& args )
+bool fadeInking ( gui::CWidget* widget, util::DataHolder& args )
 {
 	++args.frame;
 
