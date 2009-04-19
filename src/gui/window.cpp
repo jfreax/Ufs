@@ -52,7 +52,7 @@ CWindow::CWindow ( CTheme *theme, sf::Vector2f position, sf::Vector2f size )
 
 		CButton* closeButton = new CButton ( this, closeButtonPosition, closeButtonSize );
 		closeButton->SetBackground ( *game->GetImgResource()->Get ( settings::GetThemePath() + "close.png" ) );
-		closeButton->AddMouseClick ( &action::closeWindow );
+// 		closeButton->AddMouseEvent ( &action::closeWindow, action::LEFT );
 	} // End Titlebar
 
 
@@ -130,7 +130,7 @@ void CWindow::AddWidget ( CWidget* widget_ )
 
 std::vector< gui::CWidget* >* CWindow::GetWidgetList ( void )
 {
-  return &widgetList_;
+	return &widgetList_;
 }
 
 
@@ -236,7 +236,7 @@ bool CWindow::GetMoveWindow ( void ) const
 {
 	return moveWindow_;
 }
-
+// 
 
 
 } // namespace gui

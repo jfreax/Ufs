@@ -18,43 +18,52 @@
 #define ACTION_HPP
 
 #include <sstream>
+
 #include "gui/widget.hpp"
 #include "util.hpp"
 
 /*
-	widget_ - Pointer auf Widgets das die Aktion ausf¸hrt
-	stream_ - Die eigendlichen Paramter getrennt durch Leerzeichen
+ widget_ - Pointer auf Widgets das die Aktion ausf¸hrt
+ stream_ - Die eigendlichen Paramter getrennt durch Leerzeichen
 */
 
 namespace action
 {
 
+enum Mouse
+{
+	LEFT,
+	RIGHT,
+	MIDDLE,
+	HOVER,
+	UNHOVER
+};
+
+
+
+// bool quit ( class gui::CWidget* widget, util::DataHolder& args );
 
 /*
-	void
+  Funktion: Fenster schlieﬂen
+//   ---------
+ sprite_one -> Name des zu schlieﬂenden Fensters (optional)
 */
-bool quit ( gui::CWidget* widget, util::DataHolder& args );
-
-/*
-	1.) <optional> Typ: string | Funktion: "id" oder "name" ( "" schlieﬂt das Mutterfenster des Widgets )
-	2.) <optional> Typ: int | Funktion: enth‰llt entweder die Id des Fensters oder den Namen
-*/
-bool closeWindow ( gui::CWidget* widget, util::DataHolder& args );
+// bool closeWindow ( gui::CWidget* widget, util::DataHolder& args );
 
 
 namespace gfx
 {
 
 /*
-		Funktion: Einf‰rben eines sf::Sprites
-		---------
-	sprite_one -> Objekt das eingef‰rbt werden soll
-	f -> Zeit in Millisekunden bis Ende (optional)
-	x -> verbleibende Frames bis Ende (optional)
-	b -> 1 = addieren und 0 = subtrahieren
-	color_one -> Endfarbe
-	color_two -> Differenzfarbe (+)
-	
+  Funktion: Einf‰rben eines sf::Sprites
+  ---------
+ sprite_one -> Objekt das eingef‰rbt werden soll
+ f -> Zeit in Millisekunden bis Ende (optional)
+ x -> verbleibende Frames bis Ende (optional)
+ b -> 1 = addieren und 0 = subtrahieren
+ color_one -> Endfarbe
+ color_two -> Differenzfarbe (+)
+
 */
 bool inking ( gui::CWidget* widget, util::DataHolder& args );
 

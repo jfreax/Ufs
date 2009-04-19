@@ -16,6 +16,7 @@
 
 #include <iostream>
 
+#include "gui/widget.hpp"
 #include "game.hpp"
 #include "action.hpp"
 
@@ -57,7 +58,7 @@ bool inking ( gui::CWidget* widget, util::DataHolder& args )
 		{
 			return false;
 		}
-	
+
 		args.f -= GetGameClass()->GetApp()->GetFrameTime();
 	}
 	if ( args.x )
@@ -75,7 +76,7 @@ bool inking ( gui::CWidget* widget, util::DataHolder& args )
 	if ( args.b )
 	{
 		endColor = args.sprite_one->GetColor() + args.color_two;
-		
+
 		if ( args.color_one.r > spriteColor.r )
 		{
 			endColor.r = spriteColor.r + args.color_two.r;

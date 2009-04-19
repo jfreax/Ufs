@@ -21,6 +21,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "../util.hpp"
+#include "../action.hpp"
 
 namespace gui
 {
@@ -53,15 +54,15 @@ class CWidget
 
 
 		bool Call ( void );
-		bool Mouse ( std::vector< Arguments_* >* mouseArgs );
-		bool MouseClick ( sf::Mouse::Button button );
-		bool MouseHover ( void );
-		bool UnMouseHover ( void );
+		bool Mouse ( action::Mouse type );
+// 		bool MouseClick ( sf::Mouse::Button button );
+// 		bool MouseHover ( void );
+// 		bool UnMouseHover ( void );
 		
 		util::DataHolder* AddCall ( bool ( *mouseClick ) ( CWidget*, util::DataHolder& ), float wait = 0.f );
-		util::DataHolder* AddMouseClick ( bool ( *mouseClick ) ( CWidget*, util::DataHolder& ), sf::Mouse::Button button = sf::Mouse::Left, float wait = 0.f );
-		util::DataHolder* AddMouseHover ( bool ( *mouseHover ) ( CWidget*, util::DataHolder& ), float wait = 0.f );
-		util::DataHolder* AddUnMouseHover ( bool ( *mouseUnHover ) ( CWidget*, util::DataHolder& ), float wait = 0.f  );
+		util::DataHolder* AddMouseEvent ( bool ( *mouseClick ) ( CWidget*, util::DataHolder& ), action::Mouse type = action::LEFT, float wait = 0.f );
+// 		util::DataHolder* AddMouseHover ( bool ( *mouseHover ) ( CWidget*, util::DataHolder& ), float wait = 0.f );
+// 		util::DataHolder* AddUnMouseHover ( bool ( *mouseUnHover ) ( CWidget*, util::DataHolder& ), float wait = 0.f  );
 
 		void SetPosition ( sf::Vector2f position );
 		void SetSize ( sf::Vector2f size );

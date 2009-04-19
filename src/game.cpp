@@ -181,17 +181,17 @@ bool CGame::Start ( void )
 	newButton->SetSize ( sf::Vector2f ( 80, 20 ) );
 	newButton->SetBackgroundColor ( sf::Color( 0, 0, 0, 0 ) );
 	
-	util::DataHolder* buttonSettings = newButton->AddMouseHover ( &action::gfx::inking, 0.1f );
-	buttonSettings->sprite_one = newButton->GetBackground();
-	buttonSettings->color_one = sf::Color ( 20, 1, 1 );
-	buttonSettings->color_two = sf::Color ( 10, 0, 0 );
-	buttonSettings->b = false;
-
-	util::DataHolder* buttonSettings2 = newButton->AddUnMouseHover ( &action::gfx::inking, 0.1f );
-	buttonSettings2->sprite_one = newButton->GetBackground();
-	buttonSettings2->color_one = sf::Color ( 245, 255, 255 );
-	buttonSettings2->color_two = sf::Color ( 10, 0, 0 );
-	buttonSettings2->b = true;
+// 	util::DataHolder* buttonSettings = newButton->AddMouseEvent ( &action::gfx::inking, action::HOVER, 0.1f );
+// 	buttonSettings->sprite_one = newButton->GetBackground();
+// 	buttonSettings->color_one = sf::Color ( 20, 1, 1 );
+// 	buttonSettings->color_two = sf::Color ( 10, 0, 0 );
+// 	buttonSettings->b = false;
+// 
+// 	util::DataHolder* buttonSettings2 = newButton->AddUnMouseHover ( &action::gfx::inking, action::HOVER, 0.1f );
+// 	buttonSettings2->sprite_one = newButton->GetBackground();
+// 	buttonSettings2->color_one = sf::Color ( 245, 255, 255 );
+// 	buttonSettings2->color_two = sf::Color ( 10, 0, 0 );
+// 	buttonSettings2->b = true;
 
 	while ( run_ )
 	{

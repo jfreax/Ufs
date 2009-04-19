@@ -17,6 +17,7 @@
 #include <list>
 
 #include "../game.hpp"
+#include "../action.hpp"
 
 #include "window.hpp"
 #include "widget.hpp"
@@ -83,7 +84,7 @@ void CWidget::Calc ( void )
 	//
 	if ( !isMouseHere && wasMouseHere )
 	{
-		this->UnMouseHover();
+// 		this->UnMouseHover();
 		wasMouseHere = false;
 	}
 
@@ -139,8 +140,35 @@ bool CWidget::Call ( void )
 }
 
 
-bool CWidget::Mouse ( std::vector< Arguments_* >* mouseArgs )
+bool CWidget::Mouse ( action::Mouse type )
 {
+	std::vector< Arguments_* >* mouseArgs = NULL;
+
+	switch ( type )
+	{
+		case action::LEFT:
+			mouseArgs = &mouseLClick_;
+			break;
+		case action::RIGHT:
+			mouseArgs = &mouseRClick_;
+			break;
+		case action::MIDDLE:
+			mouseArgs = &mouseMClick_;
+			break;
+		case action::HOVER:
+			mouseArgs = &mouseHover_;
+			break;
+		case action::UNHOVER:
+			mouseArgs = &mouseUnHover_;
+			break;
+	}
+
+	if ( !mouseArgs )
+	{
+		return false;
+	}
+
+
 	bool ret = true;
 
 	for ( std::vector< Arguments_* >::size_type i = mouseArgs->size(); i; --i )
@@ -165,44 +193,44 @@ bool CWidget::Mouse ( std::vector< Arguments_* >* mouseArgs )
 }
 
 
-bool CWidget::MouseClick ( sf::Mouse::Button button )
-{
-	std::vector< Arguments_* >* mouseArgs = NULL;
-
-	switch ( button )
-	{
-		case sf::Mouse::Left:
-			mouseArgs = &mouseLClick_;
-			break;
-		case sf::Mouse::Right:
-			mouseArgs = &mouseRClick_;
-			break;
-		case sf::Mouse::Middle:
-			mouseArgs = &mouseMClick_;
-			break;
-	}
-
-	return Mouse ( mouseArgs );
-}
-
-
-bool CWidget::MouseHover ( void )
-{
-	isMouseHere = wasMouseHere = true;
-
-	return Mouse ( &mouseHover_ );
-}
-
-
-bool CWidget::UnMouseHover ( void )
-{
-	for ( std::vector< Arguments_* >::size_type i = mouseHover_.size(); i; --i )
-	{ // Alle MouseHovers stoppen
-		mouseHover_.at ( i - 1 )->delNow = true;
-	}
-
-	return Mouse ( &mouseUnHover_ );
-}
+// bool CWidget::MouseClick ( sf::Mouse::Button button )
+// {
+//  std::vector< Arguments_* >* mouseArgs = NULL;
+//
+//  switch ( button )
+//  {
+//   case sf::Mouse::Left:
+//    mouseArgs = &mouseLClick_;
+//    break;
+//   case sf::Mouse::Right:
+//    mouseArgs = &mouseRClick_;
+//    break;
+//   case sf::Mouse::Middle:
+//    mouseArgs = &mouseMClick_;
+//    break;
+//  }
+//
+//  return Mouse ( mouseArgs );
+// }
+//
+//
+// bool CWidget::MouseHover ( void )
+// {
+//  isMouseHere = wasMouseHere = true;
+//
+//  return Mouse ( &mouseHover_ );
+// }
+//
+//
+// bool CWidget::UnMouseHover ( void )
+// {
+//  for ( std::vector< Arguments_* >::size_type i = mouseHover_.size(); i; --i )
+//  { // Alle MouseHovers stoppen
+//   mouseHover_.at ( i - 1 )->delNow = true;
+//  }
+//
+//  return Mouse ( &mouseUnHover_ );
+// }
 
 
 util::DataHolder* CWidget::AddCall ( bool ( *mouseClick ) ( CWidget*, util::DataHolder& ), float wait )
@@ -218,24 +246,30 @@ util::DataHolder* CWidget::AddCall ( bool ( *mouseClick ) ( CWidget*, util::Data
 }
 
 
-util::DataHolder* CWidget::AddMouseClick ( bool ( *mouseClick ) ( CWidget*, util::DataHolder& ), sf::Mouse::Button button, float wait )
+util::DataHolder* CWidget::AddMouseEvent ( bool ( *mouseClick ) ( CWidget*, util::DataHolder& ), action::Mouse type, float wait )
 {
 	Arguments_* newMouseAction = new Arguments_;
 	newMouseAction->function = mouseClick;
 	newMouseAction->wait = wait;
 	newMouseAction->shouldDelete = false;
 
-	switch ( button )
+	switch ( type )
 	{
 		default:
-		case sf::Mouse::Left:
+		case action::LEFT:
 			mouseLClick_.push_back ( newMouseAction );
 			break;
-		case sf::Mouse::Right:
+		case action::RIGHT:
 			mouseRClick_.push_back ( newMouseAction );
 			break;
-		case sf::Mouse::Middle:
+		case action::MIDDLE:
 			mouseMClick_.push_back ( newMouseAction );
+			break;
+		case action::HOVER:
+			mouseHover_.push_back ( newMouseAction );
+			break;
+		case action::UNHOVER:
+			mouseUnHover_.push_back ( newMouseAction );
 			break;
 	}
 
@@ -243,30 +277,30 @@ util::DataHolder* CWidget::AddMouseClick ( bool ( *mouseClick ) ( CWidget*, util
 }
 
 
-util::DataHolder* CWidget::AddMouseHover ( bool ( *mouseHover ) ( CWidget*, util::DataHolder& ), float wait )
-{
-	Arguments_* newMouseHover = new Arguments_;
-	newMouseHover->function = mouseHover;
-	newMouseHover->wait = wait;
-	newMouseHover->shouldDelete = false;
-
-	mouseHover_.push_back ( newMouseHover );
-
-	return &newMouseHover->args;
-}
-
-
-util::DataHolder* CWidget::AddUnMouseHover ( bool ( *mouseUnHover ) ( CWidget*, util::DataHolder& ), float wait )
-{
-	Arguments_* newUnMouseHover = new Arguments_;
-	newUnMouseHover->function = mouseUnHover;
-	newUnMouseHover->wait = wait;
-	newUnMouseHover->shouldDelete = false;
-
-	mouseUnHover_.push_back ( newUnMouseHover );
-
-	return &newUnMouseHover->args;
-}
+// util::DataHolder* CWidget::AddMouseHover ( bool ( *mouseHover ) ( CWidget*, util::DataHolder& ), float wait )
+// {
+//  Arguments_* newMouseHover = new Arguments_;
+//  newMouseHover->function = mouseHover;
+//  newMouseHover->wait = wait;
+//  newMouseHover->shouldDelete = false;
+//
+//  mouseHover_.push_back ( newMouseHover );
+//
+//  return &newMouseHover->args;
+// }
+//
+//
+// util::DataHolder* CWidget::AddUnMouseHover ( bool ( *mouseUnHover ) ( CWidget*, util::DataHolder& ), float wait )
+// {
+//  Arguments_* newUnMouseHover = new Arguments_;
+//  newUnMouseHover->function = mouseUnHover;
+//  newUnMouseHover->wait = wait;
+//  newUnMouseHover->shouldDelete = false;
+//
+//  mouseUnHover_.push_back ( newUnMouseHover );
+//
+//  return &newUnMouseHover->args;
+// }
 
 
 void CWidget::SetPosition ( sf::Vector2f position )
