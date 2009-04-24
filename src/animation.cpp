@@ -55,7 +55,6 @@ void CAnimation::Update ( void )
 		}
 
 		clipArea = sf::IntRect ( frameWidth * ( frame - 1 ), 0, frameWidth * frame, image->GetHeight() );
-
 	}
 }
 

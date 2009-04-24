@@ -14,72 +14,15 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef UTIL_HPP
-#define UTIL_HPP
+#ifndef DATAHOLDER_HPP
+#define DATAHOLDER_HPP
 
-#include <typeinfo>
-#include <iostream>
-#include <sstream>
-
-#include <SFML/Graphics.hpp>
-#include "input.hpp"
-
-
-enum TYPE
-{
-	UNKNOWN,
-	BOOL,
-	INTEGER,
-	FLOAT,
-	STRING,
-	COLOR,
-	IMAGE,
-	SPRITE,
-	VECTOR_INTEGER,
-	VECTOR_FLOAT,
-	VECTOR3_FLOAT,
-	
-	CWINDOW,
-	CWIDGET
-};
-
-
-enum MOUSESCOPE
-{
-	NONE,
-	TITLE,
-	RESIZE,
-	WINDOW,
-	BUTTON
-};
-
-
-namespace util
-{
-
-
-template<typename To, typename From>
-To lCast ( From a, To def = To() )
-{
-	To res;
-	std::stringstream str;
-
-	if ( ! ( str << a && str >> res ) )
-	{
-		return def;
-	}
-	else
-	{
-		return res;
-	}
-}
-
-
-class DataHolder
+class CDataHolder
 {
 	public:
-		DataHolder ( void );
-
+		CDataHolder ( void );
+	
+	private:
 		int frame;
 		
 		bool b;
@@ -101,13 +44,4 @@ class DataHolder
 		sf::Sprite* sprite_two;
 };
 
-
-bool isFile ( std::string filename );
-void deleteChar ( std::string &stringToReplace, char delThis = ' ' );
-void lowercase ( std::string& str );
-
-std::string colorToString ( sf::Color color );
-MOUSE::TYPES sfMouseToMouse ( sf::Mouse::Button button );
-}
-
-#endif // UTIL_HPP
+#endif // DATAHOLDER_HPP

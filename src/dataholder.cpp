@@ -14,54 +14,11 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef INPUT_HPP
-#define INPUT_HPP
+#include "dataholder.hpp"
 
-#include <map>
-#include <SFML/Graphics.hpp>
-
-#include "parser.hpp"
-
-
-namespace MOUSE
+CDataHolder::CDataHolder ( void ) :
+		b ( true ),
+		x ( 0 ), y ( 0 ), z ( 0 ), d ( 0 ), f ( 0 ),
+		sprite_one ( NULL ), sprite_two ( NULL )
 {
-
-enum TYPES
-{
-	LEFT,
-	RIGHT,
-	MIDDLE,
-	HOVER,
-	UNHOVER
-};
-
-} // namespace MOUSE
-
-struct KeyHolder
-{
-  sf::Key::Code key;
-
-  bool strg;
-  bool alt;
-  bool shift;
-};
-
-
-class CInput
-{
-  public:
-    CInput ( std::string file = "./config/keyboard.ini" );
-    bool LoadKeys ( std::string file );
-
-    bool TestPressedKeys ( std::string keyName_ );
-    bool Events ( void );
-
-  private:
-    std::map<std::string, sf::Key::Code> availableKeys;
-    std::map<std::string, KeyHolder> globalKeys;
-    sf::Event event;
-
-    Parser keyfile;
-};
-
-#endif // INPUT_HPP
+}

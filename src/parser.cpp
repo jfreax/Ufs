@@ -36,7 +36,8 @@ bool Parser::Open ( std::string filename, bool index, bool make_lower )
 
 	if ( !file )
 	{
-		std::cerr << "Could not open file: " << filename << std::endl;
+		// TODO logger << "Could not open file: " << filename
+		return false;
 	}
 
 	std::string line = "";
@@ -46,7 +47,7 @@ bool Parser::Open ( std::string filename, bool index, bool make_lower )
 
 	std::string normalLine = line;
 
-	while ( getline ( file, normalLine ) )
+	while ( std::getline ( file, normalLine ) )
 	{
 		++nr;
 		line = normalLine;

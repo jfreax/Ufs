@@ -14,14 +14,40 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <iostream>
+// #include <iostream>
 
-#include "gui/widget.hpp"
+#include "ui/widget.hpp"
 #include "game.hpp"
-#include "action.hpp"
+// #include "action.hpp"
 
 namespace action
 {
+
+// bool set ( CScript* scriptClass,  std::vector< std::string >* line )
+// {
+// 	if ( line->size() >= 3 )
+// 	{
+// 		if ( line->at ( 2 ).at ( 0 ) != '$' )
+// 		{
+// 			// TODO logger
+// 			std::cout << "keine variable!" << std::endl;
+// 			return false;
+// 		}
+// 		if ( variables_.find( line->at ( 2 ) ) == variables_.end() )
+// 		{
+// 			// TODO
+// 			std::cout << "variable wurde nicht deklariert!" << std::endl;
+// 			return false;
+// 		}
+// 	}
+// 	else
+// 	{
+// 		return false;
+// 	}
+// 
+// 
+// 
+// }
 
 
 bool quit ( gui::CWidget* widget, util::DataHolder& args )
@@ -70,6 +96,7 @@ bool fadeInking ( gui::CWidget* widget, util::DataHolder& args )
 	}
 
 	bool end = true;
+
 
 	sf::Color spriteColor = args.sprite_one->GetColor();
 	sf::Color endColor = spriteColor;

@@ -22,9 +22,11 @@
 #include "animation.hpp"
 #include "game.hpp"
 
-#include "gui/window.hpp"
-#include "gui/manager.hpp"
-#include "gui/button.hpp"
+#include "ui/window.hpp"
+#include "ui/manager.hpp"
+#include "ui/button.hpp"
+
+#include "gui/button/close.hpp"
 
 
 CGame* game = NULL;
@@ -115,6 +117,12 @@ CGame::CGame ( int argc, char **argv ) :
 	}
 }
 
+CGame::~CGame ( void )
+{
+	// TODO !!!
+}
+
+
 
 bool CGame::Initialize ( void )
 {
@@ -137,25 +145,23 @@ bool CGame::Initialize ( void )
 	}
 
 	app_.UseVerticalSync ( true );
-
 	app_.EnableKeyRepeat ( true );
+	app_.ShowMouseCursor ( false );
 
 	fpsStr_.SetSize ( 12 );
 
-	app_.ShowMouseCursor ( false );
+	// TODO nur Beispiele!
 	cursor_[NONE] = new CAnimation ( GetImgResource()->Get ( settings::GetThemePath() + "arrow.png" ) , 36, 0.1f );
 	cursor_[NONE]->Scale ( 0.6, 0.6 );
 	cursor_[WINDOW] = new CAnimation ( GetImgResource()->Get ( settings::GetThemePath() + "hand.png" ) , 41, 0.08f );
 	cursor_[WINDOW]->Scale ( 0.6, 0.6 );
 	cursor_[WINDOW]->SetStartAt ( 6 );
-//   cursor = cursors[0];
-//   cursor->Scale( 0.5f, 0.5f );
 
 	return true;
 }
 
 
-bool CGame::IsVideoModeValid ( void ) // TODO in CGame::initialize und settings::setHeight() !
+bool CGame::IsVideoModeValid ( void ) /* TODO in CGame::initialize und settings::setHeight() ! */
 {
 
 
@@ -164,34 +170,38 @@ bool CGame::IsVideoModeValid ( void ) // TODO in CGame::initialize und settings:
 
 bool CGame::Start ( void )
 {
+	// FIXME Nur BEISPIELE!
 	gui::CWindow* newWin = guiManager_.NewWindow();
 	guiManager_.NewWindow();
 	guiManager_.NewWindow();
 
 	newWin->SetSizeInPercent ( sf::Vector2f ( 90, 90 ) );
-	newWin->SetPosition ( sf::Vector2f ( 20, 100 ) );
+	newWin->SetPosition ( sf::Vector2f ( 20, 130 ) );
+	
+	
 //
 //   gui::CWindow* newWin2 = guiManager.newWindow();
 //   newWin2->setSizeInPercent ( sf::Vector2f ( 20, 20 ) );
 //   newWin2->setTitlebar ( 10 );
 //   newWin2->setPosition ( sf::Vector2f ( 0, 50 ) );
 
-	gui::CButton* newButton = new gui::CButton ( newWin );
-	newButton->SetName ( "TEST" );
-	newButton->SetSize ( sf::Vector2f ( 80, 20 ) );
-	newButton->SetBackgroundColor ( sf::Color( 0, 0, 0, 0 ) );
-	
-	util::DataHolder* buttonSettings = newButton->AddMouseEvent ( &action::gfx::fadeInking, MOUSE::HOVER, 0.1f );
-	buttonSettings->sprite_one = newButton->GetBackground();
-	buttonSettings->color_one = sf::Color ( 20, 1, 1 );
-	buttonSettings->color_two = sf::Color ( 10, 0, 0 );
-	buttonSettings->b = false;
-
-	util::DataHolder* buttonSettings2 = newButton->AddMouseEvent ( &action::gfx::fadeInking, MOUSE::UNHOVER, 0.1f );
-	buttonSettings2->sprite_one = newButton->GetBackground();
-	buttonSettings2->color_one = sf::Color ( 245, 255, 255 );
-	buttonSettings2->color_two = sf::Color ( 10, 0, 0 );
-	buttonSettings2->b = true;
+// 	gui::CButton* newButton = new gui::CButton ( newWin );
+// 	newButton->SetName ( "TEST" );
+// 	newButton->SetSize ( sf::Vector2f ( 80, 25 ) );
+// 	newButton->SetPosition ( sf::Vector2f ( 30, 20 ) );
+// 	newButton->SetBackgroundColor ( sf::Color ( 0, 0, 0, 0 ) );
+// 
+// 	util::DataHolder* buttonSettings = newButton->AddMouseEvent ( "fadeInking", MOUSE::HOVER, 0.01f );
+// 	buttonSettings->sprite_one = newButton->GetBackground();
+// 	buttonSettings->color_one = sf::Color ( 20, 1, 1, 20 );
+// 	buttonSettings->color_two = sf::Color ( 10, 0, 0, 10 );
+// 	buttonSettings->b = false;
+// 
+// 	util::DataHolder* buttonSettings2 = newButton->AddMouseEvent ( "fake", MOUSE::UNHOVER, 0.01f );
+// 	buttonSettings2->sprite_one = newButton->GetBackground();
+// 	buttonSettings2->color_one = sf::Color ( 245, 255, 255, 245 );
+// 	buttonSettings2->color_two = sf::Color ( 10, 0, 0, 10 );
+// 	buttonSettings2->b = true;
 
 	while ( run_ )
 	{
@@ -213,8 +223,6 @@ bool CGame::Stop ( void )
 
 void CGame::Render ( void )
 {
-util::colorToString ( sf::Color ( 100, 200, 50, 10 ) );
-
 	// Bildschirm säubern
 	app_.Clear();
 

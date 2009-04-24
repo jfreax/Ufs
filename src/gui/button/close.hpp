@@ -14,54 +14,43 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef INPUT_HPP
-#define INPUT_HPP
 
-#include <map>
-#include <SFML/Graphics.hpp>
+#include "../../ui/button.hpp"
 
-#include "parser.hpp"
+#ifndef CLOSE_HPP
+#define CLOSE_HPP
 
-
-namespace MOUSE
+namespace gui
 {
 
-enum TYPES
+
+class CCloseButton : public CButton
 {
-	LEFT,
-	RIGHT,
-	MIDDLE,
-	HOVER,
-	UNHOVER
-};
-
-} // namespace MOUSE
-
-struct KeyHolder
-{
-  sf::Key::Code key;
-
-  bool strg;
-  bool alt;
-  bool shift;
+	public:
+		CCloseButton ( void );
+		bool onLeftClick ( void );
+	private:
 };
 
 
-class CInput
+class CMinimizeButton : public CButton
 {
-  public:
-    CInput ( std::string file = "./config/keyboard.ini" );
-    bool LoadKeys ( std::string file );
-
-    bool TestPressedKeys ( std::string keyName_ );
-    bool Events ( void );
-
-  private:
-    std::map<std::string, sf::Key::Code> availableKeys;
-    std::map<std::string, KeyHolder> globalKeys;
-    sf::Event event;
-
-    Parser keyfile;
+	public:
+		CMinimizeButton ( void );
+		
+		bool Call ( void );
+		bool onLeftClick ( void );
+	private:
+		float originalSize_;
+	
+		bool doMinimize_;
+		bool doMaximize_;
+		
+		double diffRotate_;
+		double diff_;
 };
 
-#endif // INPUT_HPP
+
+} /* namespace gui */
+
+#endif // CLOSE_HPP

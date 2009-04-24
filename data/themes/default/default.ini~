@@ -1,10 +1,19 @@
 [WINDOW]
 minSize = 200 50
+maxSize = 1000 1000 // TODO
+
 titlebar = 15
+titlebarLength =400
+titlebarColor = 50 50 60 200
+titlebarTextSize = 10 TODO
+titlebarTextColor =  TODO
+
 borderColor = 255 10 10
-border = 20
+border = 0
+
 backgroundImage = main.png
-close = -20 0 16
+iconClose = 180 0 16
+iconMinimize = 6 0 16
 
 
 [BUTTON]

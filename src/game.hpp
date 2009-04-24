@@ -17,9 +17,11 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
-#include <SFML/Graphics.hpp>
-#include "gui/manager.hpp"
 
+#include <SFML/Graphics.hpp>
+#include "ui/manager.hpp"
+
+#include "script.hpp"
 #include "input.hpp"
 #include "resource.hpp"
 #include "animation.hpp"
@@ -29,6 +31,8 @@ class CGame
 {
 	public:
 		CGame ( int argc, char **argv );
+		~CGame ( void );
+
 		bool Initialize ( void );
 
 		bool IsVideoModeValid ( void );
@@ -37,7 +41,7 @@ class CGame
 		bool Stop ( void );
 
 		void Render ( void );
-
+		
 		sf::RenderWindow* GetApp ( void );
 		gui::CManager* GetGuiManager ( void );
 		CResource< sf::Image >* GetImgResource ( void );

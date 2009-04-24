@@ -14,54 +14,39 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef INPUT_HPP
-#define INPUT_HPP
+#ifndef BUTTON_HPP
+#define BUTTON_HPP
 
-#include <map>
-#include <SFML/Graphics.hpp>
+#include <iostream>
 
-#include "parser.hpp"
+#include "widget.hpp"
 
 
-namespace MOUSE
+namespace gui
 {
 
-enum TYPES
+
+class CButton : public CWidget
 {
-	LEFT,
-	RIGHT,
-	MIDDLE,
-	HOVER,
-	UNHOVER
+	public:
+		CButton ( );
+		void Render ( void );
+		
+		virtual bool Call ( void ) {};
+		
+		virtual bool onLeftClick ( void ) {};
+		virtual bool onHoverMouse ( void );
+		virtual bool onUnHoverMouse ( void );
+
+
+	protected:
+	
+		float WaitOnHoverMouse;
+		sf::Clock ClockOnHoverMouse;
 };
 
-} // namespace MOUSE
-
-struct KeyHolder
-{
-  sf::Key::Code key;
-
-  bool strg;
-  bool alt;
-  bool shift;
-};
 
 
-class CInput
-{
-  public:
-    CInput ( std::string file = "./config/keyboard.ini" );
-    bool LoadKeys ( std::string file );
+} // namespace gui
 
-    bool TestPressedKeys ( std::string keyName_ );
-    bool Events ( void );
-
-  private:
-    std::map<std::string, sf::Key::Code> availableKeys;
-    std::map<std::string, KeyHolder> globalKeys;
-    sf::Event event;
-
-    Parser keyfile;
-};
-
-#endif // INPUT_HPP
+#endif // BUTTON_HPP

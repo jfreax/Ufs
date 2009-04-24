@@ -19,8 +19,8 @@
 
 #include <sstream>
 
-#include "gui/widget.hpp"
-// #include "util.hpp"
+#include "ui/widget.hpp"
+
 
 class CWidget;
 
@@ -31,6 +31,9 @@ class CWidget;
 
 namespace action
 {
+
+
+// bool set ( CScript* scriptClass,  std::vector< std::string >* line );
 
 
 bool quit ( CWidget* widget, util::DataHolder& args );

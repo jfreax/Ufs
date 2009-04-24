@@ -202,6 +202,8 @@ bool CInput::Events ( void )
 	gui::CManager* guiManager = GetGameClass()->GetGuiManager();
 	const sf::Input* input = &app->GetInput();
 
+
+
 	// Mouse
 	if ( input->IsMouseButtonDown ( sf::Mouse::Left ) )
 	{

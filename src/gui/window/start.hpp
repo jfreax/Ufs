@@ -14,54 +14,25 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef INPUT_HPP
-#define INPUT_HPP
+#ifndef STARTWINDOW_HPP
+#define STARTWINDOW_HPP
 
-#include <map>
-#include <SFML/Graphics.hpp>
+#include "../../ui/button.hpp"
+#include "../../ui/window.hpp"
 
-#include "parser.hpp"
-
-
-namespace MOUSE
+namespace gui
 {
 
-enum TYPES
+class CStartWindow : public CWindow
 {
-	LEFT,
-	RIGHT,
-	MIDDLE,
-	HOVER,
-	UNHOVER
-};
-
-} // namespace MOUSE
-
-struct KeyHolder
-{
-  sf::Key::Code key;
-
-  bool strg;
-  bool alt;
-  bool shift;
+	public:
+	
+	
+	private:
+	
 };
 
 
-class CInput
-{
-  public:
-    CInput ( std::string file = "./config/keyboard.ini" );
-    bool LoadKeys ( std::string file );
+} /* namespace gui */
 
-    bool TestPressedKeys ( std::string keyName_ );
-    bool Events ( void );
-
-  private:
-    std::map<std::string, sf::Key::Code> availableKeys;
-    std::map<std::string, KeyHolder> globalKeys;
-    sf::Event event;
-
-    Parser keyfile;
-};
-
-#endif // INPUT_HPP
+#endif // STARTWINDOW_HPP
