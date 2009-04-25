@@ -33,15 +33,14 @@ class CWidget
 		CWidget ( );
 
 		virtual void Render ( void ) = 0;
-		virtual bool Update ( void );
-		void NoUpdate ( bool ison );
+		virtual bool Update ( bool doIt = false );
+// 		void NoUpdate ( bool ison );
 		
 		virtual bool Call ( void ) = 0;
 
 		virtual bool onLeftClick ( void ) = 0;
 		virtual bool onHoverMouse ( void ) = 0;
 		virtual bool onUnHoverMouse ( void ) = 0;
-
 
 		void SetMotherWin ( class CWindow* win );
 
@@ -53,6 +52,8 @@ class CWidget
 		void SetName ( std::string name );
 		void SetFontSize ( int size );
 
+		void SetDrawBackground ( bool ison );
+
 		void SetBackground ( sf::Sprite background );
 		sf::Sprite* GetBackground ( void );
 		void SetBackground ( sf::Image* background );
@@ -61,6 +62,15 @@ class CWidget
 
 		class CWindow* GetMotherWin ( void );
 		sf::Rect< float > GetDimensionInScreen ( void );
+		
+		void SetShow ( bool ison );
+		bool GetShow ( void );
+		
+		std::string GetName ( void );
+		
+		void SetText ( std::string text );
+		std::string GetText ( void );
+		void SetTextPosition ( sf::Vector2f pos );
 
 		sf::Clock lastClickTime;
 		
@@ -69,11 +79,15 @@ class CWidget
 	
 		unsigned int id_;
 		class CWindow* motherWin_;
-		bool noUpdate_; // kein "update()" mehr machen! Vorsicht! Aufjedenfall wieder zurücksetzen...
-
-		bool isMouseHere;
-		bool wasMouseHere;
 		
+		bool update_;
+
+		bool isMouseHere_;
+		bool wasMouseHere_;
+		
+		double angle_;
+		
+		bool show_;
 		
 		std::string name_;
 		sf::String text_;
@@ -82,6 +96,7 @@ class CWidget
 		sf::Vector2f fakePosition_;
 		sf::Vector2f curSize_;
 
+		bool drawBackground_;
 		sf::Sprite background_;
 		sf::Color backgroundColor_;
 		sf::Shape form_;

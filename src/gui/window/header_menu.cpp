@@ -14,20 +14,44 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "start.hpp"
+#include "header_menu.hpp"
+#include "../../settings.hpp"
+#include "../../ui/button.hpp"
+
 
 namespace gui
 {
 
 
-CStartWindow::CStartWindow ( void )
+CHeaderWindow::CHeaderWindow ( void )
 {
+	/* Keine Titelleiste */
 	this->SetTitlebar ( 0 );
 	
+	/* Temporäre Variablen */
+	int width = settings::GetWidth();
+	int height = settings::GetHeight();
 	
+	/* Position und Größe */
+	this->SetPosition( sf::Vector2f ( width * 0.2f, 0.f ) );
+	this->SetSize ( sf::Vector2f ( width * 0.15, 25.f ) );
+	
+	/* Nicht verschiebbar */
+	this->SetMoveAble ( false );
+	
+	/* Nicht schließbar */
+// 	this->SetCloseAble ( false );
+
+	/* "Beschriftung" (Button) hinzufügen */
+	CButton* button = new CButton;
+	this->AddWidget ( button );
+	
+	/* Buttoneigenschaften anpassen */
+	button->SetDrawBackground ( false );
+	button->SetSize ( this->GetSize() );
+	button->SetText ( "TEST" );
 }
 
 
 
 } /* namespace gui */
-

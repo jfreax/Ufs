@@ -27,6 +27,8 @@
 #include "ui/button.hpp"
 
 #include "gui/button/close.hpp"
+#include "gui/window/start.hpp"
+#include "gui/window/header_menu.hpp"
 
 
 CGame* game = NULL;
@@ -171,14 +173,33 @@ bool CGame::IsVideoModeValid ( void ) /* TODO in CGame::initialize und settings:
 bool CGame::Start ( void )
 {
 	// FIXME Nur BEISPIELE!
-	gui::CWindow* newWin = guiManager_.NewWindow();
-	guiManager_.NewWindow();
-	guiManager_.NewWindow();
+// 	gui::CWindow* newWin = guiManager_.NewWindow();
+// 	guiManager_.NewWindow();
+// 	guiManager_.NewWindow();
+// 
+// 	newWin->SetSizeInPercent ( sf::Vector2f ( 90, 90 ) );
+// 	newWin->SetPosition ( sf::Vector2f ( 20, 130 ) );
 
-	newWin->SetSizeInPercent ( sf::Vector2f ( 90, 90 ) );
-	newWin->SetPosition ( sf::Vector2f ( 20, 130 ) );
+// 	gui::CWindow* win = guiManager_.AddWindow ( new gui::CHeaderWindow );
+	gui::CWindow* win = guiManager_.AddWindow ( new gui::CWindow );
 	
+	win->SetPosition( sf::Vector2f ( 0, 0 ));
+	win->SetSize ( sf::Vector2f ( 200, 200 ));
+
+	gui::CWindow* win2 = guiManager_.AddWindow ( new gui::CWindow );
 	
+	win2->SetPosition( sf::Vector2f ( 100, 100 ));
+	win2->SetSize ( sf::Vector2f ( 200, 200 ));
+	
+	gui::CWindow* win3 = guiManager_.AddWindow ( new gui::CWindow );
+	
+	win3->SetPosition( sf::Vector2f ( 250, 100 ));
+	win3->SetSize ( sf::Vector2f ( 300, 200 ));
+	
+	gui::CWindow* win4 = guiManager_.AddWindow ( new gui::CWindow );
+	
+	win4->SetPosition( sf::Vector2f ( 150, 300 ));
+	win4->SetSize ( sf::Vector2f ( 200, 200 ));
 //
 //   gui::CWindow* newWin2 = guiManager.newWindow();
 //   newWin2->setSizeInPercent ( sf::Vector2f ( 20, 20 ) );

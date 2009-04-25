@@ -29,7 +29,7 @@ namespace gui
 class CWindow
 {
 	public:
-		CWindow ( class CTheme *theme, sf::Vector2f position = sf::Vector2f ( 0.f, 0.f ), sf::Vector2f size = sf::Vector2f ( 0.f, 0.f ) );
+		CWindow ( );
 		const unsigned int GetId() const;
 		void NoUpdate ( bool ison );
 
@@ -37,11 +37,17 @@ class CWindow
 		bool Render ( void );
 
 		void Close ( void );
-		void AddWidget ( class CWidget* widget );
+		class CWidget* AddWidget ( class CWidget* widget );
+
+		void calcBackground ( void );
+		
+		void SetName ( std::string str );
+		
+		void Rotate ( double angle );
+		void SetAngle ( double angle );
+		double GetAngle ( void );
 		
 		std::vector< gui::CWidget* >* GetWidgetList ( void );
-		
-		void calcBackground ( void );
 
 		void SetSize ( sf::Vector2f size, bool force = false );
 		void SetSizeInPercent ( sf::Vector2f sizePercent );
@@ -49,15 +55,22 @@ class CWindow
 
 		void SetPosition ( sf::Vector2f position );
 		sf::Vector2f GetPosition ( void ) const;
+		
+		int GetTitlebarHeight ( void );
+		int GetTitlebarLength ( void );
 
 		sf::Rect<float> GetWindowDimension ( void ) const;
 		sf::Rect<float> GetTitlebarDimension ( void ) const ;
 		sf::Rect<float> GetResizeArea ( void ) const;
 
 		void SetTitlebar ( unsigned int titlebar );
+		void SetNoRoundTitlebar ( bool ison );
 
 		void SetMoveWindow ( bool ison );
 		bool GetMoveWindow ( void ) const;
+		
+		void SetMoveAble ( bool ison );
+		bool GetMoveAble ( void );
 
 	protected:
 		unsigned int id_;
@@ -70,8 +83,11 @@ class CWindow
 		sf::Shape* formWin_;
 		sf::Shape* formWinBorder_;
 		sf::Shape* formTitlebar_;
+		bool noRoundTitlebar_;
 
 		bool moveWindow_;
+
+		double angle_;
 
 		sf::Vector2f position_;
 

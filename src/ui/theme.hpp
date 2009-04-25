@@ -49,6 +49,7 @@ struct ThemeHolder
 
 	sf::Vector3f iconClose;
 	sf::Vector3f iconMinimize;
+	sf::Vector3f iconHide;
 };
 
 

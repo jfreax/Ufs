@@ -29,7 +29,11 @@ CCloseButton::CCloseButton ( void )
 {
 	CGame* game = GetGameClass();
 	CTheme* theme = game->GetGuiManager()->GetTheme();
+	
+	/* Name des Buttons */
+	name_ = "close";
 
+	/* Position und Größe */
 	sf::Vector2f closeButtonPosition (
 		theme->window_.iconClose.x,
 		theme->window_.iconClose.y - theme->window_.titlebar );
@@ -43,6 +47,7 @@ CCloseButton::CCloseButton ( void )
 
 bool CCloseButton::onLeftClick ( void )
 {
+	/* Beim Klick -> Fenster schließen */
 	motherWin_->Close();
 	return true;
 }
@@ -56,16 +61,43 @@ CMinimizeButton::CMinimizeButton ( void )
 {
 	CGame* game = GetGameClass();
 	CTheme* theme = game->GetGuiManager()->GetTheme();
-
+	
+	/* Name des Button */
+	name_ = "minimize";
+	
+	/* Größe und Position */
 	sf::Vector2f minimizeButtonPosition ( theme->window_.iconMinimize.x, theme->window_.iconMinimize.y - theme->window_.titlebar );
-	sf::Vector2f minimizeButtonSize ( theme->window_.iconClose.z, theme->window_.iconClose.z );
+	sf::Vector2f minimizeButtonSize ( theme->window_.iconMinimize.z, theme->window_.iconMinimize.z );
 	
 	this->SetSize ( minimizeButtonSize );
 	this->SetPosition ( minimizeButtonPosition );
 	this->SetBackground ( *game->GetImgResource()->Get ( settings::GetThemePath() + "icons/minimize.png" ) );
 
+	/* Aktionen alle erstmal AUS */
 	doMinimize_ = doMaximize_ = false;
 	originalSize_ = 0;
+}
+
+
+bool CMinimizeButton::onLeftClick ( void )
+{
+	diff_ = 2000 * GetGameClass()->GetApp()->GetFrameTime();
+	
+	/* Das Fenster beim klicken "einfahren" */
+	if ( motherWin_->GetSize().y > 0 && !doMaximize_ && !originalSize_ )
+	{
+		diffRotate_ = ( 90 * diff_ ) / (motherWin_->GetSize().y+1);
+		originalSize_ = motherWin_->GetSize().y;
+		doMinimize_ = true;
+	}
+	/* Das Fenster ist minimiert, also "ausfahren" */
+	else
+	{
+		diffRotate_ = ( 90 * diff_ ) / ( originalSize_ );
+		doMaximize_ = true;
+	}
+	
+	return true;
 }
 
 
@@ -120,25 +152,124 @@ bool CMinimizeButton::Call ( void )
 }
 
 
-bool CMinimizeButton::onLeftClick ( void )
+/* HIDE BUTTON 
+   ----------- */
+
+CHideButton::CHideButton ( CButton* minimizeButton ) : minimizeButton_ ( minimizeButton )
 {
-	diff_ = 1000 * GetGameClass()->GetApp()->GetFrameTime();
+	CGame* game = GetGameClass();
+	CTheme* theme = game->GetGuiManager()->GetTheme();
 	
-	/* Das Fenster beim klicken "einfahren" */
-	if ( motherWin_->GetSize().y > 0 && !doMaximize_ && !originalSize_ )
+	/* Name des Button */
+	name_ = "minimize";
+	
+	/* Größe und Position */
+	sf::Vector2f minimizeButtonPosition ( theme->window_.iconHide.x, theme->window_.iconHide.y - theme->window_.titlebar );
+	sf::Vector2f minimizeButtonSize ( theme->window_.iconHide.z, theme->window_.iconHide.z );
+	
+	this->SetSize ( minimizeButtonSize );
+	this->SetPosition ( minimizeButtonPosition );
+	this->SetBackground ( *game->GetImgResource()->Get ( settings::GetThemePath() + "icons/hide.png" ) );
+	
+	/* Aktionen alle erstmal AUS */
+	doHide_ = doShow_ = finish_ = false;
+}
+
+
+bool CHideButton::onLeftClick ( void )
+{
+	/* Minimizebutton mit ausführen */
+	minimizeButton_->onLeftClick();
+	
+	diff_ = 1500 * GetGameClass()->GetApp()->GetFrameTime();
+	
+
+	/* Fenster links andocken lassen (hide) */
+	if ( !doHide_ && motherWin_->GetSize().y )
 	{
-		diffRotate_ = ( 90 * diff_ ) / (motherWin_->GetSize().y+1);
-		originalSize_ = motherWin_->GetSize().y;
-		doMinimize_ = true;
+		/* Originalposition des Fensters merken */
+		originalPosition_ = motherWin_->GetPosition();
+		
+		/* Neue Position vom GUIManager zuweisen lassen */
+		dockPosition_ = GetGameClass()->GetGuiManager()->AddWindowToDock ( motherWin_ );
+		
+		diffRotate_ = - ( 90 * diff_ ) / (motherWin_->GetSize().y + 1);
+		doHide_ = true;
+		finish_ = false;
 	}
-	/* Das Fenster ist minimiert, also "ausfahren" */
 	else
 	{
-		diffRotate_ = ( 90 * diff_ ) / ( originalSize_ );
-		doMaximize_ = true;
-	}
+		/* Fenster aus dem Dockmanager entfernen */
+		GetGameClass()->GetGuiManager()->RemoveWindowFromDock ( motherWin_ );
 	
-	return true;
+		doShow_ = true;
+	}
+
+}
+
+
+bool CHideButton::Call ( void )
+{
+	/* Fenster ins Dock schieben */
+	if ( doHide_ && !finish_ )
+	{
+		/* Fenster drehen */
+		if ( !motherWin_->GetAngle() || motherWin_->GetAngle() >= 270 ) 
+		{
+			motherWin_->Rotate( diffRotate_ );
+		}
+		
+		finish_ = true;
+		
+		/* Neue Fensterposition errechnen */
+		sf::Vector2f newPosition = motherWin_->GetPosition();
+		if ( dockPosition_.x + diff_ < motherWin_->GetPosition().x )
+		{
+			newPosition.x -= diff_;
+			finish_ = false;
+		}
+		else if ( dockPosition_.x > motherWin_->GetPosition().x )
+		{
+			newPosition.x += diff_;
+			finish_ = false;
+		}
+		if ( dockPosition_.y + diff_ < motherWin_->GetPosition().y )
+		{
+			newPosition.y -= diff_;
+			finish_ = false;
+		}
+		else if ( dockPosition_.y > motherWin_->GetPosition().y )
+		{
+			newPosition.y += diff_;
+			finish_ = false;
+		}
+		
+		/* Und Position setzen */
+		motherWin_->SetPosition ( newPosition );
+	}
+	else if ( doHide_ )
+	{
+		motherWin_->SetPosition ( dockPosition_ );
+	
+		motherWin_->SetAngle ( 270 );
+		motherWin_->Update();
+		doHide_ = false;
+	}
+	/* Fenster aus dem Dock holen und anzeigen */
+	else if ( doShow_ && motherWin_->GetAngle() > -diffRotate_ )
+	{
+		/* Fenster drehen */
+		motherWin_->Rotate( -diffRotate_ );
+		
+		/* Alte Position wieder herstellen TODO ! */
+		motherWin_->SetPosition ( originalPosition_ );
+	}
+	else if ( doShow_ )
+	{
+		motherWin_->SetAngle ( 0 );
+		doShow_ = false;
+	}
+
 }
 
 

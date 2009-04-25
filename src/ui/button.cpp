@@ -27,15 +27,11 @@ CButton::CButton ( )
 {
 	CTheme* theme = GetGameClass()->GetGuiManager()->GetTheme();
 
-	this->NoUpdate ( true );
-	{
-		background_.SetImage ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/" + theme->button_.background ) );
-		this->SetBackgroundColor ( theme->button_.backgroundColor );
-		this->SetFontSize ( theme->button_.fontSize );
-		
-		this->SetSize ( background_.GetSize() );
-	}
-	this->NoUpdate ( false );
+	background_.SetImage ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/" + theme->button_.background ) );
+	this->SetBackgroundColor ( theme->button_.backgroundColor );
+	this->SetFontSize ( theme->button_.fontSize );
+	
+	this->SetSize ( background_.GetSize() );
 	
 	WaitOnHoverMouse = 0.0f;
 }
@@ -43,11 +39,26 @@ CButton::CButton ( )
 
 void CButton::Render ( void )
 {
-	sf::RenderWindow* app = GetGameClass()->GetApp();
+	/* Wenn es nicht gezeichnet werden soll, dann ist hier schon Schluss */
+	if ( !show_ )
+	{
+		return;
+	}
 	
+	/* Berechnung durchführen */
 	this->Calc();
+	
+	
+// 	std::cout <<   position_.y << " + "<< curSize_.y << " und " << motherWin_->GetSize().y << std::endl;
+// 	/* Nur zeichnen wenn es innerhalb des sichtbaren Bereichs des Fensters liegt */
+// 	if ( position_.y + curSize_.y -1 > motherWin_->GetSize().y )
+// 	{
+// 		return;
+// 	}
 
-	if ( background_.GetSize().x != 1.f )
+	/* Hintergrund zeichnen */
+	sf::RenderWindow* app = GetGameClass()->GetApp();
+	if ( drawBackground_ && background_.GetSize().x != 1.f )
 	{
 		app->Draw ( background_ );
 	}
@@ -56,13 +67,14 @@ void CButton::Render ( void )
 
 	}
 
+	/* Ggf. Text zeichnen */
 	app->Draw ( text_ );
 }
 
 
 bool CButton::onHoverMouse ( void )
 {
-	isMouseHere = wasMouseHere = true;
+	isMouseHere_ = wasMouseHere_ = true;
 	background_.SetColor( sf::Color ( 200, 200, 200 ) );
 }
 

@@ -17,11 +17,12 @@
 #ifndef MANAGER_HPP
 #define MANAGER_HPP
 
-// #include <SFML/Graphics.hpp>
+#include <bits/stl_list.h>
 
 #include "theme.hpp"
 #include "window.hpp"
 #include "../parser.hpp"
+
 
 namespace gui
 {
@@ -34,11 +35,16 @@ class CManager
 		CManager ( void );
 
 		bool Render ( void );
+		bool MouseClickReleased ( const int x, const int y, const sf::Mouse::Button button );
 		bool MouseClick ( const int x, const int y, const sf::Mouse::Button button );
 		bool MouseHover ( const int x, const int y );
 
-		CWindow* NewWindow ( sf::Vector2f position = sf::Vector2f ( 0.f, 0.f ), sf::Vector2f size = sf::Vector2f ( 0.f, 0.f ) );
+		CWindow* AddWindow ( CWindow* win );		
 		bool CloseWindow ( CWindow* window = NULL ); // NULL -> schlieﬂt das letzte Fenster
+		
+		sf::Vector2f AddWindowToDock ( CWindow* win );
+		void RemoveWindowFromDock ( CWindow* win );
+		
 		bool BringToFront ( std::vector< CWindow* >::iterator iter );
 
 		CTheme* GetTheme ( void );
@@ -47,6 +53,8 @@ class CManager
 	private:
 		CTheme theme_;
 		std::vector< CWindow* > windowList_;
+		
+		std::list < CWindow* > dockList_;
 
 		sf::Vector2f previousMousePos_;
 		MOUSESCOPE previousMouseScope_;

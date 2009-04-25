@@ -26,7 +26,7 @@ namespace gui
 class CStartWindow : public CWindow
 {
 	public:
-	
+		CStartWindow ( void );
 	
 	private:
 	

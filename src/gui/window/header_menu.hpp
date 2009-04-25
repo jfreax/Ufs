@@ -14,20 +14,23 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "start.hpp"
+#ifndef HEADER_MENU_H
+#define HEADER_MENU_H
+
+#include "../../ui/window.hpp"
 
 namespace gui
 {
 
 
-CStartWindow::CStartWindow ( void )
+class CHeaderWindow : public CWindow
 {
-	this->SetTitlebar ( 0 );
-	
-	
-}
+	public:
+		CHeaderWindow ( void );
 
-
+	private:
+};
 
 } /* namespace gui */
 
+#endif // HEADER_MENU_H

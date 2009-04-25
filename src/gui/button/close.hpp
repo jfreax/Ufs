@@ -24,6 +24,8 @@ namespace gui
 {
 
 
+/* CLOSE BUTTON 
+   ------------ */
 class CCloseButton : public CButton
 {
 	public:
@@ -33,13 +35,16 @@ class CCloseButton : public CButton
 };
 
 
+/* MINIMIZE BUTTON 
+   --------------- */
 class CMinimizeButton : public CButton
 {
 	public:
 		CMinimizeButton ( void );
 		
-		bool Call ( void );
 		bool onLeftClick ( void );
+		bool Call ( void );
+		
 	private:
 		float originalSize_;
 	
@@ -48,6 +53,34 @@ class CMinimizeButton : public CButton
 		
 		double diffRotate_;
 		double diff_;
+};
+
+
+/* HIDE BUTTON 
+   ----------- */
+class CHideButton : public CButton
+{
+	public:
+		CHideButton ( CButton* minimizeButton );
+		
+		bool onLeftClick ( void );
+		bool Call ( void );
+	
+	private:
+		CButton* minimizeButton_;
+		
+		double diff_;
+		double diffRotate_;
+		
+		bool finish_;
+		
+		bool doHide_;
+		bool doShow_;
+		
+		sf::Vector2f originalSize_;
+		sf::Vector2f originalPosition_;
+		
+		sf::Vector2f dockPosition_;
 };
 
 

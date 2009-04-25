@@ -14,20 +14,13 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "start.hpp"
+#include "dock.hpp"
+
 
 namespace gui
 {
 
 
-CStartWindow::CStartWindow ( void )
-{
-	this->SetTitlebar ( 0 );
-	
-	
-}
-
 
 
 } /* namespace gui */
-

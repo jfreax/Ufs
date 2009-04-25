@@ -13,21 +13,24 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+#include "window.hpp"
 
-#include "start.hpp"
+#ifndef DOCK_HPP
+#define DOCK_HPP
 
 namespace gui
 {
 
-
-CStartWindow::CStartWindow ( void )
+class CDock
 {
-	this->SetTitlebar ( 0 );
+	public:
+		void Add ( CWindow* win );
 	
-	
-}
-
+	private:
+		
+};
 
 
 } /* namespace gui */
 
+#endif // DOCK_HPP

@@ -36,6 +36,8 @@ CTheme::CTheme ( void )
 	defaultforall.titlebarLength = 0;
 	defaultforall.fontSize = 12;
 	defaultforall.iconClose = sf::Vector3f ( -20, 0, 5 );
+	defaultforall.iconMinimize = sf::Vector3f ( 6, 0, 16 );
+	defaultforall.iconHide = sf::Vector3f ( -40, 0, 5 );
 
 	window_ = button_ = defaultforall;
 
@@ -58,6 +60,7 @@ CTheme::CTheme ( void )
 		paramList_.insert ( std::make_pair< std::string, Parameter > ( iter->first, Parameter ( "fontsize", &iter->second->ThemeHolder::fontSize ) ) );
 		paramList_.insert ( std::make_pair< std::string, Parameter > ( iter->first, Parameter ( "iconclose", &iter->second->ThemeHolder::iconClose ) ) );
 		paramList_.insert ( std::make_pair< std::string, Parameter > ( iter->first, Parameter ( "iconminimize", &iter->second->ThemeHolder::iconMinimize ) ) );
+		paramList_.insert ( std::make_pair< std::string, Parameter > ( iter->first, Parameter ( "iconhide", &iter->second->ThemeHolder::iconHide ) ) );
 		paramList_.insert ( std::make_pair< std::string, Parameter > ( iter->first, Parameter ( "titlebarlength", &iter->second->ThemeHolder::titlebarLength ) ) );
 
 	}

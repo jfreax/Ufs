@@ -203,8 +203,7 @@ bool CInput::Events ( void )
 	const sf::Input* input = &app->GetInput();
 
 
-
-	// Mouse
+// 	// Mouse
 	if ( input->IsMouseButtonDown ( sf::Mouse::Left ) )
 	{
 		guiManager->MouseClick ( input->GetMouseX(), input->GetMouseY(), sf::Mouse::Left );
@@ -223,15 +222,16 @@ bool CInput::Events ( void )
 	}
 
 
-	// Tastatur
-
+	/* Alle Events */
 	while ( app->GetEvent ( event ) )
 	{
-		// ## Spiel beenden (aka Schließen) ##
+		/* TASTATUR */
+	
+		/* Spiel beenden (aka Schließen) */
 		if ( event.Type == sf::Event::Closed )
 			GetGameClass()->Stop();
 
-		// ## Tastendruck - global ##
+		/* Tastendruck - global */
 		if ( event.Type == sf::Event::KeyPressed )
 		{
 			if ( TestPressedKeys ( "quit" ) )
@@ -241,7 +241,16 @@ bool CInput::Events ( void )
 			else if ( TestPressedKeys ( "close" ) )
 				guiManager->CloseWindow ( );
 
-		} // Tastendruck
+		} 
+		/* TASTATUR ENDE */
+		
+		
+		/* MAUS */
+		if ( event.Type == sf::Event::MouseButtonReleased )
+		{
+				guiManager->MouseClickReleased ( input->GetMouseX(), input->GetMouseY(), event.MouseButton.Button );
+		}
+		/* MAUS ENDE */
 	}
 
 	return false;

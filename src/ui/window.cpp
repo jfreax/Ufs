@@ -27,13 +27,20 @@
 
 #include "../gui/button/close.hpp"
 
+#define sin_d(x)  (sin((x)*M_PI/180))
+#define cos_d(x)  (cos((x)*M_PI/180))
+
+
 namespace gui
 {
 
-CWindow::CWindow ( CTheme *theme, sf::Vector2f position, sf::Vector2f size )
+CWindow::CWindow ( )
 {
 	static unsigned int globalId = 0;
 	id_ = ++globalId;
+
+	CGame* game = GetGameClass();
+	CTheme* theme = game->GetGuiManager()->GetTheme();
 
 	this->NoUpdate ( true );
 	{
@@ -43,8 +50,6 @@ CWindow::CWindow ( CTheme *theme, sf::Vector2f position, sf::Vector2f size )
 
 		titlebarImage_ = NULL; /* TODO thememanager! */
 
-
-		CGame* game = GetGameClass();
 
 		minSize_ = theme->window_.minSize;
 		maxSize_ = theme->window_.maxSize;
@@ -57,24 +62,32 @@ CWindow::CWindow ( CTheme *theme, sf::Vector2f position, sf::Vector2f size )
 
 
 		{ /* Titlebar */
-			titlebar_ = theme->window_.titlebar;
+			this->SetTitlebar ( theme->window_.titlebar );
+			this->AddWidget ( new gui::CCloseButton );
+			this->AddWidget ( new gui::CHideButton ( (CButton*)this->AddWidget ( new gui::CMinimizeButton ) ) );
+
+			this->SetNoRoundTitlebar( false );
+			this->SetName ( "WINDOW ID: " + util::lCast<std::string>( id_ ) );
+			
+// // 			name_.SetSize( 12 );/**/
+			gui::CButton* textButton = (gui::CButton*) this->AddWidget ( new gui::CButton );
+			textButton->SetText ( "WINDOW ID: " + util::lCast<std::string>( id_ ) );
+
 			titlebarLength_ = theme->window_.titlebarLength;
 			titlebarColor_ = theme->window_.titlebarColor;
-
-			this->AddWidget ( new gui::CCloseButton );
-			this->AddWidget ( new gui::CMinimizeButton );
 		} /* End Titlebar */
 
 
 		closeAble_ = true;
 		moveAble_ = true;
 		resizeAble_ = true;
+		
+		SetAngle( 0 ); 
 
-		this->SetPosition ( position );
-		this->SetSize ( size );
+		this->SetPosition ( sf::Vector2f ( 0, 0 ) );
+		this->SetSize ( minSize_ );
 
 	}
-
 	this->NoUpdate ( false );
 }
 
@@ -102,13 +115,14 @@ void CWindow::Update ( void )
 	{
 		return;
 	}
-
-	/* Hintergrundbild / -Shape */
+	
+	/* Hintergrundbild (falls vorhanden) berechnen, ... */
 	if ( background_.GetSize().x != 1.f )
 	{
 		background_.SetPosition ( position_ );
 		background_.Resize ( curSize_ );
 	}
+	/* ... ansonsten Backgroundshape berechnen lassen */
 	else
 	{
 		calcBackground();
@@ -141,6 +155,7 @@ bool CWindow::Render ( void )
 		app->Draw ( *formWinBorder_ );
 	}
 
+	/* Widgets zeichnen */
 	for ( std::vector<gui::CWidget*>::size_type i = widgetList_.size(); i; --i )
 	{
 		widgetList_[i-1]->Render();
@@ -154,12 +169,14 @@ void CWindow::Close ( void )
 }
 
 
-void CWindow::AddWidget ( CWidget* widget_ )
+CWidget* CWindow::AddWidget ( CWidget* widget_ )
 {
 	widgetList_.push_back ( widget_ );
 
 	widget_->SetMotherWin ( this );
 	widget_->Update();
+	
+	return widget_;
 }
 
 
@@ -182,14 +199,27 @@ void CWindow::calcBackground ( void )
 
 	/* Titelleiste
 	   ------------------ */
-	if ( !titlebarImage_ )
+	
+	if ( titlebar_ )
 	{
 		int length = GetSize().x;
 		if ( titlebarLength_ )
 		{
 			length = titlebarLength_;
 		}
-	
+
+		/* Titlebar OHNE Rundungen */
+		if ( noRoundTitlebar_ )
+		{
+			/* linke obere Rundung */
+			formTitlebar_->AddPoint ( 0, 0, titlebarColor_ );
+		
+			/* rechte obere Rundung */
+			formTitlebar_->AddPoint ( length, 0, titlebarColor_ );
+		}
+		/* Titelbar mit Rundung */
+		else
+		{
 		/* linke obere Rundung */
 		sf::Vector2f Center ( formRound_, formRound_ );
 		for ( int i = 40; i < 60; ++i )
@@ -207,6 +237,7 @@ void CWindow::calcBackground ( void )
 			sf::Vector2f Offset ( cos ( Angle ), sin ( Angle ) );
 			formTitlebar_->AddPoint ( Center + Offset * formRound_, titlebarColor_ );
 		}
+		}
 
 		/* untere rechte Ecke */
 		formTitlebar_->AddPoint ( length, titlebar_, titlebarColor_ );
@@ -223,10 +254,10 @@ void CWindow::calcBackground ( void )
 	{
 		/* Temp. Variable falls obere rechte Ecke keine Rundung haben soll */
 		float formRound = GetSize().x - titlebarLength_ > formRound_ ? formRound_ : GetSize().x - titlebarLength_;
-	
+
 		/* obere linke Ecke */
 		formWin_->AddPoint ( 0, 0, backgroundColor_ );
-		
+
 		/* obere rechte Ecke
 		   Wenn Titelbar kürzer als Fenster, dann Ecke abrunden */
 		if ( titlebarLength_ && titlebarLength_ < GetSize().x )
@@ -331,12 +362,54 @@ void CWindow::calcBackground ( void )
 		}
 	}
 
-
+	/* Positionen anpassen */
 	formWin_->SetPosition ( GetPosition() );
 	formWinBorder_->SetPosition ( GetPosition() );
-	formTitlebar_->SetPosition ( GetPosition().x, GetPosition().y - titlebar_ );
+	formTitlebar_->SetPosition ( GetPosition().x, GetPosition().y );
+	
+	/* Mittelpunkt setzen */
+	formTitlebar_->SetCenter( sf::Vector2f ( 0, titlebar_ ) );
+	
+	/* Rotation setzen */
+	formWin_->SetRotation ( angle_ );
+	formWinBorder_->SetRotation ( angle_ );
+	formTitlebar_->SetRotation ( angle_ );
 }
 
+
+void CWindow::SetName ( std::string str )
+{
+	name_.SetText( str );
+}
+
+
+void CWindow::Rotate ( double angle )
+{
+	angle_ += angle;
+
+	if ( angle_ >= 360 )
+	{
+		angle_ = 0;
+	}
+	else if ( angle_ < 0 )
+	{
+		angle_ = 359;
+	}
+
+	this->Update();
+}
+
+
+void CWindow::SetAngle ( double angle )
+{
+	angle_ = angle;
+}
+
+
+double CWindow::GetAngle ( void )
+{
+	return angle_;
+}
 
 
 std::vector< gui::CWidget* >* CWindow::GetWidgetList ( void )
@@ -417,6 +490,18 @@ sf::Vector2f CWindow::GetPosition ( void ) const
 }
 
 
+int CWindow::GetTitlebarHeight ( void )
+{
+	return titlebar_;
+}
+
+
+int CWindow::GetTitlebarLength ( void )
+{
+	return titlebarLength_;
+}
+
+
 sf::Rect<float> CWindow::GetWindowDimension ( void ) const
 {
 	return sf::Rect<float> ( position_.x, position_.y - titlebar_, position_.x + curSize_.x, position_.y + curSize_.y );
@@ -425,9 +510,13 @@ sf::Rect<float> CWindow::GetWindowDimension ( void ) const
 
 sf::Rect<float> CWindow::GetTitlebarDimension ( void ) const
 {
-	sf::Vector2f titlePos ( position_.x, position_.y - titlebar_ );
-	sf::Vector2f titleEndPos ( position_.x + curSize_.x, position_.y );
-	return sf::Rect<float> ( titlePos.x, titlePos.y, titleEndPos.x, titleEndPos.y );
+	if ( formTitlebar_ )
+	{
+		sf::Vector2f titlePos ( formTitlebar_->GetPosition().x, formTitlebar_->GetPosition().y - titlebar_ );
+		sf::Vector2f titleEndPos = formTitlebar_->TransformToGlobal (sf::Vector2f(titlebarLength_,titlebar_) );
+	
+		return sf::Rect<float> ( titlePos.x, titlePos.y, titleEndPos.x + titlebar_, titleEndPos.y );
+	}
 }
 
 
@@ -441,8 +530,41 @@ sf::Rect<float> CWindow::GetResizeArea ( void ) const
 
 void CWindow::SetTitlebar ( unsigned int titlebar )
 {
+	/* TitlebarIcons-Anzeige nur ändern, falls nötig */
+	if ( titlebar_ != !titlebar )
+	{
+		bool showTitlebarIcons = true;
+
+		/* Wenn Titlebar angezeigt werden soll, dann auch Icons anzeigen lassen */
+		if ( titlebar )
+		{
+			showTitlebarIcons = true;
+		}
+		/* Icons nicht anzeigen */
+		else
+		{
+			showTitlebarIcons = false;
+		}
+		
+		std::vector< gui::CWidget* >::iterator endIter = widgetList_.end();
+		std::vector< gui::CWidget* >::iterator iter = widgetList_.begin();
+		for ( ; iter != endIter; ++iter )
+		{
+			if ( ( *iter )->GetName() == "close" || ( *iter )->GetName() == "minimize" )
+			{
+				( *iter )->SetShow ( false );
+			}
+		}
+	}
+
 	titlebar_ = titlebar;
 	this->Update();
+}
+
+
+void CWindow::SetNoRoundTitlebar ( bool ison )
+{
+	noRoundTitlebar_ = ison;
 }
 
 
@@ -455,6 +577,18 @@ void CWindow::SetMoveWindow ( bool ison )
 bool CWindow::GetMoveWindow ( void ) const
 {
 	return moveWindow_;
+}
+
+
+void CWindow::SetMoveAble ( bool ison )
+{
+	moveAble_ = ison;
+}
+
+
+bool CWindow::GetMoveAble ( void )
+{
+	return moveAble_;
 }
 
 
