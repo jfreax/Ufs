@@ -14,30 +14,36 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef BUTTON_HPP
-#define BUTTON_HPP
+#ifndef SPRITE_HPP
+#define SPRITE_HPP
 
 #include <iostream>
+#include <SFML/Graphics.hpp>
 
-#include "widget.hpp"
+#include "../animation.hpp"
 
 
-namespace gui
+namespace sprite
 {
 
 
-class CButton : public CWidget
+class CSprite : public sf::Drawable
 {
 	public:
-		CButton ( class CWindow* motherWin, sf::Vector2f position = sf::Vector2f ( 0.f, 0.f ), sf::Vector2f size = sf::Vector2f ( 0.f, 0.f ) );
-		void Render ( void );
+		CSprite ( void );
+		~CSprite ( void );
+		virtual void Render ( sf::RenderTarget& Target ) const;
+		
+		virtual void Update ( void );
+		
+		void Scale ( double scale );
 
-
-	private:
+	protected:
+		CAnimation* background_;
+		sf::Shape mask_;
 };
 
 
+} /* namespace sprite */
 
-} // namespace gui
-
-#endif // BUTTON_HPP
+#endif /* SPRITE_HPP */
