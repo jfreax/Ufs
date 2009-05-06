@@ -288,6 +288,26 @@ void CGame::Render ( void )
 	// GUI
 	app_.SetView ( app_.GetDefaultView() );
 	guiManager_.Render();
+
+	sf::Shape testUmrandung;
+	testUmrandung.AddPoint( sf::Vector2f ( 100, 100 ), sf::Color ( 150, 150, 150, 160 ) );
+	testUmrandung.AddPoint( sf::Vector2f ( 280, 100 ), sf::Color ( 150, 150, 150, 160 ) );
+	testUmrandung.AddPoint( sf::Vector2f ( 300, 120 ), sf::Color ( 150, 150, 150, 160 ) );
+	testUmrandung.AddPoint( sf::Vector2f ( 300, 300 ), sf::Color ( 150, 150, 150, 160 ) );
+	testUmrandung.AddPoint( sf::Vector2f ( 120, 300 ), sf::Color ( 150, 150, 150, 160 ) );
+	testUmrandung.AddPoint( sf::Vector2f ( 100, 280 ), sf::Color ( 150, 150, 150, 160 ) );
+	app_.Draw( testUmrandung );
+
+	sf::Shape test;
+	test.AddPoint( sf::Vector2f ( 105, 105 ), sf::Color::Black );
+	test.AddPoint( sf::Vector2f ( 280, 105 ), sf::Color::Black );
+	test.AddPoint( sf::Vector2f ( 295, 120 ), sf::Color::Black );
+	test.AddPoint( sf::Vector2f ( 295, 280 ), sf::Color ( 0, 0, 0, 220 ) );
+	test.AddPoint( sf::Vector2f ( 295, 295 ), sf::Color ( 0, 0, 0, 220 ) );
+	test.AddPoint( sf::Vector2f ( 120, 295 ), sf::Color ( 0, 0, 0, 220 ) );
+	test.AddPoint( sf::Vector2f ( 105, 280 ), sf::Color ( 0, 0, 0, 220 ) );
+	app_.Draw( test );
+
 	
 // 	CParticleManager particle;
 // 	particle.set_Material ( GetImgResource()->Get ( "images/sun/fire.png"  ) );
