@@ -129,12 +129,12 @@ void CAnimation::Update ( void )
 void CAnimation::SetFrameWidth ( int frameWidth )
 {
 	frameWidth_ = frameWidth;
-	
+
 	if ( perPixel_ )
 	{
 		frames_ = image_->GetWidth() - frameWidth_;
 	}
-	
+
 	clipArea_ = sf::IntRect ( 0, 0, frameWidth_, image_->GetHeight() );
 }
 
@@ -154,7 +154,5 @@ void CAnimation::SetFrameDiff ( int diff )
 void CAnimation::SetBlur ( int blur )
 {
 	blur_ = blur;
-	
-// 	timePerFrame_ /= blur;
 }
 

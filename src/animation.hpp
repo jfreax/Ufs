@@ -14,10 +14,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-// #include <GL/glu.h>   // Header File For The GLu32 Library
-
-// #include <GL/glew.h>/**/
-// #include <GL/gl.h>
 
 #include <SFML/Graphics.hpp>
 
@@ -28,7 +24,7 @@ class CAnimation : public sf::Drawable
 {
 	public:
 		CAnimation ( sf::Image* image, int frames, double timePerFrame );
-		
+
 		virtual void Render ( sf::RenderTarget& ) const;
 
 		void Start ( void );
@@ -39,7 +35,7 @@ class CAnimation : public sf::Drawable
 
 		void SetStartAt ( int startAt_ );
 		void SetFrameDiff ( int diff );
-		
+
 		void SetBlur ( int blur );
 	private:
 		bool run_;
@@ -57,7 +53,7 @@ class CAnimation : public sf::Drawable
 		int frameDiff_;
 
 		bool perPixel_;
-		
+
 		int blur_;
 
 };
