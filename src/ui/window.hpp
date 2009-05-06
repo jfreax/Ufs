@@ -29,49 +29,49 @@ namespace gui
 class CWindow
 {
 	public:
-		CWindow ( );
+		CWindow();
 		const unsigned int GetId() const;
 		void NoUpdate ( bool ison );
 
-		void Update ( void );
-		bool Render ( void );
+		void Update();
+		bool Render();
 
-		void Close ( void );
+		void Close();
 		class CWidget* AddWidget ( class CWidget* widget );
 
-		void calcBackground ( void );
+		void calcBackground();
 		void SetBackgroundImage ( sf::Image* img );
 		
 		void SetName ( std::string str );
 		
 		void Rotate ( double angle );
 		void SetAngle ( double angle );
-		double GetAngle ( void );
+		double GetAngle();
 		
-		std::vector< gui::CWidget* >* GetWidgetList ( void );
+		std::vector< gui::CWidget* >* GetWidgetList();
 
 		void SetSize ( sf::Vector2f size, bool force = false );
 		void SetSizeInPercent ( sf::Vector2f sizePercent );
-		sf::Vector2f GetSize ( void ) const;
+		sf::Vector2f GetSize() const;
 
 		void SetPosition ( sf::Vector2f position );
-		sf::Vector2f GetPosition ( void ) const;
+		sf::Vector2f GetPosition() const;
 		
-		int GetTitlebarHeight ( void );
-		int GetTitlebarLength ( void );
+		int GetTitlebarHeight();
+		int GetTitlebarLength();
 
-		sf::Rect<float> GetWindowDimension ( void ) const;
-		sf::Rect<float> GetTitlebarDimension ( void ) const ;
-		sf::Rect<float> GetResizeArea ( void ) const;
+		sf::Rect<float> GetWindowDimension() const;
+		sf::Rect<float> GetTitlebarDimension() const ;
+		sf::Rect<float> GetResizeArea() const;
 
 		void SetTitlebar ( unsigned int titlebar );
 		void SetNoRoundTitlebar ( bool ison );
 
 		void SetMoveWindow ( bool ison );
-		bool GetMoveWindow ( void ) const;
+		bool GetMoveWindow () const;
 		
 		void SetMoveAble ( bool ison );
-		bool GetMoveAble ( void );
+		bool GetMoveAble ();
 
 	protected:
 		unsigned int id_;

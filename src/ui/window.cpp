@@ -31,7 +31,7 @@
 namespace gui
 {
 
-CWindow::CWindow ( )
+CWindow::CWindow()
 {
 	static unsigned int globalId = 0;
 	id_ = ++globalId;
@@ -85,7 +85,7 @@ CWindow::CWindow ( )
 }
 
 
-const unsigned int CWindow::GetId ( void ) const
+const unsigned int CWindow::GetId() const
 {
 	return id_;
 }
@@ -101,7 +101,7 @@ void CWindow::NoUpdate ( bool ison )
 }
 
 
-void CWindow::Update ( void )
+void CWindow::Update()
 {
 	/* Keine Updates durchführen! */
 	if ( noUpdate_ )
@@ -129,7 +129,7 @@ void CWindow::Update ( void )
 }
 
 
-bool CWindow::Render ( void )
+bool CWindow::Render()
 {
 	sf::RenderWindow* app = GetGameClass()->GetApp();
 
@@ -156,7 +156,7 @@ bool CWindow::Render ( void )
 }
 
 
-void CWindow::Close ( void )
+void CWindow::Close()
 {
 	GetGameClass()->GetGuiManager()->CloseWindow ( this );
 }
@@ -173,7 +173,7 @@ CWidget* CWindow::AddWidget ( CWidget* widget_ )
 }
 
 
-void CWindow::calcBackground ( void )
+void CWindow::calcBackground()
 {
 	/* alte Shapes löschen */
 	delete formWin_;
@@ -408,13 +408,13 @@ void CWindow::SetAngle ( double angle )
 }
 
 
-double CWindow::GetAngle ( void )
+double CWindow::GetAngle()
 {
 	return angle_;
 }
 
 
-std::vector< gui::CWidget* >* CWindow::GetWidgetList ( void )
+std::vector< gui::CWidget* >* CWindow::GetWidgetList()
 {
 	return &widgetList_;
 }
@@ -460,7 +460,7 @@ void CWindow::SetSizeInPercent ( sf::Vector2f sizePercent )
 }
 
 
-sf::Vector2f CWindow::GetSize ( void ) const
+sf::Vector2f CWindow::GetSize() const
 {
 	return curSize_;
 }
@@ -486,25 +486,25 @@ void CWindow::SetPosition ( sf::Vector2f position )
 }
 
 
-sf::Vector2f CWindow::GetPosition ( void ) const
+sf::Vector2f CWindow::GetPosition() const
 {
 	return position_;
 }
 
 
-int CWindow::GetTitlebarHeight ( void )
+int CWindow::GetTitlebarHeight()
 {
 	return titlebar_;
 }
 
 
-int CWindow::GetTitlebarLength ( void )
+int CWindow::GetTitlebarLength()
 {
 	return titlebarLength_;
 }
 
 
-sf::Rect<float> CWindow::GetWindowDimension ( void ) const
+sf::Rect<float> CWindow::GetWindowDimension() const
 {
 	sf::Vector2f pos = formWin_->TransformToGlobal( sf::Vector2f ( 0, 0 ) );
 	sf::Vector2f posEnd = formWin_->TransformToGlobal( sf::Vector2f ( curSize_.x, curSize_.y ) );
@@ -515,7 +515,7 @@ sf::Rect<float> CWindow::GetWindowDimension ( void ) const
 }
 
 
-sf::Rect<float> CWindow::GetTitlebarDimension ( void ) const
+sf::Rect<float> CWindow::GetTitlebarDimension() const
 {
 	if ( formTitlebar_ )
 	{
@@ -527,7 +527,7 @@ sf::Rect<float> CWindow::GetTitlebarDimension ( void ) const
 }
 
 
-sf::Rect<float> CWindow::GetResizeArea ( void ) const
+sf::Rect<float> CWindow::GetResizeArea() const
 {
 	sf::Vector2f point = GetPosition() + GetSize() - sf::Vector2f ( 2, 2 );
 
@@ -581,7 +581,7 @@ void CWindow::SetMoveWindow ( bool ison )
 }
 
 
-bool CWindow::GetMoveWindow ( void ) const
+bool CWindow::GetMoveWindow() const
 {
 	return moveWindow_;
 }
@@ -593,7 +593,7 @@ void CWindow::SetMoveAble ( bool ison )
 }
 
 
-bool CWindow::GetMoveAble ( void )
+bool CWindow::GetMoveAble ()
 {
 	return moveAble_;
 }
