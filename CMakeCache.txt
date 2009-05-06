@@ -69,7 +69,7 @@ CMAKE_C_FLAGS_RELEASE:STRING=-O3 -DNDEBUG
 CMAKE_C_FLAGS_RELWITHDEBINFO:STRING=-O2 -g
 
 //Flags used by the linker.
-CMAKE_EXE_LINKER_FLAGS:STRING= -lsfml-system -lsfml-graphics -lsfml-window
+CMAKE_EXE_LINKER_FLAGS:STRING= -lsfml-system -lsfml-graphics -lsfml-window  -lsfml-audio
 
 //Flags used by the linker during debug builds.
 CMAKE_EXE_LINKER_FLAGS_DEBUG:STRING=
