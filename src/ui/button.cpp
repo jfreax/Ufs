@@ -51,10 +51,29 @@ void CButton::Render ( void )
 	
 // 	std::cout <<   position_.y << " + "<< curSize_.y << " und " << motherWin_->GetSize().y << std::endl;
 // 	/* Nur zeichnen wenn es innerhalb des sichtbaren Bereichs des Fensters liegt */
-// 	if ( position_.y + curSize_.y -1 > motherWin_->GetSize().y )
+// sf::Rect<float> test;
+// std::cout << name_ << ": "<< GetDimension().Top << " > " << motherWin_->GetWindowDimension().Top << std::endl;
+
+// 	if ( GetDimension().Bottom > motherWin_->GetWindowDimension().Bottom )
 // 	{
+// 		std::cout << "1" << std::endl;
 // 		return;
 // 	}
+// 	else if ( GetDimension().Top < motherWin_->GetWindowDimension().Top )
+// 	{
+// 		std::cout << "2" << std::endl;
+// 		return;
+// 	}	
+// 	if ( GetDimension().Left < motherWin_->GetWindowDimension().Left )
+// 	{
+// 		std::cout << "3" << std::endl;
+// 		return;
+// 	}
+// 	else if ( GetDimension().Right > motherWin_->GetWindowDimension().Right )
+// 	{
+// 		std::cout << "4" << std::endl;
+// 		return;
+// 	}	
 
 	/* Hintergrund zeichnen */
 	sf::RenderWindow* app = GetGameClass()->GetApp();
@@ -81,7 +100,6 @@ bool CButton::onHoverMouse ( void )
 
 bool CButton::onUnHoverMouse ( void )
 {
-std::cout << "hier " << std::endl;
 	background_.SetColor( sf::Color ( 255, 255, 255 ) );
 }
 

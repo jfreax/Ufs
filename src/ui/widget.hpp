@@ -45,7 +45,8 @@ class CWidget
 		void SetMotherWin ( class CWindow* win );
 
 		void SetPosition ( sf::Vector2f position );
-		sf::Vector2f GetPosition ( );
+		sf::Vector2f GetPosition ( void );
+		sf::Rect<float> GetDimension ( void );
 		
 		void SetSize ( sf::Vector2f size );
 
@@ -69,8 +70,14 @@ class CWidget
 		std::string GetName ( void );
 		
 		void SetText ( std::string text );
-		std::string GetText ( void );
+		sf::String GetText ( void );
+		
 		void SetTextPosition ( sf::Vector2f pos );
+		sf::Vector2f GetTextPosition ( void );
+		
+		void SetTextSize ( int size );
+		
+		void SetFont ( std::string fontname );
 
 		sf::Clock lastClickTime;
 		
@@ -91,6 +98,7 @@ class CWidget
 		
 		std::string name_;
 		sf::String text_;
+		sf::Vector2f textPos_;
 
 		sf::Vector2f position_;
 		sf::Vector2f fakePosition_;

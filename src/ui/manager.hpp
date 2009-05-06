@@ -30,9 +30,8 @@ namespace gui
 
 class CManager
 {
-
 	public:
-		CManager ( void );
+		void Initialize ( void );
 
 		bool Render ( void );
 		bool MouseClickReleased ( const int x, const int y, const sf::Mouse::Button button );

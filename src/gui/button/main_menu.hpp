@@ -14,54 +14,39 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef INPUT_HPP
-#define INPUT_HPP
+#include "../../ui/button.hpp"
 
-#include <map>
-#include <SFML/Graphics.hpp>
-
-#include "parser.hpp"
+#ifndef MAIN_MENU_H
+#define MAIN_MENU_H
 
 
-namespace MOUSE
+namespace gui
 {
 
-enum TYPES
+
+class CSingleplayerButton : public CButton
 {
-	LEFT,
-	RIGHT,
-	MIDDLE,
-	HOVER,
-	UNHOVER
+	public:
+		CSingleplayerButton ( void );
+
+		bool Call ( void );
+		
+		bool onHoverMouse ( void );
+		bool onUnHoverMouse ( void );
+		
+	private:
+		bool hoverEffect_;
+		bool unHoverEffect_;
+		
+		float diff_;
+		sf::Vector2f endTextPos_;
+		
+		sf::Shape testShape;
+	
 };
 
-} // namespace MOUSE
 
-struct KeyHolder
-{
-  sf::Key::Code key;
-
-  bool strg;
-  bool alt;
-  bool shift;
-};
+} /* namespace gui */
 
 
-class CInput
-{
-  public:
-    CInput ( void );
-    bool LoadKeys ( std::string file );
-
-    bool TestPressedKeys ( std::string keyName_ );
-    bool Events ( void );
-
-  private:
-    std::map<std::string, sf::Key::Code> availableKeys;
-    std::map<std::string, KeyHolder> globalKeys;
-    sf::Event event;
-
-    Parser keyfile;
-};
-
-#endif // INPUT_HPP
+#endif // MAIN_MENU_H

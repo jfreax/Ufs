@@ -21,7 +21,7 @@
 #include "util.hpp"
 
 
-CInput::CInput ( std::string file )
+CInput::CInput ( )
 {
 	availableKeys["a"] = sf::Key::A;
 	availableKeys["b"] = sf::Key::B;
@@ -124,8 +124,6 @@ CInput::CInput ( std::string file )
 	availableKeys["f14"] = sf::Key::F14;
 	availableKeys["f15"] = sf::Key::F15;
 	availableKeys["pause"] = sf::Key::Pause;
-
-	this->LoadKeys ( file );
 }
 
 

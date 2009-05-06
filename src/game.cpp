@@ -26,9 +26,10 @@
 #include "ui/manager.hpp"
 #include "ui/button.hpp"
 
-#include "gui/button/close.hpp"
+#include "gui/button/titlebar.hpp"
 #include "gui/window/start.hpp"
 #include "gui/window/header_menu.hpp"
+// #include "particle.hpp"
 
 
 CGame* game = NULL;
@@ -48,13 +49,12 @@ CGame::CGame ( int argc, char **argv ) :
 {
 	game = this;
 
-	// Standardwerte
+	/* Standardwerte */
 	settings::SetWidth ( sf::VideoMode::GetDesktopMode().Width );
 	settings::SetHeight ( sf::VideoMode::GetDesktopMode().Height );
 	settings::SetBpp ( sf::VideoMode::GetDesktopMode().BitsPerPixel );
 
-	// Programmargumente
-
+	/* Programmargumente */
 	for ( arg_ = 1; arg_ != argc_; ++arg_ )
 	{
 		const std::string val ( argv_[arg_] );
@@ -146,7 +146,7 @@ bool CGame::Initialize ( void )
 		app_.Create ( settings::GetVideo(), "Game" , settings::GetStyle(), settings::GetWindowSettings() );
 	}
 
-	app_.UseVerticalSync ( true );
+	app_.UseVerticalSync ( false );
 	app_.EnableKeyRepeat ( true );
 	app_.ShowMouseCursor ( false );
 
@@ -173,61 +173,94 @@ bool CGame::IsVideoModeValid ( void ) /* TODO in CGame::initialize und settings:
 bool CGame::Start ( void )
 {
 	// FIXME Nur BEISPIELE!
-// 	gui::CWindow* newWin = guiManager_.NewWindow();
-// 	guiManager_.NewWindow();
-// 	guiManager_.NewWindow();
-// 
-// 	newWin->SetSizeInPercent ( sf::Vector2f ( 90, 90 ) );
-// 	newWin->SetPosition ( sf::Vector2f ( 20, 130 ) );
+//  gui::CWindow* newWin = guiManager_.NewWindow();
+//  guiManager_.NewWindow();
+//  guiManager_.NewWindow();
+//
+//  newWin->SetSizeInPercent ( sf::Vector2f ( 90, 90 ) );
+//  newWin->SetPosition ( sf::Vector2f ( 20, 130 ) );
 
-// 	gui::CWindow* win = guiManager_.AddWindow ( new gui::CHeaderWindow );
-	gui::CWindow* win = guiManager_.AddWindow ( new gui::CWindow );
-	
-	win->SetPosition( sf::Vector2f ( 0, 0 ));
-	win->SetSize ( sf::Vector2f ( 200, 200 ));
+//  gui::CWindow* win = guiManager_.AddWindow ( new gui::CHeaderWindow );
+//  gui::CWindow* win = guiManager_.AddWindow ( new gui::CStartWindow );
+//
+// //  win->SetPosition( sf::Vector2f ( 0, 0 ));
+// //  win->SetSize ( sf::Vector2f ( 200, 200 ));
+// //
 
-	gui::CWindow* win2 = guiManager_.AddWindow ( new gui::CWindow );
-	
-	win2->SetPosition( sf::Vector2f ( 100, 100 ));
-	win2->SetSize ( sf::Vector2f ( 200, 200 ));
-	
-	gui::CWindow* win3 = guiManager_.AddWindow ( new gui::CWindow );
-	
-	win3->SetPosition( sf::Vector2f ( 250, 100 ));
-	win3->SetSize ( sf::Vector2f ( 300, 200 ));
-	
-	gui::CWindow* win4 = guiManager_.AddWindow ( new gui::CWindow );
-	
-	win4->SetPosition( sf::Vector2f ( 150, 300 ));
-	win4->SetSize ( sf::Vector2f ( 200, 200 ));
+
+
+
+
+//  gui::CWindow* win3 = guiManager_.AddWindow ( new gui::CWindow );
+//
+//  win3->SetPosition( sf::Vector2f ( 250, 100 ));
+//  win3->SetSize ( sf::Vector2f ( 300, 200 ));
+//
+//  gui::CWindow* win4 = guiManager_.AddWindow ( new gui::CWindow );
+//
+//  win4->SetPosition( sf::Vector2f ( 150, 300 ));
+//  win4->SetSize ( sf::Vector2f ( 200, 200 ));
 //
 //   gui::CWindow* newWin2 = guiManager.newWindow();
 //   newWin2->setSizeInPercent ( sf::Vector2f ( 20, 20 ) );
 //   newWin2->setTitlebar ( 10 );
 //   newWin2->setPosition ( sf::Vector2f ( 0, 50 ) );
 
-// 	gui::CButton* newButton = new gui::CButton ( newWin );
-// 	newButton->SetName ( "TEST" );
-// 	newButton->SetSize ( sf::Vector2f ( 80, 25 ) );
-// 	newButton->SetPosition ( sf::Vector2f ( 30, 20 ) );
-// 	newButton->SetBackgroundColor ( sf::Color ( 0, 0, 0, 0 ) );
-// 
-// 	util::DataHolder* buttonSettings = newButton->AddMouseEvent ( "fadeInking", MOUSE::HOVER, 0.01f );
-// 	buttonSettings->sprite_one = newButton->GetBackground();
-// 	buttonSettings->color_one = sf::Color ( 20, 1, 1, 20 );
-// 	buttonSettings->color_two = sf::Color ( 10, 0, 0, 10 );
-// 	buttonSettings->b = false;
-// 
-// 	util::DataHolder* buttonSettings2 = newButton->AddMouseEvent ( "fake", MOUSE::UNHOVER, 0.01f );
-// 	buttonSettings2->sprite_one = newButton->GetBackground();
-// 	buttonSettings2->color_one = sf::Color ( 245, 255, 255, 245 );
-// 	buttonSettings2->color_two = sf::Color ( 10, 0, 0, 10 );
-// 	buttonSettings2->b = true;
+//  gui::CButton* newButton = new gui::CButton ( newWin );
+//  newButton->SetName ( "TEST" );
+//  newButton->SetSize ( sf::Vector2f ( 80, 25 ) );
+//  newButton->SetPosition ( sf::Vector2f ( 30, 20 ) );
+//  newButton->SetBackgroundColor ( sf::Color ( 0, 0, 0, 0 ) );
+//
+//  util::DataHolder* buttonSettings = newButton->AddMouseEvent ( "fadeInking", MOUSE::HOVER, 0.01f );
+//  buttonSettings->sprite_one = newButton->GetBackground();
+//  buttonSettings->color_one = sf::Color ( 20, 1, 1, 20 );
+//  buttonSettings->color_two = sf::Color ( 10, 0, 0, 10 );
+//  buttonSettings->b = false;
+//
+//  util::DataHolder* buttonSettings2 = newButton->AddMouseEvent ( "fake", MOUSE::UNHOVER, 0.01f );
+//  buttonSettings2->sprite_one = newButton->GetBackground();
+//  buttonSettings2->color_one = sf::Color ( 245, 255, 255, 245 );
+//  buttonSettings2->color_two = sf::Color ( 10, 0, 0, 10 );
+//  buttonSettings2->b = true;
 
+// 	testAnim = new CAnimation ( GetImgResource()->Get ( "images/sun/sun.png" ), 250, 0.1f, true );
+// 	testAnim->SetFrameWidth ( 250 );
+// 	testAnim->SetScale ( 0.3f, 0.3f );
+// 
+// 	testAnim2 = new CAnimation ( GetImgResource()->Get ( "images/sun/sun.png" ), 250, 0.39f, true );
+// 	testAnim2->SetFrameWidth ( 250 );
+// 	testAnim2->SetScale ( 0.3f, 0.3f );
+// 	testAnim2->SetFrameDiff ( -1 );
+// testAnim->SetPosition(100, 200);
+
+
+	/* Tastatureinstellungen laden */
+	input_.LoadKeys( "config/keyboard.ini" );
+	
+	/* Gui-Manager laden */
+	guiManager_.Initialize();
+
+	/* Leere Karte initialisieren */
+	mapManager_.Initialize();
+	
+	
+	 gui::CWindow* win2 = guiManager_.AddWindow ( new gui::CWindow );
+//
+ win2->SetPosition( sf::Vector2f ( 100, 100 ));
+ win2->SetSize ( sf::Vector2f ( 200, 200 ));
+//
+
+	/* Spielschleife */
 	while ( run_ )
 	{
+		/* Tasten- und Mauseingaben bearbeiten */
 		input_.Events();
+		
+		/* Berechnenung des Spielablaufs */
+		
 
+		/* Zeichnen der GUI und Spielinhalte */
 		this->Render();
 	}
 
@@ -249,21 +282,33 @@ void CGame::Render ( void )
 
 	// Gamegraphic
 	app_.SetView ( viewPoint_ );
+	mapManager_.Update();
+	mapManager_.Render();
 
 	// GUI
 	app_.SetView ( app_.GetDefaultView() );
 	guiManager_.Render();
+	
+// 	CParticleManager particle;
+// 	particle.set_Material ( GetImgResource()->Get ( "images/sun/fire.png"  ) );
+// // 	particle.set_Dimension ( sf::Vector2i ( 500, 500 ) );
+// 	CEmitter nEmit ( 500, 1090.2f, sf::Vector3f ( 100, 100, 0.f ) );
+// 	nEmit.set_Position( sf::Vector3f ( 50,50,1) );
+// 	nEmit.set_Velocity ( 20.f, 22.f );
+// 	nEmit.set_Direction ( 90, 50.f );
+// 	particle.AddEmitter ( nEmit );
+// 	particle.Update();
+// 	particle.Draw();
 
-	if ( settings::GetShowFps() )
-	{
-		this->CalcFPS();
-	}
+	/* Ggf. FPS Anzeigen */
+	this->CalcFPS();
 
-	// Mousecursor
+	/* Mousecursor TODO extra klasse oder funktion zur verwaltung! */
 	cursor_[settings::GetMouseScope() ]->SetPosition ( app_.GetInput().GetMouseX(), app_.GetInput().GetMouseY() );
 	cursor_[settings::GetMouseScope() ]->Update();
 	app_.Draw ( *cursor_[settings::GetMouseScope() ] );
 
+	/* Zeichnen! */
 	app_.Display();
 }
 
@@ -280,9 +325,15 @@ gui::CManager* CGame::GetGuiManager ( void )
 }
 
 
-CResource< sf::Image >* CGame::GetImgResource ( void )
+CImageResource* CGame::GetImgResource ( void )
 {
 	return &imgResource_;
+}
+
+
+CFontResource* CGame::GetFontResource ( void )
+{
+	return &fontResource_;
 }
 
 
@@ -290,6 +341,11 @@ void CGame::CalcFPS ( void )
 {
 	static int frame = -1;
 	static unsigned int fps = 0;
+	
+	if ( !settings::GetShowFps() )
+	{
+		return;
+	}
 
 	++frame;
 

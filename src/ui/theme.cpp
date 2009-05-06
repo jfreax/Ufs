@@ -86,7 +86,6 @@ void CTheme::Open ( std::string filename )
 		stream.clear();
 
 		strTemp = themeFile_.GetValue ( paramIter->first, paramIter->second.name );
-
 		if ( !strTemp.empty() )
 		{
 			switch ( paramIter->second.type )
@@ -129,7 +128,6 @@ void CTheme::Open ( std::string filename )
 					break;
 
 				case VECTOR3_FLOAT:
-
 					stream << strTemp && stream >> paramIter->second.v3f->x >> paramIter->second.v3f->y >> paramIter->second.v3f->z;
 					break;
 

@@ -108,6 +108,12 @@ void lowercase ( std::string& str );
 
 std::string colorToString ( sf::Color color );
 MOUSE::TYPES sfMouseToMouse ( sf::Mouse::Button button );
+
+int random ( int a );
+int random ( int a, int b );
+double random ( double a, double b );
+
+
 }
 
 #endif // UTIL_HPP

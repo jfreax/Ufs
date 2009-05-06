@@ -20,6 +20,7 @@
 #include "util.hpp"
 #include "parser.hpp"
 
+/* TODO Logger */
 bool Parser::Open ( std::string filename, bool index, bool make_lower )
 {
 	if ( filename.empty() )
@@ -29,28 +30,31 @@ bool Parser::Open ( std::string filename, bool index, bool make_lower )
 
 	static int nr = 0;
 
-	// open inifile
+	/* Datei öffnen */
 	filename = settings::GetPath() + filename;
-
 	std::ifstream file ( filename.c_str(), std::ios::in );
 
+	/* Auf erfolg prüfen */
 	if ( !file )
 	{
 		// TODO logger << "Could not open file: " << filename
 		return false;
 	}
 
+	/* Temporale Variablen deklarieren */
 	std::string line = "";
-
 	std::string sectionName = "";
+	std::string normalLine = line;
+	
 	unsigned int pos = 0;
 
-	std::string normalLine = line;
-
+	/* Datei Zeile für Zeile durchgehen */
 	while ( std::getline ( file, normalLine ) )
 	{
 		++nr;
 		line = normalLine;
+		
+
 
 		pos = line.find_first_not_of ( " \t" );
 
@@ -111,7 +115,6 @@ bool Parser::Open ( std::string filename, bool index, bool make_lower )
 				}
 
 				std::string key = line.substr ( 0, pos );
-
 				std::string value = line.substr ( pos + 1, line.length() - pos - 1 );
 
 				// unnötige leerzeichen am beginn und ende entfernen
@@ -156,7 +159,6 @@ bool Parser::Open ( std::string filename, bool index, bool make_lower )
 int Parser::CountKeys ( std::string searchSection, std::string searchedKey )
 {
 	int i = 1;
-
 	for ( ; data[searchSection].count ( searchedKey + "-" + util::lCast< std::string > ( i ) ); ++i );
 
 	return data[searchSection].count ( searchedKey ) + i - 1;
@@ -185,7 +187,7 @@ std::string Parser::GetValue ( std::string section, std::string key )
 		}
 	}
 
-	// Sektion oder Key existiert nicht
+	/* Sektion oder Key existiert nicht */
 	return "";
 }
 
@@ -202,10 +204,14 @@ std::string Parser::GetValue ( unsigned int sectionNr, std::string key )
 std::string Parser::GetValue ( unsigned int sectionNr, unsigned int keyNr )
 {
 	if ( headers.size() <= sectionNr )
+	{
 		return "";
+	}
 
 	if ( headers[sectionNr].size() <= keyNr )
+	{
 		return "";
+	}
 
 	std::map < std::string, std::string >::iterator it =  data[headers[sectionNr]].begin();
 

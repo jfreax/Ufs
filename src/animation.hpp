@@ -13,6 +13,12 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+
+// #include <GL/glu.h>   // Header File For The GLu32 Library
+
+// #include <GL/glew.h>/**/
+// #include <GL/gl.h>
+
 #include <SFML/Graphics.hpp>
 
 #ifndef ANIMATION_HPP
@@ -20,29 +26,39 @@
 
 class CAnimation : public sf::Drawable
 {
-  public:
-    CAnimation ( sf::Image* image_, int frames_, float fpm_ );
+	public:
+		CAnimation ( sf::Image* image, int frames, double timePerFrame );
+		
+		virtual void Render ( sf::RenderTarget& ) const;
 
-    void Start ( void );
-    void Stop ( void );
-    void Update ( void );
+		void Start ( void );
+		void Stop ( void );
+		void Update ( void );
 
-    virtual void Render ( sf::RenderTarget& ) const;
+		void SetFrameWidth ( int frameWidth );
 
-    void SetStartAt ( int startAt_ );
-  private:
-    bool run;
-    sf::Clock timer;
-    int startAt;
+		void SetStartAt ( int startAt_ );
+		void SetFrameDiff ( int diff );
+		
+		void SetBlur ( int blur );
+	private:
+		bool run_;
+		sf::Clock timer_;
+		int startAt_;
 
-    sf::Image* image;
-    sf::IntRect clipArea;
+		sf::Image* image_;
+		sf::IntRect clipArea_;
 
-    int frameWidth;
-    int frames;
-    float timePerFrame;
+		int frameWidth_;
+		int frames_;
+		double timePerFrame_;
 
-    int frame;
+		int frame_;
+		int frameDiff_;
+
+		bool perPixel_;
+		
+		int blur_;
 
 };
 

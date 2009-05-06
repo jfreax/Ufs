@@ -25,6 +25,7 @@
 #include "input.hpp"
 #include "resource.hpp"
 #include "animation.hpp"
+#include "mapmanager.hpp"
 
 
 class CGame
@@ -44,7 +45,9 @@ class CGame
 		
 		sf::RenderWindow* GetApp ( void );
 		gui::CManager* GetGuiManager ( void );
-		CResource< sf::Image >* GetImgResource ( void );
+
+		CImageResource* GetImgResource ( void );
+		CFontResource* GetFontResource ( void );
 
 		void CalcFPS();
 
@@ -61,8 +64,12 @@ class CGame
 
 		sf::View viewPoint_;
 
+		CImageResource imgResource_;
+		CFontResource fontResource_;
+		
 		gui::CManager guiManager_;
-		CResource < sf::Image > imgResource_;
+		CMapManager mapManager_;
+		
 		CInput input_;
 
 		std::map< MOUSESCOPE, CAnimation*> cursor_;

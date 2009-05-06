@@ -26,7 +26,7 @@
 namespace gui
 {
 
-CManager::CManager ( void )
+void CManager::Initialize ( void )
 {
 	theme_.Open ( settings::GetThemePath() + settings::GetTheme() + ".ini" );
 
@@ -283,7 +283,7 @@ sf::Vector2f CManager::AddWindowToDock ( CWindow* win )
 	}
 	
 	/* Fenster ist nicht mehr verschiebbar! */
-	win->SetMoveAble( false );
+// 	win->SetMoveAble( false );/**/
 	
 	/* Fenster der Docklist hinzufügen */
 	dockList_.push_back ( win );

@@ -29,7 +29,7 @@ namespace gui
 class CButton : public CWidget
 {
 	public:
-		CButton ( );
+		CButton ( void );
 		void Render ( void );
 		
 		virtual bool Call ( void ) {};

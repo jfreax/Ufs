@@ -15,6 +15,10 @@
 */
 
 #include "start.hpp"
+#include "../../settings.hpp"
+#include "../../game.hpp"
+#include "../../gui/button/main_menu.hpp"
+#include "../../gui/button/titlebar.hpp"
 
 namespace gui
 {
@@ -22,9 +26,22 @@ namespace gui
 
 CStartWindow::CStartWindow ( void )
 {
+	/* Keine Titelbar! */
 	this->SetTitlebar ( 0 );
 	
+	/* Fenster kann man nicht bewegen */
+	this->SetMoveAble ( false );
 	
+	/* Größe und Position */
+	this->SetPosition( sf::Vector2f ( 0, 0 ) );
+	this->SetSize ( sf::Vector2f ( settings::GetWidth(), settings::GetWidth() ) );
+	
+	/* Hintergrundbild */
+	this->SetBackgroundImage ( GetGameClass()->GetImgResource()->Get ( "themes/default/images/main.png" ) );
+	
+	/* Buttons hinzufügen */
+	this->AddWidget ( new gui::CSingleplayerButton );
+
 }
 
 

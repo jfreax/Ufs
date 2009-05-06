@@ -96,4 +96,33 @@ MOUSE::TYPES sfMouseToMouse ( sf::Mouse::Button button )
 }
 
 
+int random ( int a )
+{
+	return -a + ( rand() % ( 2*a + 1 ) );
+}
+
+
+int random ( int a, int b )
+{
+	if ( ! ( b - a + 1 ) )
+		return 0;
+
+	return a + ( rand() % ( b - a + 1 ) );
+}
+
+
+double random ( double a, double b )
+{
+	int aint = a * 1000;
+	int bint = b * 1000;
+
+	if ( ! ( b - a + 1.f ) )
+	{
+		return 0.f;
+	}
+
+	return ( double ) ( ( aint + ( rand() % ( bint - aint + 1 ) ) ) / 1000.f );
+}
+
+
 } // namespace util

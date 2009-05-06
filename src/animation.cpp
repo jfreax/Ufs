@@ -19,58 +19,48 @@
 #include "game.hpp"
 #include "animation.hpp"
 
-CAnimation::CAnimation ( sf::Image* image_, int frames_, float timePerFrame_ ) :
-		image ( image_ ), frames ( frames_ ), timePerFrame ( timePerFrame_ ), frame ( 1 ), startAt ( 1 )
+#include "model/md2Model.hpp"
+
+
+CAnimation::CAnimation ( sf::Image* image, int frames, double timePerFrame ) :
+		image_ ( image ), frames_ ( frames ),
+		timePerFrame_ ( timePerFrame ),
+		frame_ ( 1 ),
+		startAt_ ( 1 ),
+		frameDiff_ ( 1 ),
+		blur_ ( 1 )
 {
-	frameWidth = image->GetWidth() / frames;
-	clipArea = sf::IntRect ( 0, 0, frameWidth, image->GetHeight() );
 
-	this->Start();
-}
-// // 
-
-void CAnimation::Start ( void )
-{
-//   timer.Reset();
-	frame = startAt;
-	run = true;
-}
-
-
-void CAnimation::Stop ( void )
-{
-	run = false;
-}
-
-
-void CAnimation::Update ( void )
-{
-	if ( timer.GetElapsedTime() >= timePerFrame )
+	if ( frames_ )
 	{
-		timer.Reset();
-
-		if ( ++frame > frames )
-		{
-			frame = startAt;
-		}
-
-		clipArea = sf::IntRect ( frameWidth * ( frame - 1 ), 0, frameWidth * frame, image->GetHeight() );
+		perPixel_ = false;
+		frameWidth_ = image_->GetWidth() / frames_;
 	}
+	else
+	{
+		frameWidth_ = image_->GetHeight();
+		
+		perPixel_ = true;
+		frames_ = image_->GetWidth() - frameWidth_;
+	}
+	
+	clipArea_ = sf::IntRect ( 0, 0, frameWidth_, image_->GetHeight() );
+	this->Start();
 }
 
 
 void CAnimation::Render ( sf::RenderTarget& ) const
 {
-	if ( run )
+	if ( run_ )
 	{
-		float width  = static_cast<float> ( clipArea.GetWidth() );
-		float height = static_cast<float> ( clipArea.GetHeight() );
+		float width  = static_cast<float> ( clipArea_.GetWidth() );
+		float height = static_cast<float> ( clipArea_.GetHeight() );
+		sf::FloatRect rect = image_->GetTexCoords ( clipArea_ );
 
-		sf::FloatRect rect = image->GetTexCoords ( clipArea );
+		/* Bild für OpenGl "binden" */
+		image_->Bind();
 
-		image->Bind();
-
-		// Draw the animation's triangles
+		/* Per OpenGL ein Quadrat zeichnen (mit dem Bild drauf) */
 		glBegin ( GL_QUADS );
 		{
 			glTexCoord2f ( rect.Left,  rect.Top );
@@ -90,9 +80,81 @@ void CAnimation::Render ( sf::RenderTarget& ) const
 }
 
 
-void CAnimation::SetStartAt ( int startAt_ )
+void CAnimation::Start ( void )
 {
-	startAt = startAt_;
+	frame_ = startAt_;
+	run_ = true;
 }
 
+
+void CAnimation::Stop ( void )
+{
+	run_ = false;
+}
+
+
+void CAnimation::Update ( void )
+{
+
+	if ( timer_.GetElapsedTime() >= timePerFrame_ )
+	{
+		timer_.Reset();
+
+		frame_ += frameDiff_;
+		if ( frame_ > frames_ )
+		{
+
+			frame_ = startAt_;
+		}
+		if ( frame_ < 0 )
+		{
+			frame_ = frames_;
+		}
+
+		/* Bild ist nicht in einzelne Frames eingeteilt,
+		   Animation ist ein "Kameraschwenk" über das Bild */
+		if ( perPixel_ )
+		{
+			clipArea_ = sf::IntRect ( ( frame_ - 1 ), 0, frameWidth_ + frame_, image_->GetHeight() );
+		}
+		/* Bild ist in Frames eingeteilt, die Positionsdatei herausbekommen */
+		else
+		{
+			clipArea_ = sf::IntRect ( frameWidth_ * ( frame_ - 1 ), 0, frameWidth_ * frame_, image_->GetHeight() );
+		}
+	}
+}
+
+
+void CAnimation::SetFrameWidth ( int frameWidth )
+{
+	frameWidth_ = frameWidth;
+	
+	if ( perPixel_ )
+	{
+		frames_ = image_->GetWidth() - frameWidth_;
+	}
+	
+	clipArea_ = sf::IntRect ( 0, 0, frameWidth_, image_->GetHeight() );
+}
+
+
+void CAnimation::SetStartAt ( int startAt_ )
+{
+	startAt_ = startAt_;
+}
+
+
+void CAnimation::SetFrameDiff ( int diff )
+{
+	frameDiff_ = diff;
+}
+
+
+void CAnimation::SetBlur ( int blur )
+{
+	blur_ = blur;
+	
+// 	timePerFrame_ /= blur;
+}
 

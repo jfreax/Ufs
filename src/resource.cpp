@@ -15,3 +15,49 @@
 */
 
 #include "resource.hpp"
+
+
+sf::Image* CImageResource::Load ( const std::string& str )
+{
+	sf::Image* image = new sf::Image();
+
+	if ( !image->LoadFromFile ( settings::GetPath() + str ) )
+	{
+		std::cout << "[WARN] ImageManager failed to load: " << str << std::endl;
+		delete image;
+		image = NULL;
+	}
+
+	return image;
+}
+
+
+sf::Font* CFontResource::Load ( const std::string& str )
+{
+	sf::Font* font = new sf::Font();
+
+	if ( !font->LoadFromFile ( settings::GetPath() + str ) )
+	{
+		std::cout << "[WARN] FontManager failed to load: " << str << std::endl;
+		delete font;
+		font = NULL;
+	}
+
+	return font;
+}
+
+
+sf::SoundBuffer* CSoundResource::Load ( const std::string& str )
+{
+	sf::SoundBuffer* buffer = new sf::SoundBuffer();
+	
+	if ( !buffer->LoadFromFile ( str ) )
+	{
+		std::cout << "[WARN] SoundBufferManager failed to load: " << str << std::endl;
+		delete buffer;
+		buffer = NULL;
+	}
+
+	return buffer;
+}
+

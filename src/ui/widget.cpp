@@ -49,8 +49,7 @@ CWidget::CWidget ( )
 	this->SetDrawBackground ( true );
 		
 	/* TextPosition */
-	this->SetTextPosition ( this->GetPosition() );
-
+	this->SetTextPosition ( sf::Vector2f ( 0, 0 ) );
 	angle_ = 0;
 }
 
@@ -87,17 +86,19 @@ bool CWidget::Update ( bool doIt )
 
 		background_.SetRotation( angle_ );
 	}
-	else
-	{
-		background_.SetRotation( 0 );
-	}
 
 
 	/* Hintergrundbild, oder... */
 	if ( background_.GetSize().x != 1.f )
 	{
-		background_.SetPosition ( position_ + motherWin_->GetPosition() + background_.GetCenter() );
 		background_.Resize ( curSize_ );
+		background_.SetCenter ( background_.GetSize() * 0.5f );
+		
+		/* Bei der Positionsberechnung die Skalierung beachten (weil Center ist local!) */
+		sf::Vector2f offset ( background_.GetCenter().x * background_.GetScale().x, background_.GetCenter().y * background_.GetScale().y );
+
+		/* Neue Postion setzen */
+		background_.SetPosition ( position_ + motherWin_->GetPosition() + offset );
 	}
 	/* Hintergrundsprite */
 	else
@@ -106,8 +107,7 @@ bool CWidget::Update ( bool doIt )
 	}
 
 	/* Textposition mittig auf den Button setzen */
-	sf::Vector2f textPos ( ( curSize_.x - text_.GetRect().GetWidth() ) * 0.5f, ( curSize_.y - text_.GetRect().GetHeight() ) * 0.5f );
-	text_.SetPosition ( position_ + motherWin_->GetPosition() + textPos );
+	text_.SetPosition ( position_ + motherWin_->GetPosition() + textPos_ );
 	
 		
 
@@ -147,9 +147,32 @@ void CWidget::SetPosition ( sf::Vector2f position )
 }
 
 
-sf::Vector2f CWidget::GetPosition ( )
+sf::Vector2f CWidget::GetPosition ( void )
 {
 	return position_;
+}
+
+
+sf::Rect<float> CWidget::GetDimension ( void )
+{
+	sf::Vector2f pos;
+	sf::Vector2f posEnd;
+	
+	/* Die größen vom Hintergrundbild nehmen */
+	if ( drawBackground_ && background_.GetSize().x != 1.f )
+	{
+		pos = background_.TransformToGlobal( sf::Vector2f ( 0, 0 ) );
+		posEnd = background_.TransformToGlobal( curSize_ );
+	}
+	else
+	/* Oder wenn keins vorhanden ist, dann vom Hintergrundshape */
+	{
+		pos = form_.TransformToGlobal( sf::Vector2f ( 0, 0 ) );
+		posEnd = form_.TransformToGlobal( curSize_ );
+	}
+
+
+	return sf::Rect<float> ( pos.x, pos.y, posEnd.x, posEnd.y );
 }
 
 
@@ -184,7 +207,7 @@ void CWidget::SetDrawBackground ( bool ison )
 void CWidget::SetBackground ( sf::Sprite background )
 {
 	background_ = background;
-	background_.SetCenter ( background_.GetSize() * 0.5f );
+	this->Update();
 }
 
 
@@ -196,7 +219,11 @@ sf::Sprite* CWidget::GetBackground ( void )
 
 void CWidget::SetBackground ( sf::Image* background )
 {
+	/* Image setzen */
 	background_.SetImage ( *background );
+	
+	/* Größe vom Sprite anpassen */
+	background_.Resize( background->GetWidth(), background->GetHeight() );
 }
 
 
@@ -250,16 +277,39 @@ void CWidget::SetText ( std::string text )
 }
 
 
-std::string CWidget::GetText ( void )
+sf::String CWidget::GetText ( void )
 {
-	return text_.GetText();
+	return text_;
 }
 
 
 void CWidget::SetTextPosition ( sf::Vector2f pos )
 {
-	text_.SetPosition ( pos );
+	textPos_ = pos;
 	this->Update();
+}
+
+
+sf::Vector2f CWidget::GetTextPosition ( void )
+{
+	return textPos_;
+}
+
+
+void CWidget::SetTextSize ( int size )
+{
+	text_.SetSize( size );
+}
+
+
+void CWidget::SetFont ( std::string fontname )
+{
+	sf::Font* font = GetGameClass()->GetFontResource()->Get( settings::GetThemePath() + "/fonts/" + fontname + ".ttf" );
+
+	if ( font )
+	{
+		text_.SetFont( *font );
+	}
 }
 
 

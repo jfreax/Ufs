@@ -4,16 +4,19 @@
 
 int main ( int argc, char **argv )
 {
-  CGame game ( argc, argv );
+	/* Zufallsgenerator "starten" */
+	srand ( ( unsigned ) time ( NULL ) );
 
-  if ( game.Initialize() )
-  {
-    game.Start();
-  }
-  else
-  {
-    return 1;
-  }
+	CGame game ( argc, argv );
 
-  return 0;
+	if ( game.Initialize() )
+	{
+		game.Start();
+	}
+	else
+	{
+		return 1;
+	}
+
+	return 0;
 }

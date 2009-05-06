@@ -14,54 +14,27 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef INPUT_HPP
-#define INPUT_HPP
+#ifndef MAPMANAGER_HPP
+#define MAPMANAGER_HPP
 
-#include <map>
-#include <SFML/Graphics.hpp>
-
-#include "parser.hpp"
+#include <vector>
+#include "sprite/sprite.hpp"
 
 
-namespace MOUSE
+class CMapManager
 {
-
-enum TYPES
-{
-	LEFT,
-	RIGHT,
-	MIDDLE,
-	HOVER,
-	UNHOVER
+	public:
+// 		CMapManager ( void );
+	
+		void Initialize ( void ); /* TODO */
+		void Render ( void );
+		
+		void Update ( void );
+		
+		sprite::CSprite* AddSprite ( sprite::CSprite* sprite );
+		
+	private:
+		std::vector < sprite::CSprite* > spriteList_;
 };
 
-} // namespace MOUSE
-
-struct KeyHolder
-{
-  sf::Key::Code key;
-
-  bool strg;
-  bool alt;
-  bool shift;
-};
-
-
-class CInput
-{
-  public:
-    CInput ( void );
-    bool LoadKeys ( std::string file );
-
-    bool TestPressedKeys ( std::string keyName_ );
-    bool Events ( void );
-
-  private:
-    std::map<std::string, sf::Key::Code> availableKeys;
-    std::map<std::string, KeyHolder> globalKeys;
-    sf::Event event;
-
-    Parser keyfile;
-};
-
-#endif // INPUT_HPP
+#endif // MAPMANAGER_HPP

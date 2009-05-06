@@ -25,10 +25,7 @@
 #include "button.hpp"
 #include "window.hpp"
 
-#include "../gui/button/close.hpp"
-
-#define sin_d(x)  (sin((x)*M_PI/180))
-#define cos_d(x)  (cos((x)*M_PI/180))
+#include "../gui/button/titlebar.hpp"
 
 
 namespace gui
@@ -69,10 +66,6 @@ CWindow::CWindow ( )
 			this->SetNoRoundTitlebar( false );
 			this->SetName ( "WINDOW ID: " + util::lCast<std::string>( id_ ) );
 			
-// // 			name_.SetSize( 12 );/**/
-			gui::CButton* textButton = (gui::CButton*) this->AddWidget ( new gui::CButton );
-			textButton->SetText ( "WINDOW ID: " + util::lCast<std::string>( id_ ) );
-
 			titlebarLength_ = theme->window_.titlebarLength;
 			titlebarColor_ = theme->window_.titlebarColor;
 		} /* End Titlebar */
@@ -377,6 +370,15 @@ void CWindow::calcBackground ( void )
 }
 
 
+void CWindow::SetBackgroundImage ( sf::Image* img )
+{
+	backgroundImage_ = img;
+	background_.SetImage( *img );
+	
+	this->Update();
+}
+
+
 void CWindow::SetName ( std::string str )
 {
 	name_.SetText( str );
@@ -504,7 +506,12 @@ int CWindow::GetTitlebarLength ( void )
 
 sf::Rect<float> CWindow::GetWindowDimension ( void ) const
 {
-	return sf::Rect<float> ( position_.x, position_.y - titlebar_, position_.x + curSize_.x, position_.y + curSize_.y );
+	sf::Vector2f pos = formWin_->TransformToGlobal( sf::Vector2f ( 0, 0 ) );
+	sf::Vector2f posEnd = formWin_->TransformToGlobal( sf::Vector2f ( curSize_.x, curSize_.y ) );
+
+	return sf::Rect<float> ( pos.x, pos.y - titlebar_, posEnd.x, posEnd.y );
+
+// 	return sf::Rect<float> ( position_.x, position_.y - titlebar_, position_.x + curSize_.x, position_.y + curSize_.y );
 }
 
 

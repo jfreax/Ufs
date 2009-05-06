@@ -40,6 +40,7 @@ class CWindow
 		class CWidget* AddWidget ( class CWidget* widget );
 
 		void calcBackground ( void );
+		void SetBackgroundImage ( sf::Image* img );
 		
 		void SetName ( std::string str );
 		
