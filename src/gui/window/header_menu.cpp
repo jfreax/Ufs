@@ -39,14 +39,13 @@ CHeaderWindow::CHeaderWindow ( void )
 	/* Nicht verschiebbar */
 	this->SetMoveAble ( false );
 	
-	/* Nicht schließbar */
+        /* do not close */
 // 	this->SetCloseAble ( false );
 
-	/* "Beschriftung" (Button) hinzufügen */
+        /* Add buttons */
 	CButton* button = new CButton;
 	this->AddWidget ( button );
 	
-	/* Buttoneigenschaften anpassen */
 	button->SetDrawBackground ( false );
 	button->SetSize ( this->GetSize() );
 	button->SetText ( "TEST" );

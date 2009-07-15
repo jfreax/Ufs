@@ -19,7 +19,6 @@
 #include "game.hpp"
 #include "animation.hpp"
 
-#include "model/md2Model.hpp"
 
 
 CAnimation::CAnimation ( sf::Image* image, int frames, double timePerFrame ) :
