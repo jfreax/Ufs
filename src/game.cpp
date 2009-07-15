@@ -49,12 +49,13 @@ CGame::CGame ( int argc, char **argv ) :
 {
 	game = this;
 
-	/* Standardwerte */
+        /* Standardwerte */
 	settings::SetWidth ( sf::VideoMode::GetDesktopMode().Width );
 	settings::SetHeight ( sf::VideoMode::GetDesktopMode().Height );
 	settings::SetBpp ( sf::VideoMode::GetDesktopMode().BitsPerPixel );
+        settings::SetPath ( "../data/" );
 
-	/* Programmargumente */
+        /* Arguments */
 	for ( arg_ = 1; arg_ != argc_; ++arg_ )
 	{
 		const std::string val ( argv_[arg_] );
