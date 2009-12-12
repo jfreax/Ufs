@@ -30,29 +30,33 @@
 
 class CGame
 {
+
 	public:
 		CGame ( int argc, char **argv );
-		~CGame ( void );
+		~CGame();
 
-		bool Initialize ( void );
+		bool Initialize();
 
-		bool IsVideoModeValid ( void );
+		bool IsVideoModeValid();
 
-		bool Start ( void );
-		bool Stop ( void );
+		bool Start();
+		bool Stop();
 
-		void Render ( void );
-		
-		sf::RenderWindow* GetApp ( void );
-		gui::CManager* GetGuiManager ( void );
+		void Render();
 
-		CImageResource* GetImgResource ( void );
-		CFontResource* GetFontResource ( void );
+		sf::RenderWindow* GetApp();
+		gui::CManager* GetGuiManager();
+		CMapManager* GetMapManager();
+
+		CImageResource* GetImgResource();
+		CFontResource* GetFontResource();
 
 		void CalcFPS();
 
-		std::map< MOUSESCOPE, CAnimation*> GetCursor ( void );
-		sf::String* GetFpsStr ( void );
+		std::map< MOUSESCOPE, CAnimation*> GetCursor();
+		sf::String* GetFpsStr();
+		
+		sf::View* GetViewPoint();
 
 	private:
 		sf::RenderWindow app_;
@@ -66,10 +70,10 @@ class CGame
 
 		CImageResource imgResource_;
 		CFontResource fontResource_;
-		
+
 		gui::CManager guiManager_;
 		CMapManager mapManager_;
-		
+
 		CInput input_;
 
 		std::map< MOUSESCOPE, CAnimation*> cursor_;

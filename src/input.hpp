@@ -26,8 +26,7 @@
 namespace MOUSE
 {
 
-enum TYPES
-{
+enum TYPES {
 	LEFT,
 	RIGHT,
 	MIDDLE,
@@ -37,31 +36,30 @@ enum TYPES
 
 } // namespace MOUSE
 
-struct KeyHolder
-{
-  sf::Key::Code key;
+struct KeyHolder {
+	sf::Key::Code key;
 
-  bool strg;
-  bool alt;
-  bool shift;
+	bool strg;
+	bool alt;
+	bool shift;
 };
 
 
 class CInput
 {
-  public:
-    CInput ( void );
-    bool LoadKeys ( std::string file );
+	public:
+		CInput ( void );
+		bool LoadKeys ( std::string file );
 
-    bool TestPressedKeys ( std::string keyName_ );
-    bool Events ( void );
+		bool TestPressedKeys ( std::string keyName_ );
+		bool Events ( void );
 
-  private:
-    std::map<std::string, sf::Key::Code> availableKeys;
-    std::map<std::string, KeyHolder> globalKeys;
-    sf::Event event;
+	private:
+		std::map<std::string, sf::Key::Code> availableKeys;
+		std::map<std::string, KeyHolder> globalKeys;
+		sf::Event event;
 
-    Parser keyfile;
+		Parser keyfile;
 };
 
 #endif // INPUT_HPP

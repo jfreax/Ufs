@@ -23,18 +23,18 @@
 
 class CMapManager
 {
+
 	public:
-// 		CMapManager ( void );
-	
-		void Initialize ( void ); /* TODO */
-		void Render ( void );
-		
-		void Update ( void );
-		
+		void Initialize(); /* TODO */
+		void Render();
+
+		void Update();
+		void Zoom ( float offset, int direction );
+
 		sprite::CSprite* AddSprite ( sprite::CSprite* sprite );
-		
+
 	private:
-		std::vector < sprite::CSprite* > spriteList_;
+		std::vector < sprite::CSprite* > spriteList;
 };
 
 #endif // MAPMANAGER_HPP

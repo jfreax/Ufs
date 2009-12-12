@@ -21,7 +21,7 @@
 
 
 
-void CMapManager::Initialize ( void )
+void CMapManager::Initialize()
 {
 	sprite::CSprite* newSprite = AddSprite ( new sprite::CSun );
 	newSprite->Scale ( .25f );
@@ -36,12 +36,12 @@ void CMapManager::Initialize ( void )
 }
 
 
-void CMapManager::Render ( void )
+void CMapManager::Render()
 {
 	sf::RenderWindow* app = GetGameClass()->GetApp();
 
-	std::vector < sprite::CSprite* >::iterator iter = spriteList_.begin();
-	std::vector < sprite::CSprite* >::iterator iterEnd = spriteList_.end();
+	std::vector < sprite::CSprite* >::iterator iter = spriteList.begin();
+	std::vector < sprite::CSprite* >::iterator iterEnd = spriteList.end();
 	
 	for ( ; iter != iterEnd ; ++iter )
 	{
@@ -51,14 +51,31 @@ void CMapManager::Render ( void )
 }
 
 
-void CMapManager::Update ( void )
+void CMapManager::Update()
 {
-	std::vector < sprite::CSprite* >::iterator iter = spriteList_.begin();
-	std::vector < sprite::CSprite* >::iterator iterEnd = spriteList_.end();
+	std::vector < sprite::CSprite* >::iterator iter = spriteList.begin();
+	std::vector < sprite::CSprite* >::iterator iterEnd = spriteList.end();
 
 	for ( ; iter != iterEnd ; ++iter )
 	{
 		( *iter )->Update();
+	}
+}
+
+
+void CMapManager::Zoom ( float offset, int direction )
+{
+	static const sf::Input* input = &GetGameClass()->GetApp()->GetInput();
+	
+	int deltaX = input->GetMouseX() - (GetGameClass()->GetApp()->GetWidth()  * 0.5f);
+	int deltaY = input->GetMouseY() - (GetGameClass()->GetApp()->GetHeight() * 0.5f);
+	
+	if ( direction == 1 ) {
+		GetGameClass()->GetViewPoint()->Zoom ( 1 + offset );
+		GetGameClass()->GetViewPoint()->Move ( deltaX * 0.05, deltaY * 0.05 );
+	} else if ( direction == -1 ) {
+		GetGameClass()->GetViewPoint()->Zoom ( 1 - offset );
+		GetGameClass()->GetViewPoint()->Move ( deltaX * 0.03, deltaY * 0.03 );	
 	}
 }
 
@@ -71,7 +88,7 @@ sprite::CSprite* CMapManager::AddSprite ( sprite::CSprite* sprite )
 	}
 	else
 	{
-		spriteList_.push_back( sprite );	
+		spriteList.push_back( sprite );	
 	}
 	
 	return sprite;

@@ -34,7 +34,7 @@
 
 CGame* game = NULL;
 
-CGame* GetGameClass ( void )
+CGame* GetGameClass()
 {
 	return game;
 }
@@ -53,7 +53,7 @@ CGame::CGame ( int argc, char **argv ) :
 	settings::SetWidth ( sf::VideoMode::GetDesktopMode().Width );
 	settings::SetHeight ( sf::VideoMode::GetDesktopMode().Height );
 	settings::SetBpp ( sf::VideoMode::GetDesktopMode().BitsPerPixel );
-        settings::SetPath ( "../data/" );
+        settings::SetPath ( "./data/" );
 
         /* Arguments */
 	for ( arg_ = 1; arg_ != argc_; ++arg_ )
@@ -90,7 +90,7 @@ CGame::CGame ( int argc, char **argv ) :
 		}
 		else if ( val == "-bpp" || val == "--bitsperpixel" )
 		{
-			if ( arg_ + 1 != argc_ )
+			if ( arg_ + 1 != argc )
 			{
 				++arg_;
 				settings::SetBpp ( util::lCast<int> ( argv_[arg_], -1 ) );
@@ -120,14 +120,14 @@ CGame::CGame ( int argc, char **argv ) :
 	}
 }
 
-CGame::~CGame ( void )
+CGame::~CGame()
 {
 	// TODO !!!
 }
 
 
 
-bool CGame::Initialize ( void )
+bool CGame::Initialize()
 {
 	if ( !settings::GetVideo().IsValid() )
 	{
@@ -147,7 +147,7 @@ bool CGame::Initialize ( void )
 		app_.Create ( settings::GetVideo(), "Game" , settings::GetStyle(), settings::GetWindowSettings() );
 	}
 
-	app_.UseVerticalSync ( false );
+	app_.UseVerticalSync ( true );
 	app_.EnableKeyRepeat ( true );
 	app_.ShowMouseCursor ( false );
 
@@ -164,14 +164,14 @@ bool CGame::Initialize ( void )
 }
 
 
-bool CGame::IsVideoModeValid ( void ) /* TODO in CGame::initialize und settings::setHeight() ! */
+bool CGame::IsVideoModeValid() /* TODO in CGame::initialize und settings::setHeight() ! */
 {
 
 
 }
 
 
-bool CGame::Start ( void )
+bool CGame::Start()
 {
 	// FIXME Nur BEISPIELE!
 //  gui::CWindow* newWin = guiManager_.NewWindow();
@@ -269,14 +269,14 @@ bool CGame::Start ( void )
 }
 
 
-bool CGame::Stop ( void )
+bool CGame::Stop()
 {
 	run_ = false;
 	return true;
 }
 
 
-void CGame::Render ( void )
+void CGame::Render()
 {
 	// Bildschirm säubern
 	app_.Clear();
@@ -290,24 +290,24 @@ void CGame::Render ( void )
 	app_.SetView ( app_.GetDefaultView() );
 	guiManager_.Render();
 
-	sf::Shape testUmrandung;
-	testUmrandung.AddPoint( sf::Vector2f ( 100, 100 ), sf::Color ( 150, 150, 150, 160 ) );
-	testUmrandung.AddPoint( sf::Vector2f ( 280, 100 ), sf::Color ( 150, 150, 150, 160 ) );
-	testUmrandung.AddPoint( sf::Vector2f ( 300, 120 ), sf::Color ( 150, 150, 150, 160 ) );
-	testUmrandung.AddPoint( sf::Vector2f ( 300, 300 ), sf::Color ( 150, 150, 150, 160 ) );
-	testUmrandung.AddPoint( sf::Vector2f ( 120, 300 ), sf::Color ( 150, 150, 150, 160 ) );
-	testUmrandung.AddPoint( sf::Vector2f ( 100, 280 ), sf::Color ( 150, 150, 150, 160 ) );
-	app_.Draw( testUmrandung );
-
-	sf::Shape test;
-	test.AddPoint( sf::Vector2f ( 105, 105 ), sf::Color::Black );
-	test.AddPoint( sf::Vector2f ( 280, 105 ), sf::Color::Black );
-	test.AddPoint( sf::Vector2f ( 295, 120 ), sf::Color::Black );
-	test.AddPoint( sf::Vector2f ( 295, 280 ), sf::Color ( 0, 0, 0, 220 ) );
-	test.AddPoint( sf::Vector2f ( 295, 295 ), sf::Color ( 0, 0, 0, 220 ) );
-	test.AddPoint( sf::Vector2f ( 120, 295 ), sf::Color ( 0, 0, 0, 220 ) );
-	test.AddPoint( sf::Vector2f ( 105, 280 ), sf::Color ( 0, 0, 0, 220 ) );
-	app_.Draw( test );
+// 	sf::Shape testUmrandung;
+// 	testUmrandung.AddPoint( sf::Vector2f ( 100, 100 ), sf::Color ( 150, 150, 150, 160 ) );
+// 	testUmrandung.AddPoint( sf::Vector2f ( 280, 100 ), sf::Color ( 150, 150, 150, 160 ) );
+// 	testUmrandung.AddPoint( sf::Vector2f ( 300, 120 ), sf::Color ( 150, 150, 150, 160 ) );
+// 	testUmrandung.AddPoint( sf::Vector2f ( 300, 300 ), sf::Color ( 150, 150, 150, 160 ) );
+// 	testUmrandung.AddPoint( sf::Vector2f ( 120, 300 ), sf::Color ( 150, 150, 150, 160 ) );
+// 	testUmrandung.AddPoint( sf::Vector2f ( 100, 280 ), sf::Color ( 150, 150, 150, 160 ) );
+// 	app_.Draw( testUmrandung );
+// 
+// 	sf::Shape test;
+// 	test.AddPoint( sf::Vector2f ( 105, 105 ), sf::Color::Black );
+// 	test.AddPoint( sf::Vector2f ( 280, 105 ), sf::Color::Black );
+// 	test.AddPoint( sf::Vector2f ( 295, 120 ), sf::Color::Black );
+// 	test.AddPoint( sf::Vector2f ( 295, 280 ), sf::Color ( 0, 0, 0, 220 ) );
+// 	test.AddPoint( sf::Vector2f ( 295, 295 ), sf::Color ( 0, 0, 0, 220 ) );
+// 	test.AddPoint( sf::Vector2f ( 120, 295 ), sf::Color ( 0, 0, 0, 220 ) );
+// 	test.AddPoint( sf::Vector2f ( 105, 280 ), sf::Color ( 0, 0, 0, 220 ) );
+// 	app_.Draw( test );
 
 	
 // 	CParticleManager particle;
@@ -334,31 +334,37 @@ void CGame::Render ( void )
 }
 
 
-sf::RenderWindow* CGame::GetApp ( void )
+sf::RenderWindow* CGame::GetApp()
 {
 	return &app_;
 }
 
 
-gui::CManager* CGame::GetGuiManager ( void )
+gui::CManager* CGame::GetGuiManager()
 {
 	return &guiManager_;
 }
 
 
-CImageResource* CGame::GetImgResource ( void )
+CMapManager* CGame::GetMapManager()
+{
+	return &mapManager_;
+}
+
+
+CImageResource* CGame::GetImgResource()
 {
 	return &imgResource_;
 }
 
 
-CFontResource* CGame::GetFontResource ( void )
+CFontResource* CGame::GetFontResource()
 {
 	return &fontResource_;
 }
 
 
-void CGame::CalcFPS ( void )
+void CGame::CalcFPS()
 {
 	static int frame = -1;
 	static unsigned int fps = 0;
@@ -382,15 +388,19 @@ void CGame::CalcFPS ( void )
 }
 
 
-std::map< MOUSESCOPE, CAnimation*> CGame::GetCursor ( void )
+std::map< MOUSESCOPE, CAnimation*> CGame::GetCursor()
 {
 	return cursor_;
 }
 
 
-sf::String* CGame::GetFpsStr ( void )
+sf::String* CGame::GetFpsStr()
 {
 	return &fpsStr_;
 }
 
 
+sf::View* CGame::GetViewPoint()
+{
+	return &viewPoint_;
+}

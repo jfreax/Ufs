@@ -131,8 +131,7 @@ bool CInput::LoadKeys ( std::string file )
 {
 	bool ret = keyfile.Open ( file, false, true );
 
-	for ( int i = keyfile.CountKeys ( "global" ) - 1; i >= 0 ; --i )
-	{
+	for ( int i = keyfile.CountKeys ( "global" ) - 1; i >= 0 ; --i ) {
 		KeyHolder keyHolder;
 		keyHolder.strg = keyHolder.shift = keyHolder.alt = 0;
 
@@ -141,18 +140,19 @@ bool CInput::LoadKeys ( std::string file )
 		util::deleteChar ( keysToPress );
 
 
-		for ( size_t found = 0; found != std::string::npos; found = keysToPress.find ( '+', found + 1 ) )
-		{
+		for ( size_t found = 0; found != std::string::npos; found = keysToPress.find ( '+', found + 1 ) ) {
 			std::string keyTmp = keysToPress.substr ( found + 1, keysToPress.find ( '+', found + 1 ) - found - 1 );
 
 			if ( keyTmp == "strg" )
 				keyHolder.strg = true;
-			else if ( keyTmp == "alt" )
-				keyHolder.alt = true;
-			else if ( keyTmp == "shift" )
-				keyHolder.shift = true;
 			else
-				keyHolder.key = availableKeys[ keyTmp ];
+				if ( keyTmp == "alt" )
+					keyHolder.alt = true;
+				else
+					if ( keyTmp == "shift" )
+						keyHolder.shift = true;
+					else
+						keyHolder.key = availableKeys[ keyTmp ];
 		}
 
 		globalKeys[keyfile.GetKey ( "global", i ) ] = keyHolder;
@@ -167,8 +167,7 @@ bool CInput::TestPressedKeys ( std::string keyName_ )
 	bool ret;
 	std::string keyName = keyName_;
 
-	for ( int i = 0; globalKeys[keyName].key; keyName = keyName_ + "-" + util::lCast< std::string > ( i ) )
-	{
+	for ( int i = 0; globalKeys[keyName].key; keyName = keyName_ + "-" + util::lCast< std::string > ( i ) ) {
 		ret = true;
 
 		if ( event.Key.Code != globalKeys[keyName].key )
@@ -201,53 +200,54 @@ bool CInput::Events ( void )
 	const sf::Input* input = &app->GetInput();
 
 
-// 	// Mouse
-	if ( input->IsMouseButtonDown ( sf::Mouse::Left ) )
-	{
+	// Mouse
+
+	if ( input->IsMouseButtonDown ( sf::Mouse::Left ) ) {
 		guiManager->MouseClick ( input->GetMouseX(), input->GetMouseY(), sf::Mouse::Left );
-	}
-	else if ( input->IsMouseButtonDown ( sf::Mouse::Right ) )
-	{
-		guiManager->MouseClick ( input->GetMouseX(), input->GetMouseY(), sf::Mouse::Right );
-	}
-	else if ( input->IsMouseButtonDown ( sf::Mouse::Middle ) )
-	{
-		guiManager->MouseClick ( input->GetMouseX(), input->GetMouseY(), sf::Mouse::Middle );
-	}
-	else
-	{
-		guiManager->MouseHover ( input->GetMouseX(), input->GetMouseY() );
-	}
+	} else
+		if ( input->IsMouseButtonDown ( sf::Mouse::Right ) ) {
+			guiManager->MouseClick ( input->GetMouseX(), input->GetMouseY(), sf::Mouse::Right );
+		} else
+			if ( input->IsMouseButtonDown ( sf::Mouse::Middle ) ) {
+				guiManager->MouseClick ( input->GetMouseX(), input->GetMouseY(), sf::Mouse::Middle );
+			} else {
+				guiManager->MouseHover ( input->GetMouseX(), input->GetMouseY() );
+			}
 
 
 	/* Alle Events */
-	while ( app->GetEvent ( event ) )
-	{
+	while ( app->GetEvent ( event ) ) {
 		/* TASTATUR */
-	
+
 		/* Spiel beenden (aka Schließen) */
 		if ( event.Type == sf::Event::Closed )
 			GetGameClass()->Stop();
 
 		/* Tastendruck - global */
-		if ( event.Type == sf::Event::KeyPressed )
-		{
+		if ( event.Type == sf::Event::KeyPressed ) {
 			if ( TestPressedKeys ( "quit" ) )
 				GetGameClass()->Stop();
-			else if ( TestPressedKeys ( "fullscreen" ) )
+
+			if ( TestPressedKeys ( "fullscreen" ) )
 				settings::ToggleFullscreen();
-			else if ( TestPressedKeys ( "close" ) )
+
+			if ( TestPressedKeys ( "close" ) )
 				guiManager->CloseWindow ( );
 
-		} 
-		/* TASTATUR ENDE */
-		
-		
-		/* MAUS */
-		if ( event.Type == sf::Event::MouseButtonReleased )
-		{
-				guiManager->MouseClickReleased ( input->GetMouseX(), input->GetMouseY(), event.MouseButton.Button );
 		}
+
+		/* TASTATUR ENDE */
+
+
+		/* MAUS */
+		if ( event.Type == sf::Event::MouseButtonReleased ) {
+			guiManager->MouseClickReleased ( input->GetMouseX(), input->GetMouseY(), event.MouseButton.Button );
+		}
+
+		if ( event.Type == sf::Event::MouseWheelMoved ) {
+			GetGameClass()->GetMapManager()->Zoom ( 0.05, event.MouseWheel.Delta );
+		}
+
 		/* MAUS ENDE */
 	}
 
