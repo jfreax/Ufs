@@ -30,6 +30,7 @@ class CMapManager
 
 		void Update();
 		void Zoom ( float offset, int direction );
+		double GetZoomLevel();
 
 		sprite::CSprite* AddSprite ( sprite::CSprite* sprite );
 

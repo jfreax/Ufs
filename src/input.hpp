@@ -52,7 +52,8 @@ class CInput
 		bool LoadKeys ( std::string file );
 
 		bool TestPressedKeys ( std::string keyName_ );
-		bool Events ( void );
+		bool Events();
+		void MouseWheel ( float delta );
 
 	private:
 		std::map<std::string, sf::Key::Code> availableKeys;

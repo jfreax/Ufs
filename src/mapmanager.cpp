@@ -65,18 +65,29 @@ void CMapManager::Update()
 
 void CMapManager::Zoom ( float offset, int direction )
 {
+	std::cout << this->GetZoomLevel() << std::endl;
 	static const sf::Input* input = &GetGameClass()->GetApp()->GetInput();
 	
 	int deltaX = input->GetMouseX() - (GetGameClass()->GetApp()->GetWidth()  * 0.5f);
 	int deltaY = input->GetMouseY() - (GetGameClass()->GetApp()->GetHeight() * 0.5f);
 	
 	if ( direction == 1 ) {
-		GetGameClass()->GetViewPoint()->Zoom ( 1 + offset );
-		GetGameClass()->GetViewPoint()->Move ( deltaX * 0.05, deltaY * 0.05 );
+		if ( this->GetZoomLevel() < 3 ) {
+			GetGameClass()->GetViewPoint()->Zoom ( 1 + offset );
+			GetGameClass()->GetViewPoint()->Move ( deltaX * 0.05, deltaY * 0.05 );
+		}
 	} else if ( direction == -1 ) {
-		GetGameClass()->GetViewPoint()->Zoom ( 1 - offset );
-		GetGameClass()->GetViewPoint()->Move ( deltaX * 0.03, deltaY * 0.03 );	
+		if ( this->GetZoomLevel() > 0.2 ) {
+			GetGameClass()->GetViewPoint()->Zoom ( 1 - offset );
+			GetGameClass()->GetViewPoint()->Move ( deltaX * 0.03, deltaY * 0.03 );
+		}
 	}
+}
+
+
+double CMapManager::GetZoomLevel()
+{
+	return GetGameClass()->GetApp()->GetWidth() / GetGameClass()->GetViewPoint()->GetRect().GetWidth();
 }
 
 

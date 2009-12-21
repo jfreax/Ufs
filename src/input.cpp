@@ -155,7 +155,7 @@ bool CInput::LoadKeys ( std::string file )
 						keyHolder.key = availableKeys[ keyTmp ];
 		}
 
-		globalKeys[keyfile.GetKey ( "global", i ) ] = keyHolder;
+		globalKeys [ keyfile.GetKey ( "global", i ) ] = keyHolder;
 	}
 
 	return ret;
@@ -192,7 +192,7 @@ bool CInput::TestPressedKeys ( std::string keyName_ )
 }
 
 
-bool CInput::Events ( void )
+bool CInput::Events()
 {
 	// lokale Variablen
 	sf::RenderWindow *app = GetGameClass()->GetApp();
@@ -245,12 +245,20 @@ bool CInput::Events ( void )
 		}
 
 		if ( event.Type == sf::Event::MouseWheelMoved ) {
-			GetGameClass()->GetMapManager()->Zoom ( 0.05, event.MouseWheel.Delta );
+			this->MouseWheel ( event.MouseWheel.Delta );
+			
 		}
 
 		/* MAUS ENDE */
 	}
 
 	return false;
+}
+
+
+void CInput::MouseWheel ( float delta )
+{
+// 	GetGameClass()->GetMapManager()->
+	GetGameClass()->GetMapManager()->Zoom ( 0.05, delta );
 }
 
