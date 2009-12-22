@@ -18,8 +18,6 @@
 #define WINDOW_HPP
 
 #include <SFML/Graphics.hpp>
-// #include "widget.hpp"
-// #include "button.hpp"
 
 
 namespace gui
@@ -36,7 +34,7 @@ class CWindow
 		void Update();
 		bool Render();
 
-		void Close();
+		bool Close();
 		class CWidget* AddWidget ( class CWidget* widget );
 
 		void calcBackground();
@@ -72,6 +70,9 @@ class CWindow
 		
 		void SetMoveAble ( bool ison );
 		bool GetMoveAble ();
+		
+		void SetCloseAble ( bool ison );
+		bool GetCloseAble ();
 
 	protected:
 		unsigned int id_;

@@ -34,17 +34,16 @@ CHeaderWindow::CHeaderWindow ( void )
 	
 	/* Position und Größe */
 	this->SetPosition( sf::Vector2f ( width * 0.2f, 0.f ) );
-	this->SetSize ( sf::Vector2f ( width * 0.15, 25.f ) );
+	this->SetSize ( sf::Vector2f ( width * 0.55, 25.f ) );
 	
 	/* Nicht verschiebbar */
 	this->SetMoveAble ( false );
 	
         /* do not close */
-// 	this->SetCloseAble ( false );
+	this->SetCloseAble ( false );
 
         /* Add buttons */
-	CButton* button = new CButton;
-	this->AddWidget ( button );
+	CButton* button = (CButton*)this->AddWidget ( new CButton );
 	
 	button->SetDrawBackground ( false );
 	button->SetSize ( this->GetSize() );

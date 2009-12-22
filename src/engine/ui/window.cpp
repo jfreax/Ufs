@@ -14,17 +14,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "widget.hpp"
-#include "manager.hpp"
-
 #include "../../game.hpp"
-#include "../../resource.hpp"
-#include "../../settings/settings.hpp"
-#include "../../action.hpp"
-
-#include "button.hpp"
-#include "window.hpp"
-
 #include "../../gui/button/titlebar.hpp"
 
 
@@ -156,9 +146,12 @@ bool CWindow::Render()
 }
 
 
-void CWindow::Close()
+bool CWindow::Close()
 {
-	GetGameClass()->GetGuiManager()->CloseWindow ( this );
+	if ( closeAble_ )
+		return GetGameClass()->GetGuiManager()->CloseWindow ( this );
+	else
+		return false;
 }
 
 
@@ -596,6 +589,18 @@ void CWindow::SetMoveAble ( bool ison )
 bool CWindow::GetMoveAble ()
 {
 	return moveAble_;
+}
+
+
+void CWindow::SetCloseAble ( bool ison )
+{
+	closeAble_ = ison;
+}
+
+
+bool CWindow::GetCloseAble ()
+{
+	return closeAble_;
 }
 
 

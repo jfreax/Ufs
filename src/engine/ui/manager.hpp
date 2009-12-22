@@ -31,9 +31,9 @@ namespace gui
 class CManager
 {
 	public:
-		void Initialize ( void );
+		void Initialize();
 
-		bool Render ( void );
+		bool Render();
 		bool MouseClickReleased ( const int x, const int y, const sf::Mouse::Button button );
 		bool MouseClick ( const int x, const int y, const sf::Mouse::Button button );
 		bool MouseHover ( const int x, const int y );
@@ -46,8 +46,10 @@ class CManager
 		
 		bool BringToFront ( std::vector< CWindow* >::iterator iter );
 
-		CTheme* GetTheme ( void );
-		CWindow* GetActiveWindow ( void );
+		CTheme* GetTheme();
+		
+		CWindow* GetActiveWindow();
+		CWindow* GetPreviousWindow ( CWindow* window );
 
 	private:
 		CTheme theme_;

@@ -26,6 +26,8 @@ namespace gui
 
 CStartWindow::CStartWindow ( void )
 {
+	CWindow();
+	
 	/* Keine Titelbar! */
 	this->SetTitlebar ( 0 );
 	

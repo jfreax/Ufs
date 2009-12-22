@@ -23,7 +23,7 @@ namespace gui
 {
 
 
-CSingleplayerButton::CSingleplayerButton ( void )
+CSingleplayerButton::CSingleplayerButton()
 {
 	/* Neuen Hintergrundsprite anlegen */
 	sf::Image* buttonImg = GetGameClass()->GetImgResource()->Get( "themes/default/buttons/main_button1.png" );
@@ -66,7 +66,7 @@ CSingleplayerButton::CSingleplayerButton ( void )
 }
 
 
-bool CSingleplayerButton::Call ( void )
+bool CSingleplayerButton::Call()
 {
 // GetGameClass()->GetApp()->Draw( testShape );
 
@@ -123,7 +123,7 @@ glEnd();
 }
 
 
-bool CSingleplayerButton::onHoverMouse ( void )
+bool CSingleplayerButton::onHoverMouse()
 {
 	isMouseHere_ = wasMouseHere_ = true;
 	background_.SetColor( sf::Color ( 255, 255, 255, 230 ) );
@@ -136,7 +136,7 @@ bool CSingleplayerButton::onHoverMouse ( void )
 	diff_ = 20.f * GetGameClass()->GetApp()->GetFrameTime();
 }
 
-bool CSingleplayerButton::onUnHoverMouse ( void )
+bool CSingleplayerButton::onUnHoverMouse()
 {
 	background_.SetColor( sf::Color ( 255, 255, 255, 255 ) );
 	

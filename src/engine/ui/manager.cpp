@@ -26,7 +26,7 @@
 namespace gui
 {
 
-void CManager::Initialize ( void )
+void CManager::Initialize()
 {
 	theme_.Open ( settings::GetThemePath() + settings::GetTheme() + ".ini" );
 
@@ -35,7 +35,7 @@ void CManager::Initialize ( void )
 }
 
 
-bool CManager::Render ( void )
+bool CManager::Render()
 {
 	std::vector<gui::CWindow*>::iterator iter = windowList_.begin();
 	std::vector<gui::CWindow*>::iterator iterEnd = windowList_.end();
@@ -229,22 +229,32 @@ CWindow* CManager::AddWindow ( CWindow* win )
 bool CManager::CloseWindow ( gui::CWindow* window )
 {
 	if ( !window && windowList_.size() ) {
-		delete this->GetActiveWindow();
-
-		windowList_.pop_back();
+		if ( this->GetActiveWindow()->GetCloseAble() ) {
+			windowList_.pop_back();
+			delete this->GetActiveWindow();
+			return true;
+		} else {
+			this->CloseWindow ( this->GetPreviousWindow ( this->GetActiveWindow() ) );
+		}
 	} else {
 		std::vector<gui::CWindow*>::iterator iter = windowList_.begin();
 
 		for ( ; iter != windowList_.end(); ) {
 			if ( ( *iter )->GetId() == window->GetId() ) {
-				gui::CWindow* winDelete = *iter;
-				windowList_.erase ( iter );
-				delete winDelete;
+				if ( window->GetCloseAble() ) {
+					windowList_.erase ( iter );
+					delete window;
+					return true;
+				} else {
+					return this->CloseWindow ( this->GetPreviousWindow ( window ) );
+				}
 			} else {
 				++iter;
 			}
 		}
 	}
+	
+	return false;
 }
 
 
@@ -264,7 +274,6 @@ sf::Vector2f CManager::AddWindowToDock ( CWindow* win )
 	int x = ( dockList_.size() / max ) * height;
 
 	/* Fenster ggf. ohne Rundung zeichnen */
-
 	if ( x ) {
 		std::list < CWindow* >::iterator endIter = dockList_.end();
 
@@ -277,7 +286,7 @@ sf::Vector2f CManager::AddWindowToDock ( CWindow* win )
 	}
 
 	/* Fenster ist nicht mehr verschiebbar! */
-// 	win->SetMoveAble( false );/**/
+	win->SetMoveAble( false );
 
 	/* Fenster der Docklist hinzufügen */
 	dockList_.push_back ( win );
@@ -332,17 +341,29 @@ bool CManager::BringToFront ( std::vector< CWindow* >::iterator iter )
 }
 
 
-CTheme* CManager::GetTheme ( void )
+CTheme* CManager::GetTheme()
 {
 	return &theme_;
 }
 
 
-gui::CWindow* CManager::GetActiveWindow ( void )
+CWindow* CManager::GetActiveWindow()
 {
 	return windowList_[windowList_.size()-1];
 }
 
+
+CWindow* CManager::GetPreviousWindow ( CWindow* window )
+{
+	std::vector<gui::CWindow*>::iterator iter = ++windowList_.begin();
+	for ( ; iter != windowList_.end(); ) {
+		if ( ( *iter )->GetId() == window->GetId() ) {
+			return *(--iter);
+		} else {
+			++iter;
+		}
+	}
+}
 
 
 } // namespace gui

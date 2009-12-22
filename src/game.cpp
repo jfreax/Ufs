@@ -181,8 +181,7 @@ bool CGame::Start()
 //  newWin->SetSizeInPercent ( sf::Vector2f ( 90, 90 ) );
 //  newWin->SetPosition ( sf::Vector2f ( 20, 130 ) );
 
-//  gui::CWindow* win = guiManager_.AddWindow ( new gui::CHeaderWindow );
-//  gui::CWindow* win = guiManager_.AddWindow ( new gui::CStartWindow );
+
 //
 // //  win->SetPosition( sf::Vector2f ( 0, 0 ));
 // //  win->SetSize ( sf::Vector2f ( 200, 200 ));
@@ -247,6 +246,8 @@ bool CGame::Start()
 	
 	
 	 gui::CWindow* win2 = guiManager_.AddWindow ( new gui::CWindow );
+	 gui::CWindow* win = guiManager_.AddWindow ( new gui::CHeaderWindow );
+// 	 gui::CWindow* win = guiManager_.AddWindow ( new gui::CStartWindow );
 //
  win2->SetPosition( sf::Vector2f ( 100, 100 ));
  win2->SetSize ( sf::Vector2f ( 200, 200 ));
