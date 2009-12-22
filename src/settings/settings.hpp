@@ -19,7 +19,7 @@
 
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
-#include "util.hpp"
+#include "../util/util.hpp"
 
 namespace settings
 {

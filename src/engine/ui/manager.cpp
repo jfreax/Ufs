@@ -19,7 +19,7 @@
 
 #include "../../collision.hpp"
 #include "../../game.hpp"
-#include "../../settings.hpp"
+#include "../../settings/settings.hpp"
 
 #include "manager.hpp"
 

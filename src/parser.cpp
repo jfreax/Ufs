@@ -16,8 +16,8 @@
 
 #include <iostream>
 
-#include "settings.hpp"
-#include "util.hpp"
+#include "settings/settings.hpp"
+#include "util/util.hpp"
 #include "parser.hpp"
 
 /* TODO Logger */

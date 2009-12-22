@@ -17,7 +17,7 @@
 #include <typeinfo>
 
 #include "theme.hpp"
-#include "../../settings.hpp"
+#include "../../settings/settings.hpp"
 
 namespace gui
 {

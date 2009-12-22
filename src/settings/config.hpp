@@ -18,7 +18,7 @@
 #define CONFIG_HPP
 
 #include <SFML/Graphics.hpp>
-#include "util.hpp"
+#include "../util/util.hpp"
 
 class Config
 {

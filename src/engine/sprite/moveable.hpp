@@ -17,27 +17,14 @@
 
 */
 
-#ifndef SHIP_HPP
-#define SHIP_HPP
+#ifndef MOVEABLE_HPP
+#define MOVEABLE_HPP
 
-#include "../engine/sprite/sprite.hpp"
-#include "../engine/sprite/moveable.hpp"
-
-namespace sprite
-{
-
-
-class CShip : public CSprite, public CMoveAble
+class CMoveAble
 {
 	public:
-		CShip();
 		
-		void Render ( sf::RenderTarget& Target ) const;
-		
-		void Update();
 	private:
 };
 
-}
-
-#endif // SHIP_H
+#endif // MOVEABLE_HPP

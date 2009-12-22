@@ -22,7 +22,7 @@
 #include <sstream>
 
 #include <SFML/Graphics.hpp>
-#include "input.hpp"
+#include "../input.hpp"
 
 
 enum TYPE

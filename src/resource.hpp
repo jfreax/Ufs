@@ -32,7 +32,7 @@ OTHER DEALINGS IN THE SOFTWARE. */
 #include <string>
 #include <map>
 
-#include "settings.hpp"
+#include "settings/settings.hpp"
 
 template< class T >
 class CResource

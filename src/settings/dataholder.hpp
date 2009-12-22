@@ -17,6 +17,8 @@
 #ifndef DATAHOLDER_HPP
 #define DATAHOLDER_HPP
 
+#include <SFML/Graphics.hpp>
+
 class CDataHolder
 {
 	public:

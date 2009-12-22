@@ -19,7 +19,7 @@
 
 #include "../../game.hpp"
 #include "../../resource.hpp"
-#include "../../settings.hpp"
+#include "../../settings/settings.hpp"
 #include "../../action.hpp"
 
 #include "button.hpp"

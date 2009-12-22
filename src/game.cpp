@@ -16,8 +16,8 @@
 #include <SFML/Graphics.hpp>
 
 #include "action.hpp"
-#include "util.hpp"
-#include "settings.hpp"
+#include "util/util.hpp"
+#include "settings/settings.hpp"
 #include "resource.hpp"
 #include "animation.hpp"
 #include "game.hpp"

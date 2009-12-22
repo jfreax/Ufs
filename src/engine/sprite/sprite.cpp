@@ -15,7 +15,7 @@
 */
 
 #include "sprite.hpp"
-#include "../../settings.hpp"
+#include "../../settings/settings.hpp"
 
 
 namespace sprite

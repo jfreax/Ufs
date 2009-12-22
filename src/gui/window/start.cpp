@@ -15,7 +15,7 @@
 */
 
 #include "start.hpp"
-#include "../../settings.hpp"
+#include "../../settings/settings.hpp"
 #include "../../game.hpp"
 #include "../../gui/button/main_menu.hpp"
 #include "../../gui/button/titlebar.hpp"

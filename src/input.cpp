@@ -14,11 +14,11 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "settings.hpp"
+#include "settings/settings.hpp"
 #include "parser.hpp"
 #include "game.hpp"
 #include "input.hpp"
-#include "util.hpp"
+#include "util/util.hpp"
 
 
 CInput::CInput ( )

@@ -18,8 +18,8 @@
 
 #include "config.hpp"
 
-#include "game.hpp"
-#include "util.hpp"
+#include "../game.hpp"
+#include "../util/util.hpp"
 #include "settings.hpp"
 
 namespace

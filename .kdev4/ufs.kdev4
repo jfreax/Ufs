@@ -1,4 +1,5 @@
 [Buildset]
+BuildItems=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x01\x00\x00\x00\x0b\x00\x00\x00\x00\x01\x00\x00\x00\x06\x00U\x00f\x00S)
 Number of Builditems=0
 
 [CMake]
@@ -9,6 +10,24 @@ CurrentBuildDir=file:///home/jens/C++/UfS//build
 CurrentBuildType=
 CurrentInstallDir=
 ProjectRootRelative=./
+
+[Launch]
+Launch Configurations=Launch Configuration 0
+
+[Launch][Launch Configuration 0]
+Configured Launch Modes=execute
+Configured Launchers=nativeAppLauncher
+Name=Ufs
+Type=Native Application
+
+[Launch][Launch Configuration 0][Data]
+Arguments=-h 600 -w 800 -fps
+Dependencies=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x00)
+Dependency Action=Build
+EnvironmentGroup=default
+Executable=file:///home/jens/C++/ufs/build/src/ufs
+Working Directory=file:///home/jens/C++/ufs
+isExecutable=true
 
 [Project]
 VersionControlSupport=kdevgit

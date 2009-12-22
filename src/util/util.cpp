@@ -20,7 +20,7 @@
 
 
 #include "util.hpp"
-#include "settings.hpp"
+#include "../settings/settings.hpp"
 
 namespace util
 {

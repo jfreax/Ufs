@@ -20,7 +20,7 @@
 #include <list>
 #include <SFML/Graphics.hpp>
 
-#include "../../util.hpp"
+#include "../../util/util.hpp"
 
 
 namespace gui

@@ -1,0 +1,3 @@
+ADD_LIBRARY ( ufs_util STATIC
+  util.cpp
+)

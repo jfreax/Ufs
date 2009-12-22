@@ -1,3 +1,5 @@
-PROJECT(ufs)
+#cmake_minimum_required(VERSION 2.8)
 
-ADD_SUBDIRECTORY(src)
+PROJECT ( ufs )
+
+ADD_SUBDIRECTORY ( src )
