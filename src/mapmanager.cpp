@@ -16,6 +16,7 @@
 
 
 #include "sprite/sun.hpp"
+#include "sprite/ship.hpp"
 #include "mapmanager.hpp"
 #include "game.hpp"
 
@@ -23,12 +24,16 @@
 
 void CMapManager::Initialize()
 {
+	/* Only test data */
 	sprite::CSprite* newSprite = AddSprite ( new sprite::CSun );
 	newSprite->Scale ( .25f );
 	newSprite->SetPosition ( 100, 100 );
 	
+	sprite::CSprite* newShip = AddSprite ( new sprite::CShip );
+	newShip->Scale ( .25f );
+	newShip->SetPosition ( 200, 200 );
 
-	if ( !newSprite )
+	if ( !newSprite || !newShip )
 	{
 		std::cout << "FAILED" << std::endl;	
 	}
@@ -65,19 +70,18 @@ void CMapManager::Update()
 
 void CMapManager::Zoom ( float offset, int direction )
 {
-	std::cout << this->GetZoomLevel() << std::endl;
 	static const sf::Input* input = &GetGameClass()->GetApp()->GetInput();
 	
 	int deltaX = input->GetMouseX() - (GetGameClass()->GetApp()->GetWidth()  * 0.5f);
 	int deltaY = input->GetMouseY() - (GetGameClass()->GetApp()->GetHeight() * 0.5f);
 	
 	if ( direction == 1 ) {
-		if ( this->GetZoomLevel() < 3 ) {
+		if ( this->GetZoomLevel() < 3 ) { /* maximum zoom level */
 			GetGameClass()->GetViewPoint()->Zoom ( 1 + offset );
 			GetGameClass()->GetViewPoint()->Move ( deltaX * 0.05, deltaY * 0.05 );
 		}
 	} else if ( direction == -1 ) {
-		if ( this->GetZoomLevel() > 0.2 ) {
+		if ( this->GetZoomLevel() > 0.2 ) { /* minimum zoom level */
 			GetGameClass()->GetViewPoint()->Zoom ( 1 - offset );
 			GetGameClass()->GetViewPoint()->Move ( deltaX * 0.03, deltaY * 0.03 );
 		}

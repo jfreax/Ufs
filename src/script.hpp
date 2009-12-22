@@ -28,7 +28,7 @@ extern "C"
 #include <iostream>
 #include <SFML/System.hpp>
 
-#include "ui/window.hpp"
+#include "engine/ui/window.hpp"
 
 
 namespace script

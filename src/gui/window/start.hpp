@@ -17,8 +17,8 @@
 #ifndef STARTWINDOW_HPP
 #define STARTWINDOW_HPP
 
-#include "../../ui/button.hpp"
-#include "../../ui/window.hpp"
+#include "../../engine/ui/button.hpp"
+#include "../../engine/ui/window.hpp"
 
 namespace gui
 {

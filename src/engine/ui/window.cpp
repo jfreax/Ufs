@@ -17,15 +17,15 @@
 #include "widget.hpp"
 #include "manager.hpp"
 
-#include "../game.hpp"
-#include "../resource.hpp"
-#include "../settings.hpp"
-#include "../action.hpp"
+#include "../../game.hpp"
+#include "../../resource.hpp"
+#include "../../settings.hpp"
+#include "../../action.hpp"
 
 #include "button.hpp"
 #include "window.hpp"
 
-#include "../gui/button/titlebar.hpp"
+#include "../../gui/button/titlebar.hpp"
 
 
 namespace gui

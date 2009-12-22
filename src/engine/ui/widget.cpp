@@ -16,8 +16,8 @@
 
 #include <list>
 
-#include "../game.hpp"
-#include "../action.hpp"
+#include "../../game.hpp"
+#include "../../action.hpp"
 
 #include "window.hpp"
 #include "widget.hpp"

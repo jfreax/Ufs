@@ -14,8 +14,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "../game.hpp"
-// #include "../action.hpp"
+#include "../../game.hpp"
 
 #include "button.hpp"
 

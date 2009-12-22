@@ -17,9 +17,9 @@
 #include "theme.hpp"
 #include "widget.hpp"
 
-#include "../collision.hpp"
-#include "../game.hpp"
-#include "../settings.hpp"
+#include "../../collision.hpp"
+#include "../../game.hpp"
+#include "../../settings.hpp"
 
 #include "manager.hpp"
 

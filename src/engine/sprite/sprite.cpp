@@ -15,20 +15,20 @@
 */
 
 #include "sprite.hpp"
-#include "../settings.hpp"
+#include "../../settings.hpp"
 
 
 namespace sprite
 {
 
 
-CSprite::CSprite ( void )
+CSprite::CSprite()
 {
 	background_ = NULL;
 }
 
 
-CSprite::~CSprite(void )
+CSprite::~CSprite()
 {
 	delete background_;
 }
@@ -37,20 +37,18 @@ CSprite::~CSprite(void )
 
 void CSprite::Render ( sf::RenderTarget& Target ) const
 {
+	if ( !background_ )
+		return;
+	
 	Target.Draw ( mask_ );
 	Target.Draw ( *background_ );
-	
-
 }
 
 
-void CSprite::Update ( void )
+void CSprite::Update()
 {
-	/* Prüfen ob dieses Sprite überhaupt richtig initialisiert wurde */
 	if ( !background_ )
-	{
 		return;
-	}
 	
 	/* Animation berechnen */
 	background_->Update();

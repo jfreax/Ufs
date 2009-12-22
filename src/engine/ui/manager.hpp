@@ -21,7 +21,7 @@
 
 #include "theme.hpp"
 #include "window.hpp"
-#include "../parser.hpp"
+#include "../../parser.hpp"
 
 
 namespace gui

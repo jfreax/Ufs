@@ -22,9 +22,9 @@
 #include "animation.hpp"
 #include "game.hpp"
 
-#include "ui/window.hpp"
-#include "ui/manager.hpp"
-#include "ui/button.hpp"
+#include "engine/ui/window.hpp"
+#include "engine/ui/manager.hpp"
+#include "engine/ui/button.hpp"
 
 #include "gui/button/titlebar.hpp"
 #include "gui/window/start.hpp"

@@ -19,7 +19,7 @@
 
 #include <sstream>
 
-#include "ui/widget.hpp"
+#include "engine/ui/widget.hpp"
 
 
 class CWidget;

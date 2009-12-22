@@ -17,7 +17,7 @@
 #ifndef SUN_HPP
 #define SUN_HPP
 
-#include "sprite.hpp"
+#include "../engine/sprite/sprite.hpp"
 #include "../particle.hpp"
 
 namespace sprite
@@ -27,11 +27,11 @@ namespace sprite
 class CSun : public CSprite
 {
 	public:
-		CSun ( void );
+		CSun();
 
 		void Render ( sf::RenderTarget& Target ) const;
 
-		void Update ( void );
+		void Update();
 
 	private:
 		sf::Sprite glow_;

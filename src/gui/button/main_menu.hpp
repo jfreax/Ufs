@@ -14,7 +14,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "../../ui/button.hpp"
+#include "../../engine/ui/button.hpp"
 
 #ifndef MAIN_MENU_H
 #define MAIN_MENU_H

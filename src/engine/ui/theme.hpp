@@ -21,8 +21,8 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
-#include "../util.hpp"
-#include "../parser.hpp"
+#include "../../util.hpp"
+#include "../../parser.hpp"
 
 namespace gui
 {

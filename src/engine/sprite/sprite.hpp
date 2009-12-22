@@ -20,7 +20,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
-#include "../animation.hpp"
+#include "../../animation.hpp"
 
 
 namespace sprite
@@ -30,11 +30,11 @@ namespace sprite
 class CSprite : public sf::Drawable
 {
 	public:
-		CSprite ( void );
-		~CSprite ( void );
+		CSprite();
+		~CSprite();
 		virtual void Render ( sf::RenderTarget& Target ) const;
 		
-		virtual void Update ( void );
+		virtual void Update();
 		
 		void Scale ( double scale );
 

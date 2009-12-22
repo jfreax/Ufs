@@ -23,32 +23,32 @@ namespace sprite
 {
 
 
-CSun::CSun ( void )
+CSun::CSun ()
 {
-	/* Imageresourcen Manager */
+	/* Imageresourcen manager */
 	CImageResource* imageResource = GetGameClass()->GetImgResource();
 
-	/* Sonnenhintergrundbild laden */
+	/* load picture of a sun */
 	background_ = new CAnimation ( imageResource->Get( "images/sun/sun.png" ), 0, 0.05f );
 	
-	/* Blendmode setzen */
+	/* Set blendmode */
 	background_->SetBlendMode ( sf::Blend::Multiply );
 
 	/* Bild wird nur auf diesem Bereich gezeichnet */
 	mask_ = sf::Shape::Circle ( 250, 250, 250, sf::Color ( 255, 255, 255 ) );
 	
-	/* Bild fürs Sonnenglühen */
+	/* picture of sun glow */
 	glow_.SetImage( *imageResource->Get ( "images/sun/sun_glow.png" ) );
 	glow_.SetPosition( -83, -83 );
 	
-	/* Stormbild */
+	/* storm picture */
 	brightness_.SetImage( *imageResource->Get ( "images/sun/sun_storm.png" ) );
 	brightness_.SetPosition( 10, 10 );	
 
 	brightness_.SetColor( sf::Color ( 255, 255, 255, 100 ) );
 	brightness_.SetBlendMode( sf::Blend::Alpha );
 	
-	/* Partikelsystem */
+	/* Particlesystem */
 // 	particle.set_Material ( imageResource->Get ( "images/sun/fire.png"  ) );
 // 	particle.set_Dimension ( sf::Vector2i ( 8, 8 ) );
 // 	
@@ -84,23 +84,23 @@ CSun::CSun ( void )
 
 void CSun::Render ( sf::RenderTarget& Target ) const
 {
-	/* Spriterenderer ausführen */
+	/* run sprite renderer */
 	CSprite::Render( Target );
 	
-	/* Sonnenglühen zeichnen */
+	/* draw sun glow */
 	Target.Draw ( glow_ );
 	
-	/* Partikelsystem zeichnen */
-// 	particle.Draw ( Target );
+	/* render particlesystem */
+// 	particle.Draw();
 // 
 // 	Target.Draw ( brightness_ );
-// 	particle.Draw ( );
+// 	particle.Draw();
 }
 
 
 void CSun::Update ( void )
 {
-	/* Spriteupdate ausführen */
+	/* run updater from sprite-class */
 	CSprite::Update();
 	
 	/* Helligkeitsflimmern reinbringen */

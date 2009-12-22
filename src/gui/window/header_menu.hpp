@@ -17,7 +17,7 @@
 #ifndef HEADER_MENU_H
 #define HEADER_MENU_H
 
-#include "../../ui/window.hpp"
+#include "../../engine/ui/window.hpp"
 
 namespace gui
 {

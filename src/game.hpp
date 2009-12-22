@@ -19,7 +19,7 @@
 
 
 #include <SFML/Graphics.hpp>
-#include "ui/manager.hpp"
+#include "engine/ui/manager.hpp"
 
 #include "script.hpp"
 #include "input.hpp"

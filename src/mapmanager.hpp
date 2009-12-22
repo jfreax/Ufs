@@ -18,7 +18,7 @@
 #define MAPMANAGER_HPP
 
 #include <vector>
-#include "sprite/sprite.hpp"
+#include "engine/sprite/sprite.hpp"
 
 
 class CMapManager

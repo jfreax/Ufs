@@ -15,8 +15,8 @@
 */
 
 #include "titlebar.hpp"
-#include "../../ui/window.hpp"
-#include "../../ui/theme.hpp"
+#include "../../engine/ui/window.hpp"
+#include "../../engine/ui/theme.hpp"
 #include "../../game.hpp"
 
 namespace gui
