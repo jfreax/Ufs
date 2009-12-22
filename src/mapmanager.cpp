@@ -37,7 +37,8 @@ void CMapManager::Initialize()
 	{
 		std::cout << "FAILED" << std::endl;	
 	}
-
+	
+	this->UnSetPos();
 }
 
 
@@ -95,6 +96,15 @@ double CMapManager::GetZoomLevel()
 }
 
 
+void CMapManager::Move ( sf::Vector2f newPos )
+{
+	if ( lastPos.x != 0 )
+		GetGameClass()->GetViewPoint()->Move ( (lastPos.x - newPos.x) / GetZoomLevel(), (lastPos.y - newPos.y) / GetZoomLevel() );
+
+	lastPos = newPos;
+}
+
+
 sprite::CSprite* CMapManager::AddSprite ( sprite::CSprite* sprite )
 {
 	if ( !sprite )
@@ -107,4 +117,10 @@ sprite::CSprite* CMapManager::AddSprite ( sprite::CSprite* sprite )
 	}
 	
 	return sprite;
+}
+
+
+void CMapManager::UnSetPos()
+{
+	lastPos.x = lastPos.y = 0;
 }

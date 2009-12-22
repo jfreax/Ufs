@@ -27,15 +27,21 @@ class CMapManager
 	public:
 		void Initialize(); /* TODO */
 		void Render();
-
 		void Update();
+		
 		void Zoom ( float offset, int direction );
 		double GetZoomLevel();
+		
+		void Move ( sf::Vector2f newPos );
 
 		sprite::CSprite* AddSprite ( sprite::CSprite* sprite );
+		
+		void UnSetPos();
 
 	private:
 		std::vector < sprite::CSprite* > spriteList;
+		
+		sf::Vector2f lastPos;
 };
 
 #endif // MAPMANAGER_HPP

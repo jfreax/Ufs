@@ -53,6 +53,8 @@ class CInput
 
 		bool TestPressedKeys ( std::string keyName_ );
 		bool Events();
+		
+		void MouseClickMiddle ( int x, int y );
 		void MouseWheel ( float delta );
 
 	private:

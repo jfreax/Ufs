@@ -14,11 +14,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "settings/settings.hpp"
-#include "parser.hpp"
 #include "game.hpp"
 #include "input.hpp"
-#include "util/util.hpp"
 
 
 CInput::CInput ( )
@@ -194,36 +191,32 @@ bool CInput::TestPressedKeys ( std::string keyName_ )
 
 bool CInput::Events()
 {
-	// lokale Variablen
 	sf::RenderWindow *app = GetGameClass()->GetApp();
 	gui::CManager* guiManager = GetGameClass()->GetGuiManager();
 	const sf::Input* input = &app->GetInput();
 
 
-	// Mouse
-
+	/* Live mouse-Events */
 	if ( input->IsMouseButtonDown ( sf::Mouse::Left ) ) {
 		guiManager->MouseClick ( input->GetMouseX(), input->GetMouseY(), sf::Mouse::Left );
-	} else
-		if ( input->IsMouseButtonDown ( sf::Mouse::Right ) ) {
-			guiManager->MouseClick ( input->GetMouseX(), input->GetMouseY(), sf::Mouse::Right );
-		} else
-			if ( input->IsMouseButtonDown ( sf::Mouse::Middle ) ) {
-				guiManager->MouseClick ( input->GetMouseX(), input->GetMouseY(), sf::Mouse::Middle );
-			} else {
-				guiManager->MouseHover ( input->GetMouseX(), input->GetMouseY() );
-			}
+	} else if ( input->IsMouseButtonDown ( sf::Mouse::Right ) ) {
+		guiManager->MouseClick ( input->GetMouseX(), input->GetMouseY(), sf::Mouse::Right );
+	} else if ( input->IsMouseButtonDown ( sf::Mouse::Middle ) ) {
+		guiManager->MouseClick ( input->GetMouseX(), input->GetMouseY(), sf::Mouse::Middle );
+	} else {
+		guiManager->MouseHover ( input->GetMouseX(), input->GetMouseY() );
+	}
 
 
-	/* Alle Events */
+	/* All events */
 	while ( app->GetEvent ( event ) ) {
-		/* TASTATUR */
+		/* KEYBOARD */
 
-		/* Spiel beenden (aka Schließen) */
+		/* Quit Game */
 		if ( event.Type == sf::Event::Closed )
 			GetGameClass()->Stop();
 
-		/* Tastendruck - global */
+		/* Press keys - global */
 		if ( event.Type == sf::Event::KeyPressed ) {
 			if ( TestPressedKeys ( "quit" ) )
 				GetGameClass()->Stop();
@@ -236,29 +229,23 @@ bool CInput::Events()
 
 		}
 
-		/* TASTATUR ENDE */
+		/* MOUSE */
+		switch ( event.Type ) {
+			case sf::Event::MouseButtonReleased:
+				guiManager->MouseClickReleased ( input->GetMouseX(), input->GetMouseY(), event.MouseButton.Button );
+				break;
 
-
-		/* MAUS */
-		if ( event.Type == sf::Event::MouseButtonReleased ) {
-			guiManager->MouseClickReleased ( input->GetMouseX(), input->GetMouseY(), event.MouseButton.Button );
+			case sf::Event::MouseWheelMoved:
+				this->MouseWheel ( event.MouseWheel.Delta );
+				break;
 		}
-
-		if ( event.Type == sf::Event::MouseWheelMoved ) {
-			this->MouseWheel ( event.MouseWheel.Delta );
-			
-		}
-
-		/* MAUS ENDE */
 	}
 
 	return false;
 }
 
-
 void CInput::MouseWheel ( float delta )
 {
-// 	GetGameClass()->GetMapManager()->
 	GetGameClass()->GetMapManager()->Zoom ( 0.05, delta );
 }
 

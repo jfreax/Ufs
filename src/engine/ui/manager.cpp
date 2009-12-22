@@ -40,8 +40,7 @@ bool CManager::Render ( void )
 	std::vector<gui::CWindow*>::iterator iter = windowList_.begin();
 	std::vector<gui::CWindow*>::iterator iterEnd = windowList_.end();
 
-	for ( int i = 0; iter != iterEnd; ++iter )
-	{
+	for ( int i = 0; iter != iterEnd; ++iter ) {
 		( *iter )->Render();
 	}
 
@@ -58,65 +57,68 @@ bool CManager::MouseClick ( const int x, const int y, const sf::Mouse::Button bu
 	std::vector< CWindow* >::iterator lastWindow = windowList_.end() - 1;
 	std::vector< CWindow* >::iterator currentWindow = windowList_.end() - 1;
 	std::vector< CWindow* >::iterator iterBegin = windowList_.begin();
-	
-	for ( ;currentWindow + 1 != iterBegin; --currentWindow )
-	{
-		/* Titelbar */
-		if ( ( ( *currentWindow )->GetTitlebarDimension().Contains ( x, y ) &&
-			( *currentWindow )->GetMoveAble() &&
-			previousMouseScope_ == NONE ) || previousMouseScope_ == TITLE )
-		{
-			if ( currentWindow == lastWindow )
-			{
-				previousMouseScope_ = TITLE;
-				sf::Vector2f winPos = ( *currentWindow )->GetPosition();
 
-				if ( !previousMousePos_.x && !previousMousePos_.y )
-				{ // Maus wurde zuvor hier nicht geklickt
-					previousMousePos_.x = x - winPos.x;
-					previousMousePos_.y = y - winPos.y;
+
+	if ( button == sf::Mouse::Left ) {
+		for ( ; currentWindow + 1 != iterBegin; --currentWindow ) {
+			/* Titlebar */
+			if ( ( ( *currentWindow )->GetTitlebarDimension().Contains ( x, y ) &&
+			                ( *currentWindow )->GetMoveAble() &&
+			                previousMouseScope_ == NONE ) || previousMouseScope_ == TITLE ) {
+				if ( currentWindow == lastWindow ) {
+					previousMouseScope_ = TITLE;
+					sf::Vector2f winPos = ( *currentWindow )->GetPosition();
+
+					if ( !previousMousePos_.x && !previousMousePos_.y ) { // Maus wurde zuvor hier nicht geklickt
+						previousMousePos_.x = x - winPos.x;
+						previousMousePos_.y = y - winPos.y;
+					}
+
+					/* Move window */
+					( *currentWindow )->SetPosition ( sf::Vector2f ( x - ( previousMousePos_.x ), y - ( previousMousePos_.y ) ) );
 				}
-
-				/* Verschieben */
-				( *currentWindow )->SetPosition ( sf::Vector2f ( x - ( previousMousePos_.x ), y - ( previousMousePos_.y ) ) );
 			}
-		}
-		/* Fenster vergrößern bzw verkleinern */
-		else if ( ( *currentWindow )->GetResizeArea().Contains ( x, y ) && previousMouseScope_ == NONE || previousMouseScope_ == RESIZE )
-		{
-			/* Nur letztes (im Vordergrundstehendes) Fenster */
-			if ( currentWindow == lastWindow )
-			{
-				previousMouseScope_ = RESIZE;
-				sf::Vector2f winPos = ( *currentWindow )->GetPosition();
 
-				if ( !previousMousePos_.x && !previousMousePos_.y )
-				{
-					previousMousePos_.x = x - winPos.x;
-					previousMousePos_.y = y - winPos.y;
+			/* Fenster vergrößern bzw verkleinern */
+			else if ( ( *currentWindow )->GetResizeArea().Contains ( x, y ) && previousMouseScope_ == NONE || previousMouseScope_ == RESIZE ) {
+				/* Nur letztes (im Vordergrundstehendes) Fenster */
+				if ( currentWindow == lastWindow ) {
+					previousMouseScope_ = RESIZE;
+					sf::Vector2f winPos = ( *currentWindow )->GetPosition();
+
+					if ( !previousMousePos_.x && !previousMousePos_.y ) {
+						previousMousePos_.x = x - winPos.x;
+						previousMousePos_.y = y - winPos.y;
+					}
+
+					( *currentWindow )->SetSize ( sf::Vector2f ( x - ( *currentWindow )->GetPosition().x, y - ( *currentWindow )->GetPosition().y ) );
 				}
+			}
 
-				( *currentWindow )->SetSize ( sf::Vector2f ( x - ( *currentWindow )->GetPosition().x, y - ( *currentWindow )->GetPosition().y ) );
+			if ( ( *currentWindow )->GetWindowDimension().Contains ( x, y ) ||
+			                ( *currentWindow )->GetTitlebarDimension().Contains ( x, y ) ) { // ## Fenster ##
+				clickedWindow = currentWindow;
+
+				if ( previousMouseScope_ == NONE ) {
+					previousMouseScope_ = WINDOW;
+				}
 			}
 		}
-		if ( ( *currentWindow )->GetWindowDimension().Contains ( x, y ) || 
-			( *currentWindow )->GetTitlebarDimension().Contains ( x, y ) )
-		{ // ## Fenster ##
-			clickedWindow = currentWindow;
-			if ( previousMouseScope_ == NONE )
-			{
-				previousMouseScope_ = WINDOW;
-			}
-		}
+
+	} else if ( button == sf::Mouse::Middle ) {
+		GetGameClass()->GetMapManager()->Move ( sf::Vector2f ( x, y ) );
+	} else if ( button == sf::Mouse::Right ) {
+
 	}
 
-	if ( clickedWindow != lastWindow && ( previousMouseScope_ == NONE || previousMouseScope_ == WINDOW ) )
-	{
+	/* Change window render order */
+	if ( clickedWindow != lastWindow && ( previousMouseScope_ == NONE || previousMouseScope_ == WINDOW ) ) {
 		this->BringToFront ( clickedWindow );
 		previousMouseScope_ = NONE;
 	}
 
 	settings::SetMouseScope ( highestMouseScope );
+
 
 	return false;
 }
@@ -131,45 +133,47 @@ bool CManager::MouseClickReleased ( const int x, const int y, const sf::Mouse::B
 	std::vector< CWindow* >::iterator lastWindow = windowList_.end() - 1;
 	std::vector< CWindow* >::iterator currentWindow = windowList_.end() - 1;
 	std::vector< CWindow* >::iterator iterBegin = windowList_.begin();
-	
-	for ( ;currentWindow + 1 != iterBegin; --currentWindow )
-	{
-		if ( ( *currentWindow )->GetWindowDimension().Contains ( x, y ) || 
-			( *currentWindow )->GetTitlebarDimension().Contains ( x, y ) )
-		{ // ## Fenster ##
-			clickedWindow = currentWindow;
-			if ( previousMouseScope_ == NONE )
-			{
-				previousMouseScope_ = WINDOW;
-			}
 
-			if ( currentWindow == lastWindow )
-			{
-				/* Widgets prüfen */
-				std::vector< gui::CWidget* >* widgetList = ( *currentWindow )->GetWidgetList();
-				gui::CWidget* currentWidget = NULL;
-				for ( std::vector< gui::CWidget* >::size_type i = widgetList->size(); i; --i )
-				{
-					currentWidget = widgetList->at ( i - 1 );
-					
-					/* Wenn Widget angezeigt werden soll, minimale Klickzeitabstand vorbei ist
-					   und die Maus an der richtigen Position ist, dann Aktion ausführen */
-					if ( currentWidget->GetShow() && 
+	if ( button == sf::Mouse::Left ) {
+		for ( ;currentWindow + 1 != iterBegin; --currentWindow ) {
+			if ( ( *currentWindow )->GetWindowDimension().Contains ( x, y ) ||
+			                ( *currentWindow )->GetTitlebarDimension().Contains ( x, y ) ) { // ## Fenster ##
+				clickedWindow = currentWindow;
+
+				if ( previousMouseScope_ == NONE ) {
+					previousMouseScope_ = WINDOW;
+				}
+
+				if ( currentWindow == lastWindow ) {
+					/* Widgets prüfen */
+					std::vector< gui::CWidget* >* widgetList = ( *currentWindow )->GetWidgetList();
+					gui::CWidget* currentWidget = NULL;
+
+					for ( std::vector< gui::CWidget* >::size_type i = widgetList->size(); i; --i ) {
+						currentWidget = widgetList->at ( i - 1 );
+
+						/* Wenn Widget angezeigt werden soll, minimale Klickzeitabstand vorbei ist
+						   und die Maus an der richtigen Position ist, dann Aktion ausführen */
+
+						if ( currentWidget->GetShow() &&
 // 						currentWidget->lastClickTime.GetElapsedTime() > .2f &&
-						currentWidget->GetDimensionInScreen().Contains ( x, y ) )
-					{
-						previousMouseScope_ = NONE;
-						
-						currentWidget->lastClickTime.Reset();
-						currentWidget->onLeftClick();
+						                currentWidget->GetDimensionInScreen().Contains ( x, y ) ) {
+							previousMouseScope_ = NONE;
+
+							currentWidget->lastClickTime.Reset();
+							currentWidget->onLeftClick();
+						}
 					}
 				}
+			} else {
 			}
 		}
-		else
-		{
-		}
+	} else if ( button == sf::Mouse::Middle ) {
+		GetGameClass()->GetMapManager()->UnSetPos();
+	} else if ( button == sf::Mouse::Right ) {
+		
 	}
+
 
 	settings::SetMouseScope ( highestMouseScope );
 
@@ -189,23 +193,20 @@ bool CManager::MouseHover ( const int x, const int y )
 	std::vector< CWindow* >::iterator currentWindow = windowList_.end() - 1;
 	std::vector< CWindow* >::iterator iterBegin = windowList_.begin();
 
-	for ( ;currentWindow + 1 != iterBegin; --currentWindow )
-	{
+	for ( ;currentWindow + 1 != iterBegin; --currentWindow ) {
 		if ( ( *currentWindow )->GetWindowDimension().Contains ( x, y ) ||
-			( *currentWindow )->GetTitlebarDimension().Contains ( x, y ) )
-		{
+		                ( *currentWindow )->GetTitlebarDimension().Contains ( x, y ) ) {
 			highestMouseScope = WINDOW > highestMouseScope ? WINDOW : highestMouseScope;
 
 			std::vector< gui::CWidget* >* widgetList = ( *currentWindow )->GetWidgetList();
 			gui::CWidget* currentWidget = NULL;
 
-			for ( std::vector< gui::CWidget* >::size_type i = widgetList->size(); i; --i )
-			{
+			for ( std::vector< gui::CWidget* >::size_type i = widgetList->size(); i; --i ) {
 				currentWidget = widgetList->at ( i - 1 );
 
 				/* Wenn Widget angezeigt werden soll und die Maus an der richtigen Position ist, dann Aktion ausführen */
-				if ( currentWidget->GetShow() && currentWidget->GetDimensionInScreen().Contains ( x, y ) )
-				{
+
+				if ( currentWidget->GetShow() && currentWidget->GetDimensionInScreen().Contains ( x, y ) ) {
 					previousMouseScope_ = NONE;
 					currentWidget->onHoverMouse();
 
@@ -227,26 +228,19 @@ CWindow* CManager::AddWindow ( CWindow* win )
 
 bool CManager::CloseWindow ( gui::CWindow* window )
 {
-	if ( !window && windowList_.size() )
-	{
+	if ( !window && windowList_.size() ) {
 		delete this->GetActiveWindow();
 
 		windowList_.pop_back();
-	}
-	else
-	{
+	} else {
 		std::vector<gui::CWindow*>::iterator iter = windowList_.begin();
 
-		for ( ; iter != windowList_.end(); )
-		{
-			if ( ( *iter )->GetId() == window->GetId() )
-			{
+		for ( ; iter != windowList_.end(); ) {
+			if ( ( *iter )->GetId() == window->GetId() ) {
 				gui::CWindow* winDelete = *iter;
 				windowList_.erase ( iter );
 				delete winDelete;
-			}
-			else
-			{
+			} else {
 				++iter;
 			}
 		}
@@ -257,37 +251,37 @@ bool CManager::CloseWindow ( gui::CWindow* window )
 sf::Vector2f CManager::AddWindowToDock ( CWindow* win )
 {
 	sf::Vector2f positionOfLastWindow;
-	
+
 	/* Titelbargröße */
 	int height = win->GetTitlebarHeight();
 	int length = win->GetTitlebarLength() + height * 0.5f;
-	
+
 	/* Maximale Fenster pro Reihe */
 	int max = ( settings::GetHeight() ) / length;
-	
+
 	/* Position des Fensters innerhalb des Docks ermitteln */
 	int y = ( dockList_.size() % max ) * length + ( ( settings::GetHeight() ) % length * 0.5f );
 	int x = ( dockList_.size() / max ) * height;
-	
+
 	/* Fenster ggf. ohne Rundung zeichnen */
-	if ( x )
-	{
+
+	if ( x ) {
 		std::list < CWindow* >::iterator endIter = dockList_.end();
-		for ( int i = max; i; --i)
-		{
+
+		for ( int i = max; i; --i) {
 			endIter--;
 		}
-		
+
 		( *endIter )->SetNoRoundTitlebar( true );
 		( *endIter )->Update();
 	}
-	
+
 	/* Fenster ist nicht mehr verschiebbar! */
 // 	win->SetMoveAble( false );/**/
-	
+
 	/* Fenster der Docklist hinzufügen */
 	dockList_.push_back ( win );
-		
+
 	/* Ergebnis zurückgeben */
 	return sf::Vector2f ( x, y );
 
@@ -311,20 +305,20 @@ void CManager::RemoveWindowFromDock ( CWindow* win )
 	/* Temporäre Liste erstellen und Daten übertragen */
 	std::list < CWindow* > newList;
 	newList.swap( dockList_ );
-	
+
 	/* Dockliste mit "neuen" Daten speisen und Positionen anpassen */
-	sf::Vector2f newPosition;	
+	sf::Vector2f newPosition;
 	std::list < CWindow* >::iterator iter = newList.begin();
 	std::list < CWindow* >::iterator iterEnd = newList.end();
-	for ( ; iter != iterEnd; ++iter )
-	{
+
+	for ( ; iter != iterEnd; ++iter ) {
 		( *iter )->SetNoRoundTitlebar( false );
 		newPosition = AddWindowToDock ( ( *iter ) );
 
 		/* Position */
 		( *iter )->SetPosition ( newPosition );
 	}
-	
+
 
 }
 
