@@ -16,6 +16,7 @@
 
 #include "../../game.hpp"
 #include "../../gui/button/titlebar.hpp"
+#include "../../gui/other/spacer.hpp"
 
 
 namespace gui
@@ -165,24 +166,46 @@ bool CWindow::Close()
 }
 
 
-CWidget* CWindow::AddWidget ( CWidget* widget_ )
+CWidget* CWindow::AddWidget ( CWidget* widget )
 {
+	/* Calc position with the help of layout */
 	if ( this->GetWidget() ) {
+// 		std::cout << (std::string)this->GetWidget ( -1 )->GetText().GetText() << ": " <<  this->GetWidget ( -1 )->GetDimensionInScreen().Left << " + " << this->GetWidget ( -1 )->GetDimension().GetWidth() << std::endl;
+		
 		if ( layout_ == gui::HORIZONTAL ) {
-			widget_->SetPosition ( sf::Vector2f ( this->GetWidget ( -1 )->GetPosition().y + this->GetWidget ( -1 )->GetDimension().GetWidth() + layoutBorder_, -1 ) );
+			widget->SetPosition ( sf::Vector2f ( this->GetWidget ( -1 )->GetPosition().x + this->GetWidget ( -1 )->GetDimension().GetWidth() + layoutBorder_, -1 ) );
 		} else if ( layout_ == gui::VERTICAL ) {
-
+			widget->SetPosition ( sf::Vector2f ( 1, this->GetWidget ( -1 )->GetPosition().y + this->GetWidget ( -1 )->GetDimension().GetHeight() + layoutBorder_ ) );
 		} else if ( layout_ == gui::GRID ) {
 			/* TODO */
 		}
 	}
+	
+	/* Move widget outside the spacer's */
+	std::vector< gui::CWidget* >::iterator endIter = spacerList_.end();
+	std::vector< gui::CWidget* >::iterator iter = spacerList_.begin();
+	for ( ; iter != endIter; ++iter ) {
+		if ( ( *iter )->GetDimension().Intersects ( widget->GetDimension() ) ) {
+			if ( ( *iter )->GetName() == "spacer_horizontal" ) {
+				widget->SetPosition ( sf::Vector2f ( ( *iter )->GetDimension().GetWidth() + ( *iter )->GetPosition().x, -1 ) );
+			} else {
+				widget->SetPosition ( sf::Vector2f ( -1, ( *iter )->GetDimension().GetHeight() + ( *iter )->GetPosition().y ) );
+			}
+		}
+	}
+	
+	/* Add to right widget list */
+	if (  widget->GetName() == "spacer_horizontal" || widget->GetName() == "spacer_vertical" ) {
+// 		std::cout << "ok " << std::endl;
+		spacerList_.push_back ( widget );
+	} else {
+		widgetList_.push_back ( widget );
+	}
 
-	widgetList_.push_back ( widget_ );
+	widget->SetMotherWin ( this );
+	widget->Update();
 
-	widget_->SetMotherWin ( this );
-	widget_->Update();
-
-	return widget_;
+	return widget;
 }
 
 
@@ -433,7 +456,7 @@ gui::CWidget* CWindow::GetWidget ( int i )
 		return NULL;
 
 	if ( i == -1 ) { /* last one */
-		return *(widgetList_.end()-1);
+		return *( widgetList_.end() - 1 );
 	}
 
 	if ( i < widgetList_.size() ) {
@@ -575,9 +598,7 @@ void CWindow::SetTitlebar ( unsigned int titlebar )
 		}
 
 		std::vector< gui::CWidget* >::iterator endIter = widgetList_.end();
-
 		std::vector< gui::CWidget* >::iterator iter = widgetList_.begin();
-
 		for ( ; iter != endIter; ++iter ) {
 			if ( ( *iter )->GetName() == "close" || ( *iter )->GetName() == "minimize" ) {
 				( *iter )->SetShow ( false );

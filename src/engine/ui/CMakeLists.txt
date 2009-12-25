@@ -5,5 +5,4 @@ ADD_LIBRARY ( ufs_engine_ui STATIC
   theme.cpp
   widget.cpp
   dock.cpp
-  placeholder.cpp
 )

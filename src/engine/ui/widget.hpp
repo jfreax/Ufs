@@ -21,6 +21,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "../../util/util.hpp"
+#include "util.hpp"
 
 
 namespace gui
@@ -47,6 +48,8 @@ class CWidget
 		void SetMotherWin ( class CWindow* win );
 
 		void SetPosition ( sf::Vector2f position );
+		void MovePosition ( LAYOUT direction, unsigned int distance );
+		
 		sf::Vector2f GetPosition();
 		sf::Rect<float> GetDimension();
 		

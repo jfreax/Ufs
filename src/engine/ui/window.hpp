@@ -18,18 +18,11 @@
 #define WINDOW_HPP
 
 #include <SFML/Graphics.hpp>
+#include "util.hpp"
 
 
 namespace gui
 {
-
-
-enum LAYOUT {
-	NOTHING,
-	HORIZONTAL,
-	VERTICAL,
-	GRID
-};
 
 
 class CWindow
@@ -42,7 +35,7 @@ class CWindow
 
 		void Update();
 		void UpdateWidgets();
-		
+
 		bool Render();
 
 		bool Close();
@@ -86,8 +79,8 @@ class CWindow
 
 		void SetCloseAble ( bool ison );
 		bool GetCloseAble ();
-		
-		void SetLayout ( gui::LAYOUT layout, int layoutBorder = 1 );
+
+		void SetLayout ( LAYOUT layout, int layoutBorder = 1 );
 
 	protected:
 		unsigned int id_;
@@ -96,6 +89,7 @@ class CWindow
 		sf::String name_;
 
 		std::vector< gui::CWidget* > widgetList_;
+		std::vector< gui::CWidget* > spacerList_;
 
 		sf::Shape* formWin_;
 		sf::Shape* formWinBorder_;
@@ -129,8 +123,8 @@ class CWindow
 		bool closeAble_;
 		bool moveAble_;
 		bool resizeAble_;
-		
-		gui::LAYOUT layout_;
+
+		LAYOUT layout_;
 		int layoutBorder_;
 };
 

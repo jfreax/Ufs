@@ -41,6 +41,7 @@ CWidget::CWidget ( )
 	
 	/* Standardeinstellungen */
 	isMouseHere_ = wasMouseHere_ = false;
+	name_ = "";
 	
 	/* Widget anzeigen */
 	this->SetShow ( true );
@@ -148,32 +149,25 @@ void CWidget::SetPosition ( sf::Vector2f position )
 }
 
 
+void CWidget::MovePosition ( LAYOUT direction, unsigned int distance )
+{
+	if ( direction == HORIZONTAL ) {
+		SetPosition ( sf::Vector2f ( GetPosition().x + distance, -1 ) );
+	} else {
+		SetPosition ( sf::Vector2f ( -1, GetPosition().y + distance ) );
+	}
+}
+
+
 sf::Vector2f CWidget::GetPosition()
 {
-	return position_;
+	return fakePosition_;
 }
 
 
 sf::Rect<float> CWidget::GetDimension()
 {
-	sf::Vector2f pos;
-	sf::Vector2f posEnd;
-	
-	/* Die größen vom Hintergrundbild nehmen */
-	if ( drawBackground_ && background_.GetSize().x != 1.f )
-	{
-		pos = background_.TransformToGlobal( sf::Vector2f ( 0, 0 ) );
-		posEnd = background_.TransformToGlobal( curSize_ );
-	}
-	else
-	/* Oder wenn keins vorhanden ist, dann vom Hintergrundshape */
-	{
-		pos = form_.TransformToGlobal( sf::Vector2f ( 0, 0 ) );
-		posEnd = form_.TransformToGlobal( curSize_ );
-	}
-
-
-	return sf::Rect<float> ( pos.x, pos.y, posEnd.x, posEnd.y );
+	return sf::Rect<float> ( fakePosition_.x, fakePosition_.y, fakePosition_.x + curSize_.x, fakePosition_.y + curSize_.y );
 }
 
 

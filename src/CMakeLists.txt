@@ -31,5 +31,5 @@ TARGET_LINK_LIBRARIES ( ufs
   ufs_engine_ui
   ufs_gui_window
   ufs_gui_button
-
+  ufs_gui_other
 )

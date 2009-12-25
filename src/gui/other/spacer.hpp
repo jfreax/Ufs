@@ -17,5 +17,32 @@
 
 */
 
-#include "cplaceholder.hpp"
+#ifndef SPACER_HPP
+#define SPACER_HPP
 
+#include "../../engine/ui/widget.hpp"
+#include "../../engine/ui/util.hpp"
+
+namespace gui
+{
+
+
+class CSpacer : public CWidget
+{
+	public:
+		CSpacer ( LAYOUT layout, unsigned int size );
+		
+		void Render();
+		
+		virtual bool Call() {};
+		
+		virtual bool onLeftClick() {};
+		virtual bool onHoverMouse() {};
+		virtual bool onUnHoverMouse() {};
+	private:
+};
+
+} /* namespace gui */
+
+
+#endif // SPACER_HPP

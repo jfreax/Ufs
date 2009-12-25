@@ -18,6 +18,7 @@
 #include "../../settings/settings.hpp"
 #include "../../engine/ui/button.hpp"
 #include "../../gui/button/header.hpp"
+#include "../../gui/other/spacer.hpp"
 
 
 namespace gui
@@ -38,15 +39,19 @@ CHeaderWindow::CHeaderWindow()
 	this->SetPosition( sf::Vector2f ( width * 0.2f, 0.f ) );
 	this->SetMoveAble ( false );
 	this->SetCloseAble ( false );
-	this->SetLayout ( gui::HORIZONTAL, 5 );
+	this->SetLayout ( HORIZONTAL, 5 );
 
         /* Add buttons */
-	CWidget* buttonM = this->AddWidget ( new CHeaderMainButton );
-	CWidget* buttonS = this->AddWidget ( new CHeaderStatsButton );
+	this->AddWidget ( new CSpacer ( VERTICAL, 3 ) );
+	this->AddWidget ( new CSpacer ( HORIZONTAL, 3 ) );
+	this->AddWidget ( new CHeaderMainButton );
+	this->AddWidget ( new CHeaderStatsButton );
+	this->AddWidget ( new CHeaderStatsButton );
+	
 	this->UpdateWidgets();
 	
 	/* Set size (depend on buttons) */
-	this->SetSize ( sf::Vector2f ( buttonS->GetPosition().x + buttonS->GetDimension().GetWidth(), 30 ) );
+	this->SetSize ( sf::Vector2f ( GetWidget ( -1 )->GetPosition().x + GetWidget ( -1 )->GetDimension().GetWidth() + 3, 28 ) );
 }
 
 

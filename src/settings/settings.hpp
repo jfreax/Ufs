@@ -24,34 +24,34 @@
 namespace settings
 {
 
-sf::VideoMode GetVideo ( void );
-sf::WindowSettings GetWindowSettings ( void );
-int GetStyle ( void );
+sf::VideoMode GetVideo();
+sf::WindowSettings GetWindowSettings();
+int GetStyle();
 
-std::string GetPath ( void );
-std::string GetThemePath ( void );
+std::string GetPath();
+std::string GetThemePath();
 void SetPath ( std::string path_ );
 
-bool GetFullscreen ( void );
+bool GetFullscreen();
 void SetFullscreen ( bool ison );
-void ToggleFullscreen ( void );
+void ToggleFullscreen();
 
-bool GetShowFps ( void );
+bool GetShowFps();
 void SetShowFps ( bool ison );
 
-int GetHeight ( void );
+int GetHeight();
 void SetHeight ( int height_ );
 
-int GetWidth ( void );
+int GetWidth();
 void SetWidth ( int width_ );
 
-int GetBpp ( void );
+int GetBpp();
 void SetBpp ( int bpp_ );
 
-std::string GetTheme ( void );
+std::string GetTheme();
 void SetTheme ( std::string theme_ );
 
-MOUSESCOPE GetMouseScope ( void );
+MOUSESCOPE GetMouseScope();
 void SetMouseScope ( MOUSESCOPE mousescope_ );
 
 }

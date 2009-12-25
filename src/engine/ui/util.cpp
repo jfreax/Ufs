@@ -17,11 +17,5 @@
 
 */
 
-#ifndef CPLACEHOLDER_HPP
-#define CPLACEHOLDER_HPP
+#include "util.hpp"
 
-class CPlaceHolder
-{
-};
-
-#endif // CPLACEHOLDER_HPP
