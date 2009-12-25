@@ -29,16 +29,14 @@ namespace gui
 class CButton : public CWidget
 {
 	public:
-		CButton ( void );
-		void Render ( void );
+		CButton();
+		void Render();
 		
-		virtual bool Call ( void ) {};
+		virtual bool Call() {};
 		
-		virtual bool onLeftClick ( void ) {};
-		virtual bool onHoverMouse ( void );
-		virtual bool onUnHoverMouse ( void );
-
-
+		virtual bool onLeftClick() {};
+		virtual bool onHoverMouse();
+		virtual bool onUnHoverMouse();
 	protected:
 	
 		float WaitOnHoverMouse;

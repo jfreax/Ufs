@@ -55,7 +55,7 @@ CWindow::CWindow()
 
 			this->SetNoRoundTitlebar( false );
 			this->SetName ( "WINDOW ID: " + util::lCast<std::string>( id_ ) );
-			
+
 			titlebarLength_ = theme->window_.titlebarLength;
 			titlebarColor_ = theme->window_.titlebarColor;
 		} /* End Titlebar */
@@ -64,13 +64,16 @@ CWindow::CWindow()
 		closeAble_ = true;
 		moveAble_ = true;
 		resizeAble_ = true;
-		
-		SetAngle( 0 ); 
+
+		SetAngle( 0 );
 
 		this->SetPosition ( sf::Vector2f ( 0, 0 ) );
 		this->SetSize ( minSize_ );
 
+		this->SetLayout ( gui::NOTHING );
+
 	}
+
 	this->NoUpdate ( false );
 }
 
@@ -84,8 +87,8 @@ const unsigned int CWindow::GetId() const
 void CWindow::NoUpdate ( bool ison )
 {
 	noUpdate_ = ison;
-	if ( !ison )
-	{
+
+	if ( !ison ) {
 		this->Update();
 	}
 }
@@ -94,29 +97,39 @@ void CWindow::NoUpdate ( bool ison )
 void CWindow::Update()
 {
 	/* Keine Updates durchführen! */
-	if ( noUpdate_ )
-	{
+	if ( noUpdate_ ) {
 		return;
 	}
-	
+
 	/* Hintergrundbild (falls vorhanden) berechnen, ... */
-	if ( background_.GetSize().x != 1.f )
-	{
+	if ( background_.GetSize().x != 1.f ) {
 		background_.SetPosition ( position_ );
 		background_.Resize ( curSize_ );
 	}
+
 	/* ... ansonsten Backgroundshape berechnen lassen */
-	else
-	{
+	else {
 		calcBackground();
 	}
 
 	/* Inhalte ebenfalls aktualisieren */
-	for ( std::vector<gui::CWidget*>::size_type i = widgetList_.size(); i; --i )
-	{
+	for ( std::vector<gui::CWidget*>::size_type i = widgetList_.size(); i; --i ) {
 		widgetList_.at ( i - 1 )->Update();
 	}
 }
+
+
+void CWindow::UpdateWidgets()
+{
+	std::vector< gui::CWidget* >::iterator endIter = widgetList_.end();
+	std::vector< gui::CWidget* >::iterator iter = widgetList_.begin();
+	
+	for ( ; iter != endIter; ++iter ) {
+		( *iter )->Update ( true );
+
+	}
+}
+
 
 
 bool CWindow::Render()
@@ -128,19 +141,16 @@ bool CWindow::Render()
 
 
 	/* Hintergrund */
-	if ( background_.GetSize().x && background_.GetSize().x != 1.f )
-	{
+
+	if ( background_.GetSize().x && background_.GetSize().x != 1.f ) {
 		app->Draw ( background_ );
-	}
-	else
-	{
+	} else {
 		app->Draw ( *formWin_ );
 		app->Draw ( *formWinBorder_ );
 	}
 
 	/* Widgets zeichnen */
-	for ( std::vector<gui::CWidget*>::size_type i = widgetList_.size(); i; --i )
-	{
+	for ( std::vector<gui::CWidget*>::size_type i = widgetList_.size(); i; --i ) {
 		widgetList_[i-1]->Render();
 	}
 }
@@ -157,11 +167,21 @@ bool CWindow::Close()
 
 CWidget* CWindow::AddWidget ( CWidget* widget_ )
 {
+	if ( this->GetWidget() ) {
+		if ( layout_ == gui::HORIZONTAL ) {
+			widget_->SetPosition ( sf::Vector2f ( this->GetWidget ( -1 )->GetPosition().y + this->GetWidget ( -1 )->GetDimension().GetWidth() + layoutBorder_, -1 ) );
+		} else if ( layout_ == gui::VERTICAL ) {
+
+		} else if ( layout_ == gui::GRID ) {
+			/* TODO */
+		}
+	}
+
 	widgetList_.push_back ( widget_ );
 
 	widget_->SetMotherWin ( this );
 	widget_->Update();
-	
+
 	return widget_;
 }
 
@@ -185,44 +205,42 @@ void CWindow::calcBackground()
 
 	/* Titelleiste
 	   ------------------ */
-	
-	if ( titlebar_ )
-	{
+
+	if ( titlebar_ ) {
 		int length = GetSize().x;
-		if ( titlebarLength_ )
-		{
+
+		if ( titlebarLength_ ) {
 			length = titlebarLength_;
 		}
 
 		/* Titlebar OHNE Rundungen */
-		if ( noRoundTitlebar_ )
-		{
+		if ( noRoundTitlebar_ ) {
 			/* linke obere Rundung */
 			formTitlebar_->AddPoint ( 0, 0, titlebarColor_ );
-		
+
 			/* rechte obere Rundung */
 			formTitlebar_->AddPoint ( length, 0, titlebarColor_ );
 		}
-		/* Titelbar mit Rundung */
-		else
-		{
-		/* linke obere Rundung */
-		sf::Vector2f Center ( formRound_, formRound_ );
-		for ( int i = 40; i < 60; ++i )
-		{
-			Angle = i * 2 * 3.141592654f / 80;
-			sf::Vector2f Offset ( cos ( Angle ), sin ( Angle ) );
-			formTitlebar_->AddPoint ( Center + Offset * formRound_, titlebarColor_ );
-		}
 
-		/* rechte obere Rundung */
-		Center = sf::Vector2f ( length - formRound_, formRound_ );
-		for ( int i = 60; i < 80; ++i )
-		{
-			Angle = i * 2 * 3.141592654f / 80;
-			sf::Vector2f Offset ( cos ( Angle ), sin ( Angle ) );
-			formTitlebar_->AddPoint ( Center + Offset * formRound_, titlebarColor_ );
-		}
+		/* Titelbar mit Rundung */
+		else {
+			/* linke obere Rundung */
+			sf::Vector2f Center ( formRound_, formRound_ );
+
+			for ( int i = 40; i < 60; ++i ) {
+				Angle = i * 2 * 3.141592654f / 80;
+				sf::Vector2f Offset ( cos ( Angle ), sin ( Angle ) );
+				formTitlebar_->AddPoint ( Center + Offset * formRound_, titlebarColor_ );
+			}
+
+			/* rechte obere Rundung */
+			Center = sf::Vector2f ( length - formRound_, formRound_ );
+
+			for ( int i = 60; i < 80; ++i ) {
+				Angle = i * 2 * 3.141592654f / 80;
+				sf::Vector2f Offset ( cos ( Angle ), sin ( Angle ) );
+				formTitlebar_->AddPoint ( Center + Offset * formRound_, titlebarColor_ );
+			}
 		}
 
 		/* untere rechte Ecke */
@@ -236,8 +254,7 @@ void CWindow::calcBackground()
 	   ------------------ */
 
 	/* Nur Hintergrund zeichnen, wenn auch Fenster groß genug ist */
-	if ( GetSize().y > titlebar_ )
-	{
+	if ( GetSize().y > titlebar_ ) {
 		/* Temp. Variable falls obere rechte Ecke keine Rundung haben soll */
 		float formRound = GetSize().x - titlebarLength_ > formRound_ ? formRound_ : GetSize().x - titlebarLength_;
 
@@ -246,25 +263,23 @@ void CWindow::calcBackground()
 
 		/* obere rechte Ecke
 		   Wenn Titelbar kürzer als Fenster, dann Ecke abrunden */
-		if ( titlebarLength_ && titlebarLength_ < GetSize().x )
-		{
+
+		if ( titlebarLength_ && titlebarLength_ < GetSize().x ) {
 			Center = sf::Vector2f ( GetSize().x - formRound, formRound );
-			for ( int i = 60; i < 80; ++i )
-			{
+
+			for ( int i = 60; i < 80; ++i ) {
 				Angle = i * 2 * 3.141592654f / 80;
 				sf::Vector2f Offset ( cos ( Angle ), sin ( Angle ) );
 				formWin_->AddPoint ( Center + Offset * formRound, backgroundColor_ );
 			}
-		}
-		else
-		{
+		} else {
 			formWin_->AddPoint ( GetSize().x, 0, backgroundColor_ );
 		}
 
 		/* rechte untere Rundung */
 		Center = sf::Vector2f ( GetSize().x - formRound_, GetSize().y - formRound_ );
-		for ( int i = 0; i < 20; ++i )
-		{
+
+		for ( int i = 0; i < 20; ++i ) {
 			Angle = i * 2 * 3.141592654f / 80;
 			sf::Vector2f Offset ( cos ( Angle ), sin ( Angle ) );
 			formWin_->AddPoint ( Center + Offset * formRound_, backgroundColor_ );
@@ -272,12 +287,13 @@ void CWindow::calcBackground()
 
 		/* Farbanpassungen */
 		sf::Color lastColor = backgroundColor_;
+
 		lastColor.a = 160;
 
 		/* linke untere Rundung */
 		Center = sf::Vector2f ( formRound_, GetSize().y - formRound_ );
-		for ( int i = 20; i < 40; ++i )
-		{
+
+		for ( int i = 20; i < 40; ++i ) {
 			Angle = i * 2 * 3.141592654f / 80;
 			sf::Vector2f Offset ( cos ( Angle ), sin ( Angle ) );
 			formWin_->AddPoint ( Center + Offset * formRound_, lastColor );
@@ -287,8 +303,7 @@ void CWindow::calcBackground()
 
 	/* Rand des Fensters
 	   -----------------*/
-	if ( border_ )
-	{
+	if ( border_ ) {
 		/* Allgemeine Einstellungen
 		   Stärke der Umrandung */
 		formWinBorder_->SetOutlineWidth ( border_ );
@@ -300,20 +315,18 @@ void CWindow::calcBackground()
 		sf::Color borderColor = sf::Color ( 80, 80, 80, backgroundColor_.a );
 
 		/* Wenn Titelleiste vorhanden, oben keine Rundungen zeichnen */
-		if ( GetTitlebarDimension().GetWidth() )
-		{
+
+		if ( GetTitlebarDimension().GetWidth() ) {
 			/* obere linke Ecke */
 			formWinBorder_->AddPoint ( 0, 0, borderColor, borderColor );
 
 			/* obere rechte Ecke */
 			formWinBorder_->AddPoint ( GetSize().x, 0, borderColor, borderColor );
-		}
-		else
-		{
+		} else {
 			/* linke obere Rundung */
 			Center = sf::Vector2f ( formRound_, formRound_ );
-			for ( int i = 40; i < 60; ++i )
-			{
+
+			for ( int i = 40; i < 60; ++i ) {
 				Angle = i * 2 * 3.141592654f / 80;
 				sf::Vector2f Offset ( cos ( Angle ), sin ( Angle ) );
 				formWinBorder_->AddPoint ( Center + Offset * formRound_, borderColor, borderColor );
@@ -321,8 +334,8 @@ void CWindow::calcBackground()
 
 			/* rechte obere Rundung */
 			Center = sf::Vector2f ( GetSize().x - formRound_, formRound_ );
-			for ( int i = 60; i < 80; ++i )
-			{
+
+			for ( int i = 60; i < 80; ++i ) {
 				Angle = i * 2 * 3.141592654f / 80;
 				sf::Vector2f Offset ( cos ( Angle ), sin ( Angle ) );
 				formWinBorder_->AddPoint ( Center + Offset * formRound_, borderColor, borderColor );
@@ -331,8 +344,8 @@ void CWindow::calcBackground()
 
 		/* rechte untere Rundung */
 		sf::Vector2f Center ( GetSize().x - formRound_, GetSize().y - formRound_ );
-		for ( int i = 0; i < 20; ++i )
-		{
+
+		for ( int i = 0; i < 20; ++i ) {
 			Angle = i * 2 * 3.141592654f / 80;
 			sf::Vector2f Offset ( cos ( Angle ), sin ( Angle ) );
 			formWinBorder_->AddPoint ( Center + Offset * formRound_, borderColor, borderColor );
@@ -340,8 +353,8 @@ void CWindow::calcBackground()
 
 		/* linke untere Rundung */
 		Center = sf::Vector2f ( formRound_, GetSize().y - formRound_ );
-		for ( int i = 20; i < 40; ++i )
-		{
+
+		for ( int i = 20; i < 40; ++i ) {
 			Angle = i * 2 * 3.141592654f / 80;
 			sf::Vector2f Offset ( cos ( Angle ), sin ( Angle ) );
 			formWinBorder_->AddPoint ( Center + Offset * formRound_, borderColor, borderColor );
@@ -350,15 +363,19 @@ void CWindow::calcBackground()
 
 	/* Positionen anpassen */
 	formWin_->SetPosition ( GetPosition() );
+
 	formWinBorder_->SetPosition ( GetPosition() );
+
 	formTitlebar_->SetPosition ( GetPosition().x, GetPosition().y );
-	
+
 	/* Mittelpunkt setzen */
 	formTitlebar_->SetCenter( sf::Vector2f ( 0, titlebar_ ) );
-	
+
 	/* Rotation setzen */
 	formWin_->SetRotation ( angle_ );
+
 	formWinBorder_->SetRotation ( angle_ );
+
 	formTitlebar_->SetRotation ( angle_ );
 }
 
@@ -367,7 +384,7 @@ void CWindow::SetBackgroundImage ( sf::Image* img )
 {
 	backgroundImage_ = img;
 	background_.SetImage( *img );
-	
+
 	this->Update();
 }
 
@@ -382,12 +399,9 @@ void CWindow::Rotate ( double angle )
 {
 	angle_ += angle;
 
-	if ( angle_ >= 360 )
-	{
+	if ( angle_ >= 360 ) {
 		angle_ = 0;
-	}
-	else if ( angle_ < 0 )
-	{
+	} else if ( angle_ < 0 ) {
 		angle_ = 359;
 	}
 
@@ -413,6 +427,23 @@ std::vector< gui::CWidget* >* CWindow::GetWidgetList()
 }
 
 
+gui::CWidget* CWindow::GetWidget ( int i )
+{
+	if ( widgetList_.size() <= 3 ) /* Ignore the titlebar buttons */
+		return NULL;
+
+	if ( i == -1 ) { /* last one */
+		return *(widgetList_.end()-1);
+	}
+
+	if ( i < widgetList_.size() ) {
+		return widgetList_[i];
+	} else {
+		return NULL;
+	}
+}
+
+
 void CWindow::SetSize ( sf::Vector2f size_, bool force )
 {
 	curSize_ = size_;
@@ -421,25 +452,24 @@ void CWindow::SetSize ( sf::Vector2f size_, bool force )
 
 	/* Egal welche min. Einstellungen es gibt,
 	   ich soll sie ignorieren.. nagut... */
-	if ( force )
-	{
+
+	if ( force ) {
 		minSize = sf::Vector2f ( 0, 0 );
 	}
 
-	if ( curSize_.x < minSize.x )
-	{
+	if ( curSize_.x < minSize.x ) {
 		curSize_.x = minSize.x;
 	}
-	if ( curSize_.y < minSize.y )
-	{
+
+	if ( curSize_.y < minSize.y ) {
 		curSize_.y = minSize.y;
 	}
-	if ( curSize_.x > maxSize_.x )
-	{
+
+	if ( curSize_.x > maxSize_.x ) {
 		curSize_.x = maxSize_.x;
 	}
-	if ( curSize_.y > maxSize_.y )
-	{
+
+	if ( curSize_.y > maxSize_.y ) {
 		curSize_.y = maxSize_.y;
 	}
 
@@ -510,11 +540,10 @@ sf::Rect<float> CWindow::GetWindowDimension() const
 
 sf::Rect<float> CWindow::GetTitlebarDimension() const
 {
-	if ( formTitlebar_ )
-	{
+	if ( formTitlebar_ ) {
 		sf::Vector2f titlePos ( formTitlebar_->GetPosition().x, formTitlebar_->GetPosition().y - titlebar_ );
 		sf::Vector2f titleEndPos = formTitlebar_->TransformToGlobal (sf::Vector2f(titlebarLength_,titlebar_) );
-	
+
 		return sf::Rect<float> ( titlePos.x, titlePos.y, titleEndPos.x + titlebar_, titleEndPos.y );
 	}
 }
@@ -531,33 +560,33 @@ sf::Rect<float> CWindow::GetResizeArea() const
 void CWindow::SetTitlebar ( unsigned int titlebar )
 {
 	/* TitlebarIcons-Anzeige nur ändern, falls nötig */
-	if ( titlebar_ != !titlebar )
-	{
+	if ( titlebar_ != !titlebar ) {
 		bool showTitlebarIcons = true;
 
 		/* Wenn Titlebar angezeigt werden soll, dann auch Icons anzeigen lassen */
-		if ( titlebar )
-		{
+
+		if ( titlebar ) {
 			showTitlebarIcons = true;
 		}
+
 		/* Icons nicht anzeigen */
-		else
-		{
+		else {
 			showTitlebarIcons = false;
 		}
-		
+
 		std::vector< gui::CWidget* >::iterator endIter = widgetList_.end();
+
 		std::vector< gui::CWidget* >::iterator iter = widgetList_.begin();
-		for ( ; iter != endIter; ++iter )
-		{
-			if ( ( *iter )->GetName() == "close" || ( *iter )->GetName() == "minimize" )
-			{
+
+		for ( ; iter != endIter; ++iter ) {
+			if ( ( *iter )->GetName() == "close" || ( *iter )->GetName() == "minimize" ) {
 				( *iter )->SetShow ( false );
 			}
 		}
 	}
 
 	titlebar_ = titlebar;
+
 	this->Update();
 }
 
@@ -601,6 +630,13 @@ void CWindow::SetCloseAble ( bool ison )
 bool CWindow::GetCloseAble ()
 {
 	return closeAble_;
+}
+
+
+void CWindow::SetLayout ( gui::LAYOUT layout, int layoutBorder )
+{
+	layout_ = layout;
+	layoutBorder_ = layoutBorder; /* TODO Test if value is okay */
 }
 
 

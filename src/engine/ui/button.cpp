@@ -22,21 +22,21 @@ namespace gui
 {
 
 
-CButton::CButton ( )
+CButton::CButton()
 {
 	CTheme* theme = GetGameClass()->GetGuiManager()->GetTheme();
 
 	background_.SetImage ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/" + theme->button_.background ) );
+
 	this->SetBackgroundColor ( theme->button_.backgroundColor );
 	this->SetFontSize ( theme->button_.fontSize );
-	
 	this->SetSize ( background_.GetSize() );
 	
 	WaitOnHoverMouse = 0.0f;
 }
 
 
-void CButton::Render ( void )
+void CButton::Render()
 {
 	/* Wenn es nicht gezeichnet werden soll, dann ist hier schon Schluss */
 	if ( !show_ )
@@ -58,20 +58,20 @@ void CButton::Render ( void )
 	{
 
 	}
-
+	
 	/* Ggf. Text zeichnen */
 	app->Draw ( text_ );
 }
 
 
-bool CButton::onHoverMouse ( void )
+bool CButton::onHoverMouse()
 {
 	isMouseHere_ = wasMouseHere_ = true;
 	background_.SetColor( sf::Color ( 200, 200, 200 ) );
 }
 
 
-bool CButton::onUnHoverMouse ( void )
+bool CButton::onUnHoverMouse()
 {
 	background_.SetColor( sf::Color ( 255, 255, 255 ) );
 }

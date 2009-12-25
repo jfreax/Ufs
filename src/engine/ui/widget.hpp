@@ -25,28 +25,30 @@
 
 namespace gui
 {
+	
 
 
 class CWidget
 {
 	public:
-		CWidget ( );
+		CWidget();
+		unsigned int GetId() { return id_; }
 
-		virtual void Render ( void ) = 0;
+		virtual void Render() = 0;
 		virtual bool Update ( bool doIt = false );
 // 		void NoUpdate ( bool ison );
 		
-		virtual bool Call ( void ) = 0;
+		virtual bool Call() = 0;
 
-		virtual bool onLeftClick ( void ) = 0;
-		virtual bool onHoverMouse ( void ) = 0;
-		virtual bool onUnHoverMouse ( void ) = 0;
+		virtual bool onLeftClick() = 0;
+		virtual bool onHoverMouse() = 0;
+		virtual bool onUnHoverMouse() = 0;
 
 		void SetMotherWin ( class CWindow* win );
 
 		void SetPosition ( sf::Vector2f position );
-		sf::Vector2f GetPosition ( void );
-		sf::Rect<float> GetDimension ( void );
+		sf::Vector2f GetPosition();
+		sf::Rect<float> GetDimension();
 		
 		void SetSize ( sf::Vector2f size );
 
@@ -56,33 +58,32 @@ class CWidget
 		void SetDrawBackground ( bool ison );
 
 		void SetBackground ( sf::Sprite background );
-		sf::Sprite* GetBackground ( void );
+		sf::Sprite* GetBackground();
 		void SetBackground ( sf::Image* background );
 		void SetBackgroundColor ( sf::Color color );
-		sf::Color GetBackgroundColor ( void );
+		sf::Color GetBackgroundColor();
 
-		class CWindow* GetMotherWin ( void );
-		sf::Rect< float > GetDimensionInScreen ( void );
+		class CWindow* GetMotherWin();
+		sf::Rect< float > GetDimensionInScreen();
 		
 		void SetShow ( bool ison );
-		bool GetShow ( void );
+		bool GetShow();
 		
-		std::string GetName ( void );
+		std::string GetName();
 		
 		void SetText ( std::string text );
-		sf::String GetText ( void );
+		sf::String GetText();
 		
 		void SetTextPosition ( sf::Vector2f pos );
-		sf::Vector2f GetTextPosition ( void );
+		sf::Vector2f GetTextPosition();
 		
 		void SetTextSize ( int size );
-		
 		void SetFont ( std::string fontname );
 
 		sf::Clock lastClickTime;
 		
 	protected:
-		virtual void Calc ( void );
+		virtual void Calc();
 	
 		unsigned int id_;
 		class CWindow* motherWin_;

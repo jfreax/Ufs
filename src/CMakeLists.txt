@@ -26,8 +26,10 @@ TARGET_LINK_LIBRARIES ( ufs
   ufs_settings
   ufs_sprite
   ufs_engine
+  ufs_engine_model
   ufs_engine_sprite
   ufs_engine_ui
-  ufs_gui_button
   ufs_gui_window
+  ufs_gui_button
+
 )

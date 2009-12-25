@@ -17,37 +17,36 @@
 #include "header_menu.hpp"
 #include "../../settings/settings.hpp"
 #include "../../engine/ui/button.hpp"
+#include "../../gui/button/header.hpp"
 
 
 namespace gui
 {
 
 
-CHeaderWindow::CHeaderWindow ( void )
+CHeaderWindow::CHeaderWindow()
 {
-	/* Keine Titelleiste */
+	gui::CWindow::CWindow();
+	
+	/* No titlebar */
 	this->SetTitlebar ( 0 );
 	
-	/* Temporäre Variablen */
+	/* Temp. vars */
 	int width = settings::GetWidth();
 	int height = settings::GetHeight();
 	
-	/* Position und Größe */
 	this->SetPosition( sf::Vector2f ( width * 0.2f, 0.f ) );
-	this->SetSize ( sf::Vector2f ( width * 0.55, 25.f ) );
-	
-	/* Nicht verschiebbar */
 	this->SetMoveAble ( false );
-	
-        /* do not close */
 	this->SetCloseAble ( false );
+	this->SetLayout ( gui::HORIZONTAL, 5 );
 
         /* Add buttons */
-	CButton* button = (CButton*)this->AddWidget ( new CButton );
+	CWidget* buttonM = this->AddWidget ( new CHeaderMainButton );
+	CWidget* buttonS = this->AddWidget ( new CHeaderStatsButton );
+	this->UpdateWidgets();
 	
-	button->SetDrawBackground ( false );
-	button->SetSize ( this->GetSize() );
-	button->SetText ( "TEST" );
+	/* Set size (depend on buttons) */
+	this->SetSize ( sf::Vector2f ( buttonS->GetPosition().x + buttonS->GetDimension().GetWidth(), 30 ) );
 }
 
 

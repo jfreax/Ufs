@@ -221,6 +221,7 @@ bool CManager::MouseHover ( const int x, const int y )
 
 CWindow* CManager::AddWindow ( CWindow* win )
 {
+	win->Initialize();
 	windowList_.push_back ( win );
 	return win;
 }

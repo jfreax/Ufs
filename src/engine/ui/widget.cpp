@@ -115,13 +115,13 @@ bool CWidget::Update ( bool doIt )
 }
 
 
-void CWidget::Calc ( void )
+void CWidget::Calc()
 {
 	/* Funktionsanrufe tätigen */
 	this->Call();
 	
 	/* Ggf. "Update"s durchführen */
-	this->Update( true );
+	this->Update ( true );
 
 	/* Hover Effekt? Unhover? */
 	if ( !isMouseHere_ && wasMouseHere_ )
@@ -142,18 +142,19 @@ void CWidget::SetMotherWin ( gui::CWindow* win )
 
 void CWidget::SetPosition ( sf::Vector2f position )
 {
-	fakePosition_ = position;
+	fakePosition_.x = position.x != -1 ? position.x : fakePosition_.x;
+	fakePosition_.y = position.y != -1 ? position.y : fakePosition_.y;
 	this->Update();
 }
 
 
-sf::Vector2f CWidget::GetPosition ( void )
+sf::Vector2f CWidget::GetPosition()
 {
 	return position_;
 }
 
 
-sf::Rect<float> CWidget::GetDimension ( void )
+sf::Rect<float> CWidget::GetDimension()
 {
 	sf::Vector2f pos;
 	sf::Vector2f posEnd;
@@ -211,7 +212,7 @@ void CWidget::SetBackground ( sf::Sprite background )
 }
 
 
-sf::Sprite* CWidget::GetBackground ( void )
+sf::Sprite* CWidget::GetBackground()
 {
 	return &background_;
 }
@@ -233,19 +234,19 @@ void CWidget::SetBackgroundColor ( sf::Color color )
 }
 
 
-sf::Color CWidget::GetBackgroundColor ( void )
+sf::Color CWidget::GetBackgroundColor()
 {
 	return backgroundColor_;
 }
 
 
-CWindow* CWidget::GetMotherWin ( void )
+CWindow* CWidget::GetMotherWin()
 {
 	return motherWin_;
 }
 
 
-sf::Rect< float > CWidget::GetDimensionInScreen ( void )
+sf::Rect< float > CWidget::GetDimensionInScreen()
 {
 	sf::Vector2f motherPosition = motherWin_->GetPosition();
 	return sf::Rect< float > ( motherPosition.x + position_.x, motherPosition.y + position_.y, motherPosition.x + position_.x + curSize_.x, motherPosition.y + position_.y + curSize_.y );
@@ -258,13 +259,13 @@ void CWidget::SetShow ( bool ison )
 }
 
 
-bool CWidget::GetShow ( void )
+bool CWidget::GetShow()
 {
 	return show_;
 }
 
 
-std::string CWidget::GetName ( void )
+std::string CWidget::GetName()
 {
 	return name_;
 }
@@ -277,7 +278,7 @@ void CWidget::SetText ( std::string text )
 }
 
 
-sf::String CWidget::GetText ( void )
+sf::String CWidget::GetText()
 {
 	return text_;
 }
@@ -290,7 +291,7 @@ void CWidget::SetTextPosition ( sf::Vector2f pos )
 }
 
 
-sf::Vector2f CWidget::GetTextPosition ( void )
+sf::Vector2f CWidget::GetTextPosition()
 {
 	return textPos_;
 }

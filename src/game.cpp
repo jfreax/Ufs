@@ -253,6 +253,7 @@ bool CGame::Start()
  win2->SetSize ( sf::Vector2f ( 200, 200 ));
 //
 
+
 	/* Spielschleife */
 	while ( run_ )
 	{
@@ -283,7 +284,7 @@ void CGame::Render()
 	app_.Clear();
 
 	// Gamegraphic
-	app_.SetView ( viewPoint_ );
+	app_.SetView ( viewPoint_[0] );
 	mapManager_.Update();
 	mapManager_.Render();
 
@@ -401,7 +402,7 @@ sf::String* CGame::GetFpsStr()
 }
 
 
-sf::View* CGame::GetViewPoint()
+sf::View* CGame::GetViewPoint ( int i )
 {
-	return &viewPoint_;
+	return &viewPoint_[i];
 }

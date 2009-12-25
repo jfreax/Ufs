@@ -24,29 +24,42 @@ namespace gui
 {
 
 
+enum LAYOUT {
+	NOTHING,
+	HORIZONTAL,
+	VERTICAL,
+	GRID
+};
+
+
 class CWindow
 {
 	public:
 		CWindow();
 		const unsigned int GetId() const;
 		void NoUpdate ( bool ison );
+		void Initialize() {};
 
 		void Update();
+		void UpdateWidgets();
+		
 		bool Render();
 
 		bool Close();
+
 		class CWidget* AddWidget ( class CWidget* widget );
 
 		void calcBackground();
 		void SetBackgroundImage ( sf::Image* img );
-		
+
 		void SetName ( std::string str );
-		
+
 		void Rotate ( double angle );
 		void SetAngle ( double angle );
 		double GetAngle();
-		
+
 		std::vector< gui::CWidget* >* GetWidgetList();
+		gui::CWidget* GetWidget ( int i = -1 );
 
 		void SetSize ( sf::Vector2f size, bool force = false );
 		void SetSizeInPercent ( sf::Vector2f sizePercent );
@@ -54,7 +67,7 @@ class CWindow
 
 		void SetPosition ( sf::Vector2f position );
 		sf::Vector2f GetPosition() const;
-		
+
 		int GetTitlebarHeight();
 		int GetTitlebarLength();
 
@@ -67,17 +80,19 @@ class CWindow
 
 		void SetMoveWindow ( bool ison );
 		bool GetMoveWindow () const;
-		
+
 		void SetMoveAble ( bool ison );
 		bool GetMoveAble ();
-		
+
 		void SetCloseAble ( bool ison );
 		bool GetCloseAble ();
+		
+		void SetLayout ( gui::LAYOUT layout, int layoutBorder = 1 );
 
 	protected:
 		unsigned int id_;
 		bool noUpdate_;
-		
+
 		sf::String name_;
 
 		std::vector< gui::CWidget* > widgetList_;
@@ -99,14 +114,14 @@ class CWindow
 
 		sf::Image* backgroundImage_;
 		sf::Image* titlebarImage_;
-		
+
 		sf::Sprite background_;
 		sf::Color backgroundColor_;
 
 		unsigned int border_;
 		sf::Color borderColor_;
 		float formRound_;
-		
+
 		unsigned int titlebar_;
 		int titlebarLength_;
 		sf::Color titlebarColor_;
@@ -114,6 +129,9 @@ class CWindow
 		bool closeAble_;
 		bool moveAble_;
 		bool resizeAble_;
+		
+		gui::LAYOUT layout_;
+		int layoutBorder_;
 };
 
 } // namespace gui

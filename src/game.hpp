@@ -56,7 +56,7 @@ class CGame
 		std::map< MOUSESCOPE, CAnimation*> GetCursor();
 		sf::String* GetFpsStr();
 		
-		sf::View* GetViewPoint();
+		sf::View* GetViewPoint ( int i = 0 );
 
 	private:
 		sf::RenderWindow app_;
@@ -66,7 +66,7 @@ class CGame
 		const char* const * const argv_;
 		bool run_;
 
-		sf::View viewPoint_;
+		sf::View viewPoint_[5];
 
 		CImageResource imgResource_;
 		CFontResource fontResource_;

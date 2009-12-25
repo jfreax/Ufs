@@ -26,7 +26,7 @@ namespace gui
 class CHeaderWindow : public CWindow
 {
 	public:
-		CHeaderWindow ( void );
+		CHeaderWindow();
 
 	private:
 };
