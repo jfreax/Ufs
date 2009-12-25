@@ -54,7 +54,7 @@ CWindow::CWindow()
 			this->AddWidget ( new gui::CCloseButton );
 			this->AddWidget ( new gui::CHideButton ( (CButton*)this->AddWidget ( new gui::CMinimizeButton ) ) );
 
-			this->SetNoRoundTitlebar( false );
+			this->SetNoRoundTitlebar ( false );
 			this->SetName ( "WINDOW ID: " + util::lCast<std::string>( id_ ) );
 
 			titlebarLength_ = theme->window_.titlebarLength;
@@ -132,7 +132,6 @@ void CWindow::UpdateWidgets()
 }
 
 
-
 bool CWindow::Render()
 {
 	sf::RenderWindow* app = GetGameClass()->GetApp();
@@ -141,8 +140,7 @@ bool CWindow::Render()
 	app->Draw ( *formTitlebar_ );
 
 
-	/* Hintergrund */
-
+	/* Background */
 	if ( background_.GetSize().x && background_.GetSize().x != 1.f ) {
 		app->Draw ( background_ );
 	} else {
@@ -150,7 +148,7 @@ bool CWindow::Render()
 		app->Draw ( *formWinBorder_ );
 	}
 
-	/* Widgets zeichnen */
+	/* Draw all widgets */
 	for ( std::vector<gui::CWidget*>::size_type i = widgetList_.size(); i; --i ) {
 		widgetList_[i-1]->Render();
 	}
@@ -285,9 +283,8 @@ void CWindow::calcBackground()
 		formWin_->AddPoint ( 0, 0, backgroundColor_ );
 
 		/* obere rechte Ecke
-		   Wenn Titelbar kürzer als Fenster, dann Ecke abrunden */
-
-		if ( titlebarLength_ && titlebarLength_ < GetSize().x ) {
+		   Wenn Titelbar kürzer als Fenster und Fenster nicht am oberen Rand, dann Ecke abrunden */
+		if ( titlebarLength_ && titlebarLength_ < GetSize().x && GetPosition().y != 0 ) {
 			Center = sf::Vector2f ( GetSize().x - formRound, formRound );
 
 			for ( int i = 60; i < 80; ++i ) {
