@@ -27,7 +27,8 @@ namespace gui
 
 CHeaderWindow::CHeaderWindow()
 {
-	gui::CWindow::CWindow();
+	/* Temp. vars */
+	int outline = 3;
 	
 	/* No titlebar */
 	this->SetTitlebar ( 0 );
@@ -42,16 +43,23 @@ CHeaderWindow::CHeaderWindow()
 	this->SetLayout ( HORIZONTAL, 5 );
 
         /* Add buttons */
-	this->AddWidget ( new CSpacer ( VERTICAL, 3 ) );
-	this->AddWidget ( new CSpacer ( HORIZONTAL, 3 ) );
+	this->AddWidget ( new CSpacer ( VERTICAL, outline ) );
+	this->AddWidget ( new CSpacer ( HORIZONTAL, outline ) );
 	this->AddWidget ( new CHeaderMainButton );
+	this->AddWidget ( new CHeaderResearchButton );
+	this->AddWidget ( new CHeaderPlanetsButton );
+	this->AddWidget ( new CHeaderEmpireButton );
+	this->AddWidget ( new CHeaderSpyButton );
 	this->AddWidget ( new CHeaderStatsButton );
-	this->AddWidget ( new CHeaderStatsButton );
+	this->AddWidget ( new CHeaderQuitButton );
 	
 	this->UpdateWidgets();
-	
+
 	/* Set size (depend on buttons) */
-	this->SetSize ( sf::Vector2f ( GetWidget ( -1 )->GetPosition().x + GetWidget ( -1 )->GetDimension().GetWidth() + 3, 28 ) );
+	int endOfLastWidget = GetWidget ( -1 )->GetPosition().x + GetWidget ( -1 )->GetDimension().GetWidth();
+	
+	this->SetSize ( sf::Vector2f ( endOfLastWidget + outline, 37 ) );
+	this->SetPosition ( sf::Vector2f ( (settings::GetWidth() - endOfLastWidget) * 0.5f, 0 ) );
 }
 
 

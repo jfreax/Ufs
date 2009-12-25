@@ -38,6 +38,54 @@ class CHeaderMainButton : public CButton
 /* ------------------------- */
 
 
+class CHeaderResearchButton : public CButton
+{
+	public:
+		CHeaderResearchButton();
+		
+	private:
+};
+
+
+/* ------------------------- */
+
+
+class CHeaderPlanetsButton : public CButton
+{
+	public:
+		CHeaderPlanetsButton();
+		
+	private:
+};
+
+
+/* ------------------------- */
+
+
+class CHeaderEmpireButton : public CButton
+{
+	public:
+		CHeaderEmpireButton();
+		
+	private:
+};
+
+
+/* ------------------------- */
+
+
+class CHeaderSpyButton : public CButton
+{
+	public:
+		CHeaderSpyButton();
+		
+	private:
+};
+
+
+/* ------------------------- */
+
+
 class CHeaderStatsButton : public CButton
 {
 	public:
@@ -45,6 +93,20 @@ class CHeaderStatsButton : public CButton
 		
 	private:
 };
+
+
+/* ------------------------- */
+
+
+class CHeaderQuitButton : public CButton
+{
+	public:
+		CHeaderQuitButton();
+		
+	private:
+};
+
+
 
 } /* namespace gui */
 

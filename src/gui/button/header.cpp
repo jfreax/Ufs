@@ -17,6 +17,7 @@
 
 */
 
+#include "../../game.hpp"
 #include "header.hpp"
 
 namespace gui
@@ -25,7 +26,49 @@ namespace gui
 	
 CHeaderMainButton::CHeaderMainButton()
 {
-	this->SetText ( "MAIN" );
+	this->SetSize ( sf::Vector2f ( 32, 32 ) );
+	this->SetBackground ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/buttons/header_home.png" ) );
+}
+
+
+/* ------------------------- */
+
+
+CHeaderResearchButton::CHeaderResearchButton()
+{
+	this->SetSize ( sf::Vector2f ( 32, 32 ) );
+	this->SetBackground ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/buttons/header_research.png" ) );
+}
+
+
+/* ------------------------- */
+
+
+CHeaderPlanetsButton::CHeaderPlanetsButton()
+{
+	this->SetSize ( sf::Vector2f ( 32, 32 ) );
+	this->SetBackground ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/buttons/header_planets.png" ) );
+}
+
+
+/* ------------------------- */
+
+
+CHeaderEmpireButton::CHeaderEmpireButton()
+{
+	this->SetSize ( sf::Vector2f ( 32, 32 ) );
+	this->SetBackground ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/buttons/header_empire.png" ) );
+}
+
+
+/* ------------------------- */
+
+
+
+CHeaderSpyButton::CHeaderSpyButton()
+{
+	this->SetSize ( sf::Vector2f ( 32, 32 ) );
+	this->SetBackground ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/buttons/header_spy.png" ) );
 }
 
 
@@ -34,9 +77,19 @@ CHeaderMainButton::CHeaderMainButton()
 
 CHeaderStatsButton::CHeaderStatsButton()
 {
-	this->SetText ( "STATISTIKEN" );
+	this->SetSize ( sf::Vector2f ( 32, 32 ) );
+	this->SetBackground ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/buttons/header_stats.png" ) );
 }
 
 
+/* ------------------------- */
+
+
+
+CHeaderQuitButton::CHeaderQuitButton()
+{
+	this->SetSize ( sf::Vector2f ( 32, 32 ) );
+	this->SetBackground ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/buttons/header_quit.png" ) );
+}
 
 } /* namespace gui */
