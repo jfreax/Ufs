@@ -37,7 +37,6 @@ CHeaderWindow::CHeaderWindow()
 	int width = settings::GetWidth();
 	int height = settings::GetHeight();
 	
-	this->SetPosition( sf::Vector2f ( width * 0.2f, 0.f ) );
 	this->SetMoveAble ( false );
 	this->SetCloseAble ( false );
 	this->SetLayout ( HORIZONTAL, 3 );
@@ -51,13 +50,9 @@ CHeaderWindow::CHeaderWindow()
 	this->AddWidget ( new CHeaderStatsButton );
 	this->AddWidget ( new CHeaderQuitButton );
 	
-	this->UpdateWidgets();
-
 	/* Set size (depend on buttons) */
-	int endOfLastWidget = GetWidget ( -1 )->GetPosition().x + GetWidget ( -1 )->GetDimension().GetWidth();
-	
-	this->SetSize ( sf::Vector2f ( endOfLastWidget + outline, 37 ) );
-	this->SetPosition ( sf::Vector2f ( (settings::GetWidth() - endOfLastWidget) * 0.5f, 0 ) );
+	this->AdjustSize();
+	this->SetPosition ( CENTER, TOP );
 }
 
 

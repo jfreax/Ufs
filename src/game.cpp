@@ -299,7 +299,7 @@ GAMETYPE CGame::GetGameType()
 
 void CGame::SetGameType ( GAMETYPE gametype )
 {
-	if ( gametype == PAUSED )
+	if ( gametype == QUIT )
 		specialWindow_ [ "QUIT" ]->SetShow();
 
 	gametype_ = gametype;

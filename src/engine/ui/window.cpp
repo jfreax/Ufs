@@ -586,12 +586,14 @@ void CWindow::SetPosition ( sf::Vector2f position )
 
 void CWindow::SetPosition ( POSITION posX, POSITION posY )
 {
+	this->SetPosition ( sf::Vector2f ( 0, 0 ) ); /* FIXME why I used "MovePosition"??? */
+	
 	switch ( posX ) {
 		case LEFT:
 			MovePosition ( HORIZONTAL, 0 );
 			break;
 		case CENTER:
-			MovePosition ( HORIZONTAL, (settings::GetWidth() - GetSize().x) * 0.5f );
+			MovePosition ( HORIZONTAL, ( settings::GetWidth() - GetSize().x ) * 0.5f );
 			break;
 		case RIGHT:
 			MovePosition ( HORIZONTAL, settings::GetWidth() - GetSize().x );
@@ -678,7 +680,9 @@ void CWindow::SetShow ( bool show )
 {
 	show_ = show;
 	
-// 	GetGameClass()->GetGuiManager()->BringToFront( this ); TODO
+	if ( show_ ) {
+		GetGameClass()->GetGuiManager()->BringToFront ( this );
+	}
 }
 
 

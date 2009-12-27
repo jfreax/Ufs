@@ -337,13 +337,32 @@ void CManager::RemoveWindowFromDock ( CWindow* win )
 }
 
 
-bool CManager::BringToFront ( std::vector< CWindow* >::iterator iter )
+void CManager::BringToFront ( std::vector< CWindow* >::iterator iter )
 {
 	CWindow* tmp = *iter;
 
 	windowList_.erase ( iter );
-	windowList_.push_back ( ( tmp ) );
+	windowList_.push_back ( tmp );
 }
+
+
+void CManager::BringToFront ( CWindow* win )
+{
+	if ( win == NULL )
+		return;
+	
+	std::vector<gui::CWindow*>::iterator iter = windowList_.begin();
+	std::vector<gui::CWindow*>::iterator iterEnd = windowList_.end();
+	
+	for ( int i = 0; iter != iterEnd; ++iter ) {
+		if ( ( *iter )->GetId() == win->GetId() ) {
+			windowList_.erase ( iter );
+			windowList_.push_back ( win );
+			return;
+		} 
+	}
+}
+
 
 
 CTheme* CManager::GetTheme()

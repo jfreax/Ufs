@@ -44,7 +44,8 @@ class CManager
 		sf::Vector2f AddWindowToDock ( CWindow* win );
 		void RemoveWindowFromDock ( CWindow* win );
 		
-		bool BringToFront ( std::vector< CWindow* >::iterator iter );
+		void BringToFront ( std::vector< CWindow* >::iterator iter );
+		void BringToFront ( CWindow* win );
 
 		CTheme* GetTheme();
 		

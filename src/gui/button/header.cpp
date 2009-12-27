@@ -94,7 +94,7 @@ CHeaderQuitButton::CHeaderQuitButton()
 
 bool CHeaderQuitButton::onLeftClick()
 {
-	GetGameClass()->SetGameType ( PAUSED );
+	GetGameClass()->SetGameType ( QUIT );
 	return true;
 }
 
