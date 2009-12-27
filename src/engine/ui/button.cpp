@@ -42,18 +42,23 @@ void CButton::Render()
 	
 	this->Calc();	
 
-	/* Hintergrund zeichnen */
+	/* Draw background */
 	sf::RenderWindow* app = GetGameClass()->GetApp();
 	if ( drawBackground_ && background_.GetSize().x != 1.f )
 		app->Draw ( background_ );
 	
-	/* Ggf. Text zeichnen */
+	/* If necessary, draw text */
 	app->Draw ( text_ );
+	
+	/* Render things from widget-class */
+	CWidget::Render();
 }
 
 
 bool CButton::onHoverMouse()
 {
+	CWidget::onHoverMouse();
+	
 	isMouseHere_ = wasMouseHere_ = true;
 	background_.SetColor( sf::Color ( 200, 200, 200 ) );
 }
@@ -61,6 +66,8 @@ bool CButton::onHoverMouse()
 
 bool CButton::onUnHoverMouse()
 {
+	CWidget::onUnHoverMouse();
+	
 	background_.SetColor( sf::Color ( 255, 255, 255 ) );
 }
 

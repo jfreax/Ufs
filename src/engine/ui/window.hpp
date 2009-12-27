@@ -28,7 +28,7 @@ namespace gui
 class CWindow
 {
 	public:
-		CWindow();
+		CWindow ( bool withTitlebarPossible = true );
 		const unsigned int GetId() const;
 		void NoUpdate ( bool ison );
 		virtual void Initialize() {};
@@ -42,7 +42,7 @@ class CWindow
 
 		class CWidget* AddWidget ( class CWidget* widget, bool newLine = false );
 
-		void calcBackground();
+		void CalcBackground();
 		void SetBackgroundImage ( sf::Image* img );
 
 		void SetName ( std::string str );

@@ -28,6 +28,9 @@ CHeaderMainButton::CHeaderMainButton()
 {
 	this->SetSize ( sf::Vector2f ( 32, 32 ) );
 	this->SetBackground ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/buttons/header_home.png" ) );
+	
+	this->ActivateTooltip ( "HOME" );
+	
 }
 
 
@@ -38,6 +41,9 @@ CHeaderResearchButton::CHeaderResearchButton()
 {
 	this->SetSize ( sf::Vector2f ( 32, 32 ) );
 	this->SetBackground ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/buttons/header_research.png" ) );
+	
+	this->ActivateTooltip( "RESEARCH" );
+	
 }
 
 
@@ -48,6 +54,8 @@ CHeaderPlanetsButton::CHeaderPlanetsButton()
 {
 	this->SetSize ( sf::Vector2f ( 32, 32 ) );
 	this->SetBackground ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/buttons/header_planets.png" ) );
+	
+	this->ActivateTooltip ( "PLANETS" );
 }
 
 
@@ -58,6 +66,9 @@ CHeaderEmpireButton::CHeaderEmpireButton()
 {
 	this->SetSize ( sf::Vector2f ( 32, 32 ) );
 	this->SetBackground ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/buttons/header_empire.png" ) );
+	
+	this->ActivateTooltip ( "EMPIRE" );
+	
 }
 
 
@@ -69,6 +80,9 @@ CHeaderSpyButton::CHeaderSpyButton()
 {
 	this->SetSize ( sf::Vector2f ( 32, 32 ) );
 	this->SetBackground ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/buttons/header_spy.png" ) );
+	
+	this->ActivateTooltip ( "ESPIONAGE" );
+	
 }
 
 
@@ -79,6 +93,9 @@ CHeaderStatsButton::CHeaderStatsButton()
 {
 	this->SetSize ( sf::Vector2f ( 32, 32 ) );
 	this->SetBackground ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/buttons/header_stats.png" ) );
+	
+	this->ActivateTooltip ( "STATISTICS" );
+	
 }
 
 
@@ -89,6 +106,9 @@ CHeaderQuitButton::CHeaderQuitButton()
 {
 	this->SetSize ( sf::Vector2f ( 32, 32 ) );
 	this->SetBackground ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/buttons/header_quit.png" ) );
+	
+	this->ActivateTooltip ( "QUIT" );
+	
 }
 
 

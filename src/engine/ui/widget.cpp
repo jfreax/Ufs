@@ -18,6 +18,7 @@
 
 #include "../../game.hpp"
 #include "../../action.hpp"
+#include "../../gui/window/tooltip.hpp"
 
 #include "window.hpp"
 #include "widget.hpp"
@@ -39,17 +40,21 @@ CWidget::CWidget ( )
 
 	motherWin_ = NULL;
 	
-	/* Standardeinstellungen */
-	isMouseHere_ = wasMouseHere_ = false;
+	/* Standard properties */
+	isMouseHere_ = wasMouseHere_ = unHover_ = false;
 	name_ = "";
 	
-	/* Widget anzeigen */
+	/* Initialize tooltip window */
+	showTooltip_ = 0;
+	hasTooltip_ = false;
+	
+	/* Widget should be draw */
 	this->SetShow ( true );
 		
-	/* Widgethintergrund zeichnen */
+	/* Draw a background */
 	this->SetDrawBackground ( true );
 		
-	/* TextPosition */
+	/* Text position */
 	this->SetTextPosition ( sf::Vector2f ( 0, 0 ) );
 	angle_ = 0;
 	
@@ -61,19 +66,14 @@ CWidget::CWidget ( )
 bool CWidget::Update ( bool doIt )
 {
 	if ( !doIt )
-	{
 		update_ = true;
-	}
 
 	/* Kein update ausführen! */
 	if ( !motherWin_ || !doIt || !update_ )
-	{
 		return false;
-	}
 	
 	/* Update wird jetzt ausgeführt, erstmal wieder ausschalten */
-	update_ = false;
-	
+	update_ = false;	
 
 	/* Position anpassen, inkl. ggf Minusbereiche */
 	position_.x = fakePosition_.x < 0 ? fakePosition_.x + motherWin_->GetSize().x : fakePosition_.x;
@@ -81,8 +81,7 @@ bool CWidget::Update ( bool doIt )
 
 
 	/* Und nun die Position anhand der Drehung des Fensters berechnen */
-	if ( motherWin_->GetAngle() )
-	{
+	if ( motherWin_->GetAngle() ) {
 		double angle_ = motherWin_->GetAngle();
 	
 		position_.y = position_.x * sin_d ( -angle_ ) + position_.y * cos_d ( -angle_ );
@@ -93,8 +92,7 @@ bool CWidget::Update ( bool doIt )
 
 
 	/* Hintergrundbild, oder... */
-	if ( background_.GetSize().x != 1.f )
-	{
+	if ( background_.GetSize().x != 1.f ) {
 		background_.Resize ( curSize_ );
 		background_.SetCenter ( background_.GetSize() * 0.5f );
 		
@@ -105,36 +103,47 @@ bool CWidget::Update ( bool doIt )
 		background_.SetPosition ( position_ + motherWin_->GetPosition() + offset );
 	}
 	/* Hintergrundsprite */
-	else
-	{
+	else {
 		form_ = sf::Shape::Rectangle ( position_, position_ + curSize_, backgroundColor_, border_, borderColor_ );
 	}
 
-	/* Textposition mittig auf den Button setzen */
+	/* Set text position centered on button */
 	text_.SetPosition ( position_ + motherWin_->GetPosition() + textPos_ );
 	
-		
+	/* Change tooltip behavior */
+	if ( hasTooltip_ )
+		toolTip_->Update();
 
 	return true;
 }
 
 
-void CWidget::Calc()
+void CWidget::Render()
 {
-	/* Funktionsanrufe tätigen */
-	this->Call();
-	
-	/* Ggf. "Update"s durchführen */
-	this->Update ( true );
-
-	/* Hover Effekt? Unhover? */
-	if ( !isMouseHere_ && wasMouseHere_ )
-	{
-		this->onUnHoverMouse();
-		wasMouseHere_ = false;
+	if ( hasTooltip_ && showTooltip_ > 0 ) {
+		toolTip_->ChangeTransparency ( showTooltip_*8 );
+		toolTip_->Render();
 	}
+}
 
-	isMouseHere_ = false;
+
+bool CWidget::onHoverMouse()
+{
+	unHover_ = false;
+	
+	if ( hasTooltip_ && showTooltip_ < 31 ) {
+		++showTooltip_;
+	}
+	
+}
+
+
+bool CWidget::onUnHoverMouse()
+{
+	if ( hasTooltip_ ) {
+		lastMouseUnHover_.Reset();
+		unHover_ = true;
+	}
 }
 
 
@@ -276,6 +285,10 @@ CWindow* CWidget::GetMotherWin()
 
 sf::Rect< float > CWidget::GetDimensionInScreen()
 {
+	if ( motherWin_ == NULL ) {
+		return sf::Rect< float > ( 0, 0, 0, 0 );
+	}
+	
 	sf::Vector2f motherPosition = motherWin_->GetPosition();
 	return sf::Rect< float > ( motherPosition.x + position_.x, motherPosition.y + position_.y, motherPosition.x + position_.x + curSize_.x, motherPosition.y + position_.y + curSize_.y );
 }
@@ -310,9 +323,9 @@ void CWidget::SetText ( std::string text )
 }
 
 
-sf::String CWidget::GetText()
+sf::String* CWidget::GetText()
 {
-	return text_;
+	return &text_;
 }
 
 
@@ -349,10 +362,41 @@ void CWidget::SetFont ( std::string fontname )
 /* ------- PRIVATE METHODS ------- */
 
 
+void CWidget::Calc()
+{
+	/* Funktionsanrufe tätigen */
+	this->Call();
+	
+	/* Ggf. "Update"s durchführen */
+	this->Update ( true );
+	
+	/* Hover Effekt? Unhover? */
+	if ( !isMouseHere_ && wasMouseHere_ )
+	{
+		this->onUnHoverMouse();
+		wasMouseHere_ = false;
+	}
+	
+	isMouseHere_ = false;
+	
+	/* Fade out tooltip */
+	if ( hasTooltip_ && showTooltip_ > 0 && unHover_ ) {
+		showTooltip_ -= lastMouseUnHover_.GetElapsedTime();
+	}
+}
+
+
 void CWidget::AdjustTextPosition()
 {
 	if ( curSize_.x > text_.GetRect().GetWidth() && curSize_.y > text_.GetRect().GetHeight() )
 		this->SetTextPosition ( sf::Vector2f ( ( curSize_.x - text_.GetRect().GetWidth() ) * 0.5f, ( curSize_.y - text_.GetRect().GetHeight() ) * 0.5f ) );
+}
+
+
+CWindow* CWidget::ActivateTooltip ( std::string text )
+{
+	toolTip_ = new CTooltip ( this, text );
+	hasTooltip_ = true;
 }
 
 

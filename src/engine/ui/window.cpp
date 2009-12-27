@@ -22,7 +22,7 @@
 namespace gui
 {
 
-CWindow::CWindow()
+CWindow::CWindow ( bool withTitlebarPossible )
 {
 	static unsigned int globalId = 0;
 	id_ = ++globalId;
@@ -39,7 +39,6 @@ CWindow::CWindow()
 
 		titlebarImage_ = NULL; /* TODO thememanager! */
 
-
 		minSize_ = theme->window_.minSize;
 		maxSize_ = theme->window_.maxSize;
 
@@ -50,7 +49,7 @@ CWindow::CWindow()
 		borderColor_ = theme->window_.borderColor;
 
 
-		{ /* Titlebar */
+		if ( withTitlebarPossible ) { /* Titlebar */
 			this->SetTitlebar ( theme->window_.titlebar );
 			this->AddWidget ( new gui::CCloseButton );
 			this->AddWidget ( new gui::CHideButton ( (CButton*)this->AddWidget ( new gui::CMinimizeButton ) ) );
@@ -60,6 +59,8 @@ CWindow::CWindow()
 
 			titlebarLength_ = theme->window_.titlebarLength;
 			titlebarColor_ = theme->window_.titlebarColor;
+		} else {
+			titlebar_ = false;
 		} /* End Titlebar */
 
 
@@ -113,7 +114,7 @@ void CWindow::Update()
 
 	/* ... ansonsten Backgroundshape berechnen lassen */
 	else {
-		calcBackground();
+		this->CalcBackground();
 	}
 
 	/* Inhalte ebenfalls aktualisieren */
@@ -232,7 +233,7 @@ CWidget* CWindow::AddWidget ( CWidget* widget, bool newLine )
 }
 
 
-void CWindow::calcBackground()
+void CWindow::CalcBackground()
 {
 	/* alte Shapes löschen */
 	delete formWin_;
@@ -305,7 +306,7 @@ void CWindow::calcBackground()
 		float formRound = GetSize().x - titlebarLength_ > formRound_ ? formRound_ : GetSize().x - titlebarLength_;
 
 		/* obere linke Ecke */
-		if ( titlebar_ ) {
+		if ( titlebar_ || GetPosition().y == 0 ) {
 			formWin_->AddPoint ( 0, 0, backgroundColor_ );
 		} else {
 			sf::Vector2f Center ( formRound_, formRound_ );
@@ -319,8 +320,7 @@ void CWindow::calcBackground()
 
 		/* obere rechte Ecke
 		   Wenn Titelbar kürzer als Fenster und Fenster nicht am oberen Rand, dann Ecke abrunden */
-
-		if ( titlebarLength_ && titlebarLength_ < GetSize().x && GetPosition().y != 0 ) {
+		if ( ( !titlebar_ || titlebarLength_ < GetSize().x ) && GetPosition().y != 0 ) {
 			Center = sf::Vector2f ( GetSize().x - formRound, formRound );
 
 			for ( int i = 60; i < 80; ++i ) {
@@ -586,7 +586,7 @@ void CWindow::SetPosition ( sf::Vector2f position )
 
 void CWindow::SetPosition ( POSITION posX, POSITION posY )
 {
-	this->SetPosition ( sf::Vector2f ( 0, 0 ) ); /* FIXME why I used "MovePosition"??? */
+	position_.x = 0; position_.y = 0; /* FIXME why I used "MovePosition"??? */
 	
 	switch ( posX ) {
 		case LEFT:
@@ -611,6 +611,8 @@ void CWindow::SetPosition ( POSITION posX, POSITION posY )
 			MovePosition ( VERTICAL, settings::GetHeight() - GetSize().y );
 			break;
 	}
+	
+	this->Update();
 }
 
 
@@ -711,7 +713,6 @@ void CWindow::SetTitlebar ( unsigned int titlebar )
 		}
 
 		std::vector< gui::CWidget* >::iterator endIter = widgetList_.end();
-
 		std::vector< gui::CWidget* >::iterator iter = widgetList_.begin();
 
 		for ( ; iter != endIter; ++iter ) {
@@ -722,6 +723,9 @@ void CWindow::SetTitlebar ( unsigned int titlebar )
 	}
 
 	titlebar_ = titlebar;
+	
+	if ( !titlebar_ )
+		titlebarLength_ = 0;
 
 	this->Update();
 }

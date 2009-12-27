@@ -33,15 +33,14 @@ class CWidget
 		CWidget();
 		unsigned int GetId() { return id_; }
 
-		virtual void Render() = 0;
+		virtual void Render();
 		virtual bool Update ( bool doIt = false );
-// 		void NoUpdate ( bool ison );
-		
+	
 		virtual bool Call() {};
 
 		virtual bool onLeftClick() {};
-		virtual bool onHoverMouse() {};
-		virtual bool onUnHoverMouse() {};
+		virtual bool onHoverMouse();
+		virtual bool onUnHoverMouse();
 
 		void SetMotherWin ( class CWindow* win );
 
@@ -75,7 +74,7 @@ class CWidget
 		std::string GetName();
 		
 		void SetText ( std::string text );
-		sf::String GetText();
+		sf::String* GetText();
 		
 		void SetTextPosition ( sf::Vector2f pos );
 		sf::Vector2f GetTextPosition();
@@ -83,13 +82,17 @@ class CWidget
 		void SetTextSize ( int size );
 		void SetFont ( std::string fontname );
 
-		sf::Clock lastClickTime;
-		
 	protected:
 		virtual void Calc();
 		void AdjustTextPosition();
-	
-		/* DATA-VARS */
+		
+		CWindow* ActivateTooltip ( std::string text = "" );
+		
+	public:
+		sf::Clock lastClickTime;
+		
+	protected:
+		/* --- Data variables --- */
 		unsigned int id_;
 		class CWindow* motherWin_;
 		
@@ -97,6 +100,12 @@ class CWidget
 
 		bool isMouseHere_;
 		bool wasMouseHere_;
+		
+		bool hasTooltip_;
+		bool unHover_;
+		sf::Clock lastMouseUnHover_;
+		int showTooltip_;
+		class CTooltip* toolTip_;
 		
 		double angle_;
 		
