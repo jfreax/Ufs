@@ -85,11 +85,18 @@ CHeaderStatsButton::CHeaderStatsButton()
 /* ------------------------- */
 
 
-
 CHeaderQuitButton::CHeaderQuitButton()
 {
 	this->SetSize ( sf::Vector2f ( 32, 32 ) );
 	this->SetBackground ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/buttons/header_quit.png" ) );
 }
+
+
+bool CHeaderQuitButton::onLeftClick()
+{
+	GetGameClass()->SetGameType ( PAUSED );
+	return true;
+}
+
 
 } /* namespace gui */

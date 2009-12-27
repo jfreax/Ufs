@@ -17,27 +17,24 @@
 
 */
 
-#ifndef UI_UTIL_HPP
-#define UI_UTIL_HPP
+#ifndef GUI_IMAGE_HPP
+#define GUI_IMAGE_HPP
+
+#include "../../engine/ui/widget.hpp"
 
 namespace gui
 {
-
-enum LAYOUT {
-	NOTHING,
-	HORIZONTAL,
-	VERTICAL,
-	GRID
+	
+	
+class CImage : public CWidget
+{
+		public:
+			CImage ( std::string filename );
+			
+			void Render();
 };
 
-enum POSITION {
-	CENTER,
-	LEFT,
-	RIGHT,
-	TOP,
-	BOTTOM
-};
 
-} // namespace gui
+} /* namespace gui */
 
-#endif // UI_UTIL_HPP
+#endif // GUI_IMAGE_HPP

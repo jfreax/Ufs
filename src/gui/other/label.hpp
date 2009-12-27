@@ -17,27 +17,25 @@
 
 */
 
-#ifndef UI_UTIL_HPP
-#define UI_UTIL_HPP
+#ifndef LABEL_HPP
+#define LABEL_HPP
+
+#include "../../engine/ui/widget.hpp"
 
 namespace gui
 {
 
-enum LAYOUT {
-	NOTHING,
-	HORIZONTAL,
-	VERTICAL,
-	GRID
+class CLabel : public CWidget
+{
+	public:
+		CLabel ( std::string text );
+		
+		void Render();
+		
+	private:
 };
 
-enum POSITION {
-	CENTER,
-	LEFT,
-	RIGHT,
-	TOP,
-	BOTTOM
-};
 
-} // namespace gui
+} /* namespace gui */
 
-#endif // UI_UTIL_HPP
+#endif // LABEL_HPP

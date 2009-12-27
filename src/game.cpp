@@ -29,6 +29,7 @@
 #include "gui/button/titlebar.hpp"
 #include "gui/window/start.hpp"
 #include "gui/window/header_menu.hpp"
+#include "gui/window/quit.hpp"
 // #include "particle.hpp"
 
 
@@ -152,6 +153,7 @@ bool CGame::Initialize()
 	app_.ShowMouseCursor ( false );
 
 	fpsStr_.SetSize ( 12 );
+	
 
 	// TODO nur Beispiele!
 	cursor_[NONE] = new CAnimation ( GetImgResource()->Get ( settings::GetThemePath() + "arrow.png" ) , 36, 0.1f );
@@ -159,6 +161,8 @@ bool CGame::Initialize()
 	cursor_[WINDOW] = new CAnimation ( GetImgResource()->Get ( settings::GetThemePath() + "hand.png" ) , 41, 0.08f );
 	cursor_[WINDOW]->Scale ( 0.6, 0.6 );
 	cursor_[WINDOW]->SetStartAt ( 6 );
+	
+	this->SetGameType ( SINGLEPLAYER );
 
 	return true;
 }
@@ -174,66 +178,6 @@ bool CGame::IsVideoModeValid() /* TODO in CGame::initialize und settings::setHei
 bool CGame::Start()
 {
 	// FIXME Nur BEISPIELE!
-//  gui::CWindow* newWin = guiManager_.NewWindow();
-//  guiManager_.NewWindow();
-//  guiManager_.NewWindow();
-//
-//  newWin->SetSizeInPercent ( sf::Vector2f ( 90, 90 ) );
-//  newWin->SetPosition ( sf::Vector2f ( 20, 130 ) );
-
-
-//
-// //  win->SetPosition( sf::Vector2f ( 0, 0 ));
-// //  win->SetSize ( sf::Vector2f ( 200, 200 ));
-// //
-
-
-
-
-
-//  gui::CWindow* win3 = guiManager_.AddWindow ( new gui::CWindow );
-//
-//  win3->SetPosition( sf::Vector2f ( 250, 100 ));
-//  win3->SetSize ( sf::Vector2f ( 300, 200 ));
-//
-//  gui::CWindow* win4 = guiManager_.AddWindow ( new gui::CWindow );
-//
-//  win4->SetPosition( sf::Vector2f ( 150, 300 ));
-//  win4->SetSize ( sf::Vector2f ( 200, 200 ));
-//
-//   gui::CWindow* newWin2 = guiManager.newWindow();
-//   newWin2->setSizeInPercent ( sf::Vector2f ( 20, 20 ) );
-//   newWin2->setTitlebar ( 10 );
-//   newWin2->setPosition ( sf::Vector2f ( 0, 50 ) );
-
-//  gui::CButton* newButton = new gui::CButton ( newWin );
-//  newButton->SetName ( "TEST" );
-//  newButton->SetSize ( sf::Vector2f ( 80, 25 ) );
-//  newButton->SetPosition ( sf::Vector2f ( 30, 20 ) );
-//  newButton->SetBackgroundColor ( sf::Color ( 0, 0, 0, 0 ) );
-//
-//  util::DataHolder* buttonSettings = newButton->AddMouseEvent ( "fadeInking", MOUSE::HOVER, 0.01f );
-//  buttonSettings->sprite_one = newButton->GetBackground();
-//  buttonSettings->color_one = sf::Color ( 20, 1, 1, 20 );
-//  buttonSettings->color_two = sf::Color ( 10, 0, 0, 10 );
-//  buttonSettings->b = false;
-//
-//  util::DataHolder* buttonSettings2 = newButton->AddMouseEvent ( "fake", MOUSE::UNHOVER, 0.01f );
-//  buttonSettings2->sprite_one = newButton->GetBackground();
-//  buttonSettings2->color_one = sf::Color ( 245, 255, 255, 245 );
-//  buttonSettings2->color_two = sf::Color ( 10, 0, 0, 10 );
-//  buttonSettings2->b = true;
-
-// 	testAnim = new CAnimation ( GetImgResource()->Get ( "images/sun/sun.png" ), 250, 0.1f, true );
-// 	testAnim->SetFrameWidth ( 250 );
-// 	testAnim->SetScale ( 0.3f, 0.3f );
-// 
-// 	testAnim2 = new CAnimation ( GetImgResource()->Get ( "images/sun/sun.png" ), 250, 0.39f, true );
-// 	testAnim2->SetFrameWidth ( 250 );
-// 	testAnim2->SetScale ( 0.3f, 0.3f );
-// 	testAnim2->SetFrameDiff ( -1 );
-// testAnim->SetPosition(100, 200);
-
 
 	/* Tastatureinstellungen laden */
 	input_.LoadKeys( "config/keyboard.ini" );
@@ -244,13 +188,17 @@ bool CGame::Start()
 	/* Leere Karte initialisieren */
 	mapManager_.Initialize();
 	
+	/* Load standard windows */
+	guiManager_.AddWindow ( specialWindow_["QUIT"] = new gui::CQuitWindow );
+	guiManager_.AddWindow ( new gui::CHeaderWindow );
 	
-	 gui::CWindow* win2 = guiManager_.AddWindow ( new gui::CWindow );
-	 gui::CWindow* win = guiManager_.AddWindow ( new gui::CHeaderWindow );
+	gui::CWindow* win2 = guiManager_.AddWindow ( new gui::CWindow );
+	win2->SetPosition( sf::Vector2f ( 100, 100 ));
+	win2->SetSize ( sf::Vector2f ( 200, 200 ));
+	 
 // 	 gui::CWindow* win = guiManager_.AddWindow ( new gui::CStartWindow );
 //
- win2->SetPosition( sf::Vector2f ( 100, 100 ));
- win2->SetSize ( sf::Vector2f ( 200, 200 ));
+
 //
 
 
@@ -261,13 +209,20 @@ bool CGame::Start()
 		input_.Events();
 		
 		/* Berechnenung des Spielablaufs */
-		
+		if ( this->GetGameType() == SINGLEPLAYER || this->GetGameType() == MULTIPLAYER )
+			this->Calc();
 
 		/* Zeichnen der GUI und Spielinhalte */
 		this->Render();
 	}
 
 	return true;
+}
+
+
+void CGame::Calc()
+{
+
 }
 
 
@@ -333,6 +288,21 @@ void CGame::Render()
 
 	/* Zeichnen! */
 	app_.Display();
+}
+
+
+GAMETYPE CGame::GetGameType()
+{
+	return gametype_;
+}
+
+
+void CGame::SetGameType ( GAMETYPE gametype )
+{
+	if ( gametype == PAUSED )
+		specialWindow_ [ "QUIT" ]->SetShow();
+
+	gametype_ = gametype;
 }
 
 

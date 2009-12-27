@@ -39,7 +39,7 @@ class CManager
 		bool MouseHover ( const int x, const int y );
 
 		CWindow* AddWindow ( CWindow* win );		
-		bool CloseWindow ( CWindow* window = NULL ); // NULL -> schlieﬂt das letzte Fenster
+		bool CloseWindow ( CWindow* window = NULL, bool DoNotFreeSpace = false ); // NULL -> schlieﬂt das letzte Fenster
 		
 		sf::Vector2f AddWindowToDock ( CWindow* win );
 		void RemoveWindowFromDock ( CWindow* win );

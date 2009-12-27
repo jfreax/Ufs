@@ -27,8 +27,6 @@
 namespace gui
 {
 	
-
-
 class CWidget
 {
 	public:
@@ -39,21 +37,23 @@ class CWidget
 		virtual bool Update ( bool doIt = false );
 // 		void NoUpdate ( bool ison );
 		
-		virtual bool Call() = 0;
+		virtual bool Call() {};
 
-		virtual bool onLeftClick() = 0;
-		virtual bool onHoverMouse() = 0;
-		virtual bool onUnHoverMouse() = 0;
+		virtual bool onLeftClick() {};
+		virtual bool onHoverMouse() {};
+		virtual bool onUnHoverMouse() {};
 
 		void SetMotherWin ( class CWindow* win );
 
 		void SetPosition ( sf::Vector2f position );
 		void MovePosition ( LAYOUT direction, unsigned int distance );
+		void MovePosition ( LAYOUT direction, POSITION to );
 		
 		sf::Vector2f GetPosition();
 		sf::Rect<float> GetDimension();
 		
 		void SetSize ( sf::Vector2f size );
+		void AdjustSize();
 
 		void SetName ( std::string name );
 		void SetFontSize ( int size );
@@ -87,7 +87,9 @@ class CWidget
 		
 	protected:
 		virtual void Calc();
+		void AdjustTextPosition();
 	
+		/* DATA-VARS */
 		unsigned int id_;
 		class CWindow* motherWin_;
 		
@@ -115,7 +117,6 @@ class CWidget
 
 		unsigned int border_;
 		sf::Color borderColor_;
-
 };
 
 

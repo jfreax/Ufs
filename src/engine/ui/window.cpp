@@ -29,7 +29,8 @@ CWindow::CWindow()
 
 	CGame* game = GetGameClass();
 	CTheme* theme = game->GetGuiManager()->GetTheme();
-
+	
+	this->SetShow ( true );
 	this->NoUpdate ( true );
 	{
 		formWin_ = NULL;
@@ -97,10 +98,12 @@ void CWindow::NoUpdate ( bool ison )
 
 void CWindow::Update()
 {
-	/* Keine Updates durchführen! */
-	if ( noUpdate_ ) {
+	if ( !this->GetShow() )
 		return;
-	}
+	
+	/* Keine Updates durchführen! */
+	if ( noUpdate_ )
+		return;
 
 	/* Hintergrundbild (falls vorhanden) berechnen, ... */
 	if ( background_.GetSize().x != 1.f ) {
@@ -124,7 +127,7 @@ void CWindow::UpdateWidgets()
 {
 	std::vector< gui::CWidget* >::iterator endIter = widgetList_.end();
 	std::vector< gui::CWidget* >::iterator iter = widgetList_.begin();
-	
+
 	for ( ; iter != endIter; ++iter ) {
 		( *iter )->Update ( true );
 
@@ -134,6 +137,9 @@ void CWindow::UpdateWidgets()
 
 bool CWindow::Render()
 {
+	if ( !this->GetShow() )
+		return false;
+	
 	sf::RenderWindow* app = GetGameClass()->GetApp();
 
 	/* Titlebar */
@@ -149,39 +155,51 @@ bool CWindow::Render()
 	}
 
 	/* Draw all widgets */
-	for ( std::vector<gui::CWidget*>::size_type i = widgetList_.size(); i; --i ) {
+	for ( std::vector<gui::CWidget*>::size_type i = widgetList_.size(); i; --i )
 		widgetList_[i-1]->Render();
-	}
 }
 
 
-bool CWindow::Close()
+bool CWindow::Close ( bool DoNotFreeSpace )
 {
 	if ( closeAble_ )
-		return GetGameClass()->GetGuiManager()->CloseWindow ( this );
+		return GetGameClass()->GetGuiManager()->CloseWindow ( this, DoNotFreeSpace );
 	else
 		return false;
 }
 
 
-CWidget* CWindow::AddWidget ( CWidget* widget )
+CWidget* CWindow::AddWidget ( CWidget* widget, bool newLine )
 {
 	/* Calc position with the help of layout */
-	if ( this->GetWidget() ) {
-// 		std::cout << (std::string)this->GetWidget ( -1 )->GetText().GetText() << ": " <<  this->GetWidget ( -1 )->GetDimensionInScreen().Left << " + " << this->GetWidget ( -1 )->GetDimension().GetWidth() << std::endl;
-		
+	if ( this->GetWidget() && !newLine ) {
 		if ( layout_ == gui::HORIZONTAL ) {
 			widget->SetPosition ( sf::Vector2f ( this->GetWidget ( -1 )->GetPosition().x + this->GetWidget ( -1 )->GetDimension().GetWidth() + layoutBorder_, -1 ) );
+			widget->MovePosition ( VERTICAL, this->GetWidget( -1 )->GetDimension().Top + ( this->GetWidget( -1 )->GetDimension().GetHeight() * 0.5f ) - ( widget->GetDimension().GetHeight() * 0.5f ) );
+		
 		} else if ( layout_ == gui::VERTICAL ) {
 			widget->SetPosition ( sf::Vector2f ( 1, this->GetWidget ( -1 )->GetPosition().y + this->GetWidget ( -1 )->GetDimension().GetHeight() + layoutBorder_ ) );
+			widget->MovePosition ( HORIZONTAL, this->GetWidget( -1 )->GetDimension().Left + ( this->GetWidget( -1 )->GetDimension().GetWidth() * 0.5f ) - ( widget->GetDimension().GetWidth() * 0.5f ) );
+			
 		} else if ( layout_ == gui::GRID ) {
 			/* TODO */
 		}
 	}
-	
+	if ( newLine ) {
+		int endY = 0;
+		std::vector< gui::CWidget* >::iterator endIter = widgetList_.end();
+		std::vector< gui::CWidget* >::iterator iter = widgetList_.begin();
+		for ( ; iter != endIter; ++iter )
+			if ( ( *iter )->GetDimension().Bottom > endY )
+				endY = ( *iter )->GetDimension().Bottom;
+			
+		widget->MovePosition ( VERTICAL, endY + layoutBorder_ );
+	}
+
 	/* Move widget outside the spacer's */
 	std::vector< gui::CWidget* >::iterator endIter = spacerList_.end();
 	std::vector< gui::CWidget* >::iterator iter = spacerList_.begin();
+
 	for ( ; iter != endIter; ++iter ) {
 		if ( ( *iter )->GetDimension().Intersects ( widget->GetDimension() ) ) {
 			if ( ( *iter )->GetName() == "spacer_horizontal" ) {
@@ -192,9 +210,16 @@ CWidget* CWindow::AddWidget ( CWidget* widget )
 		}
 	}
 	
+	/* Add a border */
+	if ( widget->GetPosition().x == 0 ) {
+		widget->MovePosition ( HORIZONTAL, layoutBorder_);
+	}
+	if ( widget->GetPosition().y == 0 ) {
+		widget->MovePosition ( VERTICAL, layoutBorder_);
+	}
+
 	/* Add to right widget list */
 	if (  widget->GetName() == "spacer_horizontal" || widget->GetName() == "spacer_vertical" ) {
-// 		std::cout << "ok " << std::endl;
 		spacerList_.push_back ( widget );
 	} else {
 		widgetList_.push_back ( widget );
@@ -280,10 +305,21 @@ void CWindow::calcBackground()
 		float formRound = GetSize().x - titlebarLength_ > formRound_ ? formRound_ : GetSize().x - titlebarLength_;
 
 		/* obere linke Ecke */
-		formWin_->AddPoint ( 0, 0, backgroundColor_ );
+		if ( titlebar_ ) {
+			formWin_->AddPoint ( 0, 0, backgroundColor_ );
+		} else {
+			sf::Vector2f Center ( formRound_, formRound_ );
+			
+			for ( int i = 40; i < 60; ++i ) {
+				Angle = i * 2 * 3.141592654f / 80;
+				sf::Vector2f Offset ( cos ( Angle ), sin ( Angle ) );
+				formWin_->AddPoint ( Center + Offset * formRound_, backgroundColor_ );
+			}	
+		}
 
 		/* obere rechte Ecke
 		   Wenn Titelbar kürzer als Fenster und Fenster nicht am oberen Rand, dann Ecke abrunden */
+
 		if ( titlebarLength_ && titlebarLength_ < GetSize().x && GetPosition().y != 0 ) {
 			Center = sf::Vector2f ( GetSize().x - formRound, formRound );
 
@@ -383,9 +419,7 @@ void CWindow::calcBackground()
 
 	/* Positionen anpassen */
 	formWin_->SetPosition ( GetPosition() );
-
 	formWinBorder_->SetPosition ( GetPosition() );
-
 	formTitlebar_->SetPosition ( GetPosition().x, GetPosition().y );
 
 	/* Mittelpunkt setzen */
@@ -393,9 +427,7 @@ void CWindow::calcBackground()
 
 	/* Rotation setzen */
 	formWin_->SetRotation ( angle_ );
-
 	formWinBorder_->SetRotation ( angle_ );
-
 	formTitlebar_->SetRotation ( angle_ );
 }
 
@@ -464,18 +496,38 @@ gui::CWidget* CWindow::GetWidget ( int i )
 }
 
 
+void CWindow::AdjustSize()
+{
+	int endX = 0;
+	int endY = 0;
+	
+	std::vector< gui::CWidget* >::iterator endIter = widgetList_.end();
+	std::vector< gui::CWidget* >::iterator iter = widgetList_.begin();
+	for ( ; iter != endIter; ++iter ) {
+		if ( ( *iter )->GetDimension().Right > endX )
+			endX = ( *iter )->GetDimension().Right;
+		
+		if ( ( *iter )->GetDimension().Bottom > endY )
+			endY = ( *iter )->GetDimension().Bottom;
+	}
+	
+	this->SetSize ( sf::Vector2f ( endX + layoutBorder_, endY + layoutBorder_ ) );
+}
+
+
 void CWindow::SetSize ( sf::Vector2f size_, bool force )
 {
 	curSize_ = size_;
-
 	sf::Vector2f minSize = minSize_;
 
 	/* Egal welche min. Einstellungen es gibt,
 	   ich soll sie ignorieren.. nagut... */
-
 	if ( force ) {
 		minSize = sf::Vector2f ( 0, 0 );
 	}
+	
+	if ( !resizeAble_ )
+		return;
 
 	if ( curSize_.x < minSize.x ) {
 		curSize_.x = minSize.x;
@@ -511,7 +563,10 @@ sf::Vector2f CWindow::GetSize() const
 
 void CWindow::SetPosition ( sf::Vector2f position )
 {
-	position_ = position;
+	if ( position.x != -1 )
+		position_.x = position.x;
+	if ( position.y != -1 )
+		position_.y = position.y;
 
 	if ( position_.x + curSize_.x < 0 )
 		position_.x = - curSize_.x + 10;
@@ -526,6 +581,44 @@ void CWindow::SetPosition ( sf::Vector2f position )
 		position_.y = settings::GetHeight();
 
 	this->Update();
+}
+
+
+void CWindow::SetPosition ( POSITION posX, POSITION posY )
+{
+	switch ( posX ) {
+		case LEFT:
+			MovePosition ( HORIZONTAL, 0 );
+			break;
+		case CENTER:
+			MovePosition ( HORIZONTAL, (settings::GetWidth() - GetSize().x) * 0.5f );
+			break;
+		case RIGHT:
+			MovePosition ( HORIZONTAL, settings::GetWidth() - GetSize().x );
+			break;
+	}
+	
+	switch ( posY ) {
+		case TOP:
+			MovePosition ( VERTICAL, 0 );
+			break;
+		case CENTER:
+			MovePosition ( VERTICAL, (settings::GetHeight() - GetSize().y) * 0.5f );
+			break;
+		case BOTTOM:
+			MovePosition ( VERTICAL, settings::GetHeight() - GetSize().y );
+			break;
+	}
+}
+
+
+void CWindow::MovePosition ( LAYOUT direction, unsigned int distance )
+{
+	if ( direction == HORIZONTAL ) {
+		SetPosition ( sf::Vector2f ( GetPosition().x + distance, -1 ) );
+	} else {
+		SetPosition ( sf::Vector2f ( -1, GetPosition().y + distance ) );
+	}
 }
 
 
@@ -549,10 +642,14 @@ int CWindow::GetTitlebarLength()
 
 sf::Rect<float> CWindow::GetWindowDimension() const
 {
-	sf::Vector2f pos = formWin_->TransformToGlobal( sf::Vector2f ( 0, 0 ) );
-	sf::Vector2f posEnd = formWin_->TransformToGlobal( sf::Vector2f ( curSize_.x, curSize_.y ) );
+	if ( formWin_ == NULL ) {
+		return sf::Rect<float> ( 0, 0, 0, 0 );
+	} else {
+		sf::Vector2f pos = formWin_->TransformToGlobal( sf::Vector2f ( 0, 0 ) );
+		sf::Vector2f posEnd = formWin_->TransformToGlobal( sf::Vector2f ( curSize_.x, curSize_.y ) );
 
-	return sf::Rect<float> ( pos.x, pos.y - titlebar_, posEnd.x, posEnd.y );
+		return sf::Rect<float> ( pos.x, pos.y - titlebar_, posEnd.x, posEnd.y );
+	}
 
 // 	return sf::Rect<float> ( position_.x, position_.y - titlebar_, position_.x + curSize_.x, position_.y + curSize_.y );
 }
@@ -577,6 +674,21 @@ sf::Rect<float> CWindow::GetResizeArea() const
 }
 
 
+void CWindow::SetShow ( bool show )
+{
+	show_ = show;
+	
+// 	GetGameClass()->GetGuiManager()->BringToFront( this ); TODO
+}
+
+
+bool CWindow::GetShow()
+{
+	return show_;
+}
+
+
+
 void CWindow::SetTitlebar ( unsigned int titlebar )
 {
 	/* TitlebarIcons-Anzeige nur ändern, falls nötig */
@@ -595,7 +707,9 @@ void CWindow::SetTitlebar ( unsigned int titlebar )
 		}
 
 		std::vector< gui::CWidget* >::iterator endIter = widgetList_.end();
+
 		std::vector< gui::CWidget* >::iterator iter = widgetList_.begin();
+
 		for ( ; iter != endIter; ++iter ) {
 			if ( ( *iter )->GetName() == "close" || ( *iter )->GetName() == "minimize" ) {
 				( *iter )->SetShow ( false );
@@ -615,7 +729,7 @@ void CWindow::SetNoRoundTitlebar ( bool ison )
 }
 
 
-void CWindow::SetMoveWindow ( bool ison )
+void CWindow::SetMoveWindow( bool ison )
 {
 	moveWindow_ = ison;
 }
@@ -633,7 +747,7 @@ void CWindow::SetMoveAble ( bool ison )
 }
 
 
-bool CWindow::GetMoveAble ()
+bool CWindow::GetMoveAble()
 {
 	return moveAble_;
 }
@@ -645,9 +759,21 @@ void CWindow::SetCloseAble ( bool ison )
 }
 
 
-bool CWindow::GetCloseAble ()
+bool CWindow::GetCloseAble()
 {
 	return closeAble_;
+}
+
+
+void CWindow::SetResizeAble ( bool ison )
+{
+	resizeAble_ = ison;
+}
+
+
+bool CWindow::GetResizeAble()
+{
+	return resizeAble_;
 }
 
 
@@ -655,6 +781,12 @@ void CWindow::SetLayout ( gui::LAYOUT layout, int layoutBorder )
 {
 	layout_ = layout;
 	layoutBorder_ = layoutBorder; /* TODO Test if value is okay */
+}
+
+
+unsigned int CWindow::GetLayoutBorder()
+{
+	return layoutBorder_;
 }
 
 

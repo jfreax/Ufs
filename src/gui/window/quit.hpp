@@ -17,27 +17,23 @@
 
 */
 
-#ifndef UI_UTIL_HPP
-#define UI_UTIL_HPP
+#ifndef WINDOW_QUIT_HPP
+#define WINDOW_QUIT_HPP
+
+#include "../../engine/ui/window.hpp"
 
 namespace gui
 {
 
-enum LAYOUT {
-	NOTHING,
-	HORIZONTAL,
-	VERTICAL,
-	GRID
+
+class CQuitWindow : public CWindow
+{
+	public:
+		CQuitWindow();
 };
 
-enum POSITION {
-	CENTER,
-	LEFT,
-	RIGHT,
-	TOP,
-	BOTTOM
-};
 
-} // namespace gui
 
-#endif // UI_UTIL_HPP
+} /* namespace gui */
+
+#endif // WINDOW_QUIT_HPP

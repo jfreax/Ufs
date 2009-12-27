@@ -17,27 +17,43 @@
 
 */
 
-#ifndef UI_UTIL_HPP
-#define UI_UTIL_HPP
+#include "../../game.hpp"
+#include "quit.hpp"
 
 namespace gui
 {
 
-enum LAYOUT {
-	NOTHING,
-	HORIZONTAL,
-	VERTICAL,
-	GRID
-};
 
-enum POSITION {
-	CENTER,
-	LEFT,
-	RIGHT,
-	TOP,
-	BOTTOM
-};
+CQuitButton::CQuitButton()
+{
+	this->SetText ( "Spiel beenden" ); /* TODO i18n */
+}
 
-} // namespace gui
 
-#endif // UI_UTIL_HPP
+bool CQuitButton::onLeftClick()
+{
+	GetGameClass()->Stop();
+	
+	return true;
+}
+
+
+/* --------------------- */	
+
+
+CCancelButton::CCancelButton()
+{
+	this->SetText ( "Abbruch" ); /* TODO i18n */
+}
+
+
+bool CCancelButton::onLeftClick()
+{
+	GetGameClass()->SetGameType ( SINGLEPLAYER ); /* TODO right gametype! */
+	motherWin_->SetShow ( false );
+	
+	return true;
+}
+
+
+} /* namespace gui */

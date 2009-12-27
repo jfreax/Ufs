@@ -22,6 +22,7 @@
 #ifndef HEADER_HPP
 #define HEADER_HPP
 
+
 namespace gui
 {
 
@@ -103,6 +104,7 @@ class CHeaderQuitButton : public CButton
 	public:
 		CHeaderQuitButton();
 		
+		bool onLeftClick();		
 	private:
 };
 

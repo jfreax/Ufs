@@ -28,9 +28,15 @@
 #include "mapmanager.hpp"
 
 
+enum GAMETYPE {
+	PAUSED,
+	MAINMENU,
+	SINGLEPLAYER,
+	MULTIPLAYER
+};
+
 class CGame
 {
-
 	public:
 		CGame ( int argc, char **argv );
 		~CGame();
@@ -43,6 +49,10 @@ class CGame
 		bool Stop();
 
 		void Render();
+		void Calc();
+		
+		GAMETYPE GetGameType();
+		void SetGameType ( GAMETYPE gametype );
 
 		sf::RenderWindow* GetApp();
 		gui::CManager* GetGuiManager();
@@ -57,6 +67,7 @@ class CGame
 		sf::String* GetFpsStr();
 		
 		sf::View* GetViewPoint ( int i = 0 );
+		void ShowSpecialWindow ( std::string windowName );
 
 	private:
 		sf::RenderWindow app_;
@@ -64,9 +75,12 @@ class CGame
 		const int argc_;
 		int arg_;
 		const char* const * const argv_;
+		
 		bool run_;
+		GAMETYPE gametype_;
 
 		sf::View viewPoint_[5];
+		std::map < std::string, gui::CWindow* > specialWindow_;
 
 		CImageResource imgResource_;
 		CFontResource fontResource_;

@@ -17,27 +17,34 @@
 
 */
 
-#ifndef UI_UTIL_HPP
-#define UI_UTIL_HPP
+#include "../../game.hpp"
+#include "../../settings/settings.hpp"
+#include "image.hpp"
+
 
 namespace gui
 {
 
-enum LAYOUT {
-	NOTHING,
-	HORIZONTAL,
-	VERTICAL,
-	GRID
-};
+	
+CImage::CImage ( std::string filename )
+{
+	background_.SetImage ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/" + filename ) );
+	this->SetSize ( background_.GetSize() );
+}
 
-enum POSITION {
-	CENTER,
-	LEFT,
-	RIGHT,
-	TOP,
-	BOTTOM
-};
 
-} // namespace gui
+void CImage::Render()
+{
+	if ( !show_ )
+		return;
+	
+	this->Calc();
+	
+	sf::RenderWindow* app = GetGameClass()->GetApp();
+	if ( drawBackground_ && background_.GetSize().x != 1.f )
+		app->Draw ( background_ );
+}
 
-#endif // UI_UTIL_HPP
+
+
+} /* namespace gui */

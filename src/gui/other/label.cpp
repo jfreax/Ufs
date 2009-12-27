@@ -17,27 +17,26 @@
 
 */
 
-#ifndef UI_UTIL_HPP
-#define UI_UTIL_HPP
+#include "../../game.hpp"
+#include "label.hpp"
 
 namespace gui
 {
 
-enum LAYOUT {
-	NOTHING,
-	HORIZONTAL,
-	VERTICAL,
-	GRID
-};
 
-enum POSITION {
-	CENTER,
-	LEFT,
-	RIGHT,
-	TOP,
-	BOTTOM
-};
+CLabel::CLabel ( std::string text )
+{
+	this->SetText ( text );
+	this->AdjustSize();
+}
 
-} // namespace gui
 
-#endif // UI_UTIL_HPP
+void CLabel::Render()
+{
+	sf::RenderWindow* app = GetGameClass()->GetApp();
+	
+	this->Calc();
+	app->Draw ( text_ );
+}
+
+} /* namespace gui */

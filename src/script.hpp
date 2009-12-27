@@ -57,22 +57,23 @@ gui::CWindow* pull ( lua_State* L, TYPE, int number = -1 );
 
 
 /* LUNA Template */
+
 template <typename T> class Luna
 {
-		typedef struct
-		{
+
+		typedef struct {
 			T *pT;
 		} userdataType;
+
 	public:
 		typedef int ( T::*mfp ) ( lua_State *L );
-		typedef struct
-		{
+
+		typedef struct {
 			const char *name;
 			mfp mfunc;
 		} RegType;
 
-		static void Register ( lua_State *L )
-		{
+		static void Register ( lua_State *L ) {
 			lua_newtable ( L );
 			int methods = lua_gettop ( L );
 
@@ -112,8 +113,8 @@ template <typename T> class Luna
 			lua_setmetatable ( L, methods );
 
 			// fill method table with methods from class T
-			for ( RegType *l = T::methods; l->name; l++ )
-			{
+
+			for ( RegType *l = T::methods; l->name; l++ ) {
 				/* edited by Snaily: shouldn't it be const RegType *l ... ? */
 				lua_pushstring ( L, l->name );
 				lua_pushlightuserdata ( L, ( void* ) l );
@@ -125,11 +126,12 @@ template <typename T> class Luna
 		}
 
 		// get userdata from Lua stack and return pointer to T object
-		static T *check ( lua_State *L, int narg )
-		{
+		static T *check ( lua_State *L, int narg ) {
 			userdataType *ud =
-				static_cast<userdataType*> ( luaL_checkudata ( L, narg, T::className ) );
+			        static_cast<userdataType*> ( luaL_checkudata ( L, narg, T::className ) );
+
 			if ( !ud ) luaL_typerror ( L, narg, T::className );
+
 			return ud->pT;  // pointer to T object
 		}
 
@@ -137,8 +139,7 @@ template <typename T> class Luna
 		Luna();  // hide default constructor
 
 		// member function dispatcher
-		static int thunk ( lua_State *L )
-		{
+		static int thunk ( lua_State *L ) {
 			// stack has userdata, followed by method args
 			T *obj = check ( L, 1 );  // get 'self', or if you prefer, 'this'
 			lua_remove ( L, 1 );  // remove self so member function args start at index 1
@@ -149,12 +150,11 @@ template <typename T> class Luna
 
 		// create a new T object and
 		// push onto the Lua stack a userdata containing a pointer to T object
-		static int new_T ( lua_State *L )
-		{
+		static int new_T ( lua_State *L ) {
 			lua_remove ( L, 1 );   // use classname:new(), instead of classname.new()
 			T *obj = new T ( L );  // call constructor for T objects
 			userdataType *ud =
-				static_cast<userdataType*> ( lua_newuserdata ( L, sizeof ( userdataType ) ) );
+			        static_cast<userdataType*> ( lua_newuserdata ( L, sizeof ( userdataType ) ) );
 			ud->pT = obj;  // store pointer to object in userdata
 			luaL_getmetatable ( L, T::className );  // lookup metatable in Lua registry
 			lua_setmetatable ( L, -2 );
@@ -162,16 +162,14 @@ template <typename T> class Luna
 		}
 
 		// garbage collection metamethod
-		static int gc_T ( lua_State *L )
-		{
+		static int gc_T ( lua_State *L ) {
 			userdataType *ud = static_cast<userdataType*> ( lua_touserdata ( L, 1 ) );
 			T *obj = ud->pT;
 			delete obj;  // call destructor for T objects
 			return 0;
 		}
 
-		static int tostring_T ( lua_State *L )
-		{
+		static int tostring_T ( lua_State *L ) {
 			char buff[32];
 			userdataType *ud = static_cast<userdataType*> ( lua_touserdata ( L, 1 ) );
 			T *obj = ud->pT;

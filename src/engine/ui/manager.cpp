@@ -162,6 +162,8 @@ bool CManager::MouseClickReleased ( const int x, const int y, const sf::Mouse::B
 
 							currentWidget->lastClickTime.Reset();
 							currentWidget->onLeftClick();
+							
+							return true;
 						}
 					}
 				}
@@ -227,7 +229,7 @@ CWindow* CManager::AddWindow ( CWindow* win )
 }
 
 
-bool CManager::CloseWindow ( gui::CWindow* window )
+bool CManager::CloseWindow ( gui::CWindow* window, bool DoNotFreeSpace )
 {
 	if ( !window && windowList_.size() ) {
 		if ( this->GetActiveWindow()->GetCloseAble() ) {
@@ -244,7 +246,9 @@ bool CManager::CloseWindow ( gui::CWindow* window )
 			if ( ( *iter )->GetId() == window->GetId() ) {
 				if ( window->GetCloseAble() ) {
 					windowList_.erase ( iter );
-					delete window;
+					
+					if ( !DoNotFreeSpace )
+						delete window;
 					return true;
 				} else {
 					return this->CloseWindow ( this->GetPreviousWindow ( window ) );

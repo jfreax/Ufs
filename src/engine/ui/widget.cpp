@@ -52,6 +52,9 @@ CWidget::CWidget ( )
 	/* TextPosition */
 	this->SetTextPosition ( sf::Vector2f ( 0, 0 ) );
 	angle_ = 0;
+	
+	/* Standard font */
+	this->SetFont ( "default" );
 }
 
 
@@ -159,6 +162,26 @@ void CWidget::MovePosition ( LAYOUT direction, unsigned int distance )
 }
 
 
+void CWidget::MovePosition ( LAYOUT direction, POSITION to )
+{
+	if ( direction == HORIZONTAL ) {
+		if ( to == RIGHT )
+			SetPosition ( sf::Vector2f ( - this->GetDimension().GetWidth() - motherWin_->GetLayoutBorder(), -1 ) );
+		else if ( to == CENTER )
+			SetPosition ( sf::Vector2f ( ( motherWin_->GetSize().x + this->GetDimension().GetWidth() ) * 0.5f, -1 ) );
+		else
+			SetPosition ( sf::Vector2f ( motherWin_->GetLayoutBorder(), -1 ) );
+	} else {
+		if ( to == TOP )
+			SetPosition ( sf::Vector2f ( -1, - this->GetDimension().GetHeight() - motherWin_->GetLayoutBorder() ) );
+		else if ( to == CENTER )
+			SetPosition ( sf::Vector2f ( -1, ( motherWin_->GetSize().y + this->GetDimension().GetHeight() ) * 0.5f ) );
+		else
+			SetPosition ( sf::Vector2f ( -1, motherWin_->GetLayoutBorder() ) );
+	}
+}
+
+
 sf::Vector2f CWidget::GetPosition()
 {
 	return fakePosition_;
@@ -173,8 +196,19 @@ sf::Rect<float> CWidget::GetDimension()
 
 void CWidget::SetSize ( sf::Vector2f size )
 {
+	/* Change position of widget */
 	curSize_ = size;
+	
+	/* Update text position */
+	this->AdjustTextPosition();
+	
 	this->Update();
+}
+
+
+void CWidget::AdjustSize()
+{
+	this->SetSize ( sf::Vector2f ( text_.GetRect().GetWidth() + textPos_.x, text_.GetRect().GetHeight() + textPos_.y ) );
 }
 
 
@@ -268,6 +302,10 @@ std::string CWidget::GetName()
 void CWidget::SetText ( std::string text )
 {
 	text_.SetText( text );
+	
+	/* Update text position */
+	this->AdjustTextPosition();
+
 	this->Update();
 }
 
@@ -305,6 +343,16 @@ void CWidget::SetFont ( std::string fontname )
 	{
 		text_.SetFont( *font );
 	}
+}
+
+
+/* ------- PRIVATE METHODS ------- */
+
+
+void CWidget::AdjustTextPosition()
+{
+	if ( curSize_.x > text_.GetRect().GetWidth() && curSize_.y > text_.GetRect().GetHeight() )
+		this->SetTextPosition ( sf::Vector2f ( ( curSize_.x - text_.GetRect().GetWidth() ) * 0.5f, ( curSize_.y - text_.GetRect().GetHeight() ) * 0.5f ) );
 }
 
 

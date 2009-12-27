@@ -31,16 +31,16 @@ class CWindow
 		CWindow();
 		const unsigned int GetId() const;
 		void NoUpdate ( bool ison );
-		void Initialize() {};
+		virtual void Initialize() {};
 
 		void Update();
 		void UpdateWidgets();
 
 		bool Render();
 
-		bool Close();
+		bool Close ( bool DoNotFreeSpace = false );
 
-		class CWidget* AddWidget ( class CWidget* widget );
+		class CWidget* AddWidget ( class CWidget* widget, bool newLine = false );
 
 		void calcBackground();
 		void SetBackgroundImage ( sf::Image* img );
@@ -54,11 +54,14 @@ class CWindow
 		std::vector< gui::CWidget* >* GetWidgetList();
 		gui::CWidget* GetWidget ( int i = -1 );
 
+		void AdjustSize();
 		void SetSize ( sf::Vector2f size, bool force = false );
 		void SetSizeInPercent ( sf::Vector2f sizePercent );
 		sf::Vector2f GetSize() const;
 
 		void SetPosition ( sf::Vector2f position );
+		void SetPosition ( POSITION posX, POSITION posY );
+		void MovePosition ( LAYOUT direction, unsigned int distance );
 		sf::Vector2f GetPosition() const;
 
 		int GetTitlebarHeight();
@@ -67,20 +70,27 @@ class CWindow
 		sf::Rect<float> GetWindowDimension() const;
 		sf::Rect<float> GetTitlebarDimension() const ;
 		sf::Rect<float> GetResizeArea() const;
+		
+		void SetShow ( bool show = true );
+		bool GetShow();
 
 		void SetTitlebar ( unsigned int titlebar );
 		void SetNoRoundTitlebar ( bool ison );
 
 		void SetMoveWindow ( bool ison );
-		bool GetMoveWindow () const;
+		bool GetMoveWindow() const;
 
 		void SetMoveAble ( bool ison );
-		bool GetMoveAble ();
+		bool GetMoveAble();
 
 		void SetCloseAble ( bool ison );
-		bool GetCloseAble ();
+		bool GetCloseAble();
+		
+		void SetResizeAble ( bool ison );
+		bool GetResizeAble();
 
 		void SetLayout ( LAYOUT layout, int layoutBorder = 1 );
+		unsigned int GetLayoutBorder();
 
 	protected:
 		unsigned int id_;
@@ -99,6 +109,8 @@ class CWindow
 		bool moveWindow_;
 
 		double angle_;
+		
+		bool show_;
 
 		sf::Vector2f position_;
 

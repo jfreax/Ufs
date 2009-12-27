@@ -15,7 +15,6 @@
 */
 
 #include "../../game.hpp"
-
 #include "button.hpp"
 
 namespace gui
@@ -38,26 +37,15 @@ CButton::CButton()
 
 void CButton::Render()
 {
-	/* Wenn es nicht gezeichnet werden soll, dann ist hier schon Schluss */
 	if ( !show_ )
-	{
 		return;
-	}
 	
-	/* Berechnung durchführen */
-	this->Calc();
-	
+	this->Calc();	
 
 	/* Hintergrund zeichnen */
 	sf::RenderWindow* app = GetGameClass()->GetApp();
 	if ( drawBackground_ && background_.GetSize().x != 1.f )
-	{
 		app->Draw ( background_ );
-	}
-	else
-	{
-
-	}
 	
 	/* Ggf. Text zeichnen */
 	app->Draw ( text_ );

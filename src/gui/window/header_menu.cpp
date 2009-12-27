@@ -40,11 +40,9 @@ CHeaderWindow::CHeaderWindow()
 	this->SetPosition( sf::Vector2f ( width * 0.2f, 0.f ) );
 	this->SetMoveAble ( false );
 	this->SetCloseAble ( false );
-	this->SetLayout ( HORIZONTAL, 5 );
+	this->SetLayout ( HORIZONTAL, 3 );
 
         /* Add buttons */
-	this->AddWidget ( new CSpacer ( VERTICAL, outline ) );
-	this->AddWidget ( new CSpacer ( HORIZONTAL, outline ) );
 	this->AddWidget ( new CHeaderMainButton );
 	this->AddWidget ( new CHeaderResearchButton );
 	this->AddWidget ( new CHeaderPlanetsButton );

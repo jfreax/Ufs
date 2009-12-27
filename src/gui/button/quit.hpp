@@ -17,27 +17,35 @@
 
 */
 
-#ifndef UI_UTIL_HPP
-#define UI_UTIL_HPP
+#include "../../engine/ui/button.hpp"
+
+#ifndef BUTTON_QUIT_HPP
+#define BUTTON_QUIT_HPP
 
 namespace gui
 {
+	
 
-enum LAYOUT {
-	NOTHING,
-	HORIZONTAL,
-	VERTICAL,
-	GRID
+class CQuitButton : public CButton
+{
+	public:
+		CQuitButton();
+		
+		bool onLeftClick();
 };
 
-enum POSITION {
-	CENTER,
-	LEFT,
-	RIGHT,
-	TOP,
-	BOTTOM
+
+/* ----------------- */
+
+class CCancelButton : public CButton
+{
+	public:
+		CCancelButton();
+		
+		bool onLeftClick();
 };
 
-} // namespace gui
+} /* namespace gui */
 
-#endif // UI_UTIL_HPP
+
+#endif // BUTTON_QUIT_HPP
