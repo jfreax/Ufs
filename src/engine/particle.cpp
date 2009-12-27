@@ -72,16 +72,14 @@ bool CParticleManager::Calc ( std::list <class CEmitter>::iterator EmIter )
 
 	sf::Vector3f partDirection;
 
-	while ( PartTmp )
-	{
+	while ( PartTmp ) {
 		/* "Leben" abziehen */
 		if ( !PartTmp->setDelta_Life ( -GetGameClass()->GetApp()->GetFrameTime() ) )
 			PartTmp->Reset ( &*EmIter );
 
 		/* Farbe anpassen */
 		double fade = PartTmp->GetLife() / EmIter->GetLife();
-		switch ( type )
-		{
+		switch ( type ) {
 			case 1:
 // 				PartTmp->SetColor ( sf::Color ( fade * 150.f, fade * 100.f, 0, fade * 250.f ) );
 				break;
@@ -106,9 +104,7 @@ bool CParticleManager::Calc ( std::list <class CEmitter>::iterator EmIter )
 void CParticleManager::Update ( void )
 {
 	for ( std::list <class CEmitter>::iterator iter = emitter.begin(); iter != emitter.end(); ++iter )
-	{
 		Calc ( iter );
-	}
 }
 
 
@@ -124,12 +120,10 @@ bool CParticleManager::Draw ( ) const
 	glDisable ( GL_DEPTH_TEST );
 	glBlendFunc ( GL_SRC_ALPHA, GL_ONE );
 
-	for ( std::list <class CEmitter>::const_iterator iter = emitter.begin(); iter != emitter.end(); ++iter )
-	{
+	for ( std::list <class CEmitter>::const_iterator iter = emitter.begin(); iter != emitter.end(); ++iter ) {
 		// Partikel zeichnen
 		CParticle *PartTmp = iter->GetParticle();
-		while ( PartTmp )
-		{
+		while ( PartTmp ) {
 			glPushMatrix();
 			{
 				sf::Vector3f pos = PartTmp->GetPosition();
@@ -227,9 +221,7 @@ CEmitter::CEmitter ( unsigned int numberOfParticles )
 void CEmitter::Feed ( unsigned int numberOfParticles )
 {
 	for ( unsigned int i = 0; i < numberOfParticles; ++i )
-	{
 		new CParticle ( this );
-	}
 }
 
 

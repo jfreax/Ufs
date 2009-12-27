@@ -26,7 +26,7 @@ namespace gui
 
 CQuitButton::CQuitButton()
 {
-	this->SetText ( "Spiel beenden" ); /* TODO i18n */
+	this->SetText ( SYS, "QUIT" ); /* TODO i18n */
 }
 
 
@@ -43,7 +43,7 @@ bool CQuitButton::onLeftClick()
 
 CCancelButton::CCancelButton()
 {
-	this->SetText ( "Abbruch" ); /* TODO i18n */
+	this->SetText ( SYS, "CANCEL" ); /* TODO i18n */
 }
 
 

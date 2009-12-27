@@ -55,16 +55,16 @@ bool CManager::MouseClick ( const int x, const int y, const sf::Mouse::Button bu
 
 	std::vector< CWindow* >::iterator clickedWindow = windowList_.end() - 1;
 	std::vector< CWindow* >::iterator lastWindow = windowList_.end() - 1;
-	std::vector< CWindow* >::iterator currentWindow = windowList_.end() - 1;
+	std::vector< CWindow* >::iterator currentWindow = windowList_.begin();
 	std::vector< CWindow* >::iterator iterBegin = windowList_.begin();
 
 
 	if ( button == sf::Mouse::Left ) {
-		for ( ; currentWindow + 1 != iterBegin; --currentWindow ) {
+		for ( ; currentWindow != lastWindow+1; ++currentWindow ) {
 			/* Titlebar */
 			if ( ( ( *currentWindow )->GetTitlebarDimension().Contains ( x, y ) &&
-			                ( *currentWindow )->GetMoveAble() &&
-			                previousMouseScope_ == NONE ) || previousMouseScope_ == TITLE ) {
+			                ( *currentWindow )->GetMoveAble() /*&&
+			                previousMouseScope_ == NONE */) || previousMouseScope_ == TITLE ) {
 				if ( currentWindow == lastWindow ) {
 					previousMouseScope_ = TITLE;
 					sf::Vector2f winPos = ( *currentWindow )->GetPosition();
@@ -131,11 +131,11 @@ bool CManager::MouseClickReleased ( const int x, const int y, const sf::Mouse::B
 
 	std::vector< CWindow* >::iterator clickedWindow = windowList_.end() - 1;
 	std::vector< CWindow* >::iterator lastWindow = windowList_.end() - 1;
-	std::vector< CWindow* >::iterator currentWindow = windowList_.end() - 1;
+	std::vector< CWindow* >::iterator currentWindow = windowList_.begin();
 	std::vector< CWindow* >::iterator iterBegin = windowList_.begin();
 
 	if ( button == sf::Mouse::Left ) {
-		for ( ;currentWindow + 1 != iterBegin; --currentWindow ) {
+		for ( ;currentWindow != lastWindow+1; ++currentWindow ) {
 			if ( ( *currentWindow )->GetWindowDimension().Contains ( x, y ) ||
 			                ( *currentWindow )->GetTitlebarDimension().Contains ( x, y ) ) { // ## Fenster ##
 				clickedWindow = currentWindow;

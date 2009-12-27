@@ -28,6 +28,9 @@ sf::VideoMode GetVideo();
 sf::WindowSettings GetWindowSettings();
 int GetStyle();
 
+std::string GetLang();
+void SetLang ( std::string lang );
+
 std::string GetPath();
 std::string GetThemePath();
 void SetPath ( std::string path_ );

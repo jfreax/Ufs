@@ -32,144 +32,156 @@ Config config;
 namespace settings
 {
 
-sf::VideoMode GetVideo ( void )
+sf::VideoMode GetVideo()
 {
-  return config.video;
+	return config.video;
 }
 
 
-sf::WindowSettings GetWindowSettings ( void )
+sf::WindowSettings GetWindowSettings()
 {
-  return config.windowSettings;
+	return config.windowSettings;
 }
 
 
-int GetStyle ( void )
+int GetStyle()
 {
-  int style = sf::Style::Close;
+	int style = sf::Style::Close;
 
-  if ( GetFullscreen() )
-    style |= sf::Style::Fullscreen;
+	if ( GetFullscreen() )
+		style |= sf::Style::Fullscreen;
 
-  return style;
+	return style;
 }
 
 
-std::string GetPath ( void )
+void SetLang ( std::string lang )
 {
-  return config.path;
+	config.lang = lang;
 }
 
 
-std::string GetThemePath ( void )
+std::string GetLang()
 {
-  return "/themes/" + config.theme + "/";
+	return config.lang;
 }
 
 
-void SetPath ( std::string path_ )
+
+std::string GetPath()
 {
-  config.path = path_;
+	return config.path;
 }
 
 
-bool GetFullscreen ( void )
+std::string GetThemePath()
 {
-  return config.fullscreen;
+	return "/themes/" + config.theme + "/";
+}
+
+
+void SetPath ( std::string path )
+{
+	config.path = path;
+}
+
+
+bool GetFullscreen()
+{
+	return config.fullscreen;
 }
 
 
 void SetFullscreen ( bool ison )
 {
-  config.fullscreen = ison;
-  GetGameClass()->Initialize();
+	config.fullscreen = ison;
+	GetGameClass()->Initialize();
 }
 
 
-void ToggleFullscreen ( void )
+void ToggleFullscreen()
 {
-  config.fullscreen = !config.fullscreen;
-  GetGameClass()->Initialize();
+	config.fullscreen = !config.fullscreen;
+	GetGameClass()->Initialize();
 }
 
 
-bool GetShowFps ( void )
+bool GetShowFps()
 {
-  return config.fps;
+	return config.fps;
 }
 
 
 void SetShowFps ( bool ison )
 {
-  config.fps = ison;
+	config.fps = ison;
 }
 
 
-int GetHeight ( void )
+int GetHeight()
 {
-  return config.video.Height;
+	return config.video.Height;
 }
 
 
-void SetHeight ( int height_ )
+void SetHeight ( int height )
 {
-  config.video.Height = height_;
+	config.video.Height = height;
 }
 
 
-int GetWidth ( void )
+int GetWidth()
 {
-  return config.video.Width;
+	return config.video.Width;
 }
 
 
-void SetWidth ( int width_ )
+void SetWidth ( int width )
 {
-  config.video.Width = width_;
-  GetGameClass()->GetFpsStr()->SetPosition ( settings::GetWidth() - 70, 10 );
+	config.video.Width = width;
+	GetGameClass()->GetFpsStr()->SetPosition ( settings::GetWidth() - 70, 10 );
 }
 
 
-int GetBpp ( void )
+int GetBpp()
 {
-  return config.video.BitsPerPixel;
+	return config.video.BitsPerPixel;
 }
 
 
 void SetBpp ( int bpp_ )
 {
-  config.video.BitsPerPixel = bpp_;
+	config.video.BitsPerPixel = bpp_;
 }
 
 
-std::string GetTheme ( void )
+std::string GetTheme()
 {
-  return config.theme;
+	return config.theme;
 }
 
 
-void SetTheme ( std::string theme_ )
+void SetTheme ( std::string theme )
 {
-  if ( util::isFile ( "themes/" + theme_ + ".ini" ) )
-    config.theme = theme_;
-  else
-    std::cerr << "Theme-File not found: " << theme_ << std::endl;
+	if ( util::isFile ( "themes/" + theme + ".ini" ) )
+		config.theme = theme;
+	else
+		std::cerr << "Theme-File not found: " << theme << std::endl;
 }
 
 
-MOUSESCOPE GetMouseScope ( void )
+MOUSESCOPE GetMouseScope()
 {
-  return config.mousescope;
+	return config.mousescope;
 }
 
 
-void SetMouseScope ( MOUSESCOPE mousescope_ )
+void SetMouseScope ( MOUSESCOPE mousescope )
 {
-  if ( config.mousescope != mousescope_ )
-  {
-    GetGameClass()->GetCursor() [mousescope_]->Start();
-    config.mousescope = mousescope_;
-  }
+	if ( config.mousescope != mousescope ) {
+		GetGameClass()->GetCursor() [mousescope]->Start();
+		config.mousescope = mousescope;
+	}
 }
 
 

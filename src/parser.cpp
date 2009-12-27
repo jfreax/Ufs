@@ -32,6 +32,7 @@ bool Parser::Open ( std::string filename, bool index, bool make_lower )
 
 	/* Datei öffnen */
 	filename = settings::GetPath() + filename;
+	
 	std::ifstream file ( filename.c_str(), std::ios::in );
 
 	/* Auf erfolg prüfen */
@@ -153,6 +154,8 @@ bool Parser::Open ( std::string filename, bool index, bool make_lower )
 
 			}
 	}
+	
+	return true;
 }
 
 

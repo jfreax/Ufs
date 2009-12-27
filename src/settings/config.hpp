@@ -22,20 +22,21 @@
 
 class Config
 {
-  public:
-    Config();
+	public:
+		Config();
 
-    std::string path;
+		std::string lang;
+		std::string path;
 
-    bool fullscreen;
-    bool fps;
+		bool fullscreen;
+		bool fps;
 
-    sf::WindowSettings windowSettings;
-    sf::VideoMode video;
+		sf::WindowSettings windowSettings;
+		sf::VideoMode video;
 
-    std::string theme;
+		std::string theme;
 
-    MOUSESCOPE mousescope;
+		MOUSESCOPE mousescope;
 };
 
 #endif // CONFIG_HPP

@@ -318,7 +318,16 @@ void CWidget::SetText ( std::string text )
 	
 	/* Update text position */
 	this->AdjustTextPosition();
+	this->Update();
+}
 
+
+void CWidget::SetText ( HEADERNAME header, std::string text )
+{
+	text_.SetText( l ( header, text ) );
+	
+	/* Update text position */
+	this->AdjustTextPosition();
 	this->Update();
 }
 
@@ -397,6 +406,12 @@ CWindow* CWidget::ActivateTooltip ( std::string text )
 {
 	toolTip_ = new CTooltip ( this, text );
 	hasTooltip_ = true;
+}
+
+
+CWindow* CWidget::ActivateTooltip ( HEADERNAME header, std::string var )
+{
+	this->ActivateTooltip ( l ( header, var ) );
 }
 
 

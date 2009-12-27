@@ -26,6 +26,7 @@
 #include "resource.hpp"
 #include "animation.hpp"
 #include "mapmanager.hpp"
+#include "settings/locale.hpp"
 
 
 enum GAMETYPE {
@@ -58,6 +59,8 @@ class CGame
 		sf::RenderWindow* GetApp();
 		gui::CManager* GetGuiManager();
 		CMapManager* GetMapManager();
+		
+		CLocale* GetLocale();
 
 		CImageResource* GetImgResource();
 		CFontResource* GetFontResource();
@@ -90,6 +93,7 @@ class CGame
 		CMapManager mapManager_;
 
 		CInput input_;
+		CLocale* locale_;
 
 		std::map< MOUSESCOPE, CAnimation*> cursor_;
 

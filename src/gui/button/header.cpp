@@ -29,7 +29,7 @@ CHeaderMainButton::CHeaderMainButton()
 	this->SetSize ( sf::Vector2f ( 32, 32 ) );
 	this->SetBackground ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/buttons/header_home.png" ) );
 	
-	this->ActivateTooltip ( "HOME" );
+	this->ActivateTooltip ( TOOLTIP, "HOME" );
 	
 }
 
@@ -42,7 +42,7 @@ CHeaderResearchButton::CHeaderResearchButton()
 	this->SetSize ( sf::Vector2f ( 32, 32 ) );
 	this->SetBackground ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/buttons/header_research.png" ) );
 	
-	this->ActivateTooltip( "RESEARCH" );
+	this->ActivateTooltip( TOOLTIP, "RESEARCH" );
 	
 }
 
@@ -55,7 +55,7 @@ CHeaderPlanetsButton::CHeaderPlanetsButton()
 	this->SetSize ( sf::Vector2f ( 32, 32 ) );
 	this->SetBackground ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/buttons/header_planets.png" ) );
 	
-	this->ActivateTooltip ( "PLANETS" );
+	this->ActivateTooltip ( TOOLTIP, "PLANET" );
 }
 
 
@@ -67,7 +67,7 @@ CHeaderEmpireButton::CHeaderEmpireButton()
 	this->SetSize ( sf::Vector2f ( 32, 32 ) );
 	this->SetBackground ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/buttons/header_empire.png" ) );
 	
-	this->ActivateTooltip ( "EMPIRE" );
+	this->ActivateTooltip ( TOOLTIP, "EMPIRE" );
 	
 }
 
@@ -81,7 +81,7 @@ CHeaderSpyButton::CHeaderSpyButton()
 	this->SetSize ( sf::Vector2f ( 32, 32 ) );
 	this->SetBackground ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/buttons/header_spy.png" ) );
 	
-	this->ActivateTooltip ( "ESPIONAGE" );
+	this->ActivateTooltip ( TOOLTIP, "SPY" );
 	
 }
 
@@ -94,7 +94,7 @@ CHeaderStatsButton::CHeaderStatsButton()
 	this->SetSize ( sf::Vector2f ( 32, 32 ) );
 	this->SetBackground ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/buttons/header_stats.png" ) );
 	
-	this->ActivateTooltip ( "STATISTICS" );
+	this->ActivateTooltip ( TOOLTIP, "STATS" );
 	
 }
 
@@ -107,7 +107,7 @@ CHeaderQuitButton::CHeaderQuitButton()
 	this->SetSize ( sf::Vector2f ( 32, 32 ) );
 	this->SetBackground ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/buttons/header_quit.png" ) );
 	
-	this->ActivateTooltip ( "QUIT" );
+	this->ActivateTooltip ( TOOLTIP, "QUIT" );
 	
 }
 

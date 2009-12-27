@@ -21,7 +21,9 @@
 #include <SFML/Graphics.hpp>
 
 #include "../../util/util.hpp"
+#include "../../settings/locale.hpp"
 #include "util.hpp"
+
 
 
 namespace gui
@@ -74,6 +76,7 @@ class CWidget
 		std::string GetName();
 		
 		void SetText ( std::string text );
+		void SetText ( HEADERNAME header, std::string text );
 		sf::String* GetText();
 		
 		void SetTextPosition ( sf::Vector2f pos );
@@ -87,6 +90,7 @@ class CWidget
 		void AdjustTextPosition();
 		
 		CWindow* ActivateTooltip ( std::string text = "" );
+		CWindow* ActivateTooltip ( HEADERNAME header, std::string var );
 		
 	public:
 		sf::Clock lastClickTime;

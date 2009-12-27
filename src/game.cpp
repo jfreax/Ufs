@@ -50,71 +50,56 @@ CGame::CGame ( int argc, char **argv ) :
 {
 	game = this;
 
-        /* Standardwerte */
+	/* Standardwerte */
 	settings::SetWidth ( sf::VideoMode::GetDesktopMode().Width );
 	settings::SetHeight ( sf::VideoMode::GetDesktopMode().Height );
 	settings::SetBpp ( sf::VideoMode::GetDesktopMode().BitsPerPixel );
-        settings::SetPath ( "./data/" );
 
-        /* Arguments */
-	for ( arg_ = 1; arg_ != argc_; ++arg_ )
-	{
+	settings::SetLang ( "de" );
+	settings::SetPath ( "./data/" );
+
+	/* Arguments */
+
+	for ( arg_ = 1; arg_ != argc_; ++arg_ ) {
 		const std::string val ( argv_[arg_] );
 
-		if ( val.empty() )
-		{
+		if ( val.empty() ) {
 			continue;
-		}
-		else if ( val == "-fps" | val == "--fps" )
-		{
+		} else if ( val == "-fps" | val == "--fps" ) {
 			settings::SetShowFps ( true );
-		}
-		else if ( val == "-fs" || val == "--fullscreen" )
-		{
+		} else if ( val == "-fs" || val == "--fullscreen" ) {
 			settings::SetFullscreen ( true );
-		}
-		else if ( val == "-h" || val == "--height" || val == "-y" )
-		{
-			if ( arg_ + 1 != argc_ )
-			{
+		} else if ( val == "-h" || val == "--height" || val == "-y" ) {
+			if ( arg_ + 1 != argc_ ) {
 				++arg_;
 				settings::SetHeight ( util::lCast<int> ( argv_[arg_], -1 ) );
 			}
-		}
-		else if ( val == "-w" || val == "--width" || val == "-x" )
-		{
-			if ( arg_ + 1 != argc_ )
-			{
+		} else if ( val == "-w" || val == "--width" || val == "-x" ) {
+			if ( arg_ + 1 != argc_ ) {
 				++arg_;
 				settings::SetWidth ( util::lCast<int> ( argv_[arg_], -1 ) );
 			}
-		}
-		else if ( val == "-bpp" || val == "--bitsperpixel" )
-		{
-			if ( arg_ + 1 != argc )
-			{
+		} else if ( val == "-bpp" || val == "--bitsperpixel" ) {
+			if ( arg_ + 1 != argc ) {
 				++arg_;
 				settings::SetBpp ( util::lCast<int> ( argv_[arg_], -1 ) );
 			}
-		}
-		else if ( val == "--theme" )
-		{
-			if ( arg_ + 1 != argc_ )
-			{
+		} else if ( val == "--theme" ) {
+			if ( arg_ + 1 != argc_ ) {
 				++arg_;
 				settings::SetTheme ( argv_[arg_] );
 			}
-		}
-		else if ( val == "--path" || val == "--data" )
-		{
-			if ( arg_ + 1 != argc_ )
-			{
+		} else if ( val == "--path" || val == "--data" ) {
+			if ( arg_ + 1 != argc_ ) {
 				++arg_;
 				settings::SetPath ( argv_[arg_] );
 			}
-		}
-		else if ( val[0] == '-' || val[0] == '-' && val[1] == '-' )
-		{
+		} else if ( val == "--lang" || val == "-l" ) {
+			if ( arg_ + 1 != argc_ ) {
+				++arg_;
+				settings::SetLang ( argv_[arg_] );
+			}
+		} else if ( val[0] == '-' || val[0] == '-' && val[1] == '-' ) {
 			std::cerr << "unknown option: " << val << std::endl;
 			// throw config::error( "unknown option" );
 		}
@@ -130,30 +115,28 @@ CGame::~CGame()
 
 bool CGame::Initialize()
 {
-	if ( !settings::GetVideo().IsValid() )
-	{
+	if ( !settings::GetVideo().IsValid() ) {
 		std::cerr
-			<< "VideoMode ("
-			<< settings::GetVideo().Width
-			<< "x"
-			<< settings::GetVideo().Height
-			<< "x"
-			<< settings::GetVideo().BitsPerPixel
-			<< ") is not supported!"
-			<< std::endl;
+		        << "VideoMode ("
+		        << settings::GetVideo().Width
+		        << "x"
+		        << settings::GetVideo().Height
+		        << "x"
+		        << settings::GetVideo().BitsPerPixel
+		        << ") is not supported!"
+		        << std::endl;
 		return false;
-	}
-	else
-	{
+	} else {
 		app_.Create ( settings::GetVideo(), "Game" , settings::GetStyle(), settings::GetWindowSettings() );
 	}
 
 	app_.UseVerticalSync ( true );
+
 	app_.EnableKeyRepeat ( true );
 	app_.ShowMouseCursor ( false );
 
 	fpsStr_.SetSize ( 12 );
-	
+
 
 	// TODO nur Beispiele!
 	cursor_[NONE] = new CAnimation ( GetImgResource()->Get ( settings::GetThemePath() + "arrow.png" ) , 36, 0.1f );
@@ -161,7 +144,7 @@ bool CGame::Initialize()
 	cursor_[WINDOW] = new CAnimation ( GetImgResource()->Get ( settings::GetThemePath() + "hand.png" ) , 41, 0.08f );
 	cursor_[WINDOW]->Scale ( 0.6, 0.6 );
 	cursor_[WINDOW]->SetStartAt ( 6 );
-	
+
 	this->SetGameType ( SINGLEPLAYER );
 
 	return true;
@@ -179,23 +162,26 @@ bool CGame::Start()
 {
 	// FIXME Nur BEISPIELE!
 
-	/* Tastatureinstellungen laden */
+	/* Load keyboardsettings */
 	input_.LoadKeys( "config/keyboard.ini" );
-	
+
+	/* Language file */
+	locale_ = new CLocale ( settings::GetLang() );
+
 	/* Gui-Manager laden */
 	guiManager_.Initialize();
 
 	/* Leere Karte initialisieren */
 	mapManager_.Initialize();
-	
+
 	/* Load standard windows */
 	guiManager_.AddWindow ( specialWindow_["QUIT"] = new gui::CQuitWindow );
 	guiManager_.AddWindow ( new gui::CHeaderWindow );
-	
+
 	gui::CWindow* win2 = guiManager_.AddWindow ( new gui::CWindow );
 	win2->SetPosition( sf::Vector2f ( 100, 100 ));
 	win2->SetSize ( sf::Vector2f ( 200, 200 ));
-	 
+
 // 	 gui::CWindow* win = guiManager_.AddWindow ( new gui::CStartWindow );
 //
 
@@ -203,12 +189,13 @@ bool CGame::Start()
 
 
 	/* Spielschleife */
-	while ( run_ )
-	{
+
+	while ( run_ ) {
 		/* Tasten- und Mauseingaben bearbeiten */
 		input_.Events();
-		
+
 		/* Berechnenung des Spielablaufs */
+
 		if ( this->GetGameType() == SINGLEPLAYER || this->GetGameType() == MULTIPLAYER )
 			this->Calc();
 
@@ -255,7 +242,7 @@ void CGame::Render()
 // 	testUmrandung.AddPoint( sf::Vector2f ( 120, 300 ), sf::Color ( 150, 150, 150, 160 ) );
 // 	testUmrandung.AddPoint( sf::Vector2f ( 100, 280 ), sf::Color ( 150, 150, 150, 160 ) );
 // 	app_.Draw( testUmrandung );
-// 
+//
 // 	sf::Shape test;
 // 	test.AddPoint( sf::Vector2f ( 105, 105 ), sf::Color::Black );
 // 	test.AddPoint( sf::Vector2f ( 280, 105 ), sf::Color::Black );
@@ -266,7 +253,7 @@ void CGame::Render()
 // 	test.AddPoint( sf::Vector2f ( 105, 280 ), sf::Color ( 0, 0, 0, 220 ) );
 // 	app_.Draw( test );
 
-	
+
 // 	CParticleManager particle;
 // 	particle.set_Material ( GetImgResource()->Get ( "images/sun/fire.png"  ) );
 // // 	particle.set_Dimension ( sf::Vector2i ( 500, 500 ) );
@@ -324,6 +311,13 @@ CMapManager* CGame::GetMapManager()
 }
 
 
+CLocale* CGame::GetLocale()
+{
+	return locale_;
+}
+
+
+
 CImageResource* CGame::GetImgResource()
 {
 	return &imgResource_;
@@ -340,16 +334,14 @@ void CGame::CalcFPS()
 {
 	static int frame = -1;
 	static unsigned int fps = 0;
-	
-	if ( !settings::GetShowFps() )
-	{
+
+	if ( !settings::GetShowFps() ) {
 		return;
 	}
 
 	++frame;
 
-	if ( frame >= fps )
-	{
+	if ( frame >= fps ) {
 
 		fpsStr_.SetText ( "FPS: " + util::lCast<std::string> ( fps ) );
 		fps = 1.f / app_.GetFrameTime();
