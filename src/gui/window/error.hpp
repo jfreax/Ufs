@@ -17,36 +17,31 @@
 
 */
 
-#include "../../game.hpp"
-#include "label.hpp"
+#ifndef ERROR_WINDOW_HPP
+#define ERROR_WINDOW_HPP
+
+#include "../other/label.hpp"
+#include "../../engine/ui/window.hpp"
 
 namespace gui
 {
-
-
-CLabel::CLabel ( std::string text, unsigned int fontSize )
-{
-	this->SetTextSize ( fontSize );
-	this->SetText ( text );
-	this->AdjustSize();
-}
-
-
-CLabel::CLabel ( HEADERNAME header, std::string text, unsigned int fontSize )
-{
-	this->SetTextSize ( fontSize );
-	this->SetText ( l ( header, text ) );
-	this->AdjustSize();
-}
-
-
-
-void CLabel::Render()
-{
-	sf::RenderWindow* app = GetGameClass()->GetApp();
 	
-	this->Calc();
-	app->Draw ( text_ );
-}
+
+
+class CErrorWindow : public CWindow
+{
+	public:
+		CErrorWindow ( std::string text );
+		
+		void SetText ( std::string text );
+	private:
+		CLabel* label_;
+		sf::String text_;
+};
+
+
+
 
 } /* namespace gui */
+
+#endif // ERROR_WINDOW_HPP

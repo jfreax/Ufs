@@ -17,40 +17,54 @@
 
 */
 
-#include "quit.hpp"
-#include "../../settings/settings.hpp"
-#include "../button/quit.hpp"
+#include <iostream>
+
+#include "error.hpp"
 #include "../other/image.hpp"
-#include "../other/label.hpp"
+#include "../other/spacer.hpp"
+#include "../button/quit.hpp"
+
 
 
 namespace gui
 {
 
 
-CQuitWindow::CQuitWindow()
+CErrorWindow::CErrorWindow ( std::string text )
 {
 	/* No titlebar */
 	this->SetTitlebar ( 0 );
 	
 	/* Change window properties */
-	this->SetMoveAble ( false );
 	this->SetCloseAble ( false );
 	this->SetResizeAble ( false );
-	this->SetLayout ( HORIZONTAL, 5 );
+	this->SetLayout ( VERTICAL, 5 );
 	
 	/* Add widgets */
-	this->AddWidget ( new CImage ( "icons/dialog-close.png" ) );
-	this->AddWidget ( new CLabel ( SYS, "QUIT_DIALOG" ) );
-	this->AddWidget ( new CQuitButton, true );
-	this->AddWidget ( new CCancelButton )->MovePosition ( HORIZONTAL, RIGHT );
+	this->AddWidget ( new CLabel ( "An error occurred with the following message...", 18 ) );
+	this->AddWidget ( new CImage ( "icons/dialog-close.png" ) )->MovePosition ( HORIZONTAL, LEFT );
+	
+	this->SetLayout ( HORIZONTAL, 5 );
+	label_ = dynamic_cast< CLabel* > ( this->AddWidget ( new CLabel ( text ) ) );
+	
+	this->AddWidget ( new CQuitButton ( true ), true );
+	this->AddWidget ( new CCancelButton ( true ) )->MovePosition ( HORIZONTAL, RIGHT );
 	
 	/* Set size and position (depend on buttons) */
 	this->AdjustSize();
 	this->SetPosition ( CENTER, CENTER );
+// this->Update();
 	
-	this->SetShow ( false );
+// 	this->SetShow ( true );
 }
 
-	
+
+void CErrorWindow::SetText ( std::string text )
+{
+	label_->SetText ( text );
+	label_->AdjustSize();
+	this->AdjustSize();
+}
+
+
 } /* namespace gui */

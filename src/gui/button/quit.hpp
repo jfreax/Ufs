@@ -29,7 +29,7 @@ namespace gui
 class CQuitButton : public CButton
 {
 	public:
-		CQuitButton();
+		CQuitButton ( bool noLocale = false );
 		
 		bool onLeftClick();
 };
@@ -40,7 +40,7 @@ class CQuitButton : public CButton
 class CCancelButton : public CButton
 {
 	public:
-		CCancelButton();
+		CCancelButton ( bool noLocale = false );
 		
 		bool onLeftClick();
 };

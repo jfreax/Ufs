@@ -17,36 +17,31 @@
 
 */
 
-#include "../../game.hpp"
-#include "label.hpp"
+#ifndef TOOLTIP_HPP
+#define TOOLTIP_HPP
+
+#include "../../engine/ui/window.hpp"
+#include "../../engine/ui/widget.hpp"
 
 namespace gui
 {
 
 
-CLabel::CLabel ( std::string text, unsigned int fontSize )
+class CTooltip : public CWindow
 {
-	this->SetTextSize ( fontSize );
-	this->SetText ( text );
-	this->AdjustSize();
-}
+	public:
+		CTooltip ( CWidget* motherWidget, std::string text );
+		bool Update();
+		
+		void ChangeTransparency ( unsigned int alpha );
 
-
-CLabel::CLabel ( HEADERNAME header, std::string text, unsigned int fontSize )
-{
-	this->SetTextSize ( fontSize );
-	this->SetText ( l ( header, text ) );
-	this->AdjustSize();
-}
-
-
-
-void CLabel::Render()
-{
-	sf::RenderWindow* app = GetGameClass()->GetApp();
-	
-	this->Calc();
-	app->Draw ( text_ );
-}
+	private:
+		CWidget* motherWidget_;
+		
+		CWidget* label_;
+		sf::Color textColor_;
+};
 
 } /* namespace gui */
+
+#endif // TOOLTIP_HPP

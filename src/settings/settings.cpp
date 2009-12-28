@@ -13,8 +13,6 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-// #include <SFML/Window.hpp>
-// #include <SFML/Graphics.hpp>
 
 #include "config.hpp"
 
@@ -166,7 +164,7 @@ void SetTheme ( std::string theme )
 	if ( util::isFile ( "themes/" + theme + ".ini" ) )
 		config.theme = theme;
 	else
-		std::cerr << "Theme-File not found: " << theme << std::endl;
+		GetGameClass()->Error ( "Theme-File not found: " + theme, __PRETTY_FUNCTION__, __FILE__, __LINE__ );
 }
 
 

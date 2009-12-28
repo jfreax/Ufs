@@ -28,7 +28,8 @@ namespace gui
 class CLabel : public CWidget
 {
 	public:
-		CLabel ( std::string text );
+		CLabel ( std::string text = "", unsigned int fontSize = 12 );
+		CLabel ( HEADERNAME header, std::string text, unsigned int fontSize = 12 );
 		
 		void Render();
 		

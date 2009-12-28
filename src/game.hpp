@@ -30,6 +30,7 @@
 
 
 enum GAMETYPE {
+	ERROR,
 	QUIT,
 	PAUSED,
 	MAINMENU,
@@ -42,17 +43,14 @@ class CGame
 	public:
 		CGame ( int argc, char **argv );
 		~CGame();
-
+		
 		bool Initialize();
-
-		bool IsVideoModeValid();
 
 		bool Start();
 		bool Stop();
-
-		void Render();
-		void Calc();
 		
+		void Error ( std::string text, std::string function = "", std::string file = "", int line = 0);
+
 		GAMETYPE GetGameType();
 		void SetGameType ( GAMETYPE gametype );
 
@@ -72,6 +70,12 @@ class CGame
 		
 		sf::View* GetViewPoint ( int i = 0 );
 		void ShowSpecialWindow ( std::string windowName );
+		
+	private:
+		bool IsVideoModeValid();
+		
+		void Render();
+		void Calc();
 
 	private:
 		sf::RenderWindow app_;

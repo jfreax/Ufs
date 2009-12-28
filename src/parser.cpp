@@ -15,12 +15,11 @@
 */
 
 #include <iostream>
-
 #include "settings/settings.hpp"
 #include "util/util.hpp"
 #include "parser.hpp"
+#include "game.hpp"
 
-/* TODO Logger */
 bool Parser::Open ( std::string filename, bool index, bool make_lower )
 {
 	if ( filename.empty() )
@@ -36,9 +35,8 @@ bool Parser::Open ( std::string filename, bool index, bool make_lower )
 	std::ifstream file ( filename.c_str(), std::ios::in );
 
 	/* Auf erfolg prüfen */
-	if ( !file )
-	{
-		// TODO logger << "Could not open file: " << filename
+	if ( !file ) {
+		GetGameClass()->Error ( "Could not open file: " + filename,  __PRETTY_FUNCTION__, __FILE__, __LINE__ );
 		return false;
 	}
 

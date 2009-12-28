@@ -215,9 +215,9 @@ void CWidget::SetSize ( sf::Vector2f size )
 }
 
 
-void CWidget::AdjustSize()
+void CWidget::AdjustSize ( unsigned int border )
 {
-	this->SetSize ( sf::Vector2f ( text_.GetRect().GetWidth() + textPos_.x, text_.GetRect().GetHeight() + textPos_.y ) );
+	this->SetSize ( sf::Vector2f ( text_.GetRect().GetWidth() + textPos_.x + border, text_.GetRect().GetHeight() + textPos_.y + border ) );
 }
 
 
@@ -318,6 +318,8 @@ void CWidget::SetText ( std::string text )
 	
 	/* Update text position */
 	this->AdjustTextPosition();
+	
+	this->AdjustSize();
 	this->Update();
 }
 
@@ -328,6 +330,8 @@ void CWidget::SetText ( HEADERNAME header, std::string text )
 	
 	/* Update text position */
 	this->AdjustTextPosition();
+	
+	this->AdjustSize();
 	this->Update();
 }
 

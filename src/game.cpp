@@ -30,7 +30,7 @@
 #include "gui/window/start.hpp"
 #include "gui/window/header_menu.hpp"
 #include "gui/window/quit.hpp"
-// #include "particle.hpp"
+#include "gui/window/error.hpp"
 
 
 CGame* game = NULL;
@@ -151,36 +151,28 @@ bool CGame::Initialize()
 }
 
 
-bool CGame::IsVideoModeValid() /* TODO in CGame::initialize und settings::setHeight() ! */
-{
-
-
-}
-
-
 bool CGame::Start()
 {
-	// FIXME Nur BEISPIELE!
-
 	/* Load keyboardsettings */
 	input_.LoadKeys( "config/keyboard.ini" );
-
-	/* Language file */
-	locale_ = new CLocale ( settings::GetLang() );
 
 	/* Gui-Manager laden */
 	guiManager_.Initialize();
 
 	/* Leere Karte initialisieren */
 	mapManager_.Initialize();
+	
+	/* Language file */
+	locale_ = new CLocale ( settings::GetLang() );
 
 	/* Load standard windows */
 	guiManager_.AddWindow ( specialWindow_["QUIT"] = new gui::CQuitWindow );
 	guiManager_.AddWindow ( new gui::CHeaderWindow );
 
-	gui::CWindow* win2 = guiManager_.AddWindow ( new gui::CWindow );
-	win2->SetPosition( sf::Vector2f ( 100, 100 ));
-	win2->SetSize ( sf::Vector2f ( 200, 200 ));
+	// FIXME Nur BEISPIELE!
+// 	gui::CWindow* win2 = guiManager_.AddWindow ( new gui::CWindow );
+// 	win2->SetPosition( sf::Vector2f ( 100, 100 ));
+// 	win2->SetSize ( sf::Vector2f ( 200, 200 ));
 
 // 	 gui::CWindow* win = guiManager_.AddWindow ( new gui::CStartWindow );
 //
@@ -188,14 +180,12 @@ bool CGame::Start()
 //
 
 
-	/* Spielschleife */
-
+	/* Start game loop */
 	while ( run_ ) {
-		/* Tasten- und Mauseingaben bearbeiten */
+		/* Keyboard and mouse input */
 		input_.Events();
 
 		/* Berechnenung des Spielablaufs */
-
 		if ( this->GetGameType() == SINGLEPLAYER || this->GetGameType() == MULTIPLAYER )
 			this->Calc();
 
@@ -207,12 +197,6 @@ bool CGame::Start()
 }
 
 
-void CGame::Calc()
-{
-
-}
-
-
 bool CGame::Stop()
 {
 	run_ = false;
@@ -220,62 +204,16 @@ bool CGame::Stop()
 }
 
 
-void CGame::Render()
+void CGame::Error ( std::string text, std::string function, std::string file, int line )
 {
-	// Bildschirm säubern
-	app_.Clear();
-
-	// Gamegraphic
-	app_.SetView ( viewPoint_[0] );
-	mapManager_.Update();
-	mapManager_.Render();
-
-	// GUI
-	app_.SetView ( app_.GetDefaultView() );
-	guiManager_.Render();
-
-// 	sf::Shape testUmrandung;
-// 	testUmrandung.AddPoint( sf::Vector2f ( 100, 100 ), sf::Color ( 150, 150, 150, 160 ) );
-// 	testUmrandung.AddPoint( sf::Vector2f ( 280, 100 ), sf::Color ( 150, 150, 150, 160 ) );
-// 	testUmrandung.AddPoint( sf::Vector2f ( 300, 120 ), sf::Color ( 150, 150, 150, 160 ) );
-// 	testUmrandung.AddPoint( sf::Vector2f ( 300, 300 ), sf::Color ( 150, 150, 150, 160 ) );
-// 	testUmrandung.AddPoint( sf::Vector2f ( 120, 300 ), sf::Color ( 150, 150, 150, 160 ) );
-// 	testUmrandung.AddPoint( sf::Vector2f ( 100, 280 ), sf::Color ( 150, 150, 150, 160 ) );
-// 	app_.Draw( testUmrandung );
-//
-// 	sf::Shape test;
-// 	test.AddPoint( sf::Vector2f ( 105, 105 ), sf::Color::Black );
-// 	test.AddPoint( sf::Vector2f ( 280, 105 ), sf::Color::Black );
-// 	test.AddPoint( sf::Vector2f ( 295, 120 ), sf::Color::Black );
-// 	test.AddPoint( sf::Vector2f ( 295, 280 ), sf::Color ( 0, 0, 0, 220 ) );
-// 	test.AddPoint( sf::Vector2f ( 295, 295 ), sf::Color ( 0, 0, 0, 220 ) );
-// 	test.AddPoint( sf::Vector2f ( 120, 295 ), sf::Color ( 0, 0, 0, 220 ) );
-// 	test.AddPoint( sf::Vector2f ( 105, 280 ), sf::Color ( 0, 0, 0, 220 ) );
-// 	app_.Draw( test );
-
-
-// 	CParticleManager particle;
-// 	particle.set_Material ( GetImgResource()->Get ( "images/sun/fire.png"  ) );
-// // 	particle.set_Dimension ( sf::Vector2i ( 500, 500 ) );
-// 	CEmitter nEmit ( 500, 1090.2f, sf::Vector3f ( 100, 100, 0.f ) );
-// 	nEmit.set_Position( sf::Vector3f ( 50,50,1) );
-// 	nEmit.set_Velocity ( 20.f, 22.f );
-// 	nEmit.set_Direction ( 90, 50.f );
-// 	particle.AddEmitter ( nEmit );
-// 	particle.Update();
-// 	particle.Draw();
-
-	/* Ggf. FPS Anzeigen */
-	this->CalcFPS();
-
-	/* Mousecursor TODO extra klasse oder funktion zur verwaltung! */
-	cursor_[settings::GetMouseScope() ]->SetPosition ( app_.GetInput().GetMouseX(), app_.GetInput().GetMouseY() );
-	cursor_[settings::GetMouseScope() ]->Update();
-	app_.Draw ( *cursor_[settings::GetMouseScope() ] );
-
-	/* Zeichnen! */
-	app_.Display();
+	if ( !file.empty() ) {
+		text += "\n\nFunction: " + function + "\nFile: " + file + "\nLine: " + util::lCast< std::string >( line );
+	}
+	
+	guiManager_.BringToFront( guiManager_.AddWindow( new gui::CErrorWindow ( text ) ) );
+	this->SetGameType ( ERROR );
 }
+
 
 
 GAMETYPE CGame::GetGameType()
@@ -286,8 +224,14 @@ GAMETYPE CGame::GetGameType()
 
 void CGame::SetGameType ( GAMETYPE gametype )
 {
-	if ( gametype == QUIT )
-		specialWindow_ [ "QUIT" ]->SetShow();
+	switch ( gametype ) {
+		case QUIT:
+			specialWindow_ [ "QUIT" ]->SetShow();
+			break;
+		case ERROR: 
+// 			specialWindow_ [ "ERROR" ]->SetShow();
+			break;
+	}
 
 	gametype_ = gametype;
 }
@@ -367,4 +311,79 @@ sf::String* CGame::GetFpsStr()
 sf::View* CGame::GetViewPoint ( int i )
 {
 	return &viewPoint_[i];
+}
+
+
+/* --- PRIVATE --- */
+
+bool CGame::IsVideoModeValid() /* TODO in CGame::initialize und settings::setHeight() ! */
+{
+	
+	
+}
+
+
+
+void CGame::Render()
+{
+	// Bildschirm säubern
+	app_.Clear();
+	
+	// Gamegraphic
+	app_.SetView ( viewPoint_[0] );
+	mapManager_.Update();
+	mapManager_.Render();
+	
+	// GUI
+	app_.SetView ( app_.GetDefaultView() );
+	guiManager_.Render();
+	
+	// 	sf::Shape testUmrandung;
+	// 	testUmrandung.AddPoint( sf::Vector2f ( 100, 100 ), sf::Color ( 150, 150, 150, 160 ) );
+	// 	testUmrandung.AddPoint( sf::Vector2f ( 280, 100 ), sf::Color ( 150, 150, 150, 160 ) );
+	// 	testUmrandung.AddPoint( sf::Vector2f ( 300, 120 ), sf::Color ( 150, 150, 150, 160 ) );
+	// 	testUmrandung.AddPoint( sf::Vector2f ( 300, 300 ), sf::Color ( 150, 150, 150, 160 ) );
+	// 	testUmrandung.AddPoint( sf::Vector2f ( 120, 300 ), sf::Color ( 150, 150, 150, 160 ) );
+	// 	testUmrandung.AddPoint( sf::Vector2f ( 100, 280 ), sf::Color ( 150, 150, 150, 160 ) );
+	// 	app_.Draw( testUmrandung );
+	//
+	// 	sf::Shape test;
+	// 	test.AddPoint( sf::Vector2f ( 105, 105 ), sf::Color::Black );
+	// 	test.AddPoint( sf::Vector2f ( 280, 105 ), sf::Color::Black );
+	// 	test.AddPoint( sf::Vector2f ( 295, 120 ), sf::Color::Black );
+	// 	test.AddPoint( sf::Vector2f ( 295, 280 ), sf::Color ( 0, 0, 0, 220 ) );
+	// 	test.AddPoint( sf::Vector2f ( 295, 295 ), sf::Color ( 0, 0, 0, 220 ) );
+	// 	test.AddPoint( sf::Vector2f ( 120, 295 ), sf::Color ( 0, 0, 0, 220 ) );
+	// 	test.AddPoint( sf::Vector2f ( 105, 280 ), sf::Color ( 0, 0, 0, 220 ) );
+	// 	app_.Draw( test );
+	
+	
+	// 	CParticleManager particle;
+	// 	particle.set_Material ( GetImgResource()->Get ( "images/sun/fire.png"  ) );
+	// // 	particle.set_Dimension ( sf::Vector2i ( 500, 500 ) );
+	// 	CEmitter nEmit ( 500, 1090.2f, sf::Vector3f ( 100, 100, 0.f ) );
+	// 	nEmit.set_Position( sf::Vector3f ( 50,50,1) );
+	// 	nEmit.set_Velocity ( 20.f, 22.f );
+	// 	nEmit.set_Direction ( 90, 50.f );
+	// 	particle.AddEmitter ( nEmit );
+	// 	particle.Update();
+	// 	particle.Draw();
+	
+	/* Ggf. FPS Anzeigen */
+	this->CalcFPS();
+	
+	/* Mousecursor TODO extra klasse oder funktion zur verwaltung! */
+	cursor_[settings::GetMouseScope() ]->SetPosition ( app_.GetInput().GetMouseX(), app_.GetInput().GetMouseY() );
+	cursor_[settings::GetMouseScope() ]->Update();
+	app_.Draw ( *cursor_[settings::GetMouseScope() ] );
+	
+	/* Zeichnen! */
+	app_.Display();
+}
+
+
+
+void CGame::Calc()
+{
+	
 }

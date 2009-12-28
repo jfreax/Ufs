@@ -54,7 +54,7 @@ class CWidget
 		sf::Rect<float> GetDimension();
 		
 		void SetSize ( sf::Vector2f size );
-		void AdjustSize();
+		void AdjustSize ( unsigned int border = 0 );
 
 		void SetName ( std::string name );
 		void SetFontSize ( int size );
