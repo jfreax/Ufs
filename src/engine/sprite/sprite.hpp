@@ -32,13 +32,19 @@ class CSprite : public sf::Drawable
 	public:
 		CSprite();
 		~CSprite();
-		virtual void Render ( sf::RenderTarget& Target ) const;
 		
+		virtual void Render ( sf::RenderTarget& Target ) const;
 		virtual void Update();
+		
+		unsigned int GetId();
+		
+		sf::Rect<float> GetDimension();
 		
 		void Scale ( double scale );
 
 	protected:
+		unsigned int id_;
+		
 		CAnimation* background_;
 		sf::Shape mask_;
 };

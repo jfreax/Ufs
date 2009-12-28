@@ -29,6 +29,9 @@ class CMapManager
 		void Render();
 		void Update();
 		
+		bool MouseClick ( const int mouseX, const int mouseY, const sf::Mouse::Button button );
+		bool MouseClickReleased ( const int mouseX, const int mouseY, const sf::Mouse::Button button );
+		
 		void Zoom ( float offset, int direction );
 		double GetZoomLevel();
 		
@@ -39,9 +42,11 @@ class CMapManager
 		void UnSetPos();
 
 	private:
-		std::vector < sprite::CSprite* > spriteList;
+		std::vector < sprite::CSprite* > spriteList_;
 		
-		sf::Vector2f lastPos;
+		sf::Vector2f lastPos_;
+		
+		sf::Rect< float > selectedRect_;
 };
 
 #endif // MAPMANAGER_HPP

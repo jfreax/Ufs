@@ -193,12 +193,17 @@ bool CInput::Events()
 {
 	sf::RenderWindow *app = GetGameClass()->GetApp();
 	gui::CManager* guiManager = GetGameClass()->GetGuiManager();
+	CMapManager* mapManager = GetGameClass()->GetMapManager();
 	const sf::Input* input = &app->GetInput();
 
 
 	/* Live mouse-Events */
 	if ( input->IsMouseButtonDown ( sf::Mouse::Left ) ) {
-		guiManager->MouseClick ( input->GetMouseX(), input->GetMouseY(), sf::Mouse::Left );
+		if ( settings::GetSelect() || !guiManager->MouseClick ( input->GetMouseX(), input->GetMouseY(), sf::Mouse::Left ) ) {
+			/* No gui element was clicked */
+			mapManager->MouseClick ( input->GetMouseX(), input->GetMouseY(), sf::Mouse::Left );
+		}
+		
 	} else if ( input->IsMouseButtonDown ( sf::Mouse::Right ) ) {
 		guiManager->MouseClick ( input->GetMouseX(), input->GetMouseY(), sf::Mouse::Right );
 	} else if ( input->IsMouseButtonDown ( sf::Mouse::Middle ) ) {
@@ -232,7 +237,8 @@ bool CInput::Events()
 		/* MOUSE */
 		switch ( event.Type ) {
 			case sf::Event::MouseButtonReleased:
-				guiManager->MouseClickReleased ( input->GetMouseX(), input->GetMouseY(), event.MouseButton.Button );
+				if ( settings::GetSelect() || !guiManager->MouseClickReleased ( input->GetMouseX(), input->GetMouseY(), event.MouseButton.Button ) )
+					mapManager->MouseClickReleased ( input->GetMouseX(), input->GetMouseY(), sf::Mouse::Left );
 				break;
 
 			case sf::Event::MouseWheelMoved:

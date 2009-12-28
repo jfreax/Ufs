@@ -26,12 +26,12 @@ namespace gui
 
 CQuitButton::CQuitButton ( bool noLocale  )
 {
-	if ( noLocale ) {
+	if ( noLocale )
 		this->SetText ( "Quit" );
-		this->AdjustSize ( 10 );
-	} else {
+	else
 		this->SetText ( SYS, "QUIT" );
-	}
+	
+	this->AdjustSize ( 10 );
 }
 
 
@@ -48,12 +48,12 @@ bool CQuitButton::onLeftClick()
 
 CCancelButton::CCancelButton ( bool noLocale )
 {
-	if ( noLocale ) {
+	if ( noLocale )
 		this->SetText ( "Ignore" );
-		this->AdjustSize ( 10 );
-	} else {
+	else
 		this->SetText ( SYS, "CANCEL" );
-	}
+	
+	this->AdjustSize ( 10 );
 }
 
 

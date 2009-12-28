@@ -122,7 +122,10 @@ bool CManager::MouseClick ( const int x, const int y, const sf::Mouse::Button bu
 	settings::SetMouseScope ( highestMouseScope );
 
 
-	return false;
+	if ( previousMouseScope_ == NONE )
+		return false;
+	else
+		return true;
 }
 
 
@@ -179,10 +182,12 @@ bool CManager::MouseClickReleased ( const int x, const int y, const sf::Mouse::B
 
 	}
 
-
 	settings::SetMouseScope ( highestMouseScope );
 
-	return false;
+	if ( previousMouseScope_ == NONE )
+		return false;
+	else
+		return true;
 }
 
 

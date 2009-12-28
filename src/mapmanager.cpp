@@ -34,9 +34,9 @@ void CMapManager::Initialize()
 	newShip->SetPosition ( 200, 200 );
 
 	if ( !newSprite || !newShip )
-	{
-		std::cout << "FAILED" << std::endl;	
-	}
+		std::cout << "FAILED" << std::endl;
+	
+	selectedRect_ = sf::Rect < float > ( 0, 0, 0, 0 );
 	
 	this->UnSetPos();
 }
@@ -46,12 +46,18 @@ void CMapManager::Render()
 {
 	sf::RenderWindow* app = GetGameClass()->GetApp();
 
-	std::vector < sprite::CSprite* >::iterator iter = spriteList.begin();
-	std::vector < sprite::CSprite* >::iterator iterEnd = spriteList.end();
+	std::vector < sprite::CSprite* >::iterator iter = spriteList_.begin();
+	std::vector < sprite::CSprite* >::iterator iterEnd = spriteList_.end();
 	
 	for ( ; iter != iterEnd ; ++iter )
-	{
 		app->Draw( **iter );
+	
+	/* Render rect to select objects */
+	if ( selectedRect_.Left != 0 && selectedRect_.Top != 0 ) {
+		sf::Shape rect = sf::Shape::Rectangle ( selectedRect_.Left, selectedRect_.Top, selectedRect_.Right, selectedRect_.Bottom, sf::Color ( 0, 0, 50, 60 ), 1, sf::Color ( 0, 0, 200,80 ) );
+		
+		app->SetView ( app->GetDefaultView() );
+		app->Draw( rect );
 	}
 
 }
@@ -59,12 +65,60 @@ void CMapManager::Render()
 
 void CMapManager::Update()
 {
-	std::vector < sprite::CSprite* >::iterator iter = spriteList.begin();
-	std::vector < sprite::CSprite* >::iterator iterEnd = spriteList.end();
+	std::vector < sprite::CSprite* >::iterator iter = spriteList_.begin();
+	std::vector < sprite::CSprite* >::iterator iterEnd = spriteList_.end();
 
 	for ( ; iter != iterEnd ; ++iter )
-	{
 		( *iter )->Update();
+}
+
+
+bool CMapManager::MouseClick ( const int mouseX, const int mouseY, const sf::Mouse::Button button )
+{
+	std::vector < sprite::CSprite* >::iterator iter = spriteList_.begin();
+	std::vector < sprite::CSprite* >::iterator iterEnd = spriteList_.end();
+	
+	int x = GetGameClass()->GetApp()->ConvertCoords ( mouseX, mouseY, GetGameClass()->GetViewPoint() ).x;
+	int y = GetGameClass()->GetApp()->ConvertCoords ( mouseX, mouseY, GetGameClass()->GetViewPoint() ).y;
+	
+	switch ( button ) {
+		case sf::Mouse::Left:
+			for ( ; iter != iterEnd ; ++iter ) {
+				if ( selectedRect_.Left == 0 && selectedRect_.Top == 0 ) {
+					selectedRect_.Left = selectedRect_.Right = mouseX;
+					selectedRect_.Top = selectedRect_.Bottom = mouseY;
+				} else {
+					settings::SetSelect();
+					
+					selectedRect_.Right = mouseX;
+					selectedRect_.Bottom = mouseY;
+				}
+			}
+			break;
+			
+	}
+}
+
+
+bool CMapManager::MouseClickReleased ( const int mouseX, const int mouseY, const sf::Mouse::Button button )
+{
+	std::vector < sprite::CSprite* >::iterator iter = spriteList_.begin();
+	std::vector < sprite::CSprite* >::iterator iterEnd = spriteList_.end();
+	
+	int x = GetGameClass()->GetApp()->ConvertCoords ( mouseX, mouseY, GetGameClass()->GetViewPoint() ).x;
+	int y = GetGameClass()->GetApp()->ConvertCoords ( mouseX, mouseY, GetGameClass()->GetViewPoint() ).y;
+	
+	switch ( button ) {
+		case sf::Mouse::Left:
+			selectedRect_.Left = selectedRect_.Top = 0;
+			settings::SetSelect ( false );
+			
+			for ( ; iter != iterEnd ; ++iter ) {
+				if ( ( *iter )->GetDimension().Contains( x, y ) ) {
+				}
+			}
+			break;
+			
 	}
 }
 
@@ -98,23 +152,19 @@ double CMapManager::GetZoomLevel()
 
 void CMapManager::Move ( sf::Vector2f newPos )
 {
-	if ( lastPos.x != 0 )
-		GetGameClass()->GetViewPoint()->Move ( (lastPos.x - newPos.x) / GetZoomLevel(), (lastPos.y - newPos.y) / GetZoomLevel() );
+	if ( lastPos_.x != 0 )
+		GetGameClass()->GetViewPoint()->Move ( (lastPos_.x - newPos.x) / GetZoomLevel(), (lastPos_.y - newPos.y) / GetZoomLevel() );
 
-	lastPos = newPos;
+	lastPos_ = newPos;
 }
 
 
 sprite::CSprite* CMapManager::AddSprite ( sprite::CSprite* sprite )
 {
 	if ( !sprite )
-	{
 		return NULL;
-	}
 	else
-	{
-		spriteList.push_back( sprite );	
-	}
+		spriteList_.push_back( sprite );	
 	
 	return sprite;
 }
@@ -122,5 +172,5 @@ sprite::CSprite* CMapManager::AddSprite ( sprite::CSprite* sprite )
 
 void CMapManager::UnSetPos()
 {
-	lastPos.x = lastPos.y = 0;
+	lastPos_.x = lastPos_.y = 0;
 }

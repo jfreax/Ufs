@@ -57,6 +57,9 @@ void SetTheme ( std::string theme_ );
 MOUSESCOPE GetMouseScope();
 void SetMouseScope ( MOUSESCOPE mousescope_ );
 
+void SetSelect ( bool ison = true );
+bool GetSelect();
+
 }
 
 

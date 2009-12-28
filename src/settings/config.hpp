@@ -37,6 +37,8 @@ class Config
 		std::string theme;
 
 		MOUSESCOPE mousescope;
+		
+		bool select;
 };
 
 #endif // CONFIG_HPP

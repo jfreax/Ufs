@@ -24,6 +24,9 @@ namespace sprite
 
 CSprite::CSprite()
 {
+	static unsigned int globalId = 0;
+	id_ = ++globalId;
+	
 	background_ = NULL;
 }
 
@@ -52,6 +55,19 @@ void CSprite::Update()
 	
 	/* Animation berechnen */
 	background_->Update();
+}
+
+
+unsigned int CSprite::GetId()
+{
+	return id_;
+}
+
+
+sf::Rect<float> CSprite::GetDimension()
+{
+	return sf::Rect<float> ( GetPosition().x, GetPosition().y,
+				 GetPosition().x + background_->GetSize().x * this->GetScale().x, GetPosition().y + background_->GetSize().y * this->GetScale().y );
 }
 
 

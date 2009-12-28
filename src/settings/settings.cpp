@@ -183,5 +183,17 @@ void SetMouseScope ( MOUSESCOPE mousescope )
 }
 
 
+void SetSelect ( bool ison )
+{
+	config.select = ison;
+}
+
+
+bool GetSelect()
+{
+	return config.select;
+}
+
+
 
 } // namespace settings

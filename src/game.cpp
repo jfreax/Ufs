@@ -164,6 +164,7 @@ bool CGame::Start()
 	
 	/* Load for errorsystem */
 	blackWindow = guiManager_.AddWindow ( new gui::CWindow () );
+	blackWindow->SetCloseAble ( false );
 	blackWindow->SetTitlebar ( 0 );
 	blackWindow->SetPosition ( sf::Vector2f ( 0, 0 ) );
 	blackWindow->SetSize ( sf::Vector2f ( settings::GetWidth(), settings::GetHeight() ) );
@@ -178,9 +179,9 @@ bool CGame::Start()
 	guiManager_.AddWindow ( new gui::CHeaderWindow );
 
 	// FIXME Nur BEISPIELE!
-// 	gui::CWindow* win2 = guiManager_.AddWindow ( new gui::CWindow );
-// 	win2->SetPosition( sf::Vector2f ( 100, 100 ));
-// 	win2->SetSize ( sf::Vector2f ( 200, 200 ));
+	gui::CWindow* win2 = guiManager_.AddWindow ( new gui::CWindow );
+	win2->SetPosition( sf::Vector2f ( 100, 100 ));
+	win2->SetSize ( sf::Vector2f ( 200, 200 ));
 
 // 	 gui::CWindow* win = guiManager_.AddWindow ( new gui::CStartWindow );
 //

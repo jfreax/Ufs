@@ -37,6 +37,8 @@ class CAnimation : public sf::Drawable
 		void SetFrameDiff ( int diff );
 
 		void SetBlur ( int blur );
+		
+		sf::Vector2f GetSize();
 	private:
 		bool run_;
 		sf::Clock timer_;

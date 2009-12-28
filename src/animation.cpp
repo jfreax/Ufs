@@ -94,33 +94,22 @@ void CAnimation::Stop ( void )
 
 void CAnimation::Update ( void )
 {
-
-	if ( timer_.GetElapsedTime() >= timePerFrame_ )
-	{
+	if ( timer_.GetElapsedTime() >= timePerFrame_ ) {
 		timer_.Reset();
 
 		frame_ += frameDiff_;
 		if ( frame_ > frames_ )
-		{
-
 			frame_ = startAt_;
-		}
 		if ( frame_ < 0 )
-		{
 			frame_ = frames_;
-		}
 
 		/* Bild ist nicht in einzelne Frames eingeteilt,
 		   Animation ist ein "Kameraschwenk" über das Bild */
 		if ( perPixel_ )
-		{
 			clipArea_ = sf::IntRect ( ( frame_ - 1 ), 0, frameWidth_ + frame_, image_->GetHeight() );
-		}
 		/* Bild ist in Frames eingeteilt, die Positionsdatei herausbekommen */
 		else
-		{
 			clipArea_ = sf::IntRect ( frameWidth_ * ( frame_ - 1 ), 0, frameWidth_ * frame_, image_->GetHeight() );
-		}
 	}
 }
 
@@ -130,9 +119,7 @@ void CAnimation::SetFrameWidth ( int frameWidth )
 	frameWidth_ = frameWidth;
 
 	if ( perPixel_ )
-	{
 		frames_ = image_->GetWidth() - frameWidth_;
-	}
 
 	clipArea_ = sf::IntRect ( 0, 0, frameWidth_, image_->GetHeight() );
 }
@@ -153,5 +140,12 @@ void CAnimation::SetFrameDiff ( int diff )
 void CAnimation::SetBlur ( int blur )
 {
 	blur_ = blur;
+}
+
+
+sf::Vector2f CAnimation::GetSize()
+{
+// 	std::cout << frameWidth_ << std::endl;
+	return sf::Vector2f ( frameWidth_, image_->GetHeight() );
 }
 
