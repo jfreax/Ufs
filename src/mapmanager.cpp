@@ -131,12 +131,12 @@ void CMapManager::Zoom ( float offset, int direction )
 	int deltaY = input->GetMouseY() - (GetGameClass()->GetApp()->GetHeight() * 0.5f);
 	
 	if ( direction == 1 ) {
-		if ( this->GetZoomLevel() < 3 ) { /* maximum zoom level */
+		if ( this->GetZoomLevel() < 6 ) { /* maximum zoom level */
 			GetGameClass()->GetViewPoint()->Zoom ( 1 + offset );
 			GetGameClass()->GetViewPoint()->Move ( deltaX * 0.05, deltaY * 0.05 );
 		}
 	} else if ( direction == -1 ) {
-		if ( this->GetZoomLevel() > 0.2 ) { /* minimum zoom level */
+		if ( this->GetZoomLevel() > 0.05 ) { /* minimum zoom level */
 			GetGameClass()->GetViewPoint()->Zoom ( 1 - offset );
 			GetGameClass()->GetViewPoint()->Move ( deltaX * 0.03, deltaY * 0.03 );
 		}
@@ -152,8 +152,9 @@ double CMapManager::GetZoomLevel()
 
 void CMapManager::Move ( sf::Vector2f newPos )
 {
-	if ( lastPos_.x != 0 )
+	if ( lastPos_.x != 0 ) {
 		GetGameClass()->GetViewPoint()->Move ( (lastPos_.x - newPos.x) / GetZoomLevel(), (lastPos_.y - newPos.y) / GetZoomLevel() );
+	}
 
 	lastPos_ = newPos;
 }

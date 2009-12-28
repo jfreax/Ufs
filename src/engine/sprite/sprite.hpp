@@ -41,12 +41,18 @@ class CSprite : public sf::Drawable
 		sf::Rect<float> GetDimension();
 		
 		void Scale ( double scale );
+		
+		void SetZoomLevel ( float zLevel );
+		float GetZoomLevel();
 
 	protected:
 		unsigned int id_;
 		
 		CAnimation* background_;
 		sf::Shape mask_;
+		
+		/* the greater number, the farther away */
+		float zoomLevel_;
 };
 
 

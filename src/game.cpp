@@ -323,9 +323,9 @@ sf::String* CGame::GetFpsStr()
 }
 
 
-sf::View* CGame::GetViewPoint ( int i )
+sf::View* CGame::GetViewPoint()
 {
-	return &viewPoint_[i];
+	return &viewPoint_;
 }
 
 
@@ -345,7 +345,7 @@ void CGame::Render()
 	app_.Clear();
 	
 	// Gamegraphic
-	app_.SetView ( viewPoint_[0] );
+	app_.SetView ( viewPoint_ );
 	mapManager_.Update();
 	mapManager_.Render();
 	

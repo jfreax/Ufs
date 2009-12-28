@@ -30,6 +30,7 @@ CSun::CSun ()
 
 	/* load picture of a sun */
 	background_ = new CAnimation ( imageResource->Get( "images/sun/sun.png" ), 0, 0.05f );
+	background_->SetCenter ( GetCenter() );
 	
 	/* Set blendmode */
 	background_->SetBlendMode ( sf::Blend::Multiply );
@@ -77,6 +78,10 @@ CSun::CSun ()
 	particle.AddEmitter ( emitter );
 
 // 	particle.Initialization ( 100, sf::Vector2f ( 10, 20 ), sf::Vector3f ( 100, 100, 0 ), sf::Vector2f ( 100000,300000 ), sf::Vector2f ( 40, 90 ), sf::Vector2f ( 10, 20 ), sf::Color::White );
+
+
+	/* Set properties */
+	SetZoomLevel ( 1 );
 }
 
 

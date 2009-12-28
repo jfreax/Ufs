@@ -28,8 +28,14 @@ CShip::CShip()
 	/* Imageresourcen manager */
 	CImageResource* imageResource = GetGameClass()->GetImgResource();
 
-	/* load picture of a sun */
+	/* Load picture of a sun */
 	background_ = new CAnimation ( imageResource->Get( "images/ship/human/hunter-001.png" ), 1, 0.05f );
+	background_->SetCenter ( GetCenter() );
+	
+	
+	/* Set properties */
+	SetZoomLevel ( .4 );
+// 	zoomLevel_ = 0.1;
 }
 
 

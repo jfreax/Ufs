@@ -68,7 +68,7 @@ class CGame
 		std::map< MOUSESCOPE, CAnimation*> GetCursor();
 		sf::String* GetFpsStr();
 		
-		sf::View* GetViewPoint ( int i = 0 );
+		sf::View* GetViewPoint();
 		void ShowSpecialWindow ( std::string windowName );
 		
 	private:
@@ -90,7 +90,7 @@ class CGame
 		GAMETYPE gametype_;
 		gui::CWindow* blackWindow;
 
-		sf::View viewPoint_[5];
+		sf::View viewPoint_;
 		std::map < std::string, gui::CWindow* > specialWindow_;
 
 		CImageResource imgResource_;

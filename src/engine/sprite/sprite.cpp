@@ -16,6 +16,7 @@
 
 #include "sprite.hpp"
 #include "../../settings/settings.hpp"
+#include "../../game.hpp"
 
 
 namespace sprite
@@ -55,6 +56,10 @@ void CSprite::Update()
 	
 	/* Animation berechnen */
 	background_->Update();
+	
+	/* Scale image to zoom level */
+	this->Scale ( 1 / ( GetZoomLevel() + GetGameClass()->GetMapManager()->GetZoomLevel() ));
+	
 }
 
 
@@ -77,6 +82,20 @@ void CSprite::Scale ( double scale )
 	this->SetScale ( scale * verh, scale );
 	
 }
+
+
+float CSprite::GetZoomLevel()
+{
+	return zoomLevel_;
+}
+
+
+void CSprite::SetZoomLevel ( float zLevel )
+{
+	zoomLevel_ = zLevel;
+}
+
+
 
 
 } /* namespace sprite */
