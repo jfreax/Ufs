@@ -91,6 +91,9 @@ class CWindow
 
 		void SetLayout ( LAYOUT layout, int layoutBorder = 1 );
 		unsigned int GetLayoutBorder();
+		
+		void SetColor ( sf::Color color );
+		void ChangeTransparency ( unsigned int alpha );
 
 	protected:
 		unsigned int id_;

@@ -57,15 +57,16 @@ bool CTooltip::Update()
 
 void CTooltip::ChangeTransparency ( unsigned int alpha )
 {
-	backgroundColor_.a = alpha;
+	CWindow::ChangeTransparency ( alpha );
+// 	backgroundColor_.a = alpha;
 	textColor_.a = alpha;
 	
-	for ( int i = formWin_->GetNbPoints()-1; i >= 0; --i ) {
-		sf::Color nColor = formWin_->GetPointColor ( i );
-		nColor.a = alpha;
-
-		formWin_->SetPointColor ( i, nColor );
-	}
+// 	for ( int i = formWin_->GetNbPoints()-1; i >= 0; --i ) {
+// 		sf::Color nColor = formWin_->GetPointColor ( i );
+// 		nColor.a = alpha;
+// 
+// 		formWin_->SetPointColor ( i, nColor );
+// 	}
 	
  	label_->GetText()->SetColor ( textColor_ );
 }

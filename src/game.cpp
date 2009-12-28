@@ -162,10 +162,18 @@ bool CGame::Start()
 	/* Leere Karte initialisieren */
 	mapManager_.Initialize();
 	
+	/* Load for errorsystem */
+	blackWindow = guiManager_.AddWindow ( new gui::CWindow () );
+	blackWindow->SetTitlebar ( 0 );
+	blackWindow->SetPosition ( sf::Vector2f ( 0, 0 ) );
+	blackWindow->SetSize ( sf::Vector2f ( settings::GetWidth(), settings::GetHeight() ) );
+	blackWindow->SetColor ( sf::Color ( 0, 0, 0 ) );
+	blackWindow->SetShow ( false );
+	
 	/* Language file */
 	locale_ = new CLocale ( settings::GetLang() );
 
-	/* Load standard windows */
+	/* Load standard windows */	
 	guiManager_.AddWindow ( specialWindow_["QUIT"] = new gui::CQuitWindow );
 	guiManager_.AddWindow ( new gui::CHeaderWindow );
 
@@ -184,6 +192,9 @@ bool CGame::Start()
 	while ( run_ ) {
 		/* Keyboard and mouse input */
 		input_.Events();
+		
+		/* Calculate error window, pause window, ... */
+		this->CalcSpecialWindow();
 
 		/* Berechnenung des Spielablaufs */
 		if ( this->GetGameType() == SINGLEPLAYER || this->GetGameType() == MULTIPLAYER )
@@ -210,7 +221,8 @@ void CGame::Error ( std::string text, std::string function, std::string file, in
 		text += "\n\nFunction: " + function + "\nFile: " + file + "\nLine: " + util::lCast< std::string >( line );
 	}
 	
-	guiManager_.BringToFront( guiManager_.AddWindow( new gui::CErrorWindow ( text ) ) );
+	specialWindow_ [ "ERROR" ] = guiManager_.AddWindow ( new gui::CErrorWindow ( text ) );
+	
 	this->SetGameType ( ERROR );
 }
 
@@ -226,13 +238,15 @@ void CGame::SetGameType ( GAMETYPE gametype )
 {
 	switch ( gametype ) {
 		case QUIT:
+			blackWindow->SetShow();
 			specialWindow_ [ "QUIT" ]->SetShow();
 			break;
-		case ERROR: 
-// 			specialWindow_ [ "ERROR" ]->SetShow();
+		case ERROR:
+			blackWindow->SetShow();
+
 			break;
 	}
-
+	
 	gametype_ = gametype;
 }
 
@@ -385,5 +399,63 @@ void CGame::Render()
 
 void CGame::Calc()
 {
+	
+}
+
+
+void CGame::CalcSpecialWindow()
+{
+	static float alpha = 0;
+	static sf::Clock clock;
+	
+	switch ( gametype_ ) {
+		case QUIT:
+			if ( alpha < 255 )
+				alpha = clock.GetElapsedTime() * 600;
+			if ( alpha >= 256 ) {
+				alpha = 255;
+				clock.Reset();
+			}
+			
+			blackWindow->ChangeTransparency ( alpha );
+			guiManager_.BringToFront ( blackWindow );
+			guiManager_.BringToFront ( specialWindow_ [ "QUIT" ] );
+			
+			specialWindow_ [ "QUIT" ]->SetShow();
+			return;
+		case ERROR:
+			if ( alpha < 255 )
+				alpha = clock.GetElapsedTime() * 600;
+			if ( alpha >= 256 ) {
+				alpha = 255;
+				clock.Reset();
+			}
+
+			blackWindow->ChangeTransparency ( alpha );
+			guiManager_.BringToFront ( blackWindow );
+			guiManager_.BringToFront ( specialWindow_ [ "ERROR" ] );
+			// 			specialWindow_ [ "ERROR" ]->SetShow();
+			return;
+		default:
+			if ( alpha >= 255 ) {
+				alpha = 255;
+				clock.Reset();
+			}
+// 			std::cout << alpha << " und " << clock.GetElapsedTime() << std::endl;
+			if ( alpha > 0 ) {	
+// 				std::cout << "hier " << std::endl;
+				alpha = 255 - clock.GetElapsedTime() * 600;
+				blackWindow->ChangeTransparency ( alpha );			
+			} if ( alpha <= 0 ) {
+				alpha = 0;
+				clock.Reset();
+				blackWindow->SetShow ( false );
+			}
+			return;
+			
+	}
+	
+// 	clock.Reset();
+// 	alpha = 0;
 	
 }

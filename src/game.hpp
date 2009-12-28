@@ -75,7 +75,9 @@ class CGame
 		bool IsVideoModeValid();
 		
 		void Render();
+		
 		void Calc();
+		void CalcSpecialWindow();
 
 	private:
 		sf::RenderWindow app_;
@@ -86,6 +88,7 @@ class CGame
 		
 		bool run_;
 		GAMETYPE gametype_;
+		gui::CWindow* blackWindow;
 
 		sf::View viewPoint_[5];
 		std::map < std::string, gui::CWindow* > specialWindow_;

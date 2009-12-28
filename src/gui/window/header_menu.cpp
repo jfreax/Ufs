@@ -33,10 +33,6 @@ CHeaderWindow::CHeaderWindow()
 	/* No titlebar */
 	this->SetTitlebar ( 0 );
 	
-	/* Temp. vars */
-	int width = settings::GetWidth();
-	int height = settings::GetHeight();
-	
 	this->SetMoveAble ( false );
 	this->SetCloseAble ( false );
 	this->SetLayout ( HORIZONTAL, 3 );

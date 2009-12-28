@@ -115,6 +115,8 @@ CHeaderQuitButton::CHeaderQuitButton()
 bool CHeaderQuitButton::onLeftClick()
 {
 	GetGameClass()->SetGameType ( QUIT );
+	std::cout << "okokok" << std::endl;
+	
 	return true;
 }
 

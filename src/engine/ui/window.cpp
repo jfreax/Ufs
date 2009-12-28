@@ -798,4 +798,29 @@ unsigned int CWindow::GetLayoutBorder()
 }
 
 
+void CWindow::SetColor ( sf::Color color )
+{
+	backgroundColor_ = color;
+	
+	for ( int i = formWin_->GetNbPoints()-1; i >= 0; --i ) {		
+		formWin_->SetPointColor ( i, color );
+	}
+}
+
+
+void CWindow::ChangeTransparency ( unsigned int alpha )
+{
+	backgroundColor_.a = alpha;
+	
+	for ( int i = formWin_->GetNbPoints()-1; i >= 0; --i ) {
+		sf::Color nColor = formWin_->GetPointColor ( i );
+		nColor.a = alpha;
+		
+		formWin_->SetPointColor ( i, nColor );
+	}
+}
+
+
+
+
 } /* namespace gui */
