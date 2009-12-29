@@ -22,14 +22,31 @@
 namespace sprite
 {
 
+static unsigned int globalId = 0;
 
 CSprite::CSprite()
 {
-	static unsigned int globalId = 0;
 	id_ = ++globalId;
 	
+	player_ = 0; /* "NATURE" */
+	
 	background_ = NULL;
+	miniImage_  = NULL;
 }
+
+
+CSprite::CSprite ( const sprite::CSprite& instance ) : Drawable ( instance )
+{ /* TODO */
+	id_ = ++globalId;
+	
+// 	background_ = new CAnimation (  instance.background_->, 1, 0.05f );
+	background_ = instance.background_;
+	
+	player_ = instance.player_;
+	mask_ = instance.mask_;
+	zoomLevel_ = instance.zoomLevel_;
+}
+
 
 
 CSprite::~CSprite()
@@ -69,11 +86,31 @@ unsigned int CSprite::GetId()
 }
 
 
+unsigned int CSprite::GetPlayer()
+{
+	return player_;
+}
+
+
+void CSprite::SetPlayer ( unsigned int player )
+{
+	player_ = player;
+}
+
+
+
 sf::Rect<float> CSprite::GetDimension()
 {
 	return sf::Rect<float> ( GetPosition().x, GetPosition().y,
 				 GetPosition().x + background_->GetSize().x * this->GetScale().x, GetPosition().y + background_->GetSize().y * this->GetScale().y );
 }
+
+
+sf::Image* CSprite::GetMiniImage()
+{
+	return miniImage_;
+}
+
 
 
 void CSprite::Scale ( double scale )

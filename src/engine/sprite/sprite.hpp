@@ -31,6 +31,8 @@ class CSprite : public sf::Drawable
 {
 	public:
 		CSprite();
+		CSprite ( const CSprite& instance );
+		
 		~CSprite();
 		
 		virtual void Render ( sf::RenderTarget& Target ) const;
@@ -38,7 +40,11 @@ class CSprite : public sf::Drawable
 		
 		unsigned int GetId();
 		
+		unsigned int GetPlayer();
+		void SetPlayer ( unsigned int player );
+		
 		sf::Rect<float> GetDimension();
+		sf::Image* GetMiniImage();
 		
 		void Scale ( double scale );
 		
@@ -47,8 +53,10 @@ class CSprite : public sf::Drawable
 
 	protected:
 		unsigned int id_;
+		unsigned int player_;
 		
 		CAnimation* background_;
+		sf::Image* miniImage_;
 		sf::Shape mask_;
 		
 		/* the greater number, the farther away */

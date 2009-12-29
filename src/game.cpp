@@ -26,11 +26,13 @@
 #include "engine/ui/manager.hpp"
 #include "engine/ui/button.hpp"
 
-#include "gui/button/titlebar.hpp"
+
 #include "gui/window/start.hpp"
 #include "gui/window/header_menu.hpp"
 #include "gui/window/quit.hpp"
 #include "gui/window/error.hpp"
+#include "gui/button/titlebar.hpp"
+#include "gui/other/select.hpp"
 
 
 CGame* game = NULL;
@@ -57,6 +59,8 @@ CGame::CGame ( int argc, char **argv ) :
 
 	settings::SetLang ( "de" );
 	settings::SetPath ( "./data/" );
+	
+	settings::SetSelect ( false );
 
 	/* Arguments */
 
@@ -109,6 +113,7 @@ CGame::CGame ( int argc, char **argv ) :
 CGame::~CGame()
 {
 	// TODO !!!
+	
 }
 
 
@@ -180,9 +185,12 @@ bool CGame::Start()
 
 	// FIXME Nur BEISPIELE!
 	gui::CWindow* win2 = guiManager_.AddWindow ( new gui::CWindow );
-	win2->SetPosition( sf::Vector2f ( 100, 100 ));
+	win2->SetPosition( sf::Vector2f ( 400, 100 ));
 	win2->SetSize ( sf::Vector2f ( 200, 200 ));
-
+	
+	gui::CWidget* wid = win2->AddWidget ( new gui::CSelectWidget );
+// 	std::cout << wid->GetPosition().x << std::endl;
+// 	new gui::CSelectWidget;
 // 	 gui::CWindow* win = guiManager_.AddWindow ( new gui::CStartWindow );
 //
 

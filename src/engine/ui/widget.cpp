@@ -45,6 +45,7 @@ CWidget::CWidget ( )
 	name_ = "";
 	
 	/* Initialize tooltip window */
+	toolTip_ = NULL;
 	showTooltip_ = 0;
 	hasTooltip_ = false;
 	
@@ -54,13 +55,22 @@ CWidget::CWidget ( )
 	/* Draw a background */
 	this->SetDrawBackground ( true );
 		
-	/* Text position */
+	/* Positions */
+	this->SetPosition ( sf::Vector2f ( 0, 0 ) );
 	this->SetTextPosition ( sf::Vector2f ( 0, 0 ) );
 	angle_ = 0;
 	
 	/* Standard font */
 	this->SetFont ( "default" );
 }
+
+
+CWidget::~CWidget()
+{
+	delete toolTip_;
+	
+}
+
 
 
 bool CWidget::Update ( bool doIt )
@@ -104,7 +114,7 @@ bool CWidget::Update ( bool doIt )
 	}
 	/* Hintergrundsprite */
 	else {
-		form_ = sf::Shape::Rectangle ( position_, position_ + curSize_, backgroundColor_, border_, borderColor_ );
+// 		form_ = sf::Shape::Rectangle ( position_, position_ + curSize_, backgroundColor_, border_, borderColor_ );
 	}
 
 	/* Set text position centered on button */
@@ -197,9 +207,27 @@ sf::Vector2f CWidget::GetPosition()
 }
 
 
+sf::Vector2f CWidget::GetPositionInScreen()
+{
+	return sf::Vector2f ( motherWin_->GetPosition().x + position_.x, motherWin_->GetPosition().y + position_.y );
+}
+
+
+
 sf::Rect<float> CWidget::GetDimension()
 {
 	return sf::Rect<float> ( fakePosition_.x, fakePosition_.y, fakePosition_.x + curSize_.x, fakePosition_.y + curSize_.y );
+}
+
+
+sf::Rect< float > CWidget::GetDimensionInScreen()
+{
+	if ( motherWin_ == NULL ) {
+		return sf::Rect< float > ( 0, 0, 0, 0 );
+	}
+	
+	sf::Vector2f motherPosition = motherWin_->GetPosition();
+	return sf::Rect< float > ( motherPosition.x + position_.x, motherPosition.y + position_.y, motherPosition.x + position_.x + curSize_.x, motherPosition.y + position_.y + curSize_.y );
 }
 
 
@@ -217,7 +245,10 @@ void CWidget::SetSize ( sf::Vector2f size )
 
 void CWidget::AdjustSize ( unsigned int border )
 {
-	this->SetSize ( sf::Vector2f ( text_.GetRect().GetWidth() + textPos_.x + border, text_.GetRect().GetHeight() + textPos_.y + border ) );
+// 	if ( static_cast <std::string> (text_.GetText()).empty() )
+// 		this->SetSize ( motherWin_->GetSize() );
+// 	else
+		this->SetSize ( sf::Vector2f ( text_.GetRect().GetWidth() + textPos_.x + border, text_.GetRect().GetHeight() + textPos_.y + border ) );
 }
 
 
@@ -280,17 +311,6 @@ sf::Color CWidget::GetBackgroundColor()
 CWindow* CWidget::GetMotherWin()
 {
 	return motherWin_;
-}
-
-
-sf::Rect< float > CWidget::GetDimensionInScreen()
-{
-	if ( motherWin_ == NULL ) {
-		return sf::Rect< float > ( 0, 0, 0, 0 );
-	}
-	
-	sf::Vector2f motherPosition = motherWin_->GetPosition();
-	return sf::Rect< float > ( motherPosition.x + position_.x, motherPosition.y + position_.y, motherPosition.x + position_.x + curSize_.x, motherPosition.y + position_.y + curSize_.y );
 }
 
 
@@ -378,7 +398,7 @@ void CWidget::SetFont ( std::string fontname )
 void CWidget::Calc()
 {
 	/* Funktionsanrufe tätigen */
-	this->Call();
+// 	this->Call();
 	
 	/* Ggf. "Update"s durchführen */
 	this->Update ( true );

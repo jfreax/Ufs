@@ -81,6 +81,23 @@ CWindow::CWindow ( bool withTitlebarPossible )
 }
 
 
+CWindow::~CWindow()
+{
+	delete formWin_;
+	delete formWinBorder_;
+	delete formTitlebar_;
+	delete titlebarImage_;
+	
+	std::vector< gui::CWidget* >::iterator endIter = widgetList_.end();
+	std::vector< gui::CWidget* >::iterator iter = widgetList_.begin();
+	
+	for ( ; iter != endIter; ++iter ) {
+		delete ( *iter );
+	}
+}
+
+
+
 const unsigned int CWindow::GetId() const
 {
 	return id_;

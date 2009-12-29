@@ -117,6 +117,8 @@ bool CManager::MouseClick ( const int x, const int y, const sf::Mouse::Button bu
 	if ( clickedWindow != lastWindow && ( previousMouseScope_ == NONE || previousMouseScope_ == WINDOW ) ) {
 		this->BringToFront ( clickedWindow );
 		previousMouseScope_ = NONE;
+		
+		this->MouseClick ( x, y, button );
 	}
 
 	settings::SetMouseScope ( highestMouseScope );
@@ -133,7 +135,7 @@ bool CManager::MouseClickReleased ( const int x, const int y, const sf::Mouse::B
 {
 	CGame* game = GetGameClass();
 	MOUSESCOPE highestMouseScope = NONE;
-
+	
 	std::vector< CWindow* >::iterator clickedWindow = windowList_.end() - 1;
 	std::vector< CWindow* >::iterator lastWindow = windowList_.end() - 1;
 	std::vector< CWindow* >::iterator currentWindow = windowList_.begin();
@@ -141,36 +143,35 @@ bool CManager::MouseClickReleased ( const int x, const int y, const sf::Mouse::B
 
 	if ( button == sf::Mouse::Left ) {
 		for ( ;currentWindow != lastWindow+1; ++currentWindow ) {
-			if ( ( *currentWindow )->GetShow() ) {
-				if ( ( *currentWindow )->GetWindowDimension().Contains ( x, y ) ||
-				                ( *currentWindow )->GetTitlebarDimension().Contains ( x, y ) ) { // ## Fenster ##
-					clickedWindow = currentWindow;
+			if ( ( *currentWindow )->GetShow() && ( *currentWindow )->GetWindowDimension().Contains ( x, y ) ||
+			                ( *currentWindow )->GetTitlebarDimension().Contains ( x, y ) ) { // ## Fenster ##
+				clickedWindow = currentWindow;
 
-					if ( previousMouseScope_ == NONE ) {
-						previousMouseScope_ = WINDOW;
-					}
+				if ( previousMouseScope_ == NONE ) {
+					previousMouseScope_ = WINDOW;
+				}
 
-					if ( currentWindow == lastWindow ) {
-						/* Widgets prüfen */
-						std::vector< gui::CWidget* >* widgetList = ( *currentWindow )->GetWidgetList();
-						gui::CWidget* currentWidget = NULL;
 
-						for ( std::vector< gui::CWidget* >::size_type i = widgetList->size(); i; --i ) {
-							currentWidget = widgetList->at ( i - 1 );
+				if ( currentWindow == lastWindow ) {
+					/* Widgets prüfen */
+					std::vector< gui::CWidget* >* widgetList = ( *currentWindow )->GetWidgetList();
+					gui::CWidget* currentWidget = NULL;
 
-							/* Wenn Widget angezeigt werden soll, minimale Klickzeitabstand vorbei ist
-							   und die Maus an der richtigen Position ist, dann Aktion ausführen */
+					for ( std::vector< gui::CWidget* >::size_type i = widgetList->size(); i; --i ) {
+						currentWidget = widgetList->at ( i - 1 );
 
-							if ( currentWidget->GetShow() &&
+						/* Wenn Widget angezeigt werden soll, minimale Klickzeitabstand vorbei ist
+						   und die Maus an der richtigen Position ist, dann Aktion ausführen */
+
+						if ( currentWidget->GetShow() &&
 // 						currentWidget->lastClickTime.GetElapsedTime() > .2f &&
-							                currentWidget->GetDimensionInScreen().Contains ( x, y ) ) {
-								previousMouseScope_ = NONE;
+						                currentWidget->GetDimensionInScreen().Contains ( x, y ) ) {
+							previousMouseScope_ = NONE;
 
-								currentWidget->lastClickTime.Reset();
-								currentWidget->onLeftClick();
+							currentWidget->lastClickTime.Reset();
+							currentWidget->onLeftClick();
 
-								return true;
-							}
+							return true;
 						}
 					}
 				}

@@ -45,8 +45,10 @@ void CLabel::Render()
 {
 	sf::RenderWindow* app = GetGameClass()->GetApp();
 	
-	this->Calc();
-	app->Draw ( text_ );
+	if ( this->GetShow() ) {
+		this->Calc();
+		app->Draw ( text_ );
+	}
 }
 
 } /* namespace gui */

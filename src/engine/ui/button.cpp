@@ -35,6 +35,13 @@ CButton::CButton()
 }
 
 
+CButton::~CButton()
+{
+
+}
+
+
+
 void CButton::Render()
 {
 	if ( !show_ )

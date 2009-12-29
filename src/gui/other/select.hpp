@@ -17,33 +17,54 @@
 
 */
 
-#ifndef TOOLTIP_HPP
-#define TOOLTIP_HPP
+#ifndef SELECT_WIDGET_HPP
+#define SELECT_WIDGET_HPP
 
-#include "../../engine/ui/window.hpp"
 #include "../../engine/ui/widget.hpp"
+#include "../../gui/other/label.hpp"
 
 namespace gui
 {
-
-
-class CTooltip : public CWindow
+	
+	
+class CSelectWidget : public CWidget
 {
 	public:
-		CTooltip ( CWidget* motherWidget, std::string text );
-		~CTooltip();
+		CSelectWidget();
+		~CSelectWidget();
 		
-		bool Update();
+		void Initialize();
+		void Render();
 		
-		void ChangeTransparency ( unsigned int alpha );
-
+		bool Call();
+		
 	private:
-		CWidget* motherWidget_;
+		void Calc();
 		
-		CWidget* label_;
-		sf::Color textColor_;
+		struct Data {
+			int playerID;
+			
+			sf::Color color;
+			
+			sf::String player;
+			sf::String health;
+		};
+		
+	private:
+		bool wasInitialized_;
+		bool needUpdate_;
+		
+		std::vector < sf::Sprite > toDraw_;
+		std::vector < sprite::CSprite* >* spriteList_;
+		
+		CLabel* player;
+		
+		std::vector < Data > data_;
+		
 };
+
+
 
 } /* namespace gui */
 
-#endif // TOOLTIP_HPP
+#endif // SELECT_WIDGET_HPP

@@ -46,6 +46,25 @@ CTooltip::CTooltip ( CWidget* motherWidget, std::string text ) :
 }
 
 
+CTooltip::~CTooltip()
+{
+// 	delete formWin_;
+// 	delete formWinBorder_;
+// 	delete formTitlebar_;
+// 	delete titlebarImage_;
+// 	
+	std::vector< gui::CWidget* >::iterator endIter = widgetList_.end();
+	std::vector< gui::CWidget* >::iterator iter = widgetList_.begin();
+	
+	for ( ; iter != endIter; ++iter ) {
+		delete ( *iter );
+	}
+	
+	delete label_;
+}
+
+
+
 bool CTooltip::Update()
 {
 	this->SetPosition ( sf::Vector2f ( motherWidget_->GetDimensionInScreen().Left - ( motherWidget_->GetDimension().GetWidth() * 0.5f ),

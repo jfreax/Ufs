@@ -21,6 +21,17 @@
 #include "game.hpp"
 
 
+CMapManager::~CMapManager()
+{
+	std::vector < sprite::CSprite* >::iterator iter = spriteList_.begin();
+	std::vector < sprite::CSprite* >::iterator iterEnd = spriteList_.end();
+	
+	for ( ; iter != iterEnd ; ++iter ) {
+		delete (*iter);
+	}
+}
+
+
 
 void CMapManager::Initialize()
 {
@@ -53,9 +64,8 @@ void CMapManager::Render()
 		app->Draw( **iter );
 	
 	/* Render rect to select objects */
-	if ( selectedRect_.Left != 0 && selectedRect_.Top != 0 ) {
+	if ( settings::GetSelect() ) {
 		sf::Shape rect = sf::Shape::Rectangle ( selectedRect_.Left, selectedRect_.Top, selectedRect_.Right, selectedRect_.Bottom, sf::Color ( 0, 0, 50, 60 ), 1, sf::Color ( 0, 0, 200,80 ) );
-		
 		app->SetView ( app->GetDefaultView() );
 		app->Draw( rect );
 	}
@@ -78,20 +88,30 @@ bool CMapManager::MouseClick ( const int mouseX, const int mouseY, const sf::Mou
 	std::vector < sprite::CSprite* >::iterator iter = spriteList_.begin();
 	std::vector < sprite::CSprite* >::iterator iterEnd = spriteList_.end();
 	
-	int x = GetGameClass()->GetApp()->ConvertCoords ( mouseX, mouseY, GetGameClass()->GetViewPoint() ).x;
-	int y = GetGameClass()->GetApp()->ConvertCoords ( mouseX, mouseY, GetGameClass()->GetViewPoint() ).y;
+	int x = this->ConvertCoords ( mouseX );
+	int y = this->ConvertCoords ( mouseY );
 	
 	switch ( button ) {
 		case sf::Mouse::Left:
+			selectedSpriteList_.clear();
+			
 			for ( ; iter != iterEnd ; ++iter ) {
-				if ( selectedRect_.Left == 0 && selectedRect_.Top == 0 ) {
+				if ( !settings::GetSelect() ) {
+					settings::SetSelect();
 					selectedRect_.Left = selectedRect_.Right = mouseX;
 					selectedRect_.Top = selectedRect_.Bottom = mouseY;
 				} else {
-					settings::SetSelect();
 					
 					selectedRect_.Right = mouseX;
 					selectedRect_.Bottom = mouseY;
+					
+					sf::Rect< float > selectedRectInGameCoord = this->ConvertCoords ( selectedRect_ );
+					if ( ( *iter )->GetDimension().Intersects ( selectedRectInGameCoord ) ) {
+						selectedSpriteList_.push_back ( *iter );
+					}
+					
+					if ( this->GetSpecialWidget ( "MINI_OBJECT" ) )
+						this->GetSpecialWidget ( "MINI_OBJECT" )->Call();
 				}
 			}
 			break;
@@ -105,18 +125,37 @@ bool CMapManager::MouseClickReleased ( const int mouseX, const int mouseY, const
 	std::vector < sprite::CSprite* >::iterator iter = spriteList_.begin();
 	std::vector < sprite::CSprite* >::iterator iterEnd = spriteList_.end();
 	
-	int x = GetGameClass()->GetApp()->ConvertCoords ( mouseX, mouseY, GetGameClass()->GetViewPoint() ).x;
-	int y = GetGameClass()->GetApp()->ConvertCoords ( mouseX, mouseY, GetGameClass()->GetViewPoint() ).y;
+	int x = this->ConvertCoords ( mouseX );
+	int y = this->ConvertCoords ( mouseY );
+	
+	
+	sf::Rect< float > selectedRectInGameCoord = this->ConvertCoords ( selectedRect_ );
+
 	
 	switch ( button ) {
 		case sf::Mouse::Left:
-			selectedRect_.Left = selectedRect_.Top = 0;
 			settings::SetSelect ( false );
+// 			selectedRect_.Left = selectedRect_.Right = 0;
+// 			selectedSpriteList_.clear();
 			
 			for ( ; iter != iterEnd ; ++iter ) {
+				/* Select rect was formed... find out which sprites selected */
+// 				if ( settings::GetSelect() ) {
+// // 					if ( selectedRect_.Contains ( ( *iter)->GetCenter() ) ) {
+// 					if ( ( *iter )->GetDimension().Intersects ( selectedRectInGameCoord ) ) {
+// 						selectedSpriteList_.push_back ( *iter );
+// 					}
+// 					this->GetSpecialWidget( "MINI_OBJECT" )->Call();
+// 				}
 				if ( ( *iter )->GetDimension().Contains( x, y ) ) {
 				}
+				
+
 			}
+			
+			
+			selectedRect_.Left = selectedRect_.Top = 0;
+
 			break;
 			
 	}
@@ -171,7 +210,72 @@ sprite::CSprite* CMapManager::AddSprite ( sprite::CSprite* sprite )
 }
 
 
+std::vector< sprite::CSprite* >* CMapManager::GetSelectedSprites()
+{
+	return &selectedSpriteList_;
+}
+
+
+gui::CWidget* CMapManager::GetSpecialWidget ( std::string name )
+{
+	gui::CWidget* widget;
+	try {
+		widget = specialWidget_.at ( name );
+	} catch (...) {
+		return NULL;
+	}
+	
+	return widget;
+}
+
+
+void CMapManager::SetSpecialWidget ( std::string name, gui::CWidget* widget )
+{
+	specialWidget_ [ name ] = widget;
+}
+
+
+
+
 void CMapManager::UnSetPos()
 {
 	lastPos_.x = lastPos_.y = 0;
 }
+
+
+sf::Rect< float > CMapManager::ConvertCoords ( sf::Rect< float > rect )
+{
+	static sf::RenderWindow* app = GetGameClass()->GetApp();
+	
+	if ( rect.Right < rect.Left ) {
+		float tmp = rect.Right;
+		rect.Right = rect.Left;
+		rect.Left = tmp;
+	}
+	if ( rect.Bottom < rect.Top ) {
+		float tmp = rect.Bottom;
+		rect.Bottom = rect.Top;
+		rect.Top = tmp;
+	}
+		
+	
+	sf::Vector2f p1 = app->ConvertCoords ( rect.Left, rect.Top, GetGameClass()->GetViewPoint() );
+	sf::Vector2f p2 = app->ConvertCoords ( rect.Right, rect.Bottom, GetGameClass()->GetViewPoint() );
+	
+	return sf::Rect< float > ( p1.x, p1.y, p2.x, p2.y );
+}
+
+sf::Vector2f CMapManager::ConvertCoords ( sf::Vector2f vector )
+{
+	static sf::RenderWindow* app = GetGameClass()->GetApp();
+	return app->ConvertCoords ( vector.x, vector.y, GetGameClass()->GetViewPoint() );
+}
+
+
+float CMapManager::ConvertCoords ( float f )
+{
+	static sf::RenderWindow* app = GetGameClass()->GetApp();
+	return app->ConvertCoords ( f, 0, GetGameClass()->GetViewPoint() ).x;
+}
+
+

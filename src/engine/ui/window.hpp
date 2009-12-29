@@ -29,6 +29,8 @@ class CWindow
 {
 	public:
 		CWindow ( bool withTitlebarPossible = true );
+		~CWindow();
+		
 		const unsigned int GetId() const;
 		void NoUpdate ( bool ison );
 		virtual void Initialize() {};

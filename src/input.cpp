@@ -237,7 +237,9 @@ bool CInput::Events()
 		/* MOUSE */
 		switch ( event.Type ) {
 			case sf::Event::MouseButtonReleased:
-				if ( settings::GetSelect() || !guiManager->MouseClickReleased ( input->GetMouseX(), input->GetMouseY(), event.MouseButton.Button ) )
+				if ( guiManager->MouseClickReleased ( input->GetMouseX(), input->GetMouseY(), event.MouseButton.Button ) )
+					settings::SetSelect ( false );
+				else
 					mapManager->MouseClickReleased ( input->GetMouseX(), input->GetMouseY(), sf::Mouse::Left );
 				break;
 

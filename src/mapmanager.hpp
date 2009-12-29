@@ -19,12 +19,14 @@
 
 #include <vector>
 #include "engine/sprite/sprite.hpp"
-
+#include "engine/ui/widget.hpp"
 
 class CMapManager
 {
 
 	public:
+		~CMapManager();
+		
 		void Initialize(); /* TODO */
 		void Render();
 		void Update();
@@ -38,15 +40,27 @@ class CMapManager
 		void Move ( sf::Vector2f newPos );
 
 		sprite::CSprite* AddSprite ( sprite::CSprite* sprite );
+		std::vector < sprite::CSprite* >* GetSelectedSprites();
+		
+		gui::CWidget* GetSpecialWidget ( std::string name );
+		void SetSpecialWidget ( std::string name, gui::CWidget* widget );
 		
 		void UnSetPos();
+		
+		sf::Rect<float> ConvertCoords ( sf::Rect<float> rect );
+		sf::Vector2f ConvertCoords ( sf::Vector2f vector );
+		float ConvertCoords ( float f );
+		
 
 	private:
 		std::vector < sprite::CSprite* > spriteList_;
+		std::vector < sprite::CSprite* > selectedSpriteList_;
 		
 		sf::Vector2f lastPos_;
 		
 		sf::Rect< float > selectedRect_;
+		
+		std::map < std::string, gui::CWidget* > specialWidget_;
 };
 
 #endif // MAPMANAGER_HPP

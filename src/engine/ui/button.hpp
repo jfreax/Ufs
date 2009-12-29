@@ -30,6 +30,8 @@ class CButton : public CWidget
 {
 	public:
 		CButton();
+		~CButton();
+		
 		void Render();
 		
 		virtual bool Call() {};

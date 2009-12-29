@@ -33,6 +33,8 @@ class CWidget
 {
 	public:
 		CWidget();
+		~CWidget();
+		
 		unsigned int GetId() { return id_; }
 
 		virtual void Render();
@@ -51,7 +53,9 @@ class CWidget
 		void MovePosition ( LAYOUT direction, POSITION to );
 		
 		sf::Vector2f GetPosition();
+		sf::Vector2f GetPositionInScreen();
 		sf::Rect<float> GetDimension();
+		sf::Rect< float > GetDimensionInScreen();
 		
 		void SetSize ( sf::Vector2f size );
 		void AdjustSize ( unsigned int border = 0 );
@@ -68,9 +72,9 @@ class CWidget
 		sf::Color GetBackgroundColor();
 
 		class CWindow* GetMotherWin();
-		sf::Rect< float > GetDimensionInScreen();
 		
-		void SetShow ( bool ison );
+		
+		void SetShow ( bool ison = true );
 		bool GetShow();
 		
 		std::string GetName();
@@ -126,7 +130,7 @@ class CWidget
 		bool drawBackground_;
 		sf::Sprite background_;
 		sf::Color backgroundColor_;
-		sf::Shape form_;
+// 		sf::Shape form_;
 
 		unsigned int border_;
 		sf::Color borderColor_;
