@@ -23,6 +23,7 @@
 #include "../other/image.hpp"
 #include "../other/spacer.hpp"
 #include "../button/quit.hpp"
+#include "../../settings/settings.hpp"
 
 
 
@@ -42,7 +43,7 @@ CErrorWindow::CErrorWindow ( std::string text )
 	
 	/* Add widgets */
 	this->AddWidget ( new CLabel ( "An error occurred with the following message...", 18 ) );
-	this->AddWidget ( new CImage ( "icons/dialog-close.png" ) )->MovePosition ( HORIZONTAL, LEFT );
+	this->AddWidget ( new CImage ( settings::GetThemePath() + "icons/dialog-close.png" ) )->MovePosition ( HORIZONTAL, LEFT );
 	
 	this->SetLayout ( HORIZONTAL, 5 );
 	label_ = dynamic_cast< CLabel* > ( this->AddWidget ( new CLabel ( text ) ) );

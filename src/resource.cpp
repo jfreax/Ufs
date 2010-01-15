@@ -15,15 +15,15 @@
 */
 
 #include "resource.hpp"
+#include "game.hpp"
 
 
 sf::Image* CImageResource::Load ( const std::string& str )
 {
 	sf::Image* image = new sf::Image();
 
-	if ( !image->LoadFromFile ( settings::GetPath() + str ) )
-	{
-		std::cout << "[WARN] ImageManager failed to load: " << str << std::endl;
+	if ( !image->LoadFromFile ( settings::GetPath() + str ) ) {
+		GetGameClass()->Error ( "ImageManager failed to load: " + str, __PRETTY_FUNCTION__, __FILE__, __LINE__ );
 		delete image;
 		image = NULL;
 	}
@@ -36,9 +36,8 @@ sf::Font* CFontResource::Load ( const std::string& str )
 {
 	sf::Font* font = new sf::Font();
 
-	if ( !font->LoadFromFile ( settings::GetPath() + str ) )
-	{
-		std::cout << "[WARN] FontManager failed to load: " << str << std::endl;
+	if ( !font->LoadFromFile ( settings::GetPath() + str ) ) {
+		GetGameClass()->Error ( "FontManager failed to load: " + str, __PRETTY_FUNCTION__, __FILE__, __LINE__ );
 		delete font;
 		font = NULL;
 	}
@@ -51,9 +50,8 @@ sf::SoundBuffer* CSoundResource::Load ( const std::string& str )
 {
 	sf::SoundBuffer* buffer = new sf::SoundBuffer();
 	
-	if ( !buffer->LoadFromFile ( str ) )
-	{
-		std::cout << "[WARN] SoundBufferManager failed to load: " << str << std::endl;
+	if ( !buffer->LoadFromFile ( str ) ) {
+		GetGameClass()->Error ( "SoundBufferManager failed to load: " + str, __PRETTY_FUNCTION__, __FILE__, __LINE__ );
 		delete buffer;
 		buffer = NULL;
 	}

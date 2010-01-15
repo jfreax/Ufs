@@ -81,7 +81,8 @@ CSun::CSun ()
 
 
 	/* Set properties */
-	SetZoomLevel ( 1 );
+	this->SetZoomFactor( 0.3 );
+	this->SetZoomLevel ( 0.02 );
 }
 
 

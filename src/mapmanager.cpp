@@ -57,11 +57,21 @@ void CMapManager::Render()
 {
 	sf::RenderWindow* app = GetGameClass()->GetApp();
 
-	std::vector < sprite::CSprite* >::iterator iter = spriteList_.begin();
-	std::vector < sprite::CSprite* >::iterator iterEnd = spriteList_.end();
+
 	
+	/* Draw a circle at selected sprites */
+	std::vector < sprite::CSprite* >::iterator iter = selectedSpriteList_.begin();
+	std::vector < sprite::CSprite* >::iterator iterEnd = selectedSpriteList_.end();
+	for ( ; iter != iterEnd ; ++iter ) {
+		(*iter)->DrawMarker();
+	}
+	
+	/* Draw sprites */
+	iter = spriteList_.begin();
+	iterEnd = spriteList_.end();
 	for ( ; iter != iterEnd ; ++iter )
 		app->Draw( **iter );
+
 	
 	/* Render rect to select objects */
 	if ( settings::GetSelect() ) {
@@ -218,14 +228,11 @@ std::vector< sprite::CSprite* >* CMapManager::GetSelectedSprites()
 
 gui::CWidget* CMapManager::GetSpecialWidget ( std::string name )
 {
-	gui::CWidget* widget;
-	try {
-		widget = specialWidget_.at ( name );
-	} catch (...) {
-		return NULL;
+	if ( specialWidget_.find( name ) != specialWidget_.end() ) {
+		return specialWidget_.at ( name );
 	}
-	
-	return widget;
+
+	return NULL;
 }
 
 
@@ -233,8 +240,6 @@ void CMapManager::SetSpecialWidget ( std::string name, gui::CWidget* widget )
 {
 	specialWidget_ [ name ] = widget;
 }
-
-
 
 
 void CMapManager::UnSetPos()
@@ -265,6 +270,7 @@ sf::Rect< float > CMapManager::ConvertCoords ( sf::Rect< float > rect )
 	return sf::Rect< float > ( p1.x, p1.y, p2.x, p2.y );
 }
 
+
 sf::Vector2f CMapManager::ConvertCoords ( sf::Vector2f vector )
 {
 	static sf::RenderWindow* app = GetGameClass()->GetApp();
@@ -278,4 +284,6 @@ float CMapManager::ConvertCoords ( float f )
 	return app->ConvertCoords ( f, 0, GetGameClass()->GetViewPoint() ).x;
 }
 
+
+/* Private */
 

@@ -41,6 +41,7 @@ CCloseButton::CCloseButton ( void )
 
 	this->SetPosition ( closeButtonPosition );
 	this->SetSize ( closeButtonSize );
+	
 	this->SetBackground ( *game->GetImgResource()->Get ( settings::GetThemePath() + "icons/close.png" ) );
 
 }

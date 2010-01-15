@@ -25,11 +25,19 @@
 namespace gui
 {
 
-	
-CImage::CImage ( std::string filename )
+
+CImage::CImage ( std::string filename, int frames, double timePerFrame ) :
+		frames_ ( frames ),
+		timePerFrame_ ( timePerFrame )
 {
-	background_.SetImage ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/" + filename ) );
-	this->SetSize ( background_.GetSize() );
+	sf::Image* img = GetGameClass()->GetImgResource()->Get ( filename );
+	
+	if ( frames_ > 1 ) {
+		animation_ = new CAnimation ( img, frames_, frames_ );
+	} else {
+		background_.SetImage ( *img );
+		this->SetSize ( background_.GetSize() );
+	}
 }
 
 
@@ -37,12 +45,16 @@ void CImage::Render()
 {
 	if ( !show_ )
 		return;
-	
+
 	this->Calc();
-	
+
 	sf::RenderWindow* app = GetGameClass()->GetApp();
-	if ( drawBackground_ && background_.GetSize().x != 1.f )
+
+	if ( frames_ > 1 ) {
+		app->Draw ( *animation_ );
+	} else if ( drawBackground_ && background_.GetSize().x != 1.f ) {
 		app->Draw ( background_ );
+	}
 }
 
 

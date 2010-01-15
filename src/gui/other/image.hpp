@@ -20,7 +20,9 @@
 #ifndef GUI_IMAGE_HPP
 #define GUI_IMAGE_HPP
 
+#include "../../animation.hpp"
 #include "../../engine/ui/widget.hpp"
+
 
 namespace gui
 {
@@ -28,10 +30,17 @@ namespace gui
 	
 class CImage : public CWidget
 {
-		public:
-			CImage ( std::string filename );
+	public:
+		CImage ( std::string filename, int frames = 1, double timePerFrame = 0 );
 			
-			void Render();
+		void Render();
+			
+	private:
+		int frames_;
+		double timePerFrame_;
+		
+		CAnimation* animation_;
+		
 };
 
 

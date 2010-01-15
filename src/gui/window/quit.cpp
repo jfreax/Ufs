@@ -40,7 +40,7 @@ CQuitWindow::CQuitWindow()
 	this->SetLayout ( HORIZONTAL, 5 );
 	
 	/* Add widgets */
-	this->AddWidget ( new CImage ( "icons/dialog-close.png" ) );
+	this->AddWidget ( new CImage ( settings::GetThemePath() + "icons/dialog-close.png" ) );
 	this->AddWidget ( new CLabel ( SYS, "QUIT_DIALOG" ) );
 	this->AddWidget ( new CQuitButton, true );
 	this->AddWidget ( new CCancelButton )->MovePosition ( HORIZONTAL, RIGHT );

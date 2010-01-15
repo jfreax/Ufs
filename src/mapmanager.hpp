@@ -28,6 +28,7 @@ class CMapManager
 		~CMapManager();
 		
 		void Initialize(); /* TODO */
+		
 		void Render();
 		void Update();
 		
@@ -51,6 +52,9 @@ class CMapManager
 		sf::Vector2f ConvertCoords ( sf::Vector2f vector );
 		float ConvertCoords ( float f );
 		
+	private:
+// 		void DrawMarked();
+		
 
 	private:
 		std::vector < sprite::CSprite* > spriteList_;
@@ -61,6 +65,8 @@ class CMapManager
 		sf::Rect< float > selectedRect_;
 		
 		std::map < std::string, gui::CWidget* > specialWidget_;
+		
+		double drawMarkedSpecialColor;
 };
 
 #endif // MAPMANAGER_HPP

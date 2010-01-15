@@ -288,6 +288,9 @@ sf::Sprite* CWidget::GetBackground()
 
 void CWidget::SetBackground ( sf::Image* background )
 {
+	if ( background == NULL )
+		return;
+	
 	/* Image setzen */
 	background_.SetImage ( *background );
 	

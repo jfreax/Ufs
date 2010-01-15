@@ -35,8 +35,7 @@ CSelectWidget::CSelectWidget()
 
 CSelectWidget::~CSelectWidget()
 {
-	if ( player != NULL )
-		delete player;
+	delete player_;
 	
 	/* Deregister widget */
 	GetGameClass()->GetMapManager()->SetSpecialWidget ( "MINI_OBJECT", NULL );
@@ -50,9 +49,9 @@ void CSelectWidget::Initialize()
 	GetGameClass()->GetMapManager()->SetSpecialWidget ( "MINI_OBJECT", this );
 
 	/* Prepare the positions */
-	player = dynamic_cast < CLabel* > ( GetMotherWin()->AddWidget ( new CLabel ) );
-	player->SetPosition ( sf::Vector2f ( 10, -50 ) );
-	player->SetShow ( false );
+	player_ = dynamic_cast < CLabel* > ( GetMotherWin()->AddWidget ( new CLabel ) );
+	player_->SetPosition ( sf::Vector2f ( 10, -50 ) );
+	player_->SetShow ( false );
 }
 
 
@@ -68,12 +67,12 @@ void CSelectWidget::Render()
 	gui::CWidget::Render();
 	this->Calc();
 	
-	std::vector < sf::Sprite >::iterator iter = toDraw_.begin();
-	std::vector < sf::Sprite >::iterator iterEnd = toDraw_.end();
-	
-	for ( ; iter != iterEnd ; ++iter ) {
-		app->Draw ( *iter );
-	}
+// 	std::vector < sf::Sprite >::iterator iter = toDraw_.begin();
+// 	std::vector < sf::Sprite >::iterator iterEnd = toDraw_.end();
+// 	
+// 	for ( ; iter != iterEnd ; ++iter ) {
+// 		app->Draw ( *iter );
+// 	}
 	
 }
 
@@ -97,12 +96,12 @@ void CSelectWidget::Calc()
 		needUpdate_ = false;
 	
 		/* Clear old list */
-		toDraw_.clear();
-		data_.clear();
+// 		toDraw_.clear();
+		images_.clear();
 		
 		/* No sprite is marked */
 		if ( spriteList_->empty() ) {
-			player->SetShow ( false );
+			player_->SetShow ( false );
 			
 		/* If one object is marked */
 		} else if ( spriteList_->size() == 1 ) {
@@ -116,7 +115,7 @@ void CSelectWidget::Calc()
 // 				miniImg.SetScale ( size, size*verh );
 				
 				/* Set infos about the object */
-				player->SetShow(); player->SetText ( "Player: " + util::lCast< std::string > ( sprite->GetPlayer() ) );
+				player_->SetShow(); player_->SetText ( "Player: " + util::lCast< std::string > ( sprite->GetPlayer() ) );
 // 				Data daTmp;
 // 				daTmp.player.SetPosition ( sf::Vector2f ( GetPositionInScreen().x, GetPositionInScreen(). ) );
 // 				daTmp.playerID = sprite->GetPlayer();

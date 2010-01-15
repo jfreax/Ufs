@@ -36,6 +36,8 @@ class CSprite : public sf::Drawable
 		~CSprite();
 		
 		virtual void Render ( sf::RenderTarget& Target ) const;
+		virtual void DrawMarker();
+		
 		virtual void Update();
 		
 		unsigned int GetId();
@@ -50,6 +52,9 @@ class CSprite : public sf::Drawable
 		
 		void SetZoomLevel ( float zLevel );
 		float GetZoomLevel();
+		
+		void SetZoomFactor ( float factor );
+		float GetZoomFactor();
 
 	protected:
 		unsigned int id_;
@@ -59,8 +64,9 @@ class CSprite : public sf::Drawable
 		sf::Image* miniImage_;
 		sf::Shape mask_;
 		
-		/* the greater number, the farther away */
+		/*  */
 		float zoomLevel_;
+		float zoomFactor_;
 };
 
 

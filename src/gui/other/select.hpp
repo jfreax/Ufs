@@ -22,6 +22,7 @@
 
 #include "../../engine/ui/widget.hpp"
 #include "../../gui/other/label.hpp"
+#include "../../gui/other/image.hpp"
 
 namespace gui
 {
@@ -41,26 +42,17 @@ class CSelectWidget : public CWidget
 	private:
 		void Calc();
 		
-		struct Data {
-			int playerID;
-			
-			sf::Color color;
-			
-			sf::String player;
-			sf::String health;
-		};
 		
 	private:
 		bool wasInitialized_;
 		bool needUpdate_;
 		
-		std::vector < sf::Sprite > toDraw_;
+// 		std::vector < sf::Sprite > toDraw_;
+		std::vector < CImage* > images_;
 		std::vector < sprite::CSprite* >* spriteList_;
 		
-		CLabel* player;
-		
-		std::vector < Data > data_;
-		
+		CLabel* player_;
+	
 };
 
 

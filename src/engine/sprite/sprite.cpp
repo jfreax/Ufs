@@ -32,6 +32,8 @@ CSprite::CSprite()
 	
 	background_ = NULL;
 	miniImage_  = NULL;
+	
+	this->SetZoomFactor ( 1.f );
 }
 
 
@@ -66,6 +68,30 @@ void CSprite::Render ( sf::RenderTarget& Target ) const
 }
 
 
+void CSprite::DrawMarker()
+{
+	/* Save static vars */
+	static sf::RenderWindow* app = GetGameClass()->GetApp();
+	static sf::Rect< float > dim;
+	static sf::Shape circle;
+	
+	
+	dim = this->GetDimension();
+	circle = sf::Shape::Circle ( dim.Left + dim.GetWidth() * 0.5f, dim.Top + dim.GetHeight() * 0.5f, dim.GetWidth() * 0.5f + 5, sf::Color ( 30, 30, 50, 150 ), 1, sf::Color ( 20, 20, 60,200 ) );
+	
+	// 		drawMarkedSpecialColor += app->GetFrameTime()*10;
+	// 		if ( drawMarkedSpecialColor+1 > circle.GetNbPoints() )
+	// 			drawMarkedSpecialColor = 1;
+	// 		
+	// 		circle.SetPointColor ( (int)drawMarkedSpecialColor+1, sf::Color ( 40, 30, 50, 100 ) );
+	// 		circle.SetPointColor ( (int)drawMarkedSpecialColor-1, sf::Color ( 40, 30, 50, 100 ) );
+	// 		circle.SetPointColor ( (int)drawMarkedSpecialColor, sf::Color ( 40, 30, 50, 100 ) );
+	
+	app->Draw ( circle );
+}
+
+
+
 void CSprite::Update()
 {
 	if ( !background_ )
@@ -75,7 +101,15 @@ void CSprite::Update()
 	background_->Update();
 	
 	/* Scale image to zoom level */
-	this->Scale ( 1 / ( GetZoomLevel() + GetGameClass()->GetMapManager()->GetZoomLevel() ));
+	double zoom = GetGameClass()->GetMapManager()->GetZoomLevel();
+	std::cout << 1/zoom << std::endl;
+ 
+// 	if ( this->GetZoomLevel() == 1 )
+this->Scale ( (1/zoom + ( zoom * GetZoomLevel() )) * this->GetZoomFactor() );
+		
+	
+// 	this->Scale ( 1/zoom*GetZoomLevel() );
+	
 	
 }
 
@@ -133,6 +167,14 @@ void CSprite::SetZoomLevel ( float zLevel )
 }
 
 
+void CSprite::SetZoomFactor ( float factor ) {
+	zoomFactor_ = factor;
+}
+
+
+float CSprite::GetZoomFactor() {
+	return zoomFactor_;
+}
 
 
 } /* namespace sprite */

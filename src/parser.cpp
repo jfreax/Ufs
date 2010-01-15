@@ -36,7 +36,7 @@ bool Parser::Open ( std::string filename, bool index, bool make_lower )
 
 	/* Auf erfolg prüfen */
 	if ( !file ) {
-		GetGameClass()->Error ( "Could not open file: " + filename,  __PRETTY_FUNCTION__, __FILE__, __LINE__ );
+		GetGameClass()->Error ( "Could not open file: " + filename, __PRETTY_FUNCTION__, __FILE__, __LINE__ );
 		return false;
 	}
 
