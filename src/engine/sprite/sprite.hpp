@@ -60,6 +60,8 @@ class CSprite : public sf::Drawable
 		unsigned int id_;
 		unsigned int player_;
 		
+		bool initialized;
+		
 		CAnimation* background_;
 		sf::Image* miniImage_;
 		sf::Shape mask_;

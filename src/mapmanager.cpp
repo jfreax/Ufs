@@ -42,7 +42,7 @@ void CMapManager::Initialize()
 	
 	sprite::CSprite* newShip = AddSprite ( new sprite::CShip );
 	newShip->Scale ( .25f );
-	newShip->SetPosition ( 200, 200 );
+	newShip->SetPosition ( 100, 100 );
 
 	if ( !newSprite || !newShip )
 		std::cout << "FAILED" << std::endl;
@@ -58,20 +58,18 @@ void CMapManager::Render()
 	sf::RenderWindow* app = GetGameClass()->GetApp();
 
 
-	
-	/* Draw a circle at selected sprites */
-	std::vector < sprite::CSprite* >::iterator iter = selectedSpriteList_.begin();
-	std::vector < sprite::CSprite* >::iterator iterEnd = selectedSpriteList_.end();
-	for ( ; iter != iterEnd ; ++iter ) {
-		(*iter)->DrawMarker();
-	}
-	
 	/* Draw sprites */
-	iter = spriteList_.begin();
-	iterEnd = spriteList_.end();
+	std::vector < sprite::CSprite* >::iterator iter = spriteList_.begin();
+	std::vector < sprite::CSprite* >::iterator iterEnd = spriteList_.end();
 	for ( ; iter != iterEnd ; ++iter )
 		app->Draw( **iter );
 
+	/* Draw a circle at selected sprites */
+	iter = selectedSpriteList_.begin();
+	iterEnd =selectedSpriteList_.end();
+	for ( ; iter != iterEnd ; ++iter ) {
+		(*iter)->DrawMarker();
+	}
 	
 	/* Render rect to select objects */
 	if ( settings::GetSelect() ) {
@@ -178,16 +176,17 @@ void CMapManager::Zoom ( float offset, int direction )
 	
 	int deltaX = input->GetMouseX() - (GetGameClass()->GetApp()->GetWidth()  * 0.5f);
 	int deltaY = input->GetMouseY() - (GetGameClass()->GetApp()->GetHeight() * 0.5f);
+	double zoom = 1/ GetGameClass()->GetMapManager()->GetZoomLevel() * 0.05;
 	
 	if ( direction == 1 ) {
 		if ( this->GetZoomLevel() < 6 ) { /* maximum zoom level */
 			GetGameClass()->GetViewPoint()->Zoom ( 1 + offset );
-			GetGameClass()->GetViewPoint()->Move ( deltaX * 0.05, deltaY * 0.05 );
+			GetGameClass()->GetViewPoint()->Move ( deltaX * zoom, deltaY * zoom );
 		}
 	} else if ( direction == -1 ) {
 		if ( this->GetZoomLevel() > 0.05 ) { /* minimum zoom level */
 			GetGameClass()->GetViewPoint()->Zoom ( 1 - offset );
-			GetGameClass()->GetViewPoint()->Move ( deltaX * 0.03, deltaY * 0.03 );
+			GetGameClass()->GetViewPoint()->Move ( deltaX * zoom, deltaY * zoom );
 		}
 	}
 }

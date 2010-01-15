@@ -34,6 +34,10 @@ CSprite::CSprite()
 	miniImage_  = NULL;
 	
 	this->SetZoomFactor ( 1.f );
+	
+	initialized = false;
+// 	std::cout << this->GetDimension().GetWidth() << std::endl;
+// 	this->SetCenter ( 71, 0 );
 }
 
 
@@ -47,6 +51,7 @@ CSprite::CSprite ( const sprite::CSprite& instance ) : Drawable ( instance )
 	player_ = instance.player_;
 	mask_ = instance.mask_;
 	zoomLevel_ = instance.zoomLevel_;
+	
 }
 
 
@@ -73,21 +78,32 @@ void CSprite::DrawMarker()
 	/* Save static vars */
 	static sf::RenderWindow* app = GetGameClass()->GetApp();
 	static sf::Rect< float > dim;
-	static sf::Shape circle;
+	static sf::Shape circle, bg;
 	
 	
 	dim = this->GetDimension();
-	circle = sf::Shape::Circle ( dim.Left + dim.GetWidth() * 0.5f, dim.Top + dim.GetHeight() * 0.5f, dim.GetWidth() * 0.5f + 5, sf::Color ( 30, 30, 50, 150 ), 1, sf::Color ( 20, 20, 60,200 ) );
+// 	dim.Left += this->GetCenter().x;
+// 	dim.Top += this->GetCenter().y;
 	
-	// 		drawMarkedSpecialColor += app->GetFrameTime()*10;
-	// 		if ( drawMarkedSpecialColor+1 > circle.GetNbPoints() )
-	// 			drawMarkedSpecialColor = 1;
-	// 		
-	// 		circle.SetPointColor ( (int)drawMarkedSpecialColor+1, sf::Color ( 40, 30, 50, 100 ) );
-	// 		circle.SetPointColor ( (int)drawMarkedSpecialColor-1, sf::Color ( 40, 30, 50, 100 ) );
-	// 		circle.SetPointColor ( (int)drawMarkedSpecialColor, sf::Color ( 40, 30, 50, 100 ) );
-	
-	app->Draw ( circle );
+// 	circle = sf::Shape::Circle ( dim.Left + dim.GetWidth() * 0.5f, dim.Top + dim.GetHeight() * 0.5f, dim.GetWidth() * 0.5f + 5, sf::Color ( 30, 30, 50, 150 ), 1, sf::Color ( 20, 20, 60,200 ) );
+// 	
+// 	// 		drawMarkedSpecialColor += app->GetFrameTime()*10;
+// 	// 		if ( drawMarkedSpecialColor+1 > circle.GetNbPoints() )
+// 	// 			drawMarkedSpecialColor = 1;
+// 	// 		
+// 	// 		circle.SetPointColor ( (int)drawMarkedSpecialColor+1, sf::Color ( 40, 30, 50, 100 ) );
+// 	// 		circle.SetPointColor ( (int)drawMarkedSpecialColor-1, sf::Color ( 40, 30, 50, 100 ) );
+// 	// 		circle.SetPointColor ( (int)drawMarkedSpecialColor, sf::Color ( 40, 30, 50, 100 ) );
+// 	
+// 	app->Draw ( circle );
+
+	float Angle;
+	sf::Vector2f Center ( 20, 20 );
+	for ( int i = 0; i < 80; ++i ) {
+		Angle = i * 2 * 3.141592654f / 80;
+		sf::Vector2f Offset ( cos ( Angle ), sin ( Angle ) );
+		bg.AddPoint ( Center + Offset * 20.f, sf::Color ( 100,40,200) );
+	}
 }
 
 
@@ -97,17 +113,20 @@ void CSprite::Update()
 	if ( !background_ )
 		return;
 	
+	if ( !initialized ) {
+		this->SetCenter ( background_->GetSize().x*0.5f, background_->GetSize().y*0.5f );
+		initialized = true;
+	}
+	
+	
 	/* Animation berechnen */
 	background_->Update();
 	
 	/* Scale image to zoom level */
 	double zoom = GetGameClass()->GetMapManager()->GetZoomLevel();
-	std::cout << 1/zoom << std::endl;
- 
-// 	if ( this->GetZoomLevel() == 1 )
-this->Scale ( (1/zoom + ( zoom * GetZoomLevel() )) * this->GetZoomFactor() );
-		
-	
+	this->Scale ( (1/zoom + ( zoom * GetZoomLevel() )) * this->GetZoomFactor() );
+
+// 	std::cout << this->GetDimension().GetWidth() - oldWidth << std::endl;
 // 	this->Scale ( 1/zoom*GetZoomLevel() );
 	
 	
