@@ -39,6 +39,7 @@ class CSprite : public sf::Drawable
 		virtual void DrawMarker();
 		
 		virtual void Update();
+		virtual void UpdateMarker();
 		
 		unsigned int GetId();
 		
@@ -65,6 +66,8 @@ class CSprite : public sf::Drawable
 		CAnimation* background_;
 		sf::Image* miniImage_;
 		sf::Shape mask_;
+		
+		sf::Shape* bgMarker_;
 		
 		/*  */
 		float zoomLevel_;

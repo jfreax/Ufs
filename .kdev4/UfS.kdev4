@@ -11,7 +11,7 @@ CurrentInstallDir=file:///usr/local
 ProjectRootRelative=./
 
 [Launch]
-Launch Configurations=Launch Configuration 0
+Launch Configurations=Launch Configuration 0,Launch Configuration 1
 
 [Launch][Launch Configuration 0]
 Configured Launch Modes=execute
@@ -27,3 +27,14 @@ EnvironmentGroup=default
 Executable=file:///home/jens/C++/ufs/build/src/ufs
 Working Directory=file:///home/jens/C++/ufs
 isExecutable=true
+
+[Launch][Launch Configuration 1]
+Configured Launch Modes=execute
+Configured Launchers=nativeAppLauncher
+Name=ufs
+Type=Native Application
+
+[Launch][Launch Configuration 1][Data]
+Project Target=UfS,src,ufs
+Working Directory=file:///home/jens/C++/ufs/build/src/
+isExecutable=false

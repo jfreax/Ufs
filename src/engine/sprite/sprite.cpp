@@ -32,12 +32,11 @@ CSprite::CSprite()
 	
 	background_ = NULL;
 	miniImage_  = NULL;
+	bgMarker_ = NULL;
 	
 	this->SetZoomFactor ( 1.f );
 	
 	initialized = false;
-// 	std::cout << this->GetDimension().GetWidth() << std::endl;
-// 	this->SetCenter ( 71, 0 );
 }
 
 
@@ -77,33 +76,8 @@ void CSprite::DrawMarker()
 {
 	/* Save static vars */
 	static sf::RenderWindow* app = GetGameClass()->GetApp();
-	static sf::Rect< float > dim;
-	static sf::Shape circle, bg;
-	
-	
-	dim = this->GetDimension();
-// 	dim.Left += this->GetCenter().x;
-// 	dim.Top += this->GetCenter().y;
-	
-// 	circle = sf::Shape::Circle ( dim.Left + dim.GetWidth() * 0.5f, dim.Top + dim.GetHeight() * 0.5f, dim.GetWidth() * 0.5f + 5, sf::Color ( 30, 30, 50, 150 ), 1, sf::Color ( 20, 20, 60,200 ) );
-// 	
-// 	// 		drawMarkedSpecialColor += app->GetFrameTime()*10;
-// 	// 		if ( drawMarkedSpecialColor+1 > circle.GetNbPoints() )
-// 	// 			drawMarkedSpecialColor = 1;
-// 	// 		
-// 	// 		circle.SetPointColor ( (int)drawMarkedSpecialColor+1, sf::Color ( 40, 30, 50, 100 ) );
-// 	// 		circle.SetPointColor ( (int)drawMarkedSpecialColor-1, sf::Color ( 40, 30, 50, 100 ) );
-// 	// 		circle.SetPointColor ( (int)drawMarkedSpecialColor, sf::Color ( 40, 30, 50, 100 ) );
-// 	
-// 	app->Draw ( circle );
 
-	float Angle;
-	sf::Vector2f Center ( 20, 20 );
-	for ( int i = 0; i < 80; ++i ) {
-		Angle = i * 2 * 3.141592654f / 80;
-		sf::Vector2f Offset ( cos ( Angle ), sin ( Angle ) );
-		bg.AddPoint ( Center + Offset * 20.f, sf::Color ( 100,40,200) );
-	}
+	app->Draw ( *bgMarker_ );
 }
 
 
@@ -118,6 +92,10 @@ void CSprite::Update()
 		initialized = true;
 	}
 	
+	if ( true ) { /* update this only when necessary */
+		/* Update marker graphic */
+		this->UpdateMarker();
+	}
 	
 	/* Animation berechnen */
 	background_->Update();
@@ -131,6 +109,55 @@ void CSprite::Update()
 	
 	
 }
+
+
+void CSprite::UpdateMarker()
+{
+	static sf::Rect< float > dim;
+	static sf::Vector2f offset;
+	static double angle;
+	static float width;
+	
+	dim = this->GetDimension();
+	width = this->GetDimension().GetWidth();
+	
+	/* Delete and create then a new shape */
+	delete bgMarker_; /* TODO */
+	bgMarker_ = new sf::Shape();
+	bgMarker_->EnableFill(false);
+	bgMarker_->EnableOutline(true);
+	
+	
+	/* Calc the outline width */
+	float zoom = GetGameClass()->GetMapManager()->GetZoomLevel();
+	if ( zoom < 1.f ) zoom = 1.f;
+	bgMarker_->SetOutlineWidth ( (this->GetDimension().GetWidth() * (this->GetZoomLevel() +0.5)) / 4 / zoom );
+	
+	/* Set variables */
+	sf::Vector2f center ( dim.Left + dim.GetWidth() * 0.5f, dim.Top + dim.GetHeight() * 0.5f );
+	sf::Color color = sf::Color ( 30, 30, 50, 255 ); /* TODO different colors for friend/enemy/neutral... */
+	
+	/* Calc a offset for rotation */
+	static double iOffset = 0;
+	iOffset += GetGameClass()->GetApp()->GetFrameTime() * 10;
+	
+	/* Add points */
+	for ( int i = 0; i < 160; ++i ) {
+		angle = (i+iOffset) * 2 * 3.141592654f / 160;
+		offset = sf::Vector2f ( cos ( angle ), sin ( angle ) );
+		
+		if ( i > 40 && i < 80 )
+			color.a = 255 - (i*2);
+		else if ( i > 80 && i < 120 )
+			color.a = 15 + (i*2);
+		else if ( i > 120 && i < 160 )
+			color.a = 255 - ((i-80)*2);
+		
+		bgMarker_->AddPoint ( center + offset * (width+10/zoom), color, color );
+	}
+	
+}
+
 
 
 unsigned int CSprite::GetId()
@@ -154,8 +181,8 @@ void CSprite::SetPlayer ( unsigned int player )
 
 sf::Rect<float> CSprite::GetDimension()
 {
-	return sf::Rect<float> ( GetPosition().x, GetPosition().y,
-				 GetPosition().x + background_->GetSize().x * this->GetScale().x, GetPosition().y + background_->GetSize().y * this->GetScale().y );
+	return sf::Rect<float> ( GetPosition().x - GetCenter().x * this->GetScale().x, GetPosition().y - GetCenter().y * this->GetScale().y,
+				 GetPosition().x - GetCenter().x * this->GetScale().x + background_->GetSize().x * this->GetScale().x, GetPosition().y - GetCenter().y * this->GetScale().y + background_->GetSize().y * this->GetScale().y );
 }
 
 
@@ -168,8 +195,7 @@ sf::Image* CSprite::GetMiniImage()
 
 void CSprite::Scale ( double scale )
 {
-	float verh = (float)settings::GetHeight() / (float)settings::GetWidth();
-	this->SetScale ( scale * verh, scale );
+	this->SetScale ( scale, scale );
 	
 }
 

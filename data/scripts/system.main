@@ -1,0 +1,17 @@
+-- Loading ui files
+-- dofile ( getPath() .. "scripts/ui/window.lua" );
+-- dofile ( getPath() .. "scripts/ui/widget.lua" );
+
+
+
+function include ( filename )
+  -- write report
+  io.write( string.format( "Loading scriptfile \"" .. filename .. "\" ..." ) );
+
+  dofile ( getPath() .. filename );
+
+  print ( "\t ok" );
+end
+
+-- start main menu
+include ( "test" )

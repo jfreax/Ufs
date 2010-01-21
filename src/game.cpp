@@ -16,16 +16,18 @@
 #include <SFML/Graphics.hpp>
 
 #include "action.hpp"
-#include "util/util.hpp"
-#include "settings/settings.hpp"
 #include "resource.hpp"
 #include "animation.hpp"
 #include "game.hpp"
 
+#include "util/util.hpp"
+#include "settings/settings.hpp"
+
+#include "script/script.hpp"
+
 #include "engine/ui/window.hpp"
 #include "engine/ui/manager.hpp"
 #include "engine/ui/button.hpp"
-
 
 #include "gui/window/start.hpp"
 #include "gui/window/header_menu.hpp"
@@ -112,6 +114,8 @@ CGame::CGame ( int argc, char **argv ) :
 
 CGame::~CGame()
 {
+	lua_close ( script::GetLua() );
+	
 	// TODO !!!
 	
 }
@@ -135,14 +139,18 @@ bool CGame::Initialize()
 		app_.Create ( settings::GetVideo(), "Game" , settings::GetStyle(), settings::GetWindowSettings() );
 	}
 
+	/* Set sfml properties */
 	app_.UseVerticalSync ( true );
-
 	app_.EnableKeyRepeat ( true );
 	app_.ShowMouseCursor ( false );
 
+	/* FPS font */
 	fpsStr_.SetSize ( 12 );
 
 
+	/* Initialize lua */
+	script::Initialize();
+	
 	// TODO nur Beispiele!
 	cursor_[NONE] = new CAnimation ( GetImgResource()->Get ( settings::GetThemePath() + "arrow.png" ) , 36, 0.1f );
 	cursor_[NONE]->Scale ( 0.6, 0.6 );
@@ -194,8 +202,8 @@ bool CGame::Start()
 // 	 gui::CWindow* win = guiManager_.AddWindow ( new gui::CStartWindow );
 //
 
-//
 
+	viewPoint_ = new sf::View( sf::FloatRect ( 0, 0, settings::GetWidth(), settings::GetHeight() ) );
 
 	/* Start game loop */
 	while ( run_ ) {
@@ -333,7 +341,7 @@ sf::String* CGame::GetFpsStr()
 
 sf::View* CGame::GetViewPoint()
 {
-	return &viewPoint_;
+	return viewPoint_;
 }
 
 
@@ -353,7 +361,7 @@ void CGame::Render()
 	app_.Clear();
 	
 	// Gamegraphic
-	app_.SetView ( viewPoint_ );
+	app_.SetView ( *viewPoint_ );
 	mapManager_.Update();
 	mapManager_.Render();
 	

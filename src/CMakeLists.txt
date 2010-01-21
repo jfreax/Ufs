@@ -5,6 +5,7 @@ add_subdirectory ( gui )
 add_subdirectory ( settings )
 add_subdirectory ( sprite )
 add_subdirectory ( util )
+add_subdirectory ( script )
 
 ADD_EXECUTABLE ( ufs 
   main.cpp
@@ -32,4 +33,5 @@ TARGET_LINK_LIBRARIES ( ufs
   ufs_gui_window
   ufs_gui_button
   ufs_gui_other
+  ufs_script
 )

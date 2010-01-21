@@ -21,7 +21,8 @@
 #include <SFML/Graphics.hpp>
 #include "engine/ui/manager.hpp"
 
-#include "script.hpp"
+#include "script/script.hpp"
+
 #include "input.hpp"
 #include "resource.hpp"
 #include "animation.hpp"
@@ -90,7 +91,7 @@ class CGame
 		GAMETYPE gametype_;
 		gui::CWindow* blackWindow;
 
-		sf::View viewPoint_;
+		sf::View* viewPoint_;
 		std::map < std::string, gui::CWindow* > specialWindow_;
 
 		CImageResource imgResource_;

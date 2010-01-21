@@ -141,7 +141,7 @@ CMAKE_SKIP_RPATH:BOOL=NO
 CMAKE_STRIP:FILEPATH=/usr/bin/strip
 
 //If true, cmake will use relative paths in makefiles and projects.
-CMAKE_USE_RELATIVE_PATHS:BOOL=OFF
+CMAKE_USE_RELATIVE_PATHS:BOOL=ON
 
 //If this value is on, makefiles will be generated without the
 // .SILENT directive, and all commands will be echoed to the console

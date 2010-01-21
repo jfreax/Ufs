@@ -37,12 +37,13 @@ void CMapManager::Initialize()
 {
 	/* Only test data */
 	sprite::CSprite* newSprite = AddSprite ( new sprite::CSun );
-	newSprite->Scale ( .25f );
 	newSprite->SetPosition ( 100, 100 );
 	
 	sprite::CSprite* newShip = AddSprite ( new sprite::CShip );
-	newShip->Scale ( .25f );
-	newShip->SetPosition ( 100, 100 );
+	newShip->SetPosition ( 300, 300 );
+	
+	sprite::CSprite* newShip2 = AddSprite ( new sprite::CShip );
+	newShip2->SetPosition ( 400, 400 );
 
 	if ( !newSprite || !newShip )
 		std::cout << "FAILED" << std::endl;

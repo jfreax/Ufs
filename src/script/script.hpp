@@ -28,28 +28,31 @@ extern "C"
 #include <iostream>
 #include <SFML/System.hpp>
 
-#include "engine/ui/window.hpp"
+#include "../engine/ui/window.hpp"
 
 
 namespace script
 {
 
+lua_State* GetLua();
+void Initialize();
 
-bool load ( lua_State* L );
-int getPath ( lua_State* L );
+bool Load ( lua_State* L );
 
-void checkError ( lua_State* L, int status );
+int GetPath ( lua_State* L );
 
-void setfield ( lua_State* L, const char *index, double value );
-int getfield ( lua_State* L, const char *key );
+void CheckError ( lua_State* L, int status );
 
-int push ( lua_State* L, bool istrue );
-int push ( lua_State* L, std::string str );
-int push ( lua_State* L, sf::Vector2f vec );
-int push ( lua_State* L, gui::CWindow* window );
+void SetField ( lua_State* L, const char *index, double value );
+int  GetField ( lua_State* L, const char *key );
 
-int pull ( lua_State* L, int number = -1 );
-gui::CWindow* pull ( lua_State* L, TYPE, int number = -1 );
+int Push ( lua_State* L, bool istrue );
+int Push ( lua_State* L, std::string str );
+int Push ( lua_State* L, sf::Vector2f vec );
+int Push ( lua_State* L, gui::CWindow* window );
+
+int Pull ( lua_State* L, int number = -1 );
+gui::CWindow* Pull ( lua_State* L, TYPE, int number = -1 );
 
 
 }  /* namespace script */
