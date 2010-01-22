@@ -4,4 +4,5 @@ ADD_LIBRARY ( ufs_gui_window STATIC
   header_menu.cpp
   tooltip.cpp
   error.cpp
+  select.cpp
 )

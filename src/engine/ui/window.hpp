@@ -44,7 +44,7 @@ class CWindow
 
 		class CWidget* AddWidget ( class CWidget* widget, bool newLine = false );
 
-		void CalcBackground();
+		virtual void CalcBackground();
 		void SetBackgroundImage ( sf::Image* img );
 
 		void SetName ( std::string str );

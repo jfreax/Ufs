@@ -17,47 +17,25 @@
 
 */
 
-#ifndef SELECT_WIDGET_HPP
-#define SELECT_WIDGET_HPP
+#ifndef SELECTWINDOW_HPP
+#define SELECTWINDOW_HPP
 
-#include "../../engine/sprite/sprite.hpp"
-#include "../../engine/ui/widget.hpp"
-#include "../../gui/other/label.hpp"
-#include "../../gui/other/image.hpp"
+#include "../../engine/ui/window.hpp"
 
 namespace gui
 {
-	
-	
-class CSelectWidget : public CWidget
+
+class CSelectWindow : public CWindow
 {
 	public:
-		CSelectWidget();
-		~CSelectWidget();
+		CSelectWindow();
 		
-		void Initialize();
-		void Render();
-		
-		bool Call();
+		void CalcBackground();
 		
 	private:
-		void Calc();
-		
-		
-	private:
-		bool wasInitialized_;
-		bool needUpdate_;
-		
-// 		std::vector < sf::Sprite > toDraw_;
-		std::vector < CImage* > images_;
-		std::vector < sprite::CSprite* >* spriteList_;
-		
-		CLabel* player_;
-	
 };
-
 
 
 } /* namespace gui */
 
-#endif // SELECT_WIDGET_HPP
+#endif // CSELECT_HPP
