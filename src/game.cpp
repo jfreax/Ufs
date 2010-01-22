@@ -397,10 +397,10 @@ void CGame::CalcSpecialWindow()
 	
 	switch ( gametype_ ) {
 		case QUIT:
-			if ( alpha < 255 )
-				alpha = clock.GetElapsedTime() * 600;
-			if ( alpha >= 256 ) {
-				alpha = 255;
+			if ( alpha < 230 )
+				alpha = clock.GetElapsedTime() * 500;
+			if ( alpha >= 230 ) {
+				alpha = 230;
 				clock.Reset();
 			}
 			
@@ -411,10 +411,10 @@ void CGame::CalcSpecialWindow()
 			specialWindow_ [ "QUIT" ]->SetShow();
 			return;
 		case ERROR:
-			if ( alpha < 255 )
-				alpha = clock.GetElapsedTime() * 600;
-			if ( alpha >= 256 ) {
-				alpha = 255;
+			if ( alpha < 230 )
+				alpha = clock.GetElapsedTime() * 500;
+			if ( alpha >= 230 ) {
+				alpha = 230;
 				clock.Reset();
 			}
 
@@ -424,14 +424,13 @@ void CGame::CalcSpecialWindow()
 			// 			specialWindow_ [ "ERROR" ]->SetShow();
 			return;
 		default:
-			if ( alpha >= 255 ) {
-				alpha = 255;
+			if ( alpha >= 230 ) {
+				alpha = 230;
 				clock.Reset();
 			}
-// 			std::cout << alpha << " und " << clock.GetElapsedTime() << std::endl;
+			
 			if ( alpha > 0 ) {	
-// 				std::cout << "hier " << std::endl;
-				alpha = 255 - clock.GetElapsedTime() * 600;
+				alpha = 230 - clock.GetElapsedTime() * 500;
 				blackWindow->ChangeTransparency ( alpha );			
 			} if ( alpha <= 0 ) {
 				alpha = 0;
