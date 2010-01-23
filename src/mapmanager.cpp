@@ -16,9 +16,11 @@
 
 
 #include "sprite/sun.hpp"
+#include "sprite/planet.hpp"
 #include "sprite/ship.hpp"
-#include "mapmanager.hpp"
+
 #include "game.hpp"
+#include "mapmanager.hpp"
 
 
 CMapManager::~CMapManager()
@@ -35,11 +37,14 @@ CMapManager::~CMapManager()
 
 void CMapManager::Initialize()
 {
+// 	zoomStep_ = 0.1f;
+	zoomed_ = 0;
+	
 	/* Only test data */
 	sprite::CSprite* newSprite = AddSprite ( new sprite::CSun );
 	newSprite->SetPosition ( 100, 100 );
 	
-	sprite::CSprite* newSprite2 = AddSprite ( new sprite::CSun );
+	sprite::CSprite* newSprite2 = AddSprite ( new sprite::CPlanet );
 	newSprite2->SetPosition ( 4000, 4000 );
 	
 	sprite::CSprite* newShip = AddSprite ( new sprite::CShip );
@@ -89,9 +94,14 @@ void CMapManager::Update()
 {
 	std::vector < sprite::CSprite* >::iterator iter = spriteList_.begin();
 	std::vector < sprite::CSprite* >::iterator iterEnd = spriteList_.end();
-
 	for ( ; iter != iterEnd ; ++iter )
 		( *iter )->Update();
+	
+	/* Fade out the zoom */
+	if ( zoomed_ > 0 ) {
+		zoomed_ -= zoomed_*0.1+0.05f;
+		this->Zoom ( lastZoomDirection_, true );
+	}
 }
 
 
@@ -174,23 +184,44 @@ bool CMapManager::MouseClickReleased ( const int mouseX, const int mouseY, const
 }
 
 
-void CMapManager::Zoom ( float offset, int direction )
+void CMapManager::MoveZoomStep ( double step )
+{
+// 	zoomStep_ += step;
+	
+// 	std::cout << "2: " << zoomStep_ << std::endl;
+	
+// 	if ( zoomStep_ <= 0.005 )
+// 		zoomStep_ = 0.005;
+// 	else if ( zoomStep_ > 0.2f )
+// 		zoomStep_ = 0.2f;
+}
+
+
+
+void CMapManager::Zoom ( int direction, bool fade )
 {
 	static const sf::Input* input = &GetGameClass()->GetApp()->GetInput();
+	static double zoomStep = 0.01f;
+	static int deltaX, deltaY;
+	double zoom = 1/ GetGameClass()->GetMapManager()->GetZoomLevel() * (0.03);
 	
-	int deltaX = input->GetMouseX() - (GetGameClass()->GetApp()->GetWidth()  * 0.5f);
-	int deltaY = input->GetMouseY() - (GetGameClass()->GetApp()->GetHeight() * 0.5f);
-	double zoom = 1/ GetGameClass()->GetMapManager()->GetZoomLevel() * 0.05;
+	if ( !fade ) {
+		deltaX = input->GetMouseX() - (GetGameClass()->GetApp()->GetWidth()  * 0.5f);
+		deltaY = input->GetMouseY() - (GetGameClass()->GetApp()->GetHeight() * 0.5f);
+		zoomed_ += 10;
+	}
+	
+	lastZoomDirection_ = direction;
 	
 	if ( direction == 1 ) {
 		if ( this->GetZoomLevel() < 6 ) { /* maximum zoom level */
-			GetGameClass()->GetViewPoint()->Zoom ( 1 + offset );
+			GetGameClass()->GetViewPoint()->Zoom ( 1 + zoomStep*(zoomed_*0.05) );
 			GetGameClass()->GetViewPoint()->Move ( deltaX * zoom, deltaY * zoom );
 		}
 	} else if ( direction == -1 ) {
 		if ( this->GetZoomLevel() > 0.05 ) { /* minimum zoom level */
-			GetGameClass()->GetViewPoint()->Zoom ( 1 - offset );
-			GetGameClass()->GetViewPoint()->Move ( deltaX * zoom, deltaY * zoom );
+			GetGameClass()->GetViewPoint()->Zoom ( 1 - zoomStep*(zoomed_*0.05f) );
+			GetGameClass()->GetViewPoint()->Move ( deltaX * 0.5f * zoom, deltaY * 0.5f * zoom );
 		}
 	}
 }

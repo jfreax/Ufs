@@ -29,7 +29,7 @@ CSun::CSun ()
 	CImageResource* imageResource = GetGameClass()->GetImgResource();
 
 	/* load picture of a sun */
-	background_ = new CAnimation ( imageResource->Get( "images/sun/sun.png" ), 0, 0.05f );
+	background_ = new CAnimation ( imageResource->Get( "images/sun/001.png" ), 0, 0.05f );
 	background_->SetCenter ( GetCenter() );
 	
 	/* Set blendmode */
@@ -81,7 +81,7 @@ CSun::CSun ()
 
 
 	/* Set properties */
-	this->SetZoomFactor( 0.3 );
+	this->SetZoomFactor( 0.4 );
 	this->SetZoomLevel ( 0.02 );
 }
 

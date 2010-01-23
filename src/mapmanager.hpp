@@ -35,7 +35,8 @@ class CMapManager
 		bool MouseClick ( const int mouseX, const int mouseY, const sf::Mouse::Button button );
 		bool MouseClickReleased ( const int mouseX, const int mouseY, const sf::Mouse::Button button );
 		
-		void Zoom ( float offset, int direction );
+		void MoveZoomStep ( double step );
+		void Zoom ( int direction, bool fade = false );
 		double GetZoomLevel();
 		
 		void Move ( sf::Vector2f newPos );
@@ -61,12 +62,14 @@ class CMapManager
 		std::vector < sprite::CSprite* > selectedSpriteList_;
 		
 		sf::Vector2f lastPos_;
-		
 		sf::Rect< float > selectedRect_;
 		
 		std::map < std::string, gui::CWidget* > specialWidget_;
 		
-		double drawMarkedSpecialColor;
+		double drawMarkedSpecialColor_;
+		
+		double zoomed_;
+		int lastZoomDirection_;
 };
 
 #endif // MAPMANAGER_HPP

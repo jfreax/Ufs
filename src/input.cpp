@@ -270,6 +270,6 @@ bool CInput::Events()
 
 void CInput::MouseWheel ( float delta )
 {
-	GetGameClass()->GetMapManager()->Zoom ( 0.05, delta );
+	GetGameClass()->GetMapManager()->Zoom ( delta );
 }
 
