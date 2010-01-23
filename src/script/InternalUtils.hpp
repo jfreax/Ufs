@@ -30,7 +30,7 @@
 #include "LuaState.hpp"
 
 
-namespace Diluculum
+namespace script
 {
    namespace Impl
    {

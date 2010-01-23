@@ -33,7 +33,7 @@
 #include "InternalUtils.hpp"
 
 
-namespace Diluculum
+namespace script
 {
    // - LuaState::LuaState -----------------------------------------------------
    LuaState::LuaState (bool loadStdLib)

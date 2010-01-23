@@ -159,6 +159,11 @@ bool CGame::Initialize()
 	cursor_[WINDOW]->SetStartAt ( 6 );
 
 	this->SetGameType ( SINGLEPLAYER );
+	
+	/* Log start time */
+	time_t rawtime;
+	time ( &rawtime );
+	log_.push_back ( ctime (&rawtime) + (std::string)"   Game started!" );
 
 	return true;
 }
@@ -172,9 +177,6 @@ bool CGame::Start()
 	/* Gui-Manager laden */
 	guiManager_.Initialize();
 	
-	/* Initialize lua */
-	script::Initialize();
-
 	/* Leere Karte initialisieren */
 	mapManager_.Initialize();
 	
@@ -199,6 +201,9 @@ bool CGame::Start()
 	/* Set view point */
 	viewPoint_ = new sf::View( sf::FloatRect ( 0, 0, settings::GetWidth(), settings::GetHeight() ) );
 
+	/* Initialize lua */
+	script::Initialize();
+	
 	/* Start game loop */
 	while ( run_ ) {
 		/* Keyboard and mouse input */
@@ -228,13 +233,24 @@ bool CGame::Stop()
 
 void CGame::Error ( std::string text, std::string function, std::string file, int line )
 {
-	if ( !file.empty() ) {
+	/* Get local time */
+	time_t rawtime;
+	time ( &rawtime );
+	
+	/* Log the error */
+	log_.push_back ( ctime (&rawtime) + (std::string)"   " + text );
+	
+	if ( !file.empty() )
 		text += "\n\nFunction: " + function + "\nFile: " + file + "\nLine: " + util::lCast< std::string >( line );
-	}
 	
 	specialWindow_ [ "ERROR" ] = guiManager_.AddWindow ( new gui::CErrorWindow ( text ) );
 	
 	this->SetGameType ( ERROR );
+}
+
+
+std::vector< std::string >* CGame::GetLog() {
+	return &log_;
 }
 
 

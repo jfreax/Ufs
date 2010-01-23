@@ -37,7 +37,7 @@
 #include "Types.hpp"
 
 
-namespace Diluculum
+namespace script
 {
    /** A class that somewhat mimics a Lua value. Notice that a \c LuaValue is
     *  a C++-side thing. There is absolutely no relationship between a

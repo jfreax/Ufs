@@ -29,7 +29,7 @@
 
 #include "LuaValue.hpp"
 
-namespace Diluculum
+namespace script
 {
 
    /** Converts and returns the element at index \c index on the stack to a

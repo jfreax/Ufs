@@ -28,7 +28,7 @@
 #include <cstring>
 
 
-namespace Diluculum
+namespace script
 {
    // - LuaFunction::LuaFunction -----------------------------------------------
    LuaFunction::LuaFunction (const void* data, size_t size)

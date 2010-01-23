@@ -25,7 +25,7 @@
 namespace gui
 {
 	
-
+class CTextArea;
 class CTerminalWindow : public CWindow
 {
 	public:
@@ -33,12 +33,13 @@ class CTerminalWindow : public CWindow
 		
 		void Call();		
 		void ToggleShow();
-		
 	private:
 		bool toggle_;
 		bool slideIn_;
 		
 		int slideSpeed_;
+		
+		CTextArea* terminal_;
 };
 
 

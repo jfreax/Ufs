@@ -31,7 +31,7 @@
 #include "InternalUtils.hpp"
 
 
-namespace Diluculum
+namespace script
 {
    // - ToLuaValue -------------------------------------------------------------
    LuaValue ToLuaValue (lua_State* state, int index)

@@ -17,14 +17,6 @@
 #ifndef SCRIPT_HPP
 #define SCRIPT_HPP
 
-// extern "C"
-// {
-// #include "lua.h"
-// #include "lauxlib.h"
-// #include "lualib.h"
-// 
-// }
-
 #include <iostream>
 #include <SFML/System.hpp>
 
@@ -35,11 +27,12 @@ namespace script
 {
 	
 
-Diluculum::LuaState* GetLua();
+script::LuaState* GetLua();
 void Initialize();
 
-
-// int GetPath ( lua_State* L );
+LuaValueList GetPath ( const LuaValueList& params );
+LuaValueList GetLog ( const LuaValueList& params );
+LuaValueList Error ( const LuaValueList& params );
 
 
 } /* namespace script */

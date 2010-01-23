@@ -1,0 +1,5 @@
+function map_functions ()
+  log = getLog()
+  dmesg = getLog()
+  path = getPath()
+end

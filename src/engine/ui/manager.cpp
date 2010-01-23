@@ -431,8 +431,7 @@ void CManager::ToogleTerminal()
 	if ( !terminal_ )
 		return;
 	
-	dynamic_cast< CTerminalWindow
-* > ( terminal_ )->ToggleShow ();
+	dynamic_cast< CTerminalWindow* > ( terminal_ )->ToggleShow ();
 }
 
 

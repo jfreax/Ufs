@@ -51,6 +51,7 @@ class CGame
 		bool Stop();
 		
 		void Error ( std::string text, std::string function = "", std::string file = "", int line = 0);
+		std::vector< std::string >* GetLog();
 
 		GAMETYPE GetGameType();
 		void SetGameType ( GAMETYPE gametype );
@@ -106,6 +107,8 @@ class CGame
 		std::map< MOUSESCOPE, CAnimation*> cursor_;
 
 		sf::String fpsStr_;
+		
+		std::vector< std::string > log_;
 
 };
 

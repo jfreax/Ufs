@@ -91,7 +91,6 @@ CWindow::~CWindow()
 	
 	std::vector< gui::CWidget* >::iterator endIter = widgetList_.end();
 	std::vector< gui::CWidget* >::iterator iter = widgetList_.begin();
-	
 	for ( ; iter != endIter; ++iter ) {
 		delete ( *iter );
 	}

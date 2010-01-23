@@ -26,7 +26,7 @@
 
 #include "LuaExceptions.hpp"
 
-namespace Diluculum
+namespace script
 {
    // - TypeMismatchError::TypeMismatchError -----------------------------------
    TypeMismatchError::TypeMismatchError (const std::string& expectedType,

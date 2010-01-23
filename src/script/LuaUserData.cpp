@@ -28,7 +28,7 @@
 #include <cstring>
 
 
-namespace Diluculum
+namespace script
 {
    // - LuaUserData::LuaUserData -----------------------------------------------
    LuaUserData::LuaUserData (size_t size)

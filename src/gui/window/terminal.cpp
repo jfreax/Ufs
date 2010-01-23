@@ -37,7 +37,7 @@ CTerminalWindow::CTerminalWindow()
 	this->SetCloseAble ( false );
 	
 	/* Add buttons */
-	this->AddWidget ( new CTerminal );
+	terminal_ = dynamic_cast < CTextArea* > ( this->AddWidget ( new CTerminal ) );
 	
 	/* Set size (depend on buttons) */
 	this->AdjustSize();
@@ -55,12 +55,13 @@ CTerminalWindow::CTerminalWindow()
 
 void CTerminalWindow::Call()
 {
-	if ( !slideIn_ && toggle_ && this->GetPosition().y < 0 ) {
+	if ( !slideIn_ && toggle_ && this->GetPosition().y < 0 ) { /* slide out */
 		this->MovePosition( VERTICAL, slideSpeed_ * GetGameClass()->GetApp()->GetFrameTime() );
 		
 		if ( this->GetPosition().y >= 0 ) {
 			this->SetPosition( sf::Vector2f ( -1, 0 ) );
 			toggle_ = false;
+			GetGameClass()->GetGuiManager()->FocusTextArea ( terminal_ );
 		}
 		
 	} else if ( slideIn_ || toggle_  && this->GetPosition().y >= 0 ) {
@@ -69,7 +70,7 @@ void CTerminalWindow::Call()
 		
 		if ( this->GetPosition().y <= -this->GetSize().y ) {
 			toggle_ = slideIn_ = false;
-			
+			GetGameClass()->GetGuiManager()->FocusTextArea ( NULL );			
 		}
 	}
 }

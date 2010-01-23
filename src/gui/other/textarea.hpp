@@ -43,15 +43,22 @@ class CTextArea : public CText
 		
 		bool AddText ( std::wstring str );
 
-		
-		void SetCursor ( int x );
+		virtual void SetCursor ( int x );
 		void MoveCursor ( int x );
 		
 	private:
-		bool initialized_;
-	
+		void CalcBackground();
+		
+	protected:
 		int cursorPos_;
+		
+	private:
+		bool initialized_;
+
 		sf::Shape cursor_;
+		sf::Clock cursorTime_;
+		
+		sf::Shape* background_;
 
 };
 

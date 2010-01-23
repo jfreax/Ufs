@@ -31,7 +31,7 @@
 #include <cstring>
 
 
-namespace Diluculum
+namespace script
 {
    namespace Impl
    {
@@ -107,8 +107,8 @@ namespace Diluculum
       int LuaFunctionWriter(lua_State* luaState, const void* data, size_t size,
                             void* func)
       {
-         Diluculum::LuaFunction* f =
-            reinterpret_cast<Diluculum::LuaFunction*>(func);
+	    script::LuaFunction* f =
+	    reinterpret_cast<script::LuaFunction*>(func);
 
          size_t newSize = f->getSize() + size;
 
@@ -128,8 +128,8 @@ namespace Diluculum
       const char* LuaFunctionReader(lua_State* luaState, void* func,
                                     size_t* size)
       {
-         Diluculum::LuaFunction* f =
-            reinterpret_cast<Diluculum::LuaFunction*>(func);
+	  script::LuaFunction* f =
+		reinterpret_cast<script::LuaFunction*>(func);
 
          if (f->getReaderFlag())
             return 0;

@@ -37,8 +37,16 @@ class CTerminal : public CTextArea
 		
 		void Run();
 		
+		void SetCursor ( int x );
+		
+	private:
+		void OverwriteLastCommandWith (  std::wstring str );
+		
 	private:
 		bool initialized_;
+		
+		std::vector< std::string > history_;
+		int historyPos_;
 };
 
 

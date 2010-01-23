@@ -29,7 +29,7 @@
 #include "LuaExceptions.hpp"
 
 
-namespace Diluculum
+namespace script
 {
    // - LuaValue::LuaValue -----------------------------------------------------
    LuaValue::LuaValue()

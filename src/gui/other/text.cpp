@@ -29,10 +29,10 @@ namespace gui
 	
 CText::CText()
 {
-	font_ = GetGameClass()->GetFontResource()->Get ( settings::GetThemePath() + "/fonts/VeraMono.ttf" );
+	font_ = GetGameClass()->GetFontResource()->Get ( settings::GetThemePath() + "/fonts/default.ttf" );
 	
 	renderedText_.SetFont ( *font_ );
-	renderedText_.SetSize ( 14 );
+	renderedText_.SetSize ( GetGameClass()->GetGuiManager()->GetTheme()->window_.fontSize );
 	
 	template_ = renderedText_;
 	template_.SetText ( L"O" );
@@ -158,6 +158,9 @@ bool CText::DelText ( int from, int to )
 {
 	std::wstring str;
 	std::wstring strEnd;
+	
+	if ( to > this->GetText().length() )
+		return false;
 	
 	try {
 		str = this->GetText().substr ( 0, from );
