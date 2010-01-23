@@ -45,6 +45,8 @@ class CWidget
 		virtual bool onLeftClick() {};
 		virtual bool onHoverMouse();
 		virtual bool onUnHoverMouse();
+		
+		virtual void PressedKey ( sf::Key::Code code ) {};
 
 		void SetMotherWin ( class CWindow* win );
 

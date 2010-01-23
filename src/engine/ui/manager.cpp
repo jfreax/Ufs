@@ -20,6 +20,7 @@
 #include "../../collision.hpp"
 #include "../../game.hpp"
 #include "../../settings/settings.hpp"
+#include "../../gui/window/terminal.hpp"
 
 #include "manager.hpp"
 
@@ -32,6 +33,9 @@ void CManager::Initialize()
 
 	previousMouseScope_ = NONE;
 	previousMousePos_.x = previousMousePos_.y = 0;
+	
+	terminal_ = NULL;
+	textArea_ = NULL;
 }
 
 
@@ -401,6 +405,36 @@ CWindow* CManager::GetPreviousWindow ( CWindow* window )
 		}
 	}
 }
+
+
+void CManager::FocusTextArea ( CTextArea* textArea )
+{
+	textArea_ = textArea;
+}
+
+
+CTextArea* CManager::GetTextArea()
+{
+	return textArea_;
+}
+
+
+
+void CManager::RegisterTerminal ( CWindow* terminal )
+{
+	terminal_ = terminal;
+}
+
+
+void CManager::ToogleTerminal()
+{
+	if ( !terminal_ )
+		return;
+	
+	dynamic_cast< CTerminalWindow
+* > ( terminal_ )->ToggleShow ();
+}
+
 
 
 } // namespace gui

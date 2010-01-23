@@ -1,5 +1,9 @@
-#cmake_minimum_required(VERSION 2.8)
+# General settings
+project(ufs)
+cmake_minimum_required(VERSION 2.6)
 
-PROJECT ( ufs )
+# Packages
+find_package(Lua51 REQUIRED)
+
 
 ADD_SUBDIRECTORY ( src )

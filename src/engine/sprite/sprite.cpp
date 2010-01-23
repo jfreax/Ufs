@@ -103,11 +103,6 @@ void CSprite::Update()
 	/* Scale image to zoom level */
 	double zoom = GetGameClass()->GetMapManager()->GetZoomLevel();
 	this->Scale ( (1/zoom + ( zoom * GetZoomLevel() )) * this->GetZoomFactor() );
-
-// 	std::cout << this->GetDimension().GetWidth() - oldWidth << std::endl;
-// 	this->Scale ( 1/zoom*GetZoomLevel() );
-	
-	
 }
 
 

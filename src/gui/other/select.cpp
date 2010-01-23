@@ -47,6 +47,8 @@ CSelectWidget::~CSelectWidget()
 
 void CSelectWidget::Initialize()
 {
+	wasInitialized_ = true;
+	
 	/* Register widget */
 	GetGameClass()->GetMapManager()->SetSpecialWidget ( "MINI_OBJECT", this );
 
@@ -117,7 +119,8 @@ void CSelectWidget::Calc()
 // 				miniImg.SetScale ( size, size*verh );
 				
 				/* Set infos about the object */
-				player_->SetShow(); player_->SetText ( "Player: " + util::lCast< std::string > ( sprite->GetPlayer() ) );
+				player_->SetShow();
+				player_->SetText ( "Player: " + util::lCast< std::string > ( sprite->GetPlayer() ) );
 // 				Data daTmp;
 // 				daTmp.player.SetPosition ( sf::Vector2f ( GetPositionInScreen().x, GetPositionInScreen(). ) );
 // 				daTmp.playerID = sprite->GetPlayer();

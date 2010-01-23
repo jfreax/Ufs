@@ -35,6 +35,8 @@ class CWindow
 		void NoUpdate ( bool ison );
 		virtual void Initialize() {};
 
+		virtual void Call();
+		
 		void Update();
 		void UpdateWidgets();
 
@@ -63,7 +65,7 @@ class CWindow
 
 		void SetPosition ( sf::Vector2f position );
 		void SetPosition ( POSITION posX, POSITION posY );
-		void MovePosition ( LAYOUT direction, unsigned int distance );
+		void MovePosition ( LAYOUT direction, int distance );
 		sf::Vector2f GetPosition() const;
 
 		int GetTitlebarHeight();
@@ -96,6 +98,8 @@ class CWindow
 		
 		void SetColor ( sf::Color color );
 		void ChangeTransparency ( unsigned int alpha );
+		
+		void SetFreeToSet ( bool freeToSet );
 
 	protected:
 		unsigned int id_;
@@ -112,6 +116,7 @@ class CWindow
 		bool noRoundTitlebar_;
 
 		bool moveWindow_;
+		bool freeToSet_;
 
 		double angle_;
 		

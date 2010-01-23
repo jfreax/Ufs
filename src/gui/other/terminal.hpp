@@ -17,33 +17,32 @@
 
 */
 
-#ifndef TOOLTIP_HPP
-#define TOOLTIP_HPP
+#ifndef TERMINAL_HPP
+#define TERMINAL_HPP
 
-#include "../../engine/ui/window.hpp"
 #include "../../engine/ui/widget.hpp"
+#include "textarea.hpp"
 
 namespace gui
 {
-
-
-class CTooltip : public CWindow
+	
+class CTerminal : public CTextArea
 {
 	public:
-		CTooltip ( CWidget* motherWidget, std::string text );
-		~CTooltip();
+		CTerminal();
+		void Initialize();
+		bool Update ( bool doIt );
 		
-		void Update();
+		void PressedKey ( sf::Key::Code code );
 		
-		void ChangeTransparency ( unsigned int alpha );
-
+		void Run();
+		
 	private:
-		CWidget* motherWidget_;
-		
-		CWidget* label_;
-		sf::Color textColor_;
+		bool initialized_;
 };
+
 
 } /* namespace gui */
 
-#endif // TOOLTIP_HPP
+
+#endif // TERMINAL_HPP

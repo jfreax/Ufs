@@ -22,6 +22,7 @@
 #include "theme.hpp"
 #include "window.hpp"
 #include "../../parser.hpp"
+#include "../../gui/other/textarea.hpp"
 
 
 namespace gui
@@ -51,12 +52,20 @@ class CManager
 		
 		CWindow* GetActiveWindow();
 		CWindow* GetPreviousWindow ( CWindow* window );
+		
+		void FocusTextArea ( CTextArea* textArea );
+		CTextArea* GetTextArea();
+		
+		void RegisterTerminal ( CWindow* terminal );
+		void ToogleTerminal();
 
 	private:
 		CTheme theme_;
 		std::vector< CWindow* > windowList_;
-		
 		std::list < CWindow* > dockList_;
+		
+		CTextArea* textArea_;
+		CWindow* terminal_;
 
 		sf::Vector2f previousMousePos_;
 		MOUSESCOPE previousMouseScope_;

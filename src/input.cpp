@@ -215,34 +215,50 @@ bool CInput::Events()
 
 	/* All events */
 	while ( app->GetEvent ( event ) ) {
-		/* KEYBOARD */
-
-		/* Quit Game */
-		if ( event.Type == sf::Event::Closed )
-			GetGameClass()->Stop();
-
-		/* Press keys - global */
-		if ( event.Type == sf::Event::KeyPressed ) {
-			if ( TestPressedKeys ( "quit" ) )
-				GetGameClass()->Stop();
-
-			if ( TestPressedKeys ( "fullscreen" ) )
-				settings::ToggleFullscreen();
-
-			if ( TestPressedKeys ( "close" ) )
-				guiManager->CloseWindow ( );
-
-		}
-
-		/* MOUSE */
 		switch ( event.Type ) {
+			/* Quit Game */
+			case sf::Event::Closed:
+				GetGameClass()->Stop();
+			
+				break;
+			case sf::Event::KeyPressed:
+				/* Press keys - global */
+				if ( TestPressedKeys ( "quit" ) )
+					GetGameClass()->Stop();
+				
+				else if ( TestPressedKeys ( "fullscreen" ) )
+					settings::ToggleFullscreen();
+				
+				else if ( TestPressedKeys ( "close" ) )
+					guiManager->CloseWindow ( );
+				
+				else if ( TestPressedKeys ( "terminal" ) )
+					guiManager->ToogleTerminal();
+				
+				else if ( guiManager->GetTextArea() ) {
+					guiManager->GetTextArea()->PressedKey ( event.Key.Code );
+				}
+				
+				break;			
+			case sf::Event::TextEntered:
+				if ( event.Text.Unicode && guiManager->GetTextArea() ) { /* Send data to TextArea */
+					if ( (int)event.Text.Unicode > 20 && (int)event.Text.Unicode != 127 ) {
+						std::wstring str = L"";
+						str += (wchar_t) event.Text.Unicode;
+					
+						guiManager->GetTextArea()->AddText ( str );
+					}
+				}
+			
+				break;
+			/* MOUSE */
 			case sf::Event::MouseButtonReleased:
 				if ( guiManager->MouseClickReleased ( input->GetMouseX(), input->GetMouseY(), event.MouseButton.Button ) )
 					settings::SetSelect ( false );
 				else
 					mapManager->MouseClickReleased ( input->GetMouseX(), input->GetMouseY(), sf::Mouse::Left );
+				
 				break;
-
 			case sf::Event::MouseWheelMoved:
 				this->MouseWheel ( event.MouseWheel.Delta );
 				break;

@@ -58,26 +58,26 @@ void CSelectWindow::CalcBackground()
 	delete formTitlebar_;
 	formTitlebar_ = new sf::Shape();
 	
-	int x = this->GetPosition().x-20;
-	int y = this->GetPosition().y+20;
+	int x = this->GetPosition().x;
+	int y = this->GetPosition().y;
 	int height = this->GetSize().y;
 	int length = this->GetSize().y;
 	
-	borderColor_ = sf::Color ( 200, 200, 200, 30 );
-	formWinBorder_->AddPoint( sf::Vector2f ( x              , y          ),borderColor_ );
-	formWinBorder_->AddPoint( sf::Vector2f ( x + length - 20, y          ), borderColor_ );
-	formWinBorder_->AddPoint( sf::Vector2f ( x + length     , y + 20     ), borderColor_ );
-	formWinBorder_->AddPoint( sf::Vector2f ( x + length     , y + height ), borderColor_ );
-	formWinBorder_->AddPoint( sf::Vector2f ( x + 20         , y + height ), borderColor_ );
-	formWinBorder_->AddPoint( sf::Vector2f ( x              , y + height - 20 ), borderColor_ );
+	borderColor_ = sf::Color ( 180, 180, 180, 80 );
+	formWin_->AddPoint( sf::Vector2f ( x              , y          ), borderColor_ );
+	formWin_->AddPoint( sf::Vector2f ( x + length - 20, y          ), borderColor_ );
+	formWin_->AddPoint( sf::Vector2f ( x + length     , y + 20     ), borderColor_ );
+	formWin_->AddPoint( sf::Vector2f ( x + length     , y + height ), borderColor_ );
+	formWin_->AddPoint( sf::Vector2f ( x              , y + height ), borderColor_ );
+// 	formWin_->AddPoint( sf::Vector2f ( x              , y + height - 20 ), borderColor_ );
 	
-	formWin_->AddPoint( sf::Vector2f ( x + 5          , y + 5           ), sf::Color ( 0, 0, 0, 190 ) );
-	formWin_->AddPoint( sf::Vector2f ( x + length - 22, y + 5           ), sf::Color ( 0, 0, 0, 190 ) );
-	formWin_->AddPoint( sf::Vector2f ( x + length - 5 , y + 22          ), sf::Color ( 0, 0, 0, 190 ) );
-	formWin_->AddPoint( sf::Vector2f ( x + length - 5 , y + height - 20 ), sf::Color ( 0, 0, 0, 100 ) );
-	formWin_->AddPoint( sf::Vector2f ( x + length - 5 , y + height - 5  ), sf::Color ( 0, 0, 0, 60 ) );
-	formWin_->AddPoint( sf::Vector2f ( x + 20         , y + height - 5  ), sf::Color ( 0, 0, 0, 200 ) );
-	formWin_->AddPoint( sf::Vector2f ( x + 5          , y + height - 20 ), sf::Color ( 0, 0, 0, 100 ) );
+	formWinBorder_->AddPoint( sf::Vector2f ( x + 5          , y + 5           ), sf::Color ( 0, 0, 0, 190 ) );
+	formWinBorder_->AddPoint( sf::Vector2f ( x + length - 22, y + 5           ), sf::Color ( 0, 0, 0, 180 ) );
+	formWinBorder_->AddPoint( sf::Vector2f ( x + length - 5 , y + 22          ), sf::Color ( 0, 0, 0, 160 ) );
+	formWinBorder_->AddPoint( sf::Vector2f ( x + length - 5 , y + height - 20 ), sf::Color ( 0, 0, 0, 170 ) );
+	formWinBorder_->AddPoint( sf::Vector2f ( x + length - 5 , y + height - 5  ), sf::Color ( 0, 0, 0, 160 ) );
+	formWinBorder_->AddPoint( sf::Vector2f ( x + 20         , y + height - 5  ), sf::Color ( 0, 0, 0, 160 ) );
+	formWinBorder_->AddPoint( sf::Vector2f ( x + 5          , y + height - 20 ), sf::Color ( 0, 0, 0, 180 ) );
 }
 
 

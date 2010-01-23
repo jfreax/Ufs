@@ -65,12 +65,10 @@ CTooltip::~CTooltip()
 
 
 
-bool CTooltip::Update()
+void CTooltip::Update()
 {
 	this->SetPosition ( sf::Vector2f ( motherWidget_->GetDimensionInScreen().Left - ( motherWidget_->GetDimension().GetWidth() * 0.5f ),
 	                                   motherWidget_->GetPosition().y + motherWidget_->GetDimension().GetHeight() + 2 ) );
-					   
-
 }
 
 

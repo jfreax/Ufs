@@ -17,33 +17,32 @@
 
 */
 
-#ifndef TOOLTIP_HPP
-#define TOOLTIP_HPP
+#ifndef TERMINAL_WINDOW_HPP
+#define TERMINAL_WINDOW_HPP
 
 #include "../../engine/ui/window.hpp"
-#include "../../engine/ui/widget.hpp"
 
 namespace gui
 {
+	
 
-
-class CTooltip : public CWindow
+class CTerminalWindow : public CWindow
 {
 	public:
-		CTooltip ( CWidget* motherWidget, std::string text );
-		~CTooltip();
+		CTerminalWindow();
 		
-		void Update();
+		void Call();		
+		void ToggleShow();
 		
-		void ChangeTransparency ( unsigned int alpha );
-
 	private:
-		CWidget* motherWidget_;
+		bool toggle_;
+		bool slideIn_;
 		
-		CWidget* label_;
-		sf::Color textColor_;
+		int slideSpeed_;
 };
+
+
 
 } /* namespace gui */
 
-#endif // TOOLTIP_HPP
+#endif // TERMINAL_HPP

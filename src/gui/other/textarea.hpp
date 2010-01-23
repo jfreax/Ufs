@@ -17,33 +17,46 @@
 
 */
 
-#ifndef TOOLTIP_HPP
-#define TOOLTIP_HPP
+#ifndef TEXTAREA_HPP
+#define TEXTAREA_HPP
 
-#include "../../engine/ui/window.hpp"
+
 #include "../../engine/ui/widget.hpp"
+#include "text.hpp"
 
 namespace gui
 {
+	
 
-
-class CTooltip : public CWindow
+class CTextArea : public CText
 {
 	public:
-		CTooltip ( CWidget* motherWidget, std::string text );
-		~CTooltip();
+		CTextArea();
 		
-		void Update();
-		
-		void ChangeTransparency ( unsigned int alpha );
+		void Initialize();
 
-	private:
-		CWidget* motherWidget_;
+		void Render();
+		bool Update ( bool doIt = false );
 		
-		CWidget* label_;
-		sf::Color textColor_;
+		bool onLeftClick();
+		void PressedKey ( sf::Key::Code code );
+		
+		bool AddText ( std::wstring str );
+
+		
+		void SetCursor ( int x );
+		void MoveCursor ( int x );
+		
+	private:
+		bool initialized_;
+	
+		int cursorPos_;
+		sf::Shape cursor_;
+
 };
+
 
 } /* namespace gui */
 
-#endif // TOOLTIP_HPP
+
+#endif // TEXTAREA_HPP

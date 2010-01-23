@@ -8,10 +8,23 @@ function include ( filename )
   -- write report
   io.write( string.format( "Loading scriptfile \"" .. filename .. "\" ..." ) );
 
-  dofile ( getPath() .. filename );
+--   dofile ( getPath() .. filename );
 
   print ( "\t ok" );
 end
+
+
+function blub ( x )
+  print ( "nööp" );
+  return x
+end
+
+function bla
+  return false,"ok",134
+end
+
+
+-- blub()
 
 -- start main menu
 include ( "test" )

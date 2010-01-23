@@ -27,12 +27,10 @@ namespace gui
 
 CHeaderWindow::CHeaderWindow()
 {
-	/* Temp. vars */
-	int outline = 3;
-	
 	/* No titlebar */
 	this->SetTitlebar ( 0 );
 	
+	/* Set properies */
 	this->SetMoveAble ( false );
 	this->SetCloseAble ( false );
 	this->SetLayout ( HORIZONTAL, 3 );
@@ -48,6 +46,7 @@ CHeaderWindow::CHeaderWindow()
 	
 	/* Set size (depend on buttons) */
 	this->AdjustSize();
+	
 	this->SetPosition ( CENTER, TOP );
 }
 

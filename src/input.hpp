@@ -58,8 +58,8 @@ class CInput
 		void MouseWheel ( float delta );
 
 	private:
-		std::map<std::string, sf::Key::Code> availableKeys;
-		std::map<std::string, KeyHolder> globalKeys;
+		std::map< std::string, sf::Key::Code > availableKeys;
+		std::map< std::string, KeyHolder > globalKeys;
 		sf::Event event;
 
 		Parser keyfile;

@@ -47,7 +47,8 @@ CWindow::CWindow ( bool withTitlebarPossible )
 
 		border_ = theme->window_.border;
 		borderColor_ = theme->window_.borderColor;
-
+		
+		freeToSet_ = false;
 
 		if ( withTitlebarPossible ) { /* Titlebar */
 			this->SetTitlebar ( theme->window_.titlebar );
@@ -114,6 +115,12 @@ void CWindow::NoUpdate ( bool ison )
 }
 
 
+void CWindow::Call()
+{
+	return;
+}
+
+
 void CWindow::Update()
 {
 	if ( !this->GetShow() )
@@ -158,11 +165,14 @@ bool CWindow::Render()
 	if ( !this->GetShow() )
 		return false;
 	
+	/* Call all special window features */
+	this->Call();
+	
+	/* Save variables */
 	sf::RenderWindow* app = GetGameClass()->GetApp();
 
 	/* Titlebar */
 	app->Draw ( *formTitlebar_ );
-
 
 	/* Background */
 	if ( background_.GetSize().x && background_.GetSize().x != 1.f ) {
@@ -584,20 +594,23 @@ void CWindow::SetPosition ( sf::Vector2f position )
 		position_.x = position.x;
 	if ( position.y != -1 )
 		position_.y = position.y;
+	
+	if ( !freeToSet_ ) {
+		if ( position_.x + curSize_.x < 0 )
+			position_.x = - curSize_.x + 10;
 
-	if ( position_.x + curSize_.x < 0 )
-		position_.x = - curSize_.x + 10;
+		if ( position_.x > settings::GetWidth() - 10 )
+			position_.x = settings::GetWidth() - 10;
+	
+		if ( position_.y - titlebar_ < 0 )
+			position_.y = titlebar_ + 1;
 
-	if ( position_.x > settings::GetWidth() - 10 )
-		position_.x = settings::GetWidth() - 10;
-
-	if ( position_.y - titlebar_ < 0 )
-		position_.y = titlebar_ + 1;
-
-	if ( position_.y > settings::GetHeight() )
-		position_.y = settings::GetHeight();
+		if ( position_.y > settings::GetHeight() )
+			position_.y = settings::GetHeight();
+	}
 
 	this->Update();
+	this->UpdateWidgets();
 }
 
 
@@ -633,12 +646,12 @@ void CWindow::SetPosition ( POSITION posX, POSITION posY )
 }
 
 
-void CWindow::MovePosition ( LAYOUT direction, unsigned int distance )
+void CWindow::MovePosition ( LAYOUT direction, int distance )
 {
 	if ( direction == HORIZONTAL ) {
-		SetPosition ( sf::Vector2f ( GetPosition().x + distance, -1 ) );
+		this->SetPosition ( sf::Vector2f ( GetPosition().x + distance, -1 ) );
 	} else {
-		SetPosition ( sf::Vector2f ( -1, GetPosition().y + distance ) );
+		this->SetPosition ( sf::Vector2f ( -1, GetPosition().y + distance ) );
 	}
 }
 
@@ -835,6 +848,12 @@ void CWindow::ChangeTransparency ( unsigned int alpha )
 		
 		formWin_->SetPointColor ( i, nColor );
 	}
+}
+
+
+void CWindow::SetFreeToSet ( bool freeToSet )
+{
+	freeToSet_ = freeToSet;
 }
 
 

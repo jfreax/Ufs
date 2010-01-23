@@ -34,7 +34,10 @@
 #include "gui/window/quit.hpp"
 #include "gui/window/error.hpp"
 #include "gui/window/select.hpp"
+#include "gui/window/terminal.hpp"
+
 #include "gui/button/titlebar.hpp"
+
 
 
 CGame* game = NULL;
@@ -114,7 +117,7 @@ CGame::CGame ( int argc, char **argv ) :
 
 CGame::~CGame()
 {
-	lua_close ( script::GetLua() );
+// 	lua_close ( script::GetLua() );
 	
 	// TODO !!!
 	
@@ -148,9 +151,6 @@ bool CGame::Initialize()
 	fpsStr_.SetSize ( 12 );
 
 
-	/* Initialize lua */
-	script::Initialize();
-	
 	// TODO nur Beispiele!
 	cursor_[NONE] = new CAnimation ( GetImgResource()->Get ( settings::GetThemePath() + "arrow.png" ) , 36, 0.1f );
 	cursor_[NONE]->Scale ( 0.6, 0.6 );
@@ -171,6 +171,9 @@ bool CGame::Start()
 
 	/* Gui-Manager laden */
 	guiManager_.Initialize();
+	
+	/* Initialize lua */
+	script::Initialize();
 
 	/* Leere Karte initialisieren */
 	mapManager_.Initialize();
@@ -189,21 +192,11 @@ bool CGame::Start()
 
 	/* Load standard windows */	
 	guiManager_.AddWindow ( specialWindow_["QUIT"] = new gui::CQuitWindow );
+	guiManager_.AddWindow ( new gui::CTerminalWindow );
 	guiManager_.AddWindow ( new gui::CHeaderWindow );
 	guiManager_.AddWindow ( new gui::CSelectWindow );
 
-	// FIXME Nur BEISPIELE!
-	guiManager_.AddWindow ( new gui::CSelectWindow );
-// 	win2->SetPosition( sf::Vector2f ( 400, 100 ));
-// 	win2->SetSize ( sf::Vector2f ( 200, 200 ));
-	
-// 	gui::CWidget* wid = win2->AddWidget ( new gui::CSelectWidget );
-// 	std::cout << wid->GetPosition().x << std::endl;
-// 	new gui::CSelectWidget;
-// 	 gui::CWindow* win = guiManager_.AddWindow ( new gui::CStartWindow );
-//
-
-
+	/* Set view point */
 	viewPoint_ = new sf::View( sf::FloatRect ( 0, 0, settings::GetWidth(), settings::GetHeight() ) );
 
 	/* Start game loop */

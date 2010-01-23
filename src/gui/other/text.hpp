@@ -17,33 +17,43 @@
 
 */
 
-#ifndef TOOLTIP_HPP
-#define TOOLTIP_HPP
+#ifndef TEXT_HPP
+#define TEXT_HPP
 
-#include "../../engine/ui/window.hpp"
 #include "../../engine/ui/widget.hpp"
 
 namespace gui
 {
 
 
-class CTooltip : public CWindow
+class CText : public CWidget
 {
 	public:
-		CTooltip ( CWidget* motherWidget, std::string text );
-		~CTooltip();
+		CText();
 		
-		void Update();
+		void Render();
+		bool Update ( bool doIt );
 		
-		void ChangeTransparency ( unsigned int alpha );
-
-	private:
-		CWidget* motherWidget_;
+		bool AddText ( std::wstring str, int position = -1 );
 		
-		CWidget* label_;
-		sf::Color textColor_;
+		std::wstring GetText();
+		sf::String* GetRenderedText();
+		
+		bool DelText ( int from, int to );
+		
+		void SetScollbar ( int scrollbar );
+		
+	protected:
+		sf::Font* font_;
+		sf::String renderedText_;
+		sf::String template_;
+		
+		int scrollbar_;
 };
+
+
 
 } /* namespace gui */
 
-#endif // TOOLTIP_HPP
+
+#endif // TEXT_HPP
