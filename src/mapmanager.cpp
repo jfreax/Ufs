@@ -39,6 +39,9 @@ void CMapManager::Initialize()
 	sprite::CSprite* newSprite = AddSprite ( new sprite::CSun );
 	newSprite->SetPosition ( 100, 100 );
 	
+	sprite::CSprite* newSprite2 = AddSprite ( new sprite::CSun );
+	newSprite2->SetPosition ( 4000, 4000 );
+	
 	sprite::CSprite* newShip = AddSprite ( new sprite::CShip );
 	newShip->SetPosition ( 300, 300 );
 	

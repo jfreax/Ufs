@@ -194,7 +194,7 @@ bool CGame::Start()
 
 	/* Load standard windows */	
 	guiManager_.AddWindow ( specialWindow_["QUIT"] = new gui::CQuitWindow );
-	guiManager_.AddWindow ( new gui::CTerminalWindow );
+	guiManager_.AddWindow ( specialWindow_["TERMINAL"] = new gui::CTerminalWindow );
 	guiManager_.AddWindow ( new gui::CHeaderWindow );
 	guiManager_.AddWindow ( new gui::CSelectWindow );
 
@@ -203,6 +203,7 @@ bool CGame::Start()
 
 	/* Initialize lua */
 	script::Initialize();
+	dynamic_cast< gui::CTerminalWindow* >(specialWindow_["TERMINAL"])->GetTerminalWidget()->Initialize();
 	
 	/* Start game loop */
 	while ( run_ ) {

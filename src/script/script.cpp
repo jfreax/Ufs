@@ -53,6 +53,41 @@ void Initialize()
 		GetGameClass()->Error ( e.what(), __PRETTY_FUNCTION__, __FILE__, __LINE__ );
 	}
 	
+	
+	
+// 	for ( int i = 0; i < (*script::GetLua())["functions"].getKeys().size(); ++i) {
+// 		std::cout << (*script::GetLua())["functions"].getKeys()[i].asString() << std::endl;
+		
+// 	}
+	
+// 	const int winWidth = static_cast<int>((*script::GetLua())["WindowSize"][1].value().asNumber());
+// 	std::cout << winWidth << std::endl;
+	
+// 	luaState.getState()->
+// 	for ( int i = 0; i < luaState.globals().size(); ++i ) {
+// 		switch ( luaState.globals()[i].type() ) {
+// 			case LUA_TSTRING:
+// 				std::cout << luaState.globals()[i].asString() << std::endl;
+// 				break;
+// 				
+// 			case LUA_TNUMBER:
+// 				std::cout << luaState.globals()[i].asNumber() << std::endl;
+// 				break;
+// 			case LUA_TBOOLEAN:
+// 				std::cout << luaState.globals()[i].asBoolean() << std::endl;
+// 				break;			
+// 			case LUA_TNIL:
+// 				std::cout << i << " - nichts " << std::endl;
+// 				break;
+// 		}
+// 		
+// 	}
+}
+
+
+void registerFuncName ( std::string str )
+{
+// 	luaState [str] = DILUCULUM_WRAPPER_FUNCTION ( func );
 }
 
 

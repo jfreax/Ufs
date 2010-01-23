@@ -20,6 +20,8 @@
 #include <iostream>
 #include <SFML/System.hpp>
 
+// #include "LuaWrappers.hpp"
+
 #include "LuaState.hpp"
 #include "../engine/ui/window.hpp"
 
@@ -29,6 +31,8 @@ namespace script
 
 script::LuaState* GetLua();
 void Initialize();
+
+void registerFuncName ( std::string str );
 
 LuaValueList GetPath ( const LuaValueList& params );
 LuaValueList GetLog ( const LuaValueList& params );

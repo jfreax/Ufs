@@ -1,5 +1,19 @@
-function map_functions ()
-  log = getLog()
-  dmesg = getLog()
-  path = getPath()
+local seen= {}
+local ret = ""
+function getFunctions(p,t) 
+        seen[t] = true 
+        for k,v in pairs(t) do 
+                if type(v) == "function" then
+                        ret = ret..";"..(p..k)
+                elseif type(v) == "table" and not seen[v] then
+                        getFunctions(k..".",v)
+                end
+        end
+	return ret
 end
+
+-- Map all function name --
+log = getLog()
+dmesg = getLog()
+path = getPath()
+getAllFunctions = getFunctions("",_G)

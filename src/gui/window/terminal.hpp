@@ -33,6 +33,8 @@ class CTerminalWindow : public CWindow
 		
 		void Call();		
 		void ToggleShow();
+		
+		CTextArea* GetTerminalWidget() { return terminal_; }
 	private:
 		bool toggle_;
 		bool slideIn_;

@@ -33,7 +33,7 @@ class CTextArea : public CText
 	public:
 		CTextArea();
 		
-		void Initialize();
+		virtual void Initialize();
 
 		void Render();
 		bool Update ( bool doIt = false );

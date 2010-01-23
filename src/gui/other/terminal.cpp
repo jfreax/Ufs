@@ -46,9 +46,23 @@ CTerminal::CTerminal()
 
 void CTerminal::Initialize()
 {
-	initialized_ = true;
+	gui::CTextArea::Initialize();
 	
+	initialized_ = true;
 	this->AddText ( L" ~ $ " );
+	
+	/* Get all possible command */
+	std::string command ( "" );
+	std::string all = (*script::GetLua())["getAllFunctions"].value().asString();
+	std::string::size_type nextPos;
+	
+	while ( nextPos != std::string::npos ) {
+		nextPos = all.find_first_of(';');
+		command = all.substr( 0, nextPos );
+		all = all.substr( nextPos+1 );
+		
+		commands_.push_back ( command );
+	}
 }
 
 
@@ -57,8 +71,8 @@ bool CTerminal::Update ( bool doIt )
 	gui::CTextArea::Update ( doIt );
 	
 	if ( doIt ) {
-		if ( !initialized_ )
-			this->Initialize();
+// 		if ( !initialized_ )
+// 			this->Initialize();
 	}
 	
 	return true;
@@ -96,7 +110,10 @@ void CTerminal::PressedKey ( sf::Key::Code code )
 				}
 			}
 			break;
-				
+			
+		case sf::Key::Tab:
+			this->PressedTab();
+			break;
 	}
 }
 
@@ -105,8 +122,9 @@ void CTerminal::Run()
 {
 	std::string str = this->GetRenderedText()->GetText();
 	
+	/* delete prompt */
 	try {
-		int prompt = str.find_last_of ( "$" ) + 1;
+		int prompt = str.find_last_of ( "$" ) + 2;
 		str = str.substr ( prompt );
 	} catch ( std::out_of_range e ) {
 		GetGameClass()->Error ( (std::string)"out_of_range in " + e.what(), __PRETTY_FUNCTION__, __FILE__, __LINE__ );
@@ -147,6 +165,7 @@ void CTerminal::Run()
 		return;
 	}
 	
+	
 	for ( int i = 0; i < ret.size(); ++i ) {
 		switch ( ret[i].type() ) {
 			case LUA_TNIL:
@@ -169,6 +188,20 @@ void CTerminal::Run()
 			case LUA_TSTRING:
 				this->AddText ( (sf::Unicode::Text)(ret[i].asString()) );
 				this->AddText ( L"\n" );
+				break;
+				
+			case LUA_TTABLE:
+				for ( int j = 0; j < ret[i].asTable().size(); ++j ) {
+					switch ( ret[i].asTable()[j].type() ) {
+						case LUA_TSTRING:	
+							this->AddText ( (sf::Unicode::Text)(ret[i].asTable()[j].asString()) );
+							break;
+							
+						case LUA_TNUMBER:	
+							this->AddText ( (sf::Unicode::Text)(util::lCast<std::string>(ret[i].asTable()[j].asNumber())) );
+							break;	
+					}
+				}
 				break;
 		}
 	}
@@ -200,6 +233,62 @@ void CTerminal::OverwriteLastCommandWith ( std::wstring str )
 	this->SetCursor ( last );
 	this->AddText ( str );
 }
+
+
+std::vector< std::string > CTerminal::FindFunction ( std::string str )
+{
+	std::vector< std::string > ret;
+	
+	std::vector< std::string >::iterator iter = commands_.begin();
+	std::vector< std::string >::iterator iterEnd = commands_.end();
+	for ( ; iter != iterEnd; ++iter ) {
+		if ( (*iter).substr(0, str.length() ) == str ) {
+			ret.push_back ( (*iter) );
+		}
+	}
+	
+	return ret;
+}
+
+
+void CTerminal::PressedTab()
+{
+	std::string str = this->GetRenderedText()->GetText();
+	
+	/* delete prompt */
+	try {
+		int prompt = str.find_last_of ( '$' ) + 2;
+		str = str.substr ( prompt );
+	} catch ( std::out_of_range e ) {
+		GetGameClass()->Error ( (std::string)"out_of_range in " + e.what(), __PRETTY_FUNCTION__, __FILE__, __LINE__ );
+		return;
+	}
+	
+	/* delete spaces */
+	util::deleteChar ( str );
+	
+	/* find all functions with beginning of 'str' */
+	std::vector< std::string > possibleFunc = this->FindFunction ( str );
+	
+	if ( possibleFunc.size() == 1 ) {
+		this->OverwriteLastCommandWith( (sf::Unicode::Text) possibleFunc[0] );
+		this->AddText( L"(  )" );
+		this->MoveCursor( -2 );
+	} else if ( possibleFunc.size() > 1 ) {
+		this->AddText( L"\n" );
+		
+		std::vector< std::string >::iterator iter = possibleFunc.begin();
+		std::vector< std::string >::iterator iterEnd = possibleFunc.end();
+		for ( ; iter != iterEnd; ++iter ) {
+			this->AddText( (sf::Unicode::Text)(*iter) );
+			this->AddText( L" " );
+		}
+		this->AddText( L"\n ~ $ " );
+		this->AddText( (sf::Unicode::Text) str );
+	}
+}
+
+
 
 
 

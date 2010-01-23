@@ -70,9 +70,6 @@ bool CTextArea::Update ( bool doIt )
 	gui::CText::Update ( doIt );
 	
 	if ( doIt ) {
-		if ( !initialized_ )
-			this->Initialize();
-		
 		/* update the graphic position */	
 		cursor_.SetPosition ( sf::Vector2f ( this->GetRenderedText()->GetCharacterPos(cursorPos_).x + this->GetPositionInScreen().x,
 						     this->GetRenderedText()->GetCharacterPos(cursorPos_).y + this->GetPositionInScreen().y ) );

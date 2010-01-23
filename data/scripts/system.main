@@ -4,9 +4,11 @@ function include ( filename )
 
   dofile ( getPath() .. filename );
 
+-- local info = debug.getinfo( 1, "Sl")
+--   print ( info.source );
+
   print ( "\t ok" );
 end
 
 include ( "system.functions" )
 
-map_functions()

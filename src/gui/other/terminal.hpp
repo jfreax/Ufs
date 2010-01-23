@@ -41,10 +41,13 @@ class CTerminal : public CTextArea
 		
 	private:
 		void OverwriteLastCommandWith (  std::wstring str );
+		std::vector< std::string > FindFunction ( std::string str );
+		void PressedTab();
 		
 	private:
 		bool initialized_;
 		
+		std::vector< std::string > commands_;
 		std::vector< std::string > history_;
 		int historyPos_;
 };
