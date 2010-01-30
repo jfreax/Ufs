@@ -32,7 +32,7 @@
 #include "Types.hpp"
 
 
-namespace script
+namespace Diluculum
 {
    /** A C++ equivalent of a Lua userdata. Or, perhaps more precisely: something
     *  that lives in the C++-space, and that stores data that would normally be

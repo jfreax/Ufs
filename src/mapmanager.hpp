@@ -25,6 +25,7 @@ class CMapManager
 {
 
 	public:
+		CMapManager() {};
 		~CMapManager();
 		
 		void Initialize(); /* TODO */
@@ -70,6 +71,25 @@ class CMapManager
 		
 		double zoomed_;
 		int lastZoomDirection_;
+		
+		
+	/* LUA SUPPORT */
+	public:
+		CMapManager ( const Diluculum::LuaValueList& params );
+		
+		Diluculum::LuaValueList AddSprite ( const Diluculum::LuaValueList& params );
+		Diluculum::LuaValueList GetSprite ( const Diluculum::LuaValueList& params );
+		
+		Diluculum::LuaValueList Blub ( const Diluculum::LuaValueList& params );
+		
+	private:
+		Diluculum::LuaValue value_;
+		
+
 };
+
+
+
+
 
 #endif // MAPMANAGER_HPP

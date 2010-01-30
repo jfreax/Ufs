@@ -31,7 +31,7 @@
 #include <vector>
 
 
-namespace script
+namespace Diluculum
 {
    class LuaValue;
 

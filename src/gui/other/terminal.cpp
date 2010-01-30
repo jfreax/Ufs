@@ -53,7 +53,13 @@ void CTerminal::Initialize()
 	
 	/* Get all possible command */
 	std::string command ( "" );
-	std::string all = (*script::GetLua())["getAllFunctions"].value().asString();
+	std::string all ( "" );
+	
+	try {
+		all = (*Diluculum::GetLua())["getAllFunctions"].value().asString();
+	} catch ( Diluculum::TypeMismatchError e ) {
+		GetGameClass()->Error ( e.what(), __PRETTY_FUNCTION__, __FILE__, __LINE__ );
+	}
 	std::string::size_type nextPos;
 	
 	while ( nextPos != std::string::npos ) {
@@ -150,15 +156,15 @@ void CTerminal::Run()
 	/* Add a line break after command */
 	this->AddText ( L"\n" );
 	
-	script::LuaValueList ret;
+	Diluculum::LuaValueList ret;
 	try {
-		ret = script::GetLua()->doString ( "return " + str );
-	} catch ( script::LuaSyntaxError e ) {
+		ret = Diluculum::GetLua()->doString ( "return " + str );
+	} catch ( Diluculum::LuaSyntaxError e ) {
 		this->AddText ( L"Syntax Error!\n       " );
 		this->AddText ( (sf::Unicode::Text)( e.what() ) );
 		this->AddText ( L"\n" );
 		return;
-	} catch ( script::LuaRunTimeError e ) {
+	} catch ( Diluculum::LuaRunTimeError e ) {
 		this->AddText ( L"      " );
 		this->AddText ( (sf::Unicode::Text)( e.what() ) );
 		this->AddText ( L"\n" );

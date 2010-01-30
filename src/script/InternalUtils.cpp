@@ -27,11 +27,10 @@
 
 #include "InternalUtils.hpp"
 #include "LuaUtils.hpp"
-#include "../util/util.hpp"
 #include <cstring>
+#include <boost/lexical_cast.hpp>
 
-
-namespace script
+namespace Diluculum
 {
    namespace Impl
    {
@@ -107,8 +106,8 @@ namespace script
       int LuaFunctionWriter(lua_State* luaState, const void* data, size_t size,
                             void* func)
       {
-	    script::LuaFunction* f =
-	    reinterpret_cast<script::LuaFunction*>(func);
+         Diluculum::LuaFunction* f =
+            reinterpret_cast<Diluculum::LuaFunction*>(func);
 
          size_t newSize = f->getSize() + size;
 
@@ -128,8 +127,8 @@ namespace script
       const char* LuaFunctionReader(lua_State* luaState, void* func,
                                     size_t* size)
       {
-	  script::LuaFunction* f =
-		reinterpret_cast<script::LuaFunction*>(func);
+         Diluculum::LuaFunction* f =
+            reinterpret_cast<Diluculum::LuaFunction*>(func);
 
          if (f->getReaderFlag())
             return 0;

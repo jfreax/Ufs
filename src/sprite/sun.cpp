@@ -30,7 +30,9 @@ CSun::CSun ()
 
 	/* load picture of a sun */
 	background_ = new CAnimation ( imageResource->Get( "images/sun/001.png" ), 0, 0.05f );
-	background_->SetCenter ( GetCenter() );
+	
+	this->SetCenter ( background_->GetSize().x * 0.5, background_->GetSize().y * 0.5 );
+	backgroundStatic_.SetCenter ( GetCenter() );
 	
 	/* Set blendmode */
 	background_->SetBlendMode ( sf::Blend::Multiply );
@@ -48,6 +50,10 @@ CSun::CSun ()
 
 	brightness_.SetColor( sf::Color ( 255, 255, 255, 100 ) );
 	brightness_.SetBlendMode( sf::Blend::Alpha );
+	
+	/* Set center of sprites */
+	glow_.SetCenter ( GetCenter() );
+	brightness_.SetCenter ( GetCenter() );
 	
 	/* Particlesystem */
 // 	particle.set_Material ( imageResource->Get ( "images/sun/fire.png"  ) );

@@ -28,7 +28,7 @@
 #ifndef _DILUCULUM_CPP_OBJECT_HPP_
 #define _DILUCULUM_CPP_OBJECT_HPP_
 
-namespace script
+namespace Diluculum
 {
    namespace Impl
    {

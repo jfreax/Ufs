@@ -18,23 +18,44 @@
 
 #include "../game.hpp"
 #include "../settings/settings.hpp"
+#include "../engine/sprite/sprite.hpp"
 #include "script.hpp"
+#include "../sprite/sun.hpp"
 
+using namespace sprite;
 
-
-namespace script
-{
-
-
-script::LuaState luaState;
-script::LuaState* GetLua() {
-	return &luaState;
-}
 
 /* Create 'lua_CFunction' */
 DILUCULUM_WRAP_FUNCTION ( GetPath );
 DILUCULUM_WRAP_FUNCTION ( GetLog );
 DILUCULUM_WRAP_FUNCTION ( Error );
+
+/* Create lua classes */
+DILUCULUM_BEGIN_CLASS ( CMapManager );
+	DILUCULUM_CLASS_METHOD ( CMapManager, GetSprite );
+	DILUCULUM_CLASS_METHOD ( CMapManager, AddSprite );
+DILUCULUM_END_CLASS ( CMapManager );
+
+DILUCULUM_BEGIN_CLASS ( CSprite );
+	DILUCULUM_CLASS_METHOD ( CSprite, Blub );
+DILUCULUM_END_CLASS ( CSprite );
+
+
+namespace Diluculum
+{
+
+Holder hold;
+LuaState luaState;
+
+LuaState* GetLua()
+{
+	return &luaState;
+}
+
+Holder* GetHolder()
+{
+	return &hold;
+}
 
 
 void Initialize()
@@ -43,6 +64,24 @@ void Initialize()
 	luaState ["getPath"] = DILUCULUM_WRAPPER_FUNCTION ( GetPath );
 	luaState ["getLog"] = DILUCULUM_WRAPPER_FUNCTION ( GetLog );
 	luaState ["error"] = DILUCULUM_WRAPPER_FUNCTION ( Error );
+	
+	/* Register all classes */
+	DILUCULUM_REGISTER_CLASS ( luaState ["CMapManager"] , CMapManager);
+	DILUCULUM_REGISTER_CLASS ( luaState ["CSprite"] , CSprite);
+	
+	/* Register objects */
+	DILUCULUM_REGISTER_OBJECT ( luaState ["mapManager"], CMapManager, *GetGameClass()->GetMapManager() );
+	
+// 	hold.sprite = GetGameClass()->GetMapManager()->AddSprite ( new CSun() );
+// 	RegisterObject ( "retSprite", hold.sprite );
+// 	hold.sprite = new CSun();
+// 	DILUCULUM_REGISTER_OBJECT ( luaState ["retSprite"], CSprite, *hold.sprite );
+	
+// 	hold.sprite = GetGameClass()->GetMapManager()->AddSprite ( new CSun() );
+// 	hold.sprite->Blub();
+// 	CMapManager* mapM = new CMapManager();
+// 	mapM->Blub(*params);
+// // 	hold.sprite->Blub(*params); 
 	
 	try {
 		luaState.doFile ( settings::GetPath() + "scripts/system.main" );
@@ -53,41 +92,14 @@ void Initialize()
 		GetGameClass()->Error ( e.what(), __PRETTY_FUNCTION__, __FILE__, __LINE__ );
 	}
 	
-	
-	
-// 	for ( int i = 0; i < (*script::GetLua())["functions"].getKeys().size(); ++i) {
-// 		std::cout << (*script::GetLua())["functions"].getKeys()[i].asString() << std::endl;
-		
-// 	}
-	
-// 	const int winWidth = static_cast<int>((*script::GetLua())["WindowSize"][1].value().asNumber());
-// 	std::cout << winWidth << std::endl;
-	
-// 	luaState.getState()->
-// 	for ( int i = 0; i < luaState.globals().size(); ++i ) {
-// 		switch ( luaState.globals()[i].type() ) {
-// 			case LUA_TSTRING:
-// 				std::cout << luaState.globals()[i].asString() << std::endl;
-// 				break;
-// 				
-// 			case LUA_TNUMBER:
-// 				std::cout << luaState.globals()[i].asNumber() << std::endl;
-// 				break;
-// 			case LUA_TBOOLEAN:
-// 				std::cout << luaState.globals()[i].asBoolean() << std::endl;
-// 				break;			
-// 			case LUA_TNIL:
-// 				std::cout << i << " - nichts " << std::endl;
-// 				break;
-// 		}
-// 		
-// 	}
+
 }
 
 
-void registerFuncName ( std::string str )
+void RegisterObject ( std::string name, CSprite* obj)
 {
-// 	luaState [str] = DILUCULUM_WRAPPER_FUNCTION ( func );
+	DILUCULUM_REGISTER_OBJECT ( luaState [name], CSprite, *obj );
+	
 }
 
 

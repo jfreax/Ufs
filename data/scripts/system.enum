@@ -1,0 +1,7 @@
+-- @version 0001
+-- @author "JDieskau" <JDieskau _at_ web _dot_ de>
+
+window = 1
+ship = 2
+sun = 3
+planet = 4

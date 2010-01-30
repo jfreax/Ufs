@@ -33,7 +33,7 @@
 #include "InternalUtils.hpp"
 
 
-namespace script
+namespace Diluculum
 {
    // - LuaState::LuaState -----------------------------------------------------
    LuaState::LuaState (bool loadStdLib)
@@ -85,7 +85,7 @@ namespace script
       }
 
       Impl::ThrowOnLuaError (state_, lua_pcall (state_, 0, LUA_MULTRET, 0));
-      
+
       const int numResults = lua_gettop (state_) - stackSizeAtBeginning;
 
       LuaValueList results;

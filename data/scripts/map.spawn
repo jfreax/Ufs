@@ -1,0 +1,18 @@
+-- @version 0001
+-- @author "JDieskau" <JDieskau _at_ web _dot_ de>
+
+function spawn( type, coordX, coordY )
+	return switch(type) : caseof {
+		  [window] = function (x)
+			   return "okok"
+
+			   end,
+		  [ship] = function (x) 
+
+
+			   end,
+		  default = function (x) return "Type not known" end,
+		  missing = function (x) return "nil" end,
+	}
+
+end

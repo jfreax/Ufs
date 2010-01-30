@@ -1,0 +1,35 @@
+-- @version 0001
+-- @author "JDieskau" <JDieskau _at_ web _dot_ de>
+
+function switch(c)
+  local swtbl = {
+    casevar = c,
+    caseof = function (self, code)
+      local f
+      if (self.casevar) then
+        f = code[self.casevar] or code.default
+      else
+        f = code.missing or code.default
+      end
+      if f then
+        if type(f)=="function" then
+          return f(self.casevar,self)
+        else
+          error("case "..tostring(self.casevar).." not a function")
+        end
+      end
+    end
+  }
+  return swtbl
+end
+
+
+-- usage example
+
+-- return switch(type) : caseof {
+--     [1]   = function (x) return "blb" end,
+--     [2]   = function (x) print(x,"two") end,
+--   default = function (x) print(x,"default") end,
+--   missing = function (x) print(x,"missing") end,
+-- }
+-- end

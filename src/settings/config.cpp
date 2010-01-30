@@ -23,6 +23,7 @@ Config::Config() :
     theme ( "default" )
 {
   video = sf::VideoMode::GetDesktopMode();
+  windowSettings.AntialiasingLevel = 8;
 
 }
 

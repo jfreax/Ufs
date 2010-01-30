@@ -33,7 +33,7 @@
 #include "InternalUtils.hpp"
 
 
-namespace script
+namespace Diluculum
 {
    // - LuaVariable::LuaVariable -----------------------------------------------
    LuaVariable::LuaVariable (lua_State* state, const LuaValue& key,

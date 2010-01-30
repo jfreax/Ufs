@@ -1,6 +1,9 @@
+-- @version 0002
+-- @author "JDieskau" <JDieskau _at_ web _dot_ de>
+
 local seen= {}
 local ret = ""
-function getFunctions(p,t) 
+function getFunctions(p,t)
         seen[t] = true 
         for k,v in pairs(t) do 
                 if type(v) == "function" then
@@ -12,8 +15,4 @@ function getFunctions(p,t)
 	return ret
 end
 
--- Map all function name --
-log = getLog()
-dmesg = getLog()
-path = getPath()
 getAllFunctions = getFunctions("",_G)

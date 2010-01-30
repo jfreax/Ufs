@@ -1,14 +1,25 @@
+-- @version 0003
+-- @author "JDieskau" <JDieskau _at_ web _dot_ de>
+
+
 function include ( filename )
-  -- write report
-  io.write( string.format( "Loading scriptfile \"" .. filename .. "\" ..." ) );
+  -- write report --
+  io.write( string.format( "Loading scriptfile \"" .. filename .. "\" ...\n" ) );
 
   dofile ( getPath() .. filename );
 
 -- local info = debug.getinfo( 1, "Sl")
 --   print ( info.source );
 
-  print ( "\t ok" );
 end
 
-include ( "system.functions" )
+-- include files --
+include ( "system.functions.map" )
+include ( "system.enum" )
 
+include ( "lib.main" )
+include ( "map.main" )
+include ( "universe.main" )
+
+-- last include !
+include ( "system.functions" )

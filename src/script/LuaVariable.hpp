@@ -31,7 +31,7 @@
 #include "LuaValue.hpp"
 
 
-namespace script
+namespace Diluculum
 {
    /** A variable living in a Lua state. Notice the crucial difference: unlike a
     *  \c LuaValue, a \c LuaVariable necessarily has a real counterpart in a Lua

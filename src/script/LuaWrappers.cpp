@@ -28,7 +28,7 @@
 #include <cassert>
 
 
-namespace script
+namespace Diluculum
 {
    namespace Impl
    {

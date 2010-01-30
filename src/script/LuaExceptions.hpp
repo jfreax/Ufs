@@ -32,7 +32,7 @@
 #include "LuaValue.hpp"
 
 
-namespace script
+namespace Diluculum
 {
    /// A generic Lua-related error.
    class LuaError: public std::runtime_error

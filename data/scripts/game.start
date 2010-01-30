@@ -1,0 +1,5 @@
+-- @version 0001
+-- @author "JDieskau" <JDieskau _at_ web _dot_ de>
+
+-- include files --
+include ( "game.start" )

@@ -36,7 +36,7 @@
 #include "LuaUtils.hpp"
 
 
-namespace script
+namespace Diluculum
 {
    namespace Impl
    {
@@ -69,7 +69,7 @@ namespace script
              *         Lua side.
              *  @param func The C function wrapping the method.
              */
-	    ClassTableFiller (script::LuaValueMap& classTable,
+            ClassTableFiller (Diluculum::LuaValueMap& classTable,
                               const std::string& name,
                               lua_CFunction func)
             {
@@ -92,8 +92,8 @@ namespace script
 
 /** Creates a \c lua_CFunction that wraps a function with the signature like the
  *  following one:
- *  <p><tt>LuaValueList Func (const LuaValueList& params)</tt>
- *  <p>Notice that, thanks to the use of <tt>LuaValueList</tt>s, the
+ *  <p><tt>Diluculum::LuaValueList Func (const Diluculum::LuaValueList& params)</tt>
+ *  <p>Notice that, thanks to the use of <tt>Diluculum::LuaValueList</tt>s, the
  *  wrapped function can effectively take and return an arbitrary number of
  *  values.
  *  @note The name of the created wrapper function is a decorated version of the
@@ -102,7 +102,7 @@ namespace script
  *        use it directly. Use the \c DILUCULUM_WRAPPER_FUNCTION() macro to
  *        obtain it instead.
  *  @note The proper way to report errors from the function being wrapped is by
- *        <tt>throw</tt>ing a \c LuaError. The created wrapper
+ *        <tt>throw</tt>ing a \c Diluculum::LuaError. The created wrapper
  *        function will handle these exceptions and "translate" them to a call
  *        to \c lua_error().
  *  @see DILUCULUM_WRAPPER_FUNCTION() To find out the name of the created
@@ -114,27 +114,27 @@ int DILUCULUM_WRAPPER_FUNCTION(FUNC) (lua_State* ls)                          \
 {                                                                             \
    using std::for_each;                                                       \
    using boost::bind;                                                         \
-   using script::PushLuaValue;                                             \
-   using script::Impl::ReportErrorFromCFunction;                           \
+   using Diluculum::PushLuaValue;                                             \
+   using Diluculum::Impl::ReportErrorFromCFunction;                           \
                                                                               \
    try                                                                        \
    {                                                                          \
       /* Read parameters and empty the stack */                               \
       const int numParams = lua_gettop (ls);                                  \
-      LuaValueList params;                                         \
+      Diluculum::LuaValueList params;                                         \
       for (int i = 1; i <= numParams; ++i)                                    \
-         params.push_back (ToLuaValue (ls, i));                    \
+         params.push_back (Diluculum::ToLuaValue (ls, i));                    \
       lua_pop (ls, numParams);                                                \
                                                                               \
       /* Call the wrapped function */                                         \
-      LuaValueList ret = FUNC (params);                            \
+      Diluculum::LuaValueList ret = FUNC (params);                            \
                                                                               \
       /* Push the return values and return */                                 \
       for_each (ret.begin(), ret.end(), bind (PushLuaValue, ls, _1));         \
                                                                               \
       return ret.size();                                                      \
    }                                                                          \
-   catch (LuaError& e)                                             \
+   catch (Diluculum::LuaError& e)                                             \
    {                                                                          \
       ReportErrorFromCFunction (ls, e.what());                                \
       return 0;                                                               \
@@ -165,23 +165,23 @@ Diluculum__Class_Table__ ## CLASS
 namespace                                                                     \
 {                                                                             \
    /* the table representing the class */                                     \
-   LuaValueMap DILUCULUM_CLASS_TABLE(CLASS);                       \
+   Diluculum::LuaValueMap DILUCULUM_CLASS_TABLE(CLASS);                       \
 }                                                                             \
                                                                               \
 /* The Constructor */                                                         \
 int Diluculum__ ## CLASS ## __Constructor_Wrapper_Function (lua_State* ls)    \
 {                                                                             \
-//    using script::PushLuaValue;                                             \
-//    using Impl::CppObject;                                          \
-//    using Impl::ReportErrorFromCFunction;                           \
+   using Diluculum::PushLuaValue;                                             \
+   using Diluculum::Impl::CppObject;                                          \
+   using Diluculum::Impl::ReportErrorFromCFunction;                           \
                                                                               \
    try                                                                        \
    {                                                                          \
       /* Read parameters and empty the stack */                               \
       const int numParams = lua_gettop (ls);                                  \
-      LuaValueList params;                                         \
+      Diluculum::LuaValueList params;                                         \
       for (int i = 1; i <= numParams; ++i)                                    \
-         params.push_back (ToLuaValue (ls, i));                    \
+         params.push_back (Diluculum::ToLuaValue (ls, i));                    \
       lua_pop (ls, numParams);                                                \
                                                                               \
       /* Construct the object, wrap it in a userdata, and return */           \
@@ -197,7 +197,7 @@ int Diluculum__ ## CLASS ## __Constructor_Wrapper_Function (lua_State* ls)    \
                                                                               \
       return 1;                                                               \
    }                                                                          \
-   catch (LuaError& e)                                             \
+   catch (Diluculum::LuaError& e)                                             \
    {                                                                          \
       ReportErrorFromCFunction (ls, e.what());                                \
       return 0;                                                               \
@@ -212,7 +212,7 @@ int Diluculum__ ## CLASS ## __Constructor_Wrapper_Function (lua_State* ls)    \
 /* Destructor */                                                              \
 int Diluculum__ ## CLASS ## __Destructor_Wrapper_Function (lua_State* ls)     \
 {                                                                             \
-   using Impl::CppObject;                                          \
+   using Diluculum::Impl::CppObject;                                          \
                                                                               \
    CppObject* cppObj =                                                        \
       reinterpret_cast<CppObject*>(lua_touserdata (ls, -1));                  \
@@ -248,18 +248,18 @@ int DILUCULUM_METHOD_WRAPPER(CLASS, METHOD) (lua_State* ls)                   \
 {                                                                             \
    using std::for_each;                                                       \
    using boost::bind;                                                         \
-   using PushLuaValue;                                             \
-   using Impl::CppObject;                                          \
-   using Impl::ReportErrorFromCFunction;                           \
+   using Diluculum::PushLuaValue;                                             \
+   using Diluculum::Impl::CppObject;                                          \
+   using Diluculum::Impl::ReportErrorFromCFunction;                           \
                                                                               \
    try                                                                        \
    {                                                                          \
       /* Read parameters and empty the stack */                               \
       const int numParams = lua_gettop (ls);                                  \
-      LuaValue ud = ToLuaValue (ls, 1);                 \
-      LuaValueList params;                                         \
+      Diluculum::LuaValue ud = Diluculum::ToLuaValue (ls, 1);                 \
+      Diluculum::LuaValueList params;                                         \
       for (int i = 2; i <= numParams; ++i)                                    \
-         params.push_back (ToLuaValue (ls, i));                    \
+         params.push_back (Diluculum::ToLuaValue (ls, i));                    \
       lua_pop (ls, numParams);                                                \
                                                                               \
       /* Get the object pointer and call the method */                        \
@@ -267,14 +267,14 @@ int DILUCULUM_METHOD_WRAPPER(CLASS, METHOD) (lua_State* ls)                   \
          reinterpret_cast<CppObject*>(ud.asUserData().getData());             \
       CLASS* pObj = reinterpret_cast<CLASS*>(cppObj->ptr);                    \
                                                                               \
-      LuaValueList ret = pObj->METHOD (params);                    \
+      Diluculum::LuaValueList ret = pObj->METHOD (params);                    \
                                                                               \
       /* Push the return values and return */                                 \
       for_each (ret.begin(), ret.end(), bind (PushLuaValue, ls, _1));         \
                                                                               \
       return ret.size();                                                      \
    }                                                                          \
-   catch (LuaError& e)                                             \
+   catch (Diluculum::LuaError& e)                                             \
    {                                                                          \
       ReportErrorFromCFunction (ls, e.what());                                \
       return 0;                                                               \
@@ -288,7 +288,7 @@ int DILUCULUM_METHOD_WRAPPER(CLASS, METHOD) (lua_State* ls)                   \
                                                                               \
 namespace                                                                     \
 {                                                                             \
-   Impl::ClassTableFiller                                          \
+   Diluculum::Impl::ClassTableFiller                                          \
       Diluculum__ ## CLASS ## _ ## METHOD ## __ ## Filler(                    \
          DILUCULUM_CLASS_TABLE(CLASS),                                        \
          #METHOD,                                                             \
@@ -304,12 +304,12 @@ namespace                                                                     \
 #define DILUCULUM_END_CLASS(CLASS)                                            \
                                                                               \
 /* The function used to register the class in a 'LuaState' */                 \
-void Diluculum_Register_Class__ ## CLASS (LuaVariable className)   \
+void Diluculum_Register_Class__ ## CLASS (Diluculum::LuaVariable className)   \
 {                                                                             \
-   LuaState ls (className.getState());                             \
+   Diluculum::LuaState ls (className.getState());                             \
                                                                               \
    if (ls["__Diluculum__Class_Metatables"].value().type() == LUA_TNIL)        \
-     ls["__Diluculum__Class_Metatables"] = EmptyLuaValueMap;       \
+     ls["__Diluculum__Class_Metatables"] = Diluculum::EmptyLuaValueMap;       \
                                                                               \
    DILUCULUM_CLASS_TABLE(CLASS)["classname"] = #CLASS;                        \
                                                                               \
@@ -332,10 +332,10 @@ void Diluculum_Register_Class__ ## CLASS (LuaVariable className)   \
 
 
 
-/** Registers a class in a given \c LuaState. The class must have
+/** Registers a class in a given \c Diluculum::LuaState. The class must have
  *  been previously exported by calls to \c DILUCULUM_BEGIN_CLASS(),
  *  \c DILUCULUM_END_CLASS() and probably \c DILUCULUM_CLASS_METHOD().
- *  @param LUA_VARIABLE The \c LuaVariable that will store the class
+ *  @param LUA_VARIABLE The \c Diluculum::LuaVariable that will store the class
  *         after this call.
  *  @param CLASS The class being registered.
  */
@@ -348,8 +348,8 @@ void Diluculum_Register_Class__ ## CLASS (LuaVariable className)   \
  *  object's methods can be called from Lua. The registered C++ object will
  *  \e not be destroyed when the corresponding Lua object is garbage-collected.
  *  Destroying it is responsibility of the programmer on the C++ side.
- *  @param LUA_VARIABLE The \c LuaVariable where the object will be
- *         stored. Notice that a \c LuaVariable contains a reference
+ *  @param LUA_VARIABLE The \c Diluculum::LuaVariable where the object will be
+ *         stored. Notice that a \c Diluculum::LuaVariable contains a reference
  *         to a <tt>lua_State*</tt>, so the Lua state in which the object will
  *         be stored is passed here, too, albeit indirectly.
  *  @param CLASS The class of the object being registered. This class must have
@@ -363,15 +363,15 @@ void Diluculum_Register_Class__ ## CLASS (LuaVariable className)   \
    LUA_VARIABLE.pushLastTable();                                              \
                                                                               \
    /* push the field where the object will be stored */                       \
-   PushLuaValue (LUA_VARIABLE.getState(),                          \
+   Diluculum::PushLuaValue (LUA_VARIABLE.getState(),                          \
                             LUA_VARIABLE.getKeys().back());                   \
                                                                               \
    /* create the userdata, set its metatable */                               \
    void* ud = lua_newuserdata (LUA_VARIABLE.getState(),                       \
-                               sizeof(Impl::CppObject));           \
+                               sizeof(Diluculum::Impl::CppObject));           \
                                                                               \
-   Impl::CppObject* cppObj =                                       \
-      reinterpret_cast<Impl::CppObject*>(ud);                      \
+   Diluculum::Impl::CppObject* cppObj =                                       \
+      reinterpret_cast<Diluculum::Impl::CppObject*>(ud);                      \
                                                                               \
    cppObj->ptr = &OBJECT;                                                     \
    cppObj->deleteMe = false;                                                  \
@@ -406,9 +406,9 @@ void Diluculum_Register_Class__ ## CLASS (LuaVariable className)   \
 #define DILUCULUM_BEGIN_MODULE(MODNAME)                  \
 extern "C" int luaopen_ ## MODNAME (lua_State *luaState) \
 {                                                        \
-   using LuaState;                            \
-   using LuaVariable;                         \
-   using EmptyLuaValueMap;                    \
+   using Diluculum::LuaState;                            \
+   using Diluculum::LuaVariable;                         \
+   using Diluculum::EmptyLuaValueMap;                    \
    LuaState ls (luaState);                               \
                                                          \
    ls[#MODNAME] = EmptyLuaValueMap;                      \

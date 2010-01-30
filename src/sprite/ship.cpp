@@ -30,8 +30,9 @@ CShip::CShip()
 
 	/* Load picture of the ship model TODO example! */
 	miniImage_ = imageResource->Get( "images/ship/human/hunter-001.png" );
-	background_ = new CAnimation ( imageResource->Get( "images/ship/human/hunter-001.png" ), 1, 0.05f );
-	background_->SetCenter ( GetCenter() );
+	backgroundStatic_.SetImage ( *imageResource->Get( "images/ship/human/hunter-001.png" ) );
+// 	background_ = new CAnimation ( imageResource->Get( "images/ship/human/hunter-001.png" ), 1, 0.05f );
+// 	background_->SetCenter ( GetCenter() );
 	
 	/* Set properties */
 	this->SetZoomFactor( 0.04 );

@@ -20,17 +20,25 @@
 #include <iostream>
 #include <SFML/System.hpp>
 
-// #include "LuaWrappers.hpp"
-
 #include "LuaState.hpp"
 #include "../engine/ui/window.hpp"
+#include "../engine/sprite/sprite.hpp"
 
-namespace script
+using namespace sprite;
+
+namespace Diluculum
 {
 	
+struct Holder {
+	CSprite* sprite;
+};
 
-script::LuaState* GetLua();
+LuaState* GetLua();
+Holder* GetHolder();
+
 void Initialize();
+
+void RegisterObject ( std::string name, CSprite* obj);
 
 void registerFuncName ( std::string str );
 
@@ -39,7 +47,10 @@ LuaValueList GetLog ( const LuaValueList& params );
 LuaValueList Error ( const LuaValueList& params );
 
 
-} /* namespace script */
+
+
+
+} /* namespace Diluculum */
 
 
 

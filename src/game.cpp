@@ -202,7 +202,7 @@ bool CGame::Start()
 	viewPoint_ = new sf::View( sf::FloatRect ( 0, 0, settings::GetWidth(), settings::GetHeight() ) );
 
 	/* Initialize lua */
-	script::Initialize();
+	Diluculum::Initialize();
 	dynamic_cast< gui::CTerminalWindow* >(specialWindow_["TERMINAL"])->GetTerminalWidget()->Initialize();
 	
 	/* Start game loop */

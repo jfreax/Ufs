@@ -36,6 +36,7 @@ CSprite::CSprite()
 	
 	this->SetZoomFactor ( 1.f );
 	
+	drawMarker_ = false;
 	initialized = false;
 }
 
@@ -44,8 +45,7 @@ CSprite::CSprite ( const sprite::CSprite& instance ) : Drawable ( instance )
 { /* TODO */
 	id_ = ++globalId;
 	
-// 	background_ = new CAnimation (  instance.background_->, 1, 0.05f );
-	background_ = instance.background_;
+	background_ = NULL;
 	
 	player_ = instance.player_;
 	mask_ = instance.mask_;
@@ -64,11 +64,12 @@ CSprite::~CSprite()
 
 void CSprite::Render ( sf::RenderTarget& Target ) const
 {
-	if ( !background_ )
-		return;
-	
 	Target.Draw ( mask_ );
-	Target.Draw ( *background_ );
+	
+	if ( !background_ )
+		Target.Draw ( backgroundStatic_ );		
+	else
+		Target.Draw ( *background_ );
 }
 
 
@@ -84,25 +85,33 @@ void CSprite::DrawMarker()
 
 void CSprite::Update()
 {
-	if ( !background_ )
-		return;
-	
-	if ( !initialized ) {
-		this->SetCenter ( background_->GetSize().x*0.5f, background_->GetSize().y*0.5f );
-		initialized = true;
-	}
+	/* Scale image to zoom level */
+	double zoom = GetGameClass()->GetMapManager()->GetZoomLevel();
+	this->Scale ( (1/zoom + ( zoom * GetZoomLevel() )) * this->GetZoomFactor() );
 	
 	if ( true ) { /* update this only when necessary */
 		/* Update marker graphic */
 		this->UpdateMarker();
 	}
 	
-	/* Animation berechnen */
-	background_->Update();
 	
-	/* Scale image to zoom level */
-	double zoom = GetGameClass()->GetMapManager()->GetZoomLevel();
-	this->Scale ( (1/zoom + ( zoom * GetZoomLevel() )) * this->GetZoomFactor() );
+	if ( !initialized ) {
+		if ( background_ ) {	
+			this->SetCenter ( background_->GetSize().x * 0.5f,
+					  background_->GetSize().y * 0.5f );
+			background_->SetCenter( this->GetCenter() );
+			mask_.SetCenter( this->GetCenter() );
+		} else {
+			this->SetCenter ( backgroundStatic_.GetSize().x * 0.5f,
+					  backgroundStatic_.GetSize().y * 0.5f );
+			 backgroundStatic_.SetCenter( this->GetCenter() );
+		}
+		initialized = true;
+	}
+	
+	/* Animation berechnen */
+	if ( background_ )
+		background_->Update();
 }
 
 
@@ -119,8 +128,8 @@ void CSprite::UpdateMarker()
 	/* Delete and create then a new shape */
 	delete bgMarker_; /* TODO */
 	bgMarker_ = new sf::Shape();
-	bgMarker_->EnableFill(false);
-	bgMarker_->EnableOutline(true);
+	bgMarker_->EnableFill ( false );
+	bgMarker_->EnableOutline ( true );
 	
 	
 	/* Calc the outline width */
@@ -129,7 +138,7 @@ void CSprite::UpdateMarker()
 	bgMarker_->SetOutlineWidth ( (this->GetDimension().GetWidth() * (this->GetZoomLevel() +0.5)) / 4 / zoom );
 	
 	/* Set variables */
-	sf::Vector2f center ( dim.Left + dim.GetWidth() * 0.5f, dim.Top + dim.GetHeight() * 0.5f );
+	sf::Vector2f center ( dim.Left, dim.Top );
 	sf::Color color = sf::Color ( 30, 30, 50, 255 ); /* TODO different colors for friend/enemy/neutral... */
 	
 	/* Calc a offset for rotation */
@@ -150,7 +159,6 @@ void CSprite::UpdateMarker()
 		
 		bgMarker_->AddPoint ( center + offset * (width+10/zoom), color, color );
 	}
-	
 }
 
 
@@ -176,8 +184,15 @@ void CSprite::SetPlayer ( unsigned int player )
 
 sf::Rect<float> CSprite::GetDimension()
 {
+	sf::Vector2f offset;
+	
+	if ( background_ )
+		offset = background_->GetSize();
+	else
+		offset = sf::Vector2f ( backgroundStatic_.GetSize() );
+	
 	return sf::Rect<float> ( GetPosition().x - GetCenter().x * this->GetScale().x, GetPosition().y - GetCenter().y * this->GetScale().y,
-				 GetPosition().x - GetCenter().x * this->GetScale().x + background_->GetSize().x * this->GetScale().x, GetPosition().y - GetCenter().y * this->GetScale().y + background_->GetSize().y * this->GetScale().y );
+				 GetPosition().x - GetCenter().x * this->GetScale().x + offset.x * this->GetScale().x, GetPosition().y - GetCenter().y * this->GetScale().y + offset.y * this->GetScale().y );
 }
 
 
@@ -214,6 +229,27 @@ void CSprite::SetZoomFactor ( float factor ) {
 
 float CSprite::GetZoomFactor() {
 	return zoomFactor_;
+}
+
+
+
+
+/* LUA SUPPORT
+----------- */
+
+CSprite::CSprite ( const Diluculum::LuaValueList& params )
+{
+	
+}
+
+
+Diluculum::LuaValueList CSprite::Blub ( const Diluculum::LuaValueList& params )
+{
+	Diluculum::LuaValueList ret;
+	this->SetPosition( -1000, -10 );
+	
+	
+	return ret;
 }
 
 

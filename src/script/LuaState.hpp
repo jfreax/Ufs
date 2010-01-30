@@ -37,7 +37,7 @@
 #include "Types.hpp"
 
 
-namespace script
+namespace Diluculum
 {
 
    /** \c LuaState: The Next Generation. The pleasant way to do perform relevant

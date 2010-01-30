@@ -209,6 +209,9 @@ void CMapManager::Zoom ( int direction, bool fade )
 		deltaX = input->GetMouseX() - (GetGameClass()->GetApp()->GetWidth()  * 0.5f);
 		deltaY = input->GetMouseY() - (GetGameClass()->GetApp()->GetHeight() * 0.5f);
 		zoomed_ += 10;
+	} else {
+		deltaX *= 0.9;
+		deltaY *= 0.9;
 	}
 	
 	lastZoomDirection_ = direction;
@@ -319,5 +322,51 @@ float CMapManager::ConvertCoords ( float f )
 }
 
 
-/* Private */
+/* LUA SUPPORT
+   ----------- */
+
+CMapManager::CMapManager ( const Diluculum::LuaValueList& params )
+{
+	
+}
+
+
+Diluculum::LuaValueList CMapManager::AddSprite ( const Diluculum::LuaValueList& params )
+{
+	
+}
+
+
+Diluculum::LuaValueList CMapManager::GetSprite ( const Diluculum::LuaValueList& params )
+{	Diluculum::LuaValueList ret;
+		if ( params.size() == 1 && params[0].type() == LUA_TNUMBER ) {
+			int x = params[0].asNumber();
+			
+			sprite::CSprite* sprite = NULL;
+			try {
+				sprite = spriteList_.at ( x );
+			} catch ( std::out_of_range ) {
+				throw Diluculum::LuaError ( "Sprite not found." ); 
+			}
+			
+
+		Diluculum::RegisterObject ( "retSprite", sprite );
+// 		ret.push_back ( ( *Diluculum::GetLua()) ["retSprite"].value().asUserData() );
+ret.push_back ( Diluculum::GetLua()->doString ("return retSprite") );
+		} else {
+			throw Diluculum::LuaError ("Wrong parameter!");
+		}
+		
+
+		
+		return ret;
+}
+
+
+Diluculum::LuaValueList CMapManager::Blub ( const Diluculum::LuaValueList& params )
+{
+	Diluculum::LuaValueList ret;
+	
+	return ret;
+}
 

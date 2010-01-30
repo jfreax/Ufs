@@ -32,7 +32,7 @@
 #include "Types.hpp"
 
 
-namespace script
+namespace Diluculum
 {
    /** A C++ equivalent of a Lua function. This can store both C functions
     *  exported (or exportable) to Lua and pure Lua functions. In the first

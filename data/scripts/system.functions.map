@@ -1,0 +1,7 @@
+-- @version 0002
+-- @author "JDieskau" <JDieskau _at_ web _dot_ de>
+
+-- Map all function name --
+log = getLog()
+dmesg = getLog()
+path = getPath()
