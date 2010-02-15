@@ -17,10 +17,10 @@
 
 */
 
-
 #include "../../game.hpp"
 #include "../../script/script.hpp"
 #include "../../settings/settings.hpp"
+
 #include "terminal.hpp"
 
 
@@ -55,11 +55,14 @@ void CTerminal::Initialize()
 	std::string command ( "" );
 	std::string all ( "" );
 	
+	
 	try {
-		all = (*Diluculum::GetLua())["getAllFunctions"].value().asString();
-	} catch ( Diluculum::TypeMismatchError e ) {
+		all = luabind::call_function <std::string> ( script::GetLuaState(), "getAllFunctions" );
+
+	} catch ( luabind::error e ) {
 		GetGameClass()->Error ( e.what(), __PRETTY_FUNCTION__, __FILE__, __LINE__ );
 	}
+	
 	std::string::size_type nextPos;
 	
 	while ( nextPos != std::string::npos ) {
@@ -156,61 +159,68 @@ void CTerminal::Run()
 	/* Add a line break after command */
 	this->AddText ( L"\n" );
 	
-	Diluculum::LuaValueList ret;
-	try {
-		ret = Diluculum::GetLua()->doString ( "return " + str );
-	} catch ( Diluculum::LuaSyntaxError e ) {
-		this->AddText ( L"Syntax Error!\n       " );
-		this->AddText ( (sf::Unicode::Text)( e.what() ) );
-		this->AddText ( L"\n" );
-		return;
-	} catch ( Diluculum::LuaRunTimeError e ) {
-		this->AddText ( L"      " );
-		this->AddText ( (sf::Unicode::Text)( e.what() ) );
-		this->AddText ( L"\n" );
-		return;
-	}
+	str = "return " + str;
+	const int stackSizeAtBeginning = lua_gettop ( script::GetLuaState() );
 	
+	luaL_loadbuffer ( script::GetLuaState(), str.c_str(), str.length(), "line" );
+	lua_pcall( script::GetLuaState(), 0, LUA_MULTRET, 0 );
 	
-	for ( int i = 0; i < ret.size(); ++i ) {
-		switch ( ret[i].type() ) {
+	const int numResults = lua_gettop ( script::GetLuaState() ) - stackSizeAtBeginning;
+	for (int i = numResults; i > 0; --i) {
+		switch (lua_type ( script::GetLuaState(), -i))
+		{
 			case LUA_TNIL:
 				this->AddText ( L"Command not found!\n" );
 				break;
-			
-			case LUA_TBOOLEAN:
-				if ( ret[i].asBoolean() )
-					this->AddText ( L"True" );
-				else
-					this->AddText ( L"False" );
-				this->AddText ( L"\n" );
-				break;
-				
-			case LUA_TNUMBER:
-				this->AddText ( (sf::Unicode::Text)( util::lCast<std::string>(ret[i].asNumber())) );
-				this->AddText ( L"\n" );
-				break;
-				
-			case LUA_TSTRING:
-				this->AddText ( (sf::Unicode::Text)(ret[i].asString()) );
-				this->AddText ( L"\n" );
-				break;
-				
-			case LUA_TTABLE:
-				for ( int j = 0; j < ret[i].asTable().size(); ++j ) {
-					switch ( ret[i].asTable()[j].type() ) {
-						case LUA_TSTRING:	
-							this->AddText ( (sf::Unicode::Text)(ret[i].asTable()[j].asString()) );
-							break;
+						
+				case LUA_TBOOLEAN:
+						if ( lua_toboolean ( script::GetLuaState(), -i )  )
+						this->AddText ( L"True" );
+					else
+						this->AddText ( L"False" );
+						this->AddText ( L"\n" );
+						break;
 							
-						case LUA_TNUMBER:	
-							this->AddText ( (sf::Unicode::Text)(util::lCast<std::string>(ret[i].asTable()[j].asNumber())) );
-							break;	
-					}
-				}
-				break;
+				case LUA_TNUMBER:
+					this->AddText ( (sf::Unicode::Text)( util::lCast<std::string>( lua_tonumber ( script::GetLuaState(), -i )  )) );
+					this->AddText ( L"\n" );
+					break;
+							
+				case LUA_TSTRING:
+					this->AddText ( (sf::Unicode::Text)( lua_tostring ( script::GetLuaState(), -i ) ) );
+					this->AddText ( L"\n" );
+					break;
+							
+// 				case LUA_TTABLE: // TODO
+// 					for ( int j = 0; j <  lua_to ( script::GetLuaState(), -i ) ret[i].asTable().size(); ++j ) {
+// 									switch ( ret[i].asTable()[j].type() ) {
+// 											case LUA_TSTRING:	
+// 												this->AddText ( (sf::Unicode::Text)(ret[i].asTable()[j].asString()) );
+// 												break;
+// 												
+// 											case LUA_TNUMBER:	
+// 												this->AddText ( (sf::Unicode::Text)(util::lCast<std::string>(ret[i].asTable()[j].asNumber())) );
+// 												break;	
+// 										}
+// 									}
+// 									break;
+// if (index < 0)
+// 	index = lua_gettop(state) + index + 1;
+// 
+// // Traverse the table adding the key/value pairs to 'ret'
+// LuaValueMap ret;
+// 
+// lua_pushnil (state);
+// while (lua_next (state, index) != 0)
+// {
+// 	ret[ToLuaValue (state, -2)] = ToLuaValue (state, -1);
+// 	lua_pop (state, 1);
+// }
 		}
+				
 	}
+	
+	lua_pop (script::GetLuaState(), numResults);
 }
 
 

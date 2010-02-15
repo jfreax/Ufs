@@ -30,6 +30,8 @@
 #include "settings/locale.hpp"
 
 
+
+
 enum GAMETYPE {
 	ERROR,
 	QUIT,
@@ -87,6 +89,8 @@ class CGame
 		const int argc_;
 		int arg_;
 		const char* const * const argv_;
+		
+
 		
 		bool run_;
 		GAMETYPE gametype_;

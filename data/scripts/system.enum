@@ -5,3 +5,8 @@ window = 1
 ship = 2
 sun = 3
 planet = 4
+
+
+singleplayer = 1
+multiplayer = 2
+ai_battle = 3

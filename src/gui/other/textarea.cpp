@@ -41,7 +41,7 @@ CTextArea::CTextArea()
 void CTextArea::Initialize()
 {
 	initialized_ = true;
-	cursor_ = sf::Shape::Rectangle ( 1, 2, template_.GetRect().GetWidth(), template_.GetRect().GetHeight()+2, sf::Color::White );
+	cursor_ = sf::Shape::Rectangle ( 1, 2, template_.GetRect().GetWidth(), template_.GetRect().GetHeight()+2, sf::Color ( 255, 255, 255, 160 ) );
 }
 
 

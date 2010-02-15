@@ -29,12 +29,10 @@ bool Parser::Open ( std::string filename, bool index, bool make_lower )
 
 	static int nr = 0;
 
-	/* Datei öffnen */
+	/* Open the file */
 	filename = settings::GetPath() + filename;
 	
 	std::ifstream file ( filename.c_str(), std::ios::in );
-
-	/* Auf erfolg prüfen */
 	if ( !file ) {
 		GetGameClass()->Error ( "Could not open file: " + filename, __PRETTY_FUNCTION__, __FILE__, __LINE__ );
 		return false;

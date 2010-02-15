@@ -15,6 +15,8 @@
 */
 #include <SFML/Graphics.hpp>
 
+#include "script/script.hpp"
+
 #include "action.hpp"
 #include "resource.hpp"
 #include "animation.hpp"
@@ -22,8 +24,6 @@
 
 #include "util/util.hpp"
 #include "settings/settings.hpp"
-
-#include "script/script.hpp"
 
 #include "engine/ui/window.hpp"
 #include "engine/ui/manager.hpp"
@@ -202,11 +202,13 @@ bool CGame::Start()
 	viewPoint_ = new sf::View( sf::FloatRect ( 0, 0, settings::GetWidth(), settings::GetHeight() ) );
 
 	/* Initialize lua */
-	Diluculum::Initialize();
+	script::Initialize();
 	dynamic_cast< gui::CTerminalWindow* >(specialWindow_["TERMINAL"])->GetTerminalWidget()->Initialize();
+
 	
 	/* Start game loop */
 	while ( run_ ) {
+		
 		/* Keyboard and mouse input */
 		input_.Events();
 		

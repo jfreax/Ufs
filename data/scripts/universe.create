@@ -1,0 +1,11 @@
+-- @version 0001
+-- @author "JDieskau" <JDieskau _at_ web _dot_ de>
+
+
+function createUniverse ( size, nb_ai_player, nb_human_player )
+	 spawn ( planet, 0, 0 )
+
+
+
+
+end

@@ -38,7 +38,7 @@ class CMapManager
 		
 		void MoveZoomStep ( double step );
 		void Zoom ( int direction, bool fade = false );
-		double GetZoomLevel();
+		double GetZoomLevel() const;
 		
 		void Move ( sf::Vector2f newPos );
 
@@ -72,23 +72,7 @@ class CMapManager
 		double zoomed_;
 		int lastZoomDirection_;
 		
-		
-	/* LUA SUPPORT */
-	public:
-		CMapManager ( const Diluculum::LuaValueList& params );
-		
-		Diluculum::LuaValueList AddSprite ( const Diluculum::LuaValueList& params );
-		Diluculum::LuaValueList GetSprite ( const Diluculum::LuaValueList& params );
-		
-		Diluculum::LuaValueList Blub ( const Diluculum::LuaValueList& params );
-		
-	private:
-		Diluculum::LuaValue value_;
-		
-
 };
-
-
 
 
 

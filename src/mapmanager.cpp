@@ -217,10 +217,10 @@ void CMapManager::Zoom ( int direction, bool fade )
 	lastZoomDirection_ = direction;
 	
 	if ( direction == 1 ) {
-		if ( this->GetZoomLevel() < 6 ) { /* maximum zoom level */
+// 		if ( this->GetZoomLevel() < 6 ) { /* maximum zoom level */
 			GetGameClass()->GetViewPoint()->Zoom ( 1 + zoomStep*(zoomed_*0.05) );
 			GetGameClass()->GetViewPoint()->Move ( deltaX * zoom, deltaY * zoom );
-		}
+// 		}
 	} else if ( direction == -1 ) {
 		if ( this->GetZoomLevel() > 0.05 ) { /* minimum zoom level */
 			GetGameClass()->GetViewPoint()->Zoom ( 1 - zoomStep*(zoomed_*0.05f) );
@@ -230,7 +230,7 @@ void CMapManager::Zoom ( int direction, bool fade )
 }
 
 
-double CMapManager::GetZoomLevel()
+double CMapManager::GetZoomLevel() const
 {
 	return GetGameClass()->GetApp()->GetWidth() / GetGameClass()->GetViewPoint()->GetRect().GetWidth();
 }
@@ -321,52 +321,4 @@ float CMapManager::ConvertCoords ( float f )
 	return app->ConvertCoords ( f, 0, GetGameClass()->GetViewPoint() ).x;
 }
 
-
-/* LUA SUPPORT
-   ----------- */
-
-CMapManager::CMapManager ( const Diluculum::LuaValueList& params )
-{
-	
-}
-
-
-Diluculum::LuaValueList CMapManager::AddSprite ( const Diluculum::LuaValueList& params )
-{
-	
-}
-
-
-Diluculum::LuaValueList CMapManager::GetSprite ( const Diluculum::LuaValueList& params )
-{	Diluculum::LuaValueList ret;
-		if ( params.size() == 1 && params[0].type() == LUA_TNUMBER ) {
-			int x = params[0].asNumber();
-			
-			sprite::CSprite* sprite = NULL;
-			try {
-				sprite = spriteList_.at ( x );
-			} catch ( std::out_of_range ) {
-				throw Diluculum::LuaError ( "Sprite not found." ); 
-			}
-			
-
-		Diluculum::RegisterObject ( "retSprite", sprite );
-// 		ret.push_back ( ( *Diluculum::GetLua()) ["retSprite"].value().asUserData() );
-ret.push_back ( Diluculum::GetLua()->doString ("return retSprite") );
-		} else {
-			throw Diluculum::LuaError ("Wrong parameter!");
-		}
-		
-
-		
-		return ret;
-}
-
-
-Diluculum::LuaValueList CMapManager::Blub ( const Diluculum::LuaValueList& params )
-{
-	Diluculum::LuaValueList ret;
-	
-	return ret;
-}
 

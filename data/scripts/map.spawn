@@ -1,13 +1,21 @@
 -- @version 0001
 -- @author "JDieskau" <JDieskau _at_ web _dot_ de>
 
-function spawn( type, coordX, coordY )
+function spawn ( type, coordX, coordY )
 	return switch(type) : caseof {
 		  [window] = function (x)
 			   return "okok"
 
 			   end,
 		  [ship] = function (x) 
+
+
+			   end,
+		  [sun] = function (x) 
+
+
+			   end,
+		  [planet] = function (x) 
 
 
 			   end,

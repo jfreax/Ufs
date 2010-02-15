@@ -22,16 +22,9 @@
 
 #include "../../animation.hpp"
 
-#include "../../script/Types.hpp"
-#include "../../script/LuaValue.hpp"
-
 
 namespace sprite
 {
-	
-// 	DILUCULUM_BEGIN_CLASS ( CMapManager );
-// 	DILUCULUM_CLASS_METHOD ( CMapManager, AddSprite );
-// 	DILUCULUM_END_CLASS ( CMapManager );
 
 
 class CSprite : public sf::Drawable
@@ -82,16 +75,7 @@ class CSprite : public sf::Drawable
 		/*  */
 		float zoomLevel_;
 		float zoomFactor_;
-		
-	/* LUA SUPPORT */
-	public:
-		CSprite ( const Diluculum::LuaValueList& params );
-		
-		Diluculum::LuaValueList Blub ( const Diluculum::LuaValueList& params );
-		
-	private:
-		Diluculum::LuaValue value_;
-};
+		};
 
 
 } /* namespace sprite */

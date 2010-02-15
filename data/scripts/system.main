@@ -2,24 +2,30 @@
 -- @author "JDieskau" <JDieskau _at_ web _dot_ de>
 
 
+math.randomseed ( os.time() )
+
 function include ( filename )
   -- write report --
   io.write( string.format( "Loading scriptfile \"" .. filename .. "\" ...\n" ) );
 
-  dofile ( getPath() .. filename );
-
+  dofile ( getPath() .. "/scripts/" .. filename );
+-- 
 -- local info = debug.getinfo( 1, "Sl")
 --   print ( info.source );
 
 end
 
+
 -- include files --
 include ( "system.functions.map" )
 include ( "system.enum" )
-
+-- 
 include ( "lib.main" )
 include ( "map.main" )
 include ( "universe.main" )
 
--- last include !
+
+include ( "game.main" ) -- @TODO Include by cpp at the right time!
+
+-- last include ! --
 include ( "system.functions" )

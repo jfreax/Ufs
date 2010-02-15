@@ -3,12 +3,6 @@
 
 -- @Attention If you include this file, the game will start
 
--- Game type are:
--- 0 -> Singleplayer
--- 1 -> Multiplayer
--- 2 -> AI Simulation
-
-gametype = 0
 
 -- include files --
 include ( "game.start" )

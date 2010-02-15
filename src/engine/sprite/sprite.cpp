@@ -38,6 +38,7 @@ CSprite::CSprite()
 	
 	drawMarker_ = false;
 	initialized = false;
+	
 }
 
 
@@ -65,7 +66,7 @@ CSprite::~CSprite()
 void CSprite::Render ( sf::RenderTarget& Target ) const
 {
 	Target.Draw ( mask_ );
-	
+
 	if ( !background_ )
 		Target.Draw ( backgroundStatic_ );		
 	else
@@ -93,7 +94,6 @@ void CSprite::Update()
 		/* Update marker graphic */
 		this->UpdateMarker();
 	}
-	
 	
 	if ( !initialized ) {
 		if ( background_ ) {	
@@ -231,26 +231,6 @@ float CSprite::GetZoomFactor() {
 	return zoomFactor_;
 }
 
-
-
-
-/* LUA SUPPORT
------------ */
-
-CSprite::CSprite ( const Diluculum::LuaValueList& params )
-{
-	
-}
-
-
-Diluculum::LuaValueList CSprite::Blub ( const Diluculum::LuaValueList& params )
-{
-	Diluculum::LuaValueList ret;
-	this->SetPosition( -1000, -10 );
-	
-	
-	return ret;
-}
 
 
 } /* namespace sprite */

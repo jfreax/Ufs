@@ -40,4 +40,4 @@ class CShip : public CSprite, public CMoveAble
 
 }
 
-#endif // SHIP_H
+#endif // SHIP_HPP

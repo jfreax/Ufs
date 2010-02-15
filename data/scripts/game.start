@@ -2,4 +2,18 @@
 -- @author "JDieskau" <JDieskau _at_ web _dot_ de>
 
 -- include files --
-include ( "game.start" )
+include ( "universe.main" )
+
+switch( gametype ) : caseof {
+	  [singleplayer] = function (x)
+		   include ( "game.start.singleplayer" )
+		   end,
+	  [multiplayer] = function (x) 
+		   include ( "game.start.multiplayer" )
+		   end,
+	  [ai_battle] = function (x) 
+		   include ( "game.start.ai_battle" )
+		   end,
+	  default = function (x) return "Type not known" end,
+	  missing = function (x) return "nil" end,
+}
