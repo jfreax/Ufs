@@ -113,6 +113,25 @@ void CSprite::Update()
 	/* Animation berechnen */
 	if ( background_ )
 		background_->Update();
+	
+	/* Fade out */
+	if ( oldZoom_ != zoom && zoom < 0.4f ) {
+		static int alpha;
+		
+		static sf::Color oldColor;
+		oldColor = gfxMarker_->GetColor();
+		
+		alpha = ( (zoom-0.2f)*1275.f );
+		alpha = alpha < 0 ? 0 : alpha;
+		oldColor.a = alpha;
+		
+		gfxMarker_->SetColor ( oldColor );	
+	}
+	
+	/* Rotate the marker */
+	markerRotation_ += GetGameClass()->GetApp()->GetFrameTime() * 0.5f;
+	gfxMarker_->Rotate ( markerRotation_ );
+	
 }
 
 
@@ -134,13 +153,39 @@ void CSprite::CalcGFX()
 	float width, gap;
 	
 	dim = this->GetDimension();
-	width = this->GetDimension().GetWidth() * 1.1;
-	gap = width - this->GetDimension().GetWidth();
+	width = this->GetDimension().GetWidth() * 1.3;
+	gap = width - this->GetDimension().GetWidth() * 1.2;
 	
+	sf::Color color = sf::Color ( 30, 30, 50, 255 ); /* TODO Player color */
+	sf::Vector2f center ( 0, 0 );
 	
 	/* Calc marker */
 	gfxMarker_ = new sf::Shape();
+	gfxMarker_->EnableFill ( false );
+	gfxMarker_->EnableOutline ( true );
+	gfxMarker_->SetOutlineWidth ( gap * 0.1f );
 	
+	int alpha;
+	for ( int j = 20; j; --j ) {
+		width -= gap * 0.1f;
+		
+		color.a = j*10;
+		alpha = color.a;
+				
+		for ( int i = 0; i < 180; ++i ) {
+			if ( i > 0 && i < 5 ||
+			     i > 45 && i < 50 ||
+			     i > 90 && i < 95 ||
+			     i > 135 && i < 140 )
+				color.a = 0;
+			else color.a = alpha;
+			
+			angle = i * 2 * 3.141592654f / 180;
+			offset = sf::Vector2f ( cos ( angle ), sin ( angle ) );
+				
+			gfxMarker_->AddPoint ( center + offset * width, color, color );
+		}
+	}
 
 }
 

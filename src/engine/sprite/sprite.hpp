@@ -78,10 +78,12 @@ class CSprite : public sf::Drawable
 		sf::Shape mask_;
 		
 		sf::Shape* gfxMarker_;
-		float markerAPos_;
+		float markerRotation_;
 		
 		float zoomLevel_;
 		float zoomFactor_;
+		
+		double oldZoom_;
 };
 
 

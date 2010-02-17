@@ -84,6 +84,7 @@ void CPlanet::Update ( void )
 	CSprite::Update();
 	
 	double frame = GetGameClass()->GetApp()->GetFrameTime();
+	double zoom = GetGameClass()->GetMapManager()->GetZoomLevel();
 	
 	/* Let rotate the whole planet */
 	backgroundStatic_.Rotate ( 2.f * frame );
@@ -91,6 +92,37 @@ void CPlanet::Update ( void )
 	/* Rotate the clouds */
 	cloud1_.Rotate ( 1.4f * frame );
 	cloud2_.Rotate ( -1.4f * frame );
+	
+	if ( oldZoom_ != zoom && zoom < 0.4 ) {
+		oldZoom_ = zoom;
+		
+		static sf::Color oldColor;
+		static int alpha;
+		
+		alpha = ( (zoom-0.2f)*1275.f );
+		alpha = alpha < 0 ? 0 : alpha;
+		
+		oldColor = backgroundStatic_.GetColor();
+		oldColor.a = alpha;
+		backgroundStatic_.SetColor ( oldColor );
+		
+		oldColor = atmosphere_.GetColor();
+		oldColor.a = alpha;
+		atmosphere_.SetColor ( oldColor );
+		
+		oldColor = shadow_.GetColor();
+		oldColor.a = alpha == 0 ? 0 : 255;
+		shadow_.SetColor ( oldColor );
+		
+		oldColor = cloud1_.GetColor();
+		oldColor.a = alpha;
+		cloud1_.SetColor ( oldColor );
+		
+		oldColor = cloud2_.GetColor();
+		oldColor.a = alpha;
+		cloud2_.SetColor ( oldColor );
+
+	}
 }
 
 

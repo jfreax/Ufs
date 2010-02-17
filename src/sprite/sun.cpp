@@ -112,8 +112,14 @@ void CSun::Render ( sf::RenderTarget& Target ) const
 
 void CSun::Update ( void )
 {
-	/* run updater from sprite-class */
+	/* Run updater from sprite-class */
 	CSprite::Update();
+	double zoom = GetGameClass()->GetMapManager()->GetZoomLevel();
+	if ( oldZoom_ != zoom && zoom < 0.2f ) {
+		
+// 		std::cout << zoom + 1.8f << std::endl;
+		this->Scale ( zoom + 1.8f );
+	}
 	
 	/* Helligkeitsflimmern reinbringen */
 // 	alpha_++;

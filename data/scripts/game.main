@@ -13,8 +13,12 @@ systems[1] = mapManager():createSystem();
 
 sun = Sun();
 mapManager():addSprite( 0, sun )
-plan = Ship();
+plan = Planet();
 mapManager():addSprite( 0, plan )
+plan.y = 1200
+ship = Ship();
+mapManager():addSprite( 0, ship )
+ship.x = 500
 
 sun2 = Sun();
 mapManager():addSprite( 1, sun2 )

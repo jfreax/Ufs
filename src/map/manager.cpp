@@ -101,6 +101,16 @@ void CMapManager::Update()
 		zoomed_ -= zoomed_*0.1+0.05f;
 		this->Zoom ( lastZoomDirection_, true );
 	}
+	
+	/* Change to galaxy view */
+	double zoom = GetGameClass()->GetMapManager()->GetZoomLevel();
+	std::cout << lastZoomDirection_ << std::endl;
+	if ( lastZoomDirection_ == -1 && zoom < 0.1 && zoom > 0.02 ) {
+		this->Zoom ( -1 );
+	}
+	if ( lastZoomDirection_ == 1 && zoom < 0.1 ) {
+		this->Zoom ( 1, false );
+	}
 }
 
 
@@ -205,9 +215,16 @@ void CMapManager::MoveZoomStep ( double step )
 void CMapManager::Zoom ( int direction, bool fade )
 {
 	static const sf::Input* input = &GetGameClass()->GetApp()->GetInput();
-	static double zoomStep = 0.01f;
+	static double zoomStep = 0.02f;
 	static int deltaX, deltaY;
 	double zoom = 1/ GetGameClass()->GetMapManager()->GetZoomLevel() * (0.03);
+	
+
+// 		zoomStep = 0.05f;
+// 	else if ( zoom < 0.2 )
+// 		zoomStep = 0.1f;
+// 	else
+// 		zoomStep = 0.01f;
 	
 	if ( !fade ) {
 		deltaX = input->GetMouseX() - (GetGameClass()->GetApp()->GetWidth()  * 0.5f);
@@ -226,10 +243,10 @@ void CMapManager::Zoom ( int direction, bool fade )
 			GetGameClass()->GetViewPoint()->Move ( deltaX * zoom, deltaY * zoom );
 		}
 	} else if ( direction == -1 ) {
-		if ( this->GetZoomLevel() > 0.05 ) { /* minimum zoom level */
+// 		if ( this->GetZoomLevel() > 0.05 ) { /* minimum zoom level */
 			GetGameClass()->GetViewPoint()->Zoom ( 1 - zoomStep*(zoomed_*0.05f) );
 			GetGameClass()->GetViewPoint()->Move ( deltaX * 0.5f * zoom, deltaY * 0.5f * zoom );
-		}
+// 		}
 	}
 }
 
