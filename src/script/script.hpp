@@ -29,7 +29,10 @@
 namespace script
 {
 	
-void Initialize();
+int GetInitProgress();
+void SetInitProgress ( int p );
+	
+void Initialize ( void* UserData = NULL );
 void Quit();
 void Reload();
 

@@ -42,6 +42,7 @@ CWindow::CWindow ( bool withTitlebarPossible )
 		minSize_ = theme->window_.minSize;
 		maxSize_ = theme->window_.maxSize;
 
+		showBackground_ = true;
 		formRound_ = 10;
 		backgroundColor_ = theme->window_.backgroundColor;
 
@@ -159,10 +160,10 @@ void CWindow::UpdateWidgets()
 }
 
 
-bool CWindow::Render()
+void CWindow::Render()
 {
 	if ( !this->GetShow() )
-		return false;
+		return;
 	
 	/* Call all special window features */
 	this->Call();
@@ -171,14 +172,17 @@ bool CWindow::Render()
 	sf::RenderWindow* app = GetGameClass()->GetApp();
 
 	/* Titlebar */
-	app->Draw ( *formTitlebar_ );
+	if ( titlebar_ )
+		app->Draw ( *formTitlebar_ );
 
 	/* Background */
-	if ( background_.GetSize().x && background_.GetSize().x != 1.f ) {
-		app->Draw ( background_ );
-	} else {
-		app->Draw ( *formWin_ );
-		app->Draw ( *formWinBorder_ );
+	if ( showBackground_ ) {
+		if ( background_.GetSize().x && background_.GetSize().x != 1.f ) {
+			app->Draw ( background_ );
+		} else {
+			app->Draw ( *formWin_ );
+			app->Draw ( *formWinBorder_ );
+		}
 	}
 
 	/* Draw all widgets */
@@ -460,10 +464,22 @@ void CWindow::CalcBackground()
 
 void CWindow::SetBackgroundImage ( sf::Image* img )
 {
-	backgroundImage_ = img;
-	background_.SetImage( *img );
+	if ( img == NULL ) {
+		sf::Image* emptyImg = new sf::Image;
+		backgroundImage_ = emptyImg;
+		background_.SetImage( *emptyImg );	
+	} else {	
+		backgroundImage_ = img;
+		background_.SetImage( *img );
+	}
 
 	this->Update();
+}
+
+
+void CWindow::ShowBackground ( bool ison )
+{
+	showBackground_ = ison;
 }
 
 

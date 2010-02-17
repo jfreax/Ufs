@@ -44,9 +44,26 @@ namespace script
 	
 /* Create a new lua state */
 lua_State* luaState = lua_open();
+int progress = 0;
+
+
+int GetInitProgress()
+{
+	return progress;
+}
+
+
+void SetInitProgress ( int p )
+{
+	progress = p;
+	
+	if ( p == 100 ) {
+		GetGameClass()->SetGameType( START );
+	}
+}
 
 	
-void Initialize()
+void Initialize ( void* UserData )
 {
 	/* Connect LuaBind to this lua state */
 	luabind::open ( luaState );
@@ -54,10 +71,10 @@ void Initialize()
 	
 	/* Export functions */
 	luabind::module ( luaState ) [
+		luabind::def ( "setLoadProgress", SetInitProgress),
 		luabind::def ( "log", GetLog ),
 		luabind::def ( "path", settings::GetPath ),
 		luabind::def ( "mapManager", GetMapManager )
-		
 	];
 	
 	/* Export our class with LuaBind */

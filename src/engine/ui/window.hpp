@@ -40,7 +40,7 @@ class CWindow
 		void Update();
 		void UpdateWidgets();
 
-		bool Render();
+		virtual void Render();
 
 		bool Close ( bool DoNotFreeSpace = false );
 
@@ -48,6 +48,7 @@ class CWindow
 
 		virtual void CalcBackground();
 		void SetBackgroundImage ( sf::Image* img );
+		void ShowBackground ( bool ison = true );
 
 		void SetName ( std::string str );
 
@@ -110,6 +111,7 @@ class CWindow
 		std::vector< gui::CWidget* > widgetList_;
 		std::vector< gui::CWidget* > spacerList_;
 
+		bool showBackground_;
 		sf::Shape* formWin_;
 		sf::Shape* formWinBorder_;
 		sf::Shape* formTitlebar_;

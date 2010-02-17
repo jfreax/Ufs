@@ -31,6 +31,7 @@
 
 #include "gui/window/start.hpp"
 #include "gui/window/header_menu.hpp"
+#include "gui/window/load.hpp"
 #include "gui/window/quit.hpp"
 #include "gui/window/error.hpp"
 #include "gui/window/select.hpp"
@@ -193,6 +194,7 @@ bool CGame::Start()
 	locale_ = new CLocale ( settings::GetLang() );
 
 	/* Load standard windows */	
+	guiManager_.AddWindow ( specialWindow_["LOADING"] = new gui::CLoadWindow );
 	guiManager_.AddWindow ( specialWindow_["QUIT"] = new gui::CQuitWindow );
 	guiManager_.AddWindow ( specialWindow_["TERMINAL"] = new gui::CTerminalWindow );
 	guiManager_.AddWindow ( new gui::CHeaderWindow );
@@ -201,10 +203,14 @@ bool CGame::Start()
 	/* Set view point */
 	viewPoint_ = new sf::View( sf::FloatRect ( 0, 0, settings::GetWidth(), settings::GetHeight() ) );
 
-	/* Initialize lua */
-	script::Initialize();
-	dynamic_cast< gui::CTerminalWindow* >(specialWindow_["TERMINAL"])->GetTerminalWidget()->Initialize();
+	/* Initialize lua (in a new thread!) */
+	sf::Thread luaThread ( &script::Initialize );
+	luaThread.Launch();
+	
+// 	dynamic_cast< gui::CTerminalWindow* >(specialWindow_["TERMINAL"])->GetTerminalWidget()->Initialize();
 
+	/* Start loading screen */
+	this->SetGameType ( LOADING );
 	
 	/* Start game loop */
 	while ( run_ ) {
@@ -267,13 +273,20 @@ GAMETYPE CGame::GetGameType()
 void CGame::SetGameType ( GAMETYPE gametype )
 {
 	switch ( gametype ) {
+		case LOADING:
+			blackWindow->SetShow();
+			blackWindow->ChangeTransparency( 230 );
+			specialWindow_ [ "LOADING" ]->SetShow();
+			break;
+		case START:
+			specialWindow_ [ "LOADING" ]->SetShow( false );
+			break;
 		case QUIT:
 			blackWindow->SetShow();
 			specialWindow_ [ "QUIT" ]->SetShow();
 			break;
 		case ERROR:
 			blackWindow->SetShow();
-
 			break;
 	}
 	
@@ -404,10 +417,24 @@ void CGame::Calc()
 
 void CGame::CalcSpecialWindow()
 {
-	static float alpha = 0;
+	static float alpha = 230;
 	static sf::Clock clock;
 	
 	switch ( gametype_ ) {
+		case LOADING:
+			if ( alpha < 230 )
+				alpha = clock.GetElapsedTime() * 500;
+			if ( alpha >= 230 ) {
+				alpha = 230;
+				clock.Reset();
+			}
+			
+			blackWindow->ChangeTransparency ( alpha );
+			guiManager_.BringToFront ( blackWindow );
+			guiManager_.BringToFront ( specialWindow_ [ "LOADING" ] );
+			
+			specialWindow_ [ "LOADING" ]->SetShow();
+			return;
 		case QUIT:
 			if ( alpha < 230 )
 				alpha = clock.GetElapsedTime() * 500;

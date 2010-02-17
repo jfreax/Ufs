@@ -33,6 +33,8 @@
 
 
 enum GAMETYPE {
+	LOADING,
+	START,
 	ERROR,
 	QUIT,
 	PAUSED,
