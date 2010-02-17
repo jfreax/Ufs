@@ -198,7 +198,7 @@ bool CGame::Start()
 	guiManager_.AddWindow ( specialWindow_["QUIT"] = new gui::CQuitWindow );
 	guiManager_.AddWindow ( specialWindow_["TERMINAL"] = new gui::CTerminalWindow );
 	guiManager_.AddWindow ( new gui::CHeaderWindow );
-	guiManager_.AddWindow ( new gui::CSelectWindow );
+	std::cout << guiManager_.AddWindow ( new gui::CSelectWindow )->GetPosition().x << std::endl;;
 
 	/* Set view point */
 	viewPoint_ = new sf::View( sf::FloatRect ( 0, 0, settings::GetWidth(), settings::GetHeight() ) );
@@ -206,8 +206,6 @@ bool CGame::Start()
 	/* Initialize lua (in a new thread!) */
 	sf::Thread luaThread ( &script::Initialize );
 	luaThread.Launch();
-	
-// 	dynamic_cast< gui::CTerminalWindow* >(specialWindow_["TERMINAL"])->GetTerminalWidget()->Initialize();
 
 	/* Start loading screen */
 	this->SetGameType ( LOADING );
@@ -280,6 +278,7 @@ void CGame::SetGameType ( GAMETYPE gametype )
 			break;
 		case START:
 			specialWindow_ [ "LOADING" ]->SetShow( false );
+			dynamic_cast< gui::CTerminalWindow* >(specialWindow_["TERMINAL"])->GetTerminalWidget()->Initialize();
 			break;
 		case QUIT:
 			blackWindow->SetShow();
@@ -448,6 +447,7 @@ void CGame::CalcSpecialWindow()
 			guiManager_.BringToFront ( specialWindow_ [ "QUIT" ] );
 			
 			specialWindow_ [ "QUIT" ]->SetShow();
+
 			return;
 		case ERROR:
 			if ( alpha < 230 )

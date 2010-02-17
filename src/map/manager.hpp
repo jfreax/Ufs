@@ -20,6 +20,7 @@
 #include <vector>
 #include "../engine/sprite/sprite.hpp"
 #include "../engine/ui/widget.hpp"
+#include "system.hpp"
 
 class CMapManager
 {
@@ -41,6 +42,7 @@ class CMapManager
 		
 		void Move ( sf::Vector2f newPos );
 
+		CSystem* AddSystem ( CSystem* system );
 		sprite::CSprite* AddSprite ( sprite::CSprite* sprite );
 		std::vector < sprite::CSprite* >& GetSelectedSprites();
 		
@@ -58,6 +60,7 @@ class CMapManager
 		
 
 	private:
+		std::vector < CSystem* > systems_;
 		std::vector < sprite::CSprite* > spriteList_;
 		std::vector < sprite::CSprite* > selectedSpriteList_;
 		

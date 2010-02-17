@@ -19,26 +19,11 @@ end
 function test2()
 	 list_iter = mapManager().selectedSprites
 	 for one_sprite in list_iter do
-		  print( "Player ID of selected sprite " .. one_sprite.player )
+		  return "Player ID of selected sprite " .. one_sprite.player
 	 end
 end
 
-local clock = os.clock
-function sleep( n )  -- seconds
-  local t0 = clock()
-  while clock() - t0 <= n do end
-end
 
-setLoadProgress( 10 )
-sleep(2)
-setLoadProgress ( 20 )
-sleep(2)
-setLoadProgress ( 40 )
-sleep(2)
-setLoadProgress ( 60 )
-sleep(2)
-setLoadProgress ( 80 )
-sleep(2)
 
 -- include files --
 include ( "system.functions.map" )

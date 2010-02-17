@@ -71,6 +71,7 @@ bool CManager::MouseClick ( const int x, const int y, const sf::Mouse::Button bu
 				                ( *currentWindow )->GetMoveAble() /*&&
 			                previousMouseScope_ == NONE */) || previousMouseScope_ == TITLE ) {
 					if ( currentWindow == lastWindow ) {
+						
 						previousMouseScope_ = TITLE;
 						sf::Vector2f winPos = ( *currentWindow )->GetPosition();
 

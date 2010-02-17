@@ -52,17 +52,15 @@ void CMapManager::Initialize()
 // 	sprite::CSprite* newShip = AddSprite ( new sprite::CShip );
 // 	newShip->SetPosition ( 300, 300 );
 	
-	sprite::CSprite* newShip2 = AddSprite ( new sprite::CShip );
-	newShip2->SetPosition ( 1000, 400 );
+	sprite::CSprite* newShip2 = /*AddSprite ( */new sprite::CShip/* )*/;
+	newShip2->SetPosition ( 500, 400 );
 	
 // 	sprite::CSprite* newShip3 = AddSprite ( new sprite::CSprite );
-
-// 	if ( !newSprite || !newShip )
-// 		std::cout << "FAILED" << std::endl;
-	
 	selectedRect_ = sf::Rect < float > ( 0, 0, 0, 0 );
-	
 	this->UnSetPos();
+	
+// 	systems_.push_back ( new CSystem() );
+// 	systems_.at(0)->AddSprite( newShip2 );
 }
 
 
@@ -70,16 +68,16 @@ void CMapManager::Render()
 {
 	sf::RenderWindow* app = GetGameClass()->GetApp();
 
-
+	
 	/* Draw sprites */
-	std::vector < sprite::CSprite* >::iterator iter = spriteList_.begin();
-	std::vector < sprite::CSprite* >::iterator iterEnd = spriteList_.end();
-	for ( ; iter != iterEnd ; ++iter )
-		app->Draw( **iter );
+	std::vector < CSystem* >::iterator sysIter = systems_.begin();
+	std::vector < CSystem* >::iterator sysIterEnd = systems_.end();
+	for ( ; sysIter != sysIterEnd ; ++sysIter )
+		app->Draw( **sysIter );
 
 	/* Draw a circle at selected sprites */
-	iter = selectedSpriteList_.begin();
-	iterEnd =selectedSpriteList_.end();
+	std::vector < sprite::CSprite* >::iterator iter = selectedSpriteList_.begin();
+	std::vector < sprite::CSprite* >::iterator iterEnd =selectedSpriteList_.end();
 	for ( ; iter != iterEnd ; ++iter ) {
 		(*iter)->DrawMarker();
 	}
@@ -96,10 +94,10 @@ void CMapManager::Render()
 
 void CMapManager::Update()
 {
-	std::vector < sprite::CSprite* >::iterator iter = spriteList_.begin();
-	std::vector < sprite::CSprite* >::iterator iterEnd = spriteList_.end();
-	for ( ; iter != iterEnd ; ++iter )
-		( *iter )->Update();
+	std::vector < CSystem* >::iterator sysIter = systems_.begin();
+	std::vector < CSystem* >::iterator sysIterEnd = systems_.end();
+	for ( ; sysIter != sysIterEnd ; ++sysIter )
+		( *sysIter )->Update();
 	
 	/* Fade out the zoom */
 	if ( zoomed_ > 0 ) {
@@ -111,9 +109,6 @@ void CMapManager::Update()
 
 bool CMapManager::MouseClick ( const int mouseX, const int mouseY, const sf::Mouse::Button button )
 {
-	std::vector < sprite::CSprite* >::iterator iter = spriteList_.begin();
-	std::vector < sprite::CSprite* >::iterator iterEnd = spriteList_.end();
-	
 	int x = this->ConvertCoords ( mouseX );
 	int y = this->ConvertCoords ( mouseY );
 	
@@ -121,23 +116,31 @@ bool CMapManager::MouseClick ( const int mouseX, const int mouseY, const sf::Mou
 		case sf::Mouse::Left:
 			selectedSpriteList_.clear();
 			
-			for ( ; iter != iterEnd ; ++iter ) {
-				if ( !settings::GetSelect() ) {
-					settings::SetSelect();
-					selectedRect_.Left = selectedRect_.Right = mouseX;
-					selectedRect_.Top = selectedRect_.Bottom = mouseY;
-				} else {
+			std::vector < CSystem* >::iterator sysIter = systems_.begin();
+			std::vector < CSystem* >::iterator sysIterEnd = systems_.end();
+			for ( ; sysIter != sysIterEnd ; ++sysIter ) {
+
+				std::vector < sprite::CSprite* >::iterator iter = (*sysIter)->GetSprites().begin();
+				std::vector < sprite::CSprite* >::iterator iterEnd = (*sysIter)->GetSprites().end();
+				for ( ; iter != iterEnd ; ++iter ) {
+
+					if ( !settings::GetSelect() ) {
+						settings::SetSelect();
+						selectedRect_.Left = selectedRect_.Right = mouseX;
+						selectedRect_.Top = selectedRect_.Bottom = mouseY;
+					} else {
 					
-					selectedRect_.Right = mouseX;
-					selectedRect_.Bottom = mouseY;
+						selectedRect_.Right = mouseX;
+						selectedRect_.Bottom = mouseY;
 					
-					sf::Rect< float > selectedRectInGameCoord = this->ConvertCoords ( selectedRect_ );
-					if ( ( *iter )->GetDimension().Intersects ( selectedRectInGameCoord ) ) {
-						selectedSpriteList_.push_back ( *iter );
+						sf::Rect< float > selectedRectInGameCoord = this->ConvertCoords ( selectedRect_ );
+						if ( ( *iter )->GetDimension().Intersects ( selectedRectInGameCoord ) ) {
+							selectedSpriteList_.push_back ( *iter );
+						}
+					
+						if ( this->GetSpecialWidget ( "MINI_OBJECT" ) )
+							this->GetSpecialWidget ( "MINI_OBJECT" )->Call();
 					}
-					
-					if ( this->GetSpecialWidget ( "MINI_OBJECT" ) )
-						this->GetSpecialWidget ( "MINI_OBJECT" )->Call();
 				}
 			}
 			break;
@@ -248,6 +251,13 @@ void CMapManager::Move ( sf::Vector2f newPos )
 
 	lastPos_ = newPos;
 }
+
+
+CSystem* CMapManager::AddSystem ( CSystem* system )
+{
+	
+}
+
 
 
 sprite::CSprite* CMapManager::AddSprite ( sprite::CSprite* sprite )

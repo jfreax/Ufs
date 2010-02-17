@@ -489,6 +489,13 @@ void CWindow::SetName ( std::string str )
 }
 
 
+std::string CWindow::GetName() const
+{
+	return name_.GetText();
+}
+
+
+
 void CWindow::Rotate ( double angle )
 {
 	angle_ += angle;
@@ -691,16 +698,16 @@ int CWindow::GetTitlebarLength()
 
 sf::Rect<float> CWindow::GetWindowDimension() const
 {
-	if ( formWin_ == NULL ) {
-		return sf::Rect<float> ( 0, 0, 0, 0 );
-	} else {
-		sf::Vector2f pos = formWin_->TransformToGlobal( sf::Vector2f ( 0, 0 ) );
-		sf::Vector2f posEnd = formWin_->TransformToGlobal( sf::Vector2f ( curSize_.x, curSize_.y ) );
+// 	if ( formWin_ == NULL ) {
+// 		return sf::Rect<float> ( 0, 0, 0, 0 );
+// 	} else {
+// 		sf::Vector2f pos = formWin_->TransformToGlobal( sf::Vector2f ( 0, 0 ) );
+// 		sf::Vector2f posEnd = formWin_->TransformToGlobal( sf::Vector2f ( curSize_.x, curSize_.y ) );
+// 
+// 		return sf::Rect<float> ( pos.x, pos.y - titlebar_, posEnd.x, posEnd.y );
+// 	}
 
-		return sf::Rect<float> ( pos.x, pos.y - titlebar_, posEnd.x, posEnd.y );
-	}
-
-// 	return sf::Rect<float> ( position_.x, position_.y - titlebar_, position_.x + curSize_.x, position_.y + curSize_.y );
+	return sf::Rect<float> ( position_.x, position_.y - titlebar_, position_.x + curSize_.x, position_.y + curSize_.y );
 }
 
 

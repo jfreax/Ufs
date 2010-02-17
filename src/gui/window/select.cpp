@@ -42,7 +42,6 @@ CSelectWindow::CSelectWindow()
 	this->SetCloseAble ( false );
 	this->SetResizeAble ( false );
 	this->SetTitlebar( false );
-
 }
 
 

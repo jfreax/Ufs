@@ -51,6 +51,7 @@ class CWindow
 		void ShowBackground ( bool ison = true );
 
 		void SetName ( std::string str );
+		std::string GetName() const;
 
 		void Rotate ( double angle );
 		void SetAngle ( double angle );
