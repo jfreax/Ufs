@@ -72,16 +72,16 @@ CSun::CSun ()
 // 	particle.set_Dimension ( sf::Vector2i ( 500, 500 ) );
 
 	/* Neuen Emitter erstellen */
-	CEmitter emitter ( 100 );
+// 	CEmitter emitter ( 100 );
 	
 	/* Emittereigenschaften setzen */
-	emitter.SetLife ( 10.f );
-	emitter.SetPosition ( sf::Vector3f ( 0, 0, 2 ) );	
-	emitter.SetVelocity ( 0.f, 2.f );
-	emitter.SetDirection ( 45, 50.f );
+// 	emitter.SetLife ( 10.f );
+// 	emitter.SetPosition ( sf::Vector3f ( 0, 0, 2 ) );	
+// 	emitter.SetVelocity ( 0.f, 2.f );
+// 	emitter.SetDirection ( 45, 50.f );
 	
 	/* Dem Partikelsystem den Emitter hinzufügen */
-	particle.AddEmitter ( emitter );
+// 	particle.AddEmitter ( emitter );
 
 // 	particle.Initialization ( 100, sf::Vector2f ( 10, 20 ), sf::Vector3f ( 100, 100, 0 ), sf::Vector2f ( 100000,300000 ), sf::Vector2f ( 40, 90 ), sf::Vector2f ( 10, 20 ), sf::Color::White );
 
@@ -116,7 +116,7 @@ void CSun::Update ( void )
 	CSprite::Update();
 	
 	/* Helligkeitsflimmern reinbringen */
-	alpha_++;
+// 	alpha_++;
 // 	brightness_.SetColor ( sf::Color ( 255, 255, 255, alpha_ ) );
 
 	/* Partikelsystem akualisieren */

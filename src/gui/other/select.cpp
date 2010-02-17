@@ -136,8 +136,6 @@ void CSelectWidget::Calc()
 			
 		}
 	}
-	
-// 	std::cout << GetGameClass()->GetMapManager()->GetSelectedSprites()->size() << std::endl;
 }
 
 

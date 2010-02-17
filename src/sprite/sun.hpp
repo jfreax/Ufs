@@ -39,7 +39,7 @@ class CSun : public CSprite
 
 		uint8_t alpha_;
 
-		CParticleManager particle;
+// 		CParticleManager particle;
 
 };
 

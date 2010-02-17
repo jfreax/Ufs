@@ -20,17 +20,17 @@
 #include "system.hpp"
 
 
+CSystem::CSystem()
+{
+	this->SetSize ( 8000, 8000 );
+}
+
+
 void CSystem::Render ( sf::RenderTarget& Target ) const
 {
 	/* Draw sprites */
-// 	std::vector < sprite::CSprite* >::iterator iter = spriteList_.begin();
-
-	for ( int i = 0; spriteList_.end() != spriteList_.begin()+i; ++i ) {
+	for ( int i = 0; spriteList_.end() != spriteList_.begin()+i; ++i )
 		Target.Draw( **(spriteList_.begin()+i) );
-	}
-// 	std::vector < sprite::CSprite* >::iterator iterEnd = spriteList_.end();
-// 	for ( ; iter != iterEnd ; ++iter )
-// 		Target.Draw( **iter );
 }
 
 
@@ -58,4 +58,47 @@ sprite::CSprite* CSystem::AddSprite ( sprite::CSprite* sprite )
 std::vector< sprite::CSprite*, std::allocator< sprite::CSprite* > >& CSystem::GetSprites()
 {
 	return spriteList_;
+}
+
+
+float CSystem::GetPositionX() const
+{
+	return this->GetPosition().x;
+}
+
+
+float CSystem::GetPositionY() const
+{
+	return this->GetPosition().y;
+}
+
+
+void CSystem::SetPositionX ( float x )
+{
+	this->SetPosition ( x, this->GetPositionY() );
+}
+
+
+void CSystem::SetPositionY ( float y )
+{
+	this->SetPosition ( this->GetPositionX(), y );
+}
+
+
+void CSystem::SetSize ( float width, float height )
+{
+	size_.x = width;
+	size_.y = height;
+}
+
+
+float CSystem::GetSizeX() const
+{
+	return size_.x;
+}
+
+
+float CSystem::GetSizeY() const
+{
+	return size_.y;
 }

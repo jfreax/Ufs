@@ -6,3 +6,15 @@
 
 -- include files --
 include ( "game.start" )
+
+systems = {}
+systems[0] = mapManager():createSystem();
+systems[1] = mapManager():createSystem();
+
+sun = Sun();
+mapManager():addSprite( 0, sun )
+plan = Ship();
+mapManager():addSprite( 0, plan )
+
+sun2 = Sun();
+mapManager():addSprite( 1, sun2 )

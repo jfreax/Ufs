@@ -198,7 +198,7 @@ bool CGame::Start()
 	guiManager_.AddWindow ( specialWindow_["QUIT"] = new gui::CQuitWindow );
 	guiManager_.AddWindow ( specialWindow_["TERMINAL"] = new gui::CTerminalWindow );
 	guiManager_.AddWindow ( new gui::CHeaderWindow );
-	std::cout << guiManager_.AddWindow ( new gui::CSelectWindow )->GetPosition().x << std::endl;;
+	guiManager_.AddWindow ( new gui::CSelectWindow );
 
 	/* Set view point */
 	viewPoint_ = new sf::View( sf::FloatRect ( 0, 0, settings::GetWidth(), settings::GetHeight() ) );

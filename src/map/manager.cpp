@@ -59,8 +59,6 @@ void CMapManager::Initialize()
 	selectedRect_ = sf::Rect < float > ( 0, 0, 0, 0 );
 	this->UnSetPos();
 	
-// 	systems_.push_back ( new CSystem() );
-// 	systems_.at(0)->AddSprite( newShip2 );
 }
 
 
@@ -68,7 +66,6 @@ void CMapManager::Render()
 {
 	sf::RenderWindow* app = GetGameClass()->GetApp();
 
-	
 	/* Draw sprites */
 	std::vector < CSystem* >::iterator sysIter = systems_.begin();
 	std::vector < CSystem* >::iterator sysIterEnd = systems_.end();
@@ -253,19 +250,35 @@ void CMapManager::Move ( sf::Vector2f newPos )
 }
 
 
-CSystem* CMapManager::AddSystem ( CSystem* system )
+CSystem* CMapManager::CreateSystem()
 {
+	CSystem* system = new CSystem;
 	
+	if ( !systems_.empty() ) {
+		CSystem* lastSystem = *(systems_.end()-1);
+		system->SetPositionX ( lastSystem->GetPositionX() + lastSystem->GetSizeX() );
+		system->SetPositionY ( lastSystem->GetPositionY() + lastSystem->GetSizeY() );
+	}
+	
+	systems_.push_back ( system );	
+
+	return system;
 }
 
 
 
-sprite::CSprite* CMapManager::AddSprite ( sprite::CSprite* sprite )
+sprite::CSprite* CMapManager::AddSprite ( int systemID, sprite::CSprite* sprite )
 {
 	if ( !sprite )
 		return NULL;
-	else
-		spriteList_.push_back ( sprite );	
+	else {
+		try {
+			systems_.at ( systemID )->AddSprite ( sprite );
+		} catch ( std::out_of_range &e ) {
+			GetGameClass()->Error ( "Could not find 'system' with ID '" + util::lCast<std::string>( systemID ) + "'", __PRETTY_FUNCTION__, __FILE__, __LINE__ );
+			return NULL;
+		}
+	}
 	
 	return sprite;
 }

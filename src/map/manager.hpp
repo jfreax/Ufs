@@ -42,8 +42,8 @@ class CMapManager
 		
 		void Move ( sf::Vector2f newPos );
 
-		CSystem* AddSystem ( CSystem* system );
-		sprite::CSprite* AddSprite ( sprite::CSprite* sprite );
+		CSystem* CreateSystem();
+		sprite::CSprite* AddSprite (  int systemID, sprite::CSprite* sprite );
 		std::vector < sprite::CSprite* >& GetSelectedSprites();
 		
 		gui::CWidget* GetSpecialWidget ( std::string name );

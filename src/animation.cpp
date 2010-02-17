@@ -145,7 +145,6 @@ void CAnimation::SetBlur ( int blur )
 
 sf::Vector2f CAnimation::GetSize()
 {
-// 	std::cout << frameWidth_ << std::endl;
 	return sf::Vector2f ( frameWidth_, image_->GetHeight() );
 }
 

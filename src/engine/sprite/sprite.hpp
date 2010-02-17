@@ -80,10 +80,9 @@ class CSprite : public sf::Drawable
 		sf::Shape* gfxMarker_;
 		float markerAPos_;
 		
-		/*  */
 		float zoomLevel_;
 		float zoomFactor_;
-		};
+};
 
 
 } /* namespace sprite */

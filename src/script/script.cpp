@@ -81,6 +81,12 @@ void Initialize ( void* UserData )
 	luabind::module ( luaState ) [
 		luabind::class_ <sf::Drawable> ( "Drawable" ),
 			
+		luabind::class_ <CSystem, sf::Drawable> ( "System" )
+			.def ( luabind::constructor<>() )
+			.def ( "addSprite", &CSystem::AddSprite )
+			.property ( "x", &CSystem::GetPositionX, &CSystem::SetPositionX )
+			.property ( "y", &CSystem::GetPositionY, &CSystem::SetPositionY ),
+			
 		luabind::class_ <sprite::CSprite, sf::Drawable> ( "Sprite" )
 			.def ( luabind::constructor<>() )
 			.property ( "x", &sprite::CSprite::GetPositionX, &sprite::CSprite::SetPositionX )
@@ -97,6 +103,7 @@ void Initialize ( void* UserData )
 			.def ( luabind::constructor<>() ),
 			
 		luabind::class_ <CMapManager> ("MapManager" )
+			.def ( "createSystem", &CMapManager::CreateSystem )
 			.def ( "addSprite", &CMapManager::AddSprite )
 			.def_readonly ( "zoomLevel", &CMapManager::GetZoomLevel )
 			.def_readonly ( "selectedSprites", &CMapManager::GetSelectedSprites, luabind::return_stl_iterator )

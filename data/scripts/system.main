@@ -23,8 +23,6 @@ function test2()
 	 end
 end
 
-
-
 -- include files --
 include ( "system.functions.map" )
 include ( "system.enum" )
@@ -39,5 +37,8 @@ include ( "examples" ) -- @TODO only test data
 
 -- last include ! --
 include ( "system.functions" )
+
+
+
 
 setLoadProgress ( 100 )

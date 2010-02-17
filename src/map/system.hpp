@@ -29,13 +29,27 @@
 class CSystem : public sf::Drawable
 {
 	public:
+		CSystem ();
+		
 		void Render ( sf::RenderTarget& Target ) const;
 		void Update();
 		
 		sprite::CSprite* AddSprite ( sprite::CSprite* sprite );
 		std::vector < sprite::CSprite* >& GetSprites();
+		
+		float GetPositionX() const;
+		float GetPositionY() const;
+		void SetPositionX ( float x );
+		void SetPositionY ( float y );
+		
+		void SetSize ( float width, float height );
+		float GetSizeX() const;
+		float GetSizeY() const;
+		
 	private:
 		std::vector < sprite::CSprite* >  spriteList_;
+		
+		sf::Vector2f size_;
 		
 };
 
