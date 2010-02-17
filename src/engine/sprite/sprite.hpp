@@ -41,21 +41,29 @@ class CSprite : public sf::Drawable
 		virtual void Update();
 		virtual void UpdateMarker();
 		
-		unsigned int GetId();
+		virtual void CalcGFX();
 		
-		unsigned int GetPlayer();
+		float GetPositionX() const;
+		void SetPositionX ( float x );
+		
+		float GetPositionY() const;
+		void SetPositionY ( float y );
+		
+		unsigned int GetId() const;
+		
+		unsigned int GetPlayer() const;
 		void SetPlayer ( unsigned int player );
 		
-		sf::Rect<float> GetDimension();
-		sf::Image* GetMiniImage();
+		sf::Rect<float> GetDimension() const;
+		sf::Image* GetMiniImage() const;
 		
 		void Scale ( double scale );
 		
 		void SetZoomLevel ( float zLevel );
-		float GetZoomLevel();
+		float GetZoomLevel() const;
 		
 		void SetZoomFactor ( float factor );
-		float GetZoomFactor();
+		float GetZoomFactor() const;
 
 	protected:
 		unsigned int id_;
@@ -69,8 +77,8 @@ class CSprite : public sf::Drawable
 		sf::Image* miniImage_;
 		sf::Shape mask_;
 		
-		bool drawMarker_;
-		sf::Shape* bgMarker_;
+		sf::Shape* gfxMarker_;
+		float markerAPos_;
 		
 		/*  */
 		float zoomLevel_;

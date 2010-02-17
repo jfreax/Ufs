@@ -1,4 +1,4 @@
--- @version 0003
+-- @version 0004
 -- @author "JDieskau" <JDieskau _at_ web _dot_ de>
 
 
@@ -8,24 +8,33 @@ function include ( filename )
   -- write report --
   io.write( string.format( "Loading scriptfile \"" .. filename .. "\" ...\n" ) );
 
-  dofile ( getPath() .. "/scripts/" .. filename );
--- 
+  dofile ( path() .. "/scripts/" .. filename );
+
 -- local info = debug.getinfo( 1, "Sl")
 --   print ( info.source );
 
 end
 
 
+function test2()
+	 list_iter = mapManager().selectedSprites
+	 for one_sprite in list_iter do
+		  print( "Player ID of selected sprite " .. one_sprite.player )
+	 end
+end
+
+
 -- include files --
 include ( "system.functions.map" )
 include ( "system.enum" )
--- 
+
 include ( "lib.main" )
 include ( "map.main" )
 include ( "universe.main" )
 
 
 include ( "game.main" ) -- @TODO Include by cpp at the right time!
+include ( "examples" ) -- @TODO only test data
 
 -- last include ! --
 include ( "system.functions" )

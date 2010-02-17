@@ -15,12 +15,12 @@
 */
 
 
-#include "sprite/sun.hpp"
-#include "sprite/planet.hpp"
-#include "sprite/ship.hpp"
+#include "../sprite/sun.hpp"
+#include "../sprite/planet.hpp"
+#include "../sprite/ship.hpp"
 
-#include "game.hpp"
-#include "mapmanager.hpp"
+#include "../game.hpp"
+#include "manager.hpp"
 
 
 CMapManager::~CMapManager()
@@ -41,20 +41,24 @@ void CMapManager::Initialize()
 	zoomed_ = 0;
 	
 	/* Only test data */
-	sprite::CSprite* newSprite = AddSprite ( new sprite::CSun );
+	sprite::CSprite* newSprite =/* AddSprite (*/ new sprite::CSun /*)*/;
 	newSprite->SetPosition ( 100, 100 );
 	
-	sprite::CSprite* newSprite2 = AddSprite ( new sprite::CPlanet );
-	newSprite2->SetPosition ( 4000, 4000 );
+	/* BUG Why is this necessary? luabind! */
+	sprite::CSprite* newSprite2 = /*AddSprite ( */new sprite::CPlanet /*)*/;
+	delete newSprite2;
+// 	newSprite2->SetPosition ( 4000, 4000 );
 	
-	sprite::CSprite* newShip = AddSprite ( new sprite::CShip );
-	newShip->SetPosition ( 300, 300 );
+// 	sprite::CSprite* newShip = AddSprite ( new sprite::CShip );
+// 	newShip->SetPosition ( 300, 300 );
 	
 	sprite::CSprite* newShip2 = AddSprite ( new sprite::CShip );
-	newShip2->SetPosition ( 400, 400 );
+	newShip2->SetPosition ( 1000, 400 );
+	
+// 	sprite::CSprite* newShip3 = AddSprite ( new sprite::CSprite );
 
-	if ( !newSprite || !newShip )
-		std::cout << "FAILED" << std::endl;
+// 	if ( !newSprite || !newShip )
+// 		std::cout << "FAILED" << std::endl;
 	
 	selectedRect_ = sf::Rect < float > ( 0, 0, 0, 0 );
 	
@@ -217,10 +221,10 @@ void CMapManager::Zoom ( int direction, bool fade )
 	lastZoomDirection_ = direction;
 	
 	if ( direction == 1 ) {
-// 		if ( this->GetZoomLevel() < 6 ) { /* maximum zoom level */
+		if ( this->GetZoomLevel() < 6 ) { /* maximum zoom level */
 			GetGameClass()->GetViewPoint()->Zoom ( 1 + zoomStep*(zoomed_*0.05) );
 			GetGameClass()->GetViewPoint()->Move ( deltaX * zoom, deltaY * zoom );
-// 		}
+		}
 	} else if ( direction == -1 ) {
 		if ( this->GetZoomLevel() > 0.05 ) { /* minimum zoom level */
 			GetGameClass()->GetViewPoint()->Zoom ( 1 - zoomStep*(zoomed_*0.05f) );
@@ -251,15 +255,15 @@ sprite::CSprite* CMapManager::AddSprite ( sprite::CSprite* sprite )
 	if ( !sprite )
 		return NULL;
 	else
-		spriteList_.push_back( sprite );	
+		spriteList_.push_back ( sprite );	
 	
 	return sprite;
 }
 
 
-std::vector< sprite::CSprite* >* CMapManager::GetSelectedSprites()
+std::vector< sprite::CSprite* >& CMapManager::GetSelectedSprites()
 {
-	return &selectedSpriteList_;
+	return selectedSpriteList_;
 }
 
 

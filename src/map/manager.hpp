@@ -18,12 +18,11 @@
 #define MAPMANAGER_HPP
 
 #include <vector>
-#include "engine/sprite/sprite.hpp"
-#include "engine/ui/widget.hpp"
+#include "../engine/sprite/sprite.hpp"
+#include "../engine/ui/widget.hpp"
 
 class CMapManager
 {
-
 	public:
 		CMapManager() {};
 		~CMapManager();
@@ -43,7 +42,7 @@ class CMapManager
 		void Move ( sf::Vector2f newPos );
 
 		sprite::CSprite* AddSprite ( sprite::CSprite* sprite );
-		std::vector < sprite::CSprite* >* GetSelectedSprites();
+		std::vector < sprite::CSprite* >& GetSelectedSprites();
 		
 		gui::CWidget* GetSpecialWidget ( std::string name );
 		void SetSpecialWidget ( std::string name, gui::CWidget* widget );

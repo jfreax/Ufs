@@ -6,6 +6,7 @@ add_subdirectory ( settings )
 add_subdirectory ( sprite )
 add_subdirectory ( util )
 add_subdirectory ( script )
+add_subdirectory ( map )
 
 ADD_EXECUTABLE ( ufs 
   main.cpp
@@ -16,7 +17,7 @@ ADD_EXECUTABLE ( ufs
   input.cpp
   animation.cpp
   game.cpp
-  mapmanager.cpp
+ # mapmanager.cpp
 
   engine/ui/button.cpp
 )
@@ -25,6 +26,7 @@ ADD_EXECUTABLE ( ufs
 TARGET_LINK_LIBRARIES ( ufs
   ufs_util
   ufs_settings
+  ufs_map
   ufs_sprite
   ufs_engine
   ufs_engine_sprite

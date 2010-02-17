@@ -26,10 +26,10 @@
 #include "input.hpp"
 #include "resource.hpp"
 #include "animation.hpp"
-#include "mapmanager.hpp"
+
+#include "map/manager.hpp"
+
 #include "settings/locale.hpp"
-
-
 
 
 enum GAMETYPE {

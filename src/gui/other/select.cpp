@@ -29,7 +29,7 @@ CSelectWidget::CSelectWidget()
 {
 	this->SetSize( sf::Vector2f ( 200, 200 ) );
 	
-	spriteList_ = GetGameClass()->GetMapManager()->GetSelectedSprites();
+	spriteList_ = &GetGameClass()->GetMapManager()->GetSelectedSprites();
 	wasInitialized_ = false;
 	needUpdate_ = true;
 }

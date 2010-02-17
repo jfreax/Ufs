@@ -2,6 +2,4 @@
 -- @author "JDieskau" <JDieskau _at_ web _dot_ de>
 
 -- Map all function name --
-log = getLog(10)
-dmesg = getLog(10)
-path = getPath()
+log = log(10);

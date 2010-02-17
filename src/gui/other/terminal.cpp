@@ -159,12 +159,18 @@ void CTerminal::Run()
 	/* Add a line break after command */
 	this->AddText ( L"\n" );
 	
+	if ( str == "reload " ) {
+		script::Reload();
+		this->AddText ( L"Reloading all files... ok\n" );
+		return;
+	}
+	
 	str = "return " + str;
 	const int stackSizeAtBeginning = lua_gettop ( script::GetLuaState() );
-	
+
 	luaL_loadbuffer ( script::GetLuaState(), str.c_str(), str.length(), "line" );
 	lua_pcall( script::GetLuaState(), 0, LUA_MULTRET, 0 );
-	
+		
 	const int numResults = lua_gettop ( script::GetLuaState() ) - stackSizeAtBeginning;
 	for (int i = numResults; i > 0; --i) {
 		switch (lua_type ( script::GetLuaState(), -i))
@@ -220,7 +226,7 @@ void CTerminal::Run()
 				
 	}
 	
-	lua_pop (script::GetLuaState(), numResults);
+	lua_pop ( script::GetLuaState(), numResults );
 }
 
 
@@ -288,8 +294,8 @@ void CTerminal::PressedTab()
 	
 	if ( possibleFunc.size() == 1 ) {
 		this->OverwriteLastCommandWith( (sf::Unicode::Text) possibleFunc[0] );
-		this->AddText( L"(  )" );
-		this->MoveCursor( -2 );
+		this->AddText( L"()" );
+		this->MoveCursor( -1 );
 	} else if ( possibleFunc.size() > 1 ) {
 		this->AddText( L"\n" );
 		

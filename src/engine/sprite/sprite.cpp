@@ -32,12 +32,12 @@ CSprite::CSprite()
 	
 	background_ = NULL;
 	miniImage_  = NULL;
-	bgMarker_ = NULL;
+	gfxMarker_ = NULL;
+	
+	initialized = false;
 	
 	this->SetZoomFactor ( 1.f );
-	
-	drawMarker_ = false;
-	initialized = false;
+	this->CalcGFX();
 	
 }
 
@@ -67,6 +67,7 @@ void CSprite::Render ( sf::RenderTarget& Target ) const
 {
 	Target.Draw ( mask_ );
 
+	/* Calc the static background if an image exists */
 	if ( !background_ )
 		Target.Draw ( backgroundStatic_ );		
 	else
@@ -78,8 +79,8 @@ void CSprite::DrawMarker()
 {
 	/* Save static vars */
 	static sf::RenderWindow* app = GetGameClass()->GetApp();
-
-	app->Draw ( *bgMarker_ );
+	
+	app->Draw ( *gfxMarker_ );
 }
 
 
@@ -90,7 +91,7 @@ void CSprite::Update()
 	double zoom = GetGameClass()->GetMapManager()->GetZoomLevel();
 	this->Scale ( (1/zoom + ( zoom * GetZoomLevel() )) * this->GetZoomFactor() );
 	
-	if ( true ) { /* update this only when necessary */
+	if ( true ) { /* TODO Update this only when necessary */
 		/* Update marker graphic */
 		this->UpdateMarker();
 	}
@@ -118,58 +119,63 @@ void CSprite::Update()
 void CSprite::UpdateMarker()
 {
 	static sf::Rect< float > dim;
-	static sf::Vector2f offset;
-	static double angle;
-	static float width;
-	
 	dim = this->GetDimension();
-	width = this->GetDimension().GetWidth();
 	
-	/* Delete and create then a new shape */
-	delete bgMarker_; /* TODO */
-	bgMarker_ = new sf::Shape();
-	bgMarker_->EnableFill ( false );
-	bgMarker_->EnableOutline ( true );
-	
-	
-	/* Calc the outline width */
-	float zoom = GetGameClass()->GetMapManager()->GetZoomLevel();
-	if ( zoom < 1.f ) zoom = 1.f;
-	bgMarker_->SetOutlineWidth ( (this->GetDimension().GetWidth() * (this->GetZoomLevel() +0.5)) / 4 / zoom );
-	
-	/* Set variables */
-	sf::Vector2f center ( dim.Left, dim.Top );
-	sf::Color color = sf::Color ( 30, 30, 50, 255 ); /* TODO different colors for friend/enemy/neutral... */
-	
-	/* Calc a offset for rotation */
-	static double iOffset = 0;
-	iOffset += GetGameClass()->GetApp()->GetFrameTime() * 10;
-	
-	/* Add points */
-	for ( int i = 0; i < 160; ++i ) {
-		angle = (i+iOffset) * 2 * 3.141592654f / 160;
-		offset = sf::Vector2f ( cos ( angle ), sin ( angle ) );
-		
-		if ( i > 40 && i < 80 )
-			color.a = 255 - (i*2);
-		else if ( i > 80 && i < 120 )
-			color.a = 15 + (i*2);
-		else if ( i > 120 && i < 160 )
-			color.a = 255 - ((i-80)*2);
-		
-		bgMarker_->AddPoint ( center + offset * (width+10/zoom), color, color );
-	}
+	gfxMarker_->SetPosition ( dim.Left + dim.GetWidth() * 0.5f, dim.Top + dim.GetHeight() * 0.5f );
+	gfxMarker_->SetScale ( this->GetScale().x, this->GetScale().y  );
 }
 
 
+void CSprite::CalcGFX()
+{
+	sf::Rect< float > dim;
+	sf::Vector2f offset;
+	double angle;
+	float width, gap;
+	
+	dim = this->GetDimension();
+	width = this->GetDimension().GetWidth() * 1.1;
+	gap = width - this->GetDimension().GetWidth();
+	
+	
+	/* Calc marker */
+	gfxMarker_ = new sf::Shape();
+	
 
-unsigned int CSprite::GetId()
+}
+
+
+float CSprite::GetPositionX() const
+{
+	return this->GetPosition().x;
+}
+
+
+void CSprite::SetPositionX ( float x )
+{
+	this->SetPosition ( x, GetPositionY() );
+}
+
+
+float CSprite::GetPositionY() const
+{
+	return this->GetPosition().y;
+}
+
+
+void CSprite::SetPositionY ( float y )
+{
+	this->SetPosition ( GetPositionX(), y );
+}
+
+
+unsigned int CSprite::GetId() const
 {
 	return id_;
 }
 
 
-unsigned int CSprite::GetPlayer()
+unsigned int CSprite::GetPlayer() const
 {
 	return player_;
 }
@@ -182,7 +188,7 @@ void CSprite::SetPlayer ( unsigned int player )
 
 
 
-sf::Rect<float> CSprite::GetDimension()
+sf::Rect<float> CSprite::GetDimension() const
 {
 	sf::Vector2f offset;
 	
@@ -191,12 +197,12 @@ sf::Rect<float> CSprite::GetDimension()
 	else
 		offset = sf::Vector2f ( backgroundStatic_.GetSize() );
 	
-	return sf::Rect<float> ( GetPosition().x - GetCenter().x * this->GetScale().x, GetPosition().y - GetCenter().y * this->GetScale().y,
-				 GetPosition().x - GetCenter().x * this->GetScale().x + offset.x * this->GetScale().x, GetPosition().y - GetCenter().y * this->GetScale().y + offset.y * this->GetScale().y );
+	return sf::Rect<float> ( GetPosition().x - GetCenter().x * this->GetScale().x * 2.f, GetPosition().y - GetCenter().y * this->GetScale().y * 2.f,
+				 GetPosition().x - GetCenter().x * this->GetScale().x + offset.x * this->GetScale().x * 0.5f, GetPosition().y - GetCenter().y * this->GetScale().y + offset.y * this->GetScale().y * 0.5f );
 }
 
 
-sf::Image* CSprite::GetMiniImage()
+sf::Image* CSprite::GetMiniImage() const
 {
 	return miniImage_;
 }
@@ -210,7 +216,7 @@ void CSprite::Scale ( double scale )
 }
 
 
-float CSprite::GetZoomLevel()
+float CSprite::GetZoomLevel() const
 {
 	return zoomLevel_;
 }
@@ -227,7 +233,8 @@ void CSprite::SetZoomFactor ( float factor ) {
 }
 
 
-float CSprite::GetZoomFactor() {
+float CSprite::GetZoomFactor() const
+{
 	return zoomFactor_;
 }
 

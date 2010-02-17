@@ -4,18 +4,30 @@
 function spawn ( type, coordX, coordY )
 	return switch(type) : caseof {
 		  [window] = function (x)
-			   return "okok"
 
 			   end,
 		  [ship] = function (x) 
+			   new = Ship();
+			   new.x = coordX;
+			   new.y = coordY;
 
+			   return mapManager():addSprite ( new );
 
 			   end,
 		  [sun] = function (x) 
+			   new = Sun();
+			   new.x = coordX;
+			   new.y = coordY;
 
+			   return mapManager():addSprite ( new );
 
 			   end,
 		  [planet] = function (x) 
+			   new = Planet();
+			   new.x = coordX;
+			   new.y = coordY;
+
+			   return mapManager():addSprite ( new );
 
 
 			   end,

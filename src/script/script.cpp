@@ -25,17 +25,22 @@ extern "C"
 #include <luabind/class.hpp>
 #include <luabind/function.hpp>
 #include <luabind/object.hpp>
+#include <luabind/iterator_policy.hpp>
 
 #include "script.hpp"
 
 #include "../game.hpp"
+
 #include "../settings/settings.hpp"
 #include "../engine/sprite/sprite.hpp"
 #include "../sprite/sun.hpp"
+#include "../sprite/planet.hpp"
+#include "../sprite/ship.hpp"
 
 
 namespace script
 {
+
 	
 /* Create a new lua state */
 lua_State* luaState = lua_open();
@@ -49,25 +54,59 @@ void Initialize()
 	
 	/* Export functions */
 	luabind::module ( luaState ) [
-		luabind::def ( "getLog", GetLog ),
-		luabind::def ( "getPath", settings::GetPath )
+		luabind::def ( "log", GetLog ),
+		luabind::def ( "path", settings::GetPath ),
+		luabind::def ( "mapManager", GetMapManager )
 		
 	];
 	
 	/* Export our class with LuaBind */
 	luabind::module ( luaState ) [
-		luabind::class_<CMapManager>("MapManager")
-			.def_readonly ("ZoomLevel", &CMapManager::GetZoomLevel )
+		luabind::class_ <sf::Drawable> ( "Drawable" ),
+			
+		luabind::class_ <sprite::CSprite, sf::Drawable> ( "Sprite" )
+			.def ( luabind::constructor<>() )
+			.property ( "x", &sprite::CSprite::GetPositionX, &sprite::CSprite::SetPositionX )
+			.property ( "y", &sprite::CSprite::GetPositionY, &sprite::CSprite::SetPositionY )
+			.property ( "player", &sprite::CSprite::GetPlayer, &sprite::CSprite::SetPlayer ),
+			
+		luabind::class_ <sprite::CPlanet, luabind::bases<sprite::CSprite, sf::Drawable> > ( "Planet" )
+			.def ( luabind::constructor<>() ),
+			
+		luabind::class_ <sprite::CSun, luabind::bases<sprite::CSprite, sf::Drawable> > ( "Sun" )
+			.def ( luabind::constructor<>() ),
+			
+			luabind::class_ <sprite::CShip, luabind::bases<sprite::CSprite, sf::Drawable> > ( "Ship" )
+			.def ( luabind::constructor<>() ),
+			
+		luabind::class_ <CMapManager> ("MapManager" )
+			.def ( "addSprite", &CMapManager::AddSprite )
+			.def_readonly ( "zoomLevel", &CMapManager::GetZoomLevel )
+			.def_readonly ( "selectedSprites", &CMapManager::GetSelectedSprites, luabind::return_stl_iterator )
 	];
 	
 	
 	std::string filename = settings::GetPath() + "scripts/system.main";
 	if ( luaL_dofile( luaState, filename.c_str() ) ) {
-		GetGameClass()->Error ( "Could not open script: " + filename, __PRETTY_FUNCTION__, __FILE__, __LINE__ );
+		GetGameClass()->Error ( lua_tostring(luaState, -1), __PRETTY_FUNCTION__, __FILE__, __LINE__ );
 		return;
 	}
 
+}
 
+
+void Quit()
+{
+	lua_close ( luaState );
+}
+
+
+void Reload()
+{
+	Quit();
+
+	luaState = lua_open();
+	Initialize();
 }
 
 
@@ -93,6 +132,13 @@ std::string GetLog ( int i )
 			
 	return ret;
 }
+
+
+CMapManager* GetMapManager()
+{
+	return GetGameClass()->GetMapManager();
+}
+
 	
 	
 } /* namespace script */

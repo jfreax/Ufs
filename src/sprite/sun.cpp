@@ -121,7 +121,7 @@ void CSun::Update ( void )
 
 	/* Partikelsystem akualisieren */
 // 	particle.Draw ( );
-	particle.Update();
+// 	particle.Update();
 	
 }
 

@@ -35,9 +35,16 @@ class CShip : public CSprite, public CMoveAble
 		void Render ( sf::RenderTarget& Target ) const;
 		
 		void Update();
+		void CalcGFX();
+		
+		void SetRotation ( float Rotation );
 	private:
+		int nbShield_;
+		sf::Shape* gfxShields_;
+		int* shieldPos_;
+		int shieldRotation_;
 };
 
-}
+} /* namespace sprite */
 
 #endif // SHIP_HPP

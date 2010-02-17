@@ -9,3 +9,5 @@ function createUniverse ( size, nb_ai_player, nb_human_player )
 
 
 end
+
+-- createUniverse ( 50, 3, 1 );

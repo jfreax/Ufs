@@ -33,7 +33,7 @@ CInput::CInput ( )
 	availableKeys["k"] = sf::Key::K;
 	availableKeys["l"] = sf::Key::L;
 	availableKeys["m"] = sf::Key::M;
-// 	availableKeys["n"] = sf::Key::N; // TODO FIXME BUG what the hack???
+ //	availableKeys["n"] = sf::Key::N; // TODO FIXME BUG what the hack???
 	availableKeys["o"] = sf::Key::O;
 	availableKeys["p"] = sf::Key::P;
 	availableKeys["q"] = sf::Key::Q;
