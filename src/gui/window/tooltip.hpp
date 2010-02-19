@@ -36,6 +36,8 @@ class CTooltip : public CWindow
 		void Update();
 		
 		void ChangeTransparency ( unsigned int alpha );
+		
+		void SetText ( std::string string );
 
 	private:
 		CWidget* motherWidget_;
@@ -45,5 +47,7 @@ class CTooltip : public CWindow
 };
 
 } /* namespace gui */
+
+
 
 #endif // TOOLTIP_HPP

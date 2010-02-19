@@ -19,25 +19,32 @@
 #include "../sprite/planet.hpp"
 #include "../sprite/ship.hpp"
 
+#include "../engine/ui/window.hpp"
+#include "../gui/window/tooltip.hpp"
 #include "../game.hpp"
 #include "manager.hpp"
 
 
 CMapManager::~CMapManager()
 {
-	std::vector < sprite::CSprite* >::iterator iter = spriteList_.begin();
-	std::vector < sprite::CSprite* >::iterator iterEnd = spriteList_.end();
-	
-	for ( ; iter != iterEnd ; ++iter ) {
-		delete (*iter);
-	}
+	std::vector < CSystem* >::iterator sysIter = systems_.begin();
+	std::vector < CSystem* >::iterator sysIterEnd = systems_.end();
+	for ( ; sysIter != sysIterEnd ; ++sysIter )
+		delete ( *sysIter );
+// 	std::vector < sprite::CSprite* >::iterator iter = spriteList_.begin();
+// 	std::vector < sprite::CSprite* >::iterator iterEnd = spriteList_.end();
+// 	for ( ; iter != iterEnd ; ++iter ) {
+// 		delete (*iter);
+// 	}
 }
 
 
 
 void CMapManager::Initialize()
 {
-// 	zoomStep_ = 0.1f;
+// 	lastMarkedSystem_ = NULL;
+	
+	viewMode_ = SYSTEM;
 	zoomed_ = 0;
 	
 	/* Only test data */
@@ -47,15 +54,10 @@ void CMapManager::Initialize()
 	/* BUG Why is this necessary? luabind! */
 	sprite::CSprite* newSprite2 = /*AddSprite ( */new sprite::CPlanet /*)*/;
 	delete newSprite2;
-// 	newSprite2->SetPosition ( 4000, 4000 );
-	
-// 	sprite::CSprite* newShip = AddSprite ( new sprite::CShip );
-// 	newShip->SetPosition ( 300, 300 );
-	
+
 	sprite::CSprite* newShip2 = /*AddSprite ( */new sprite::CShip/* )*/;
 	newShip2->SetPosition ( 500, 400 );
 	
-// 	sprite::CSprite* newShip3 = AddSprite ( new sprite::CSprite );
 	selectedRect_ = sf::Rect < float > ( 0, 0, 0, 0 );
 	this->UnSetPos();
 	
@@ -104,20 +106,22 @@ void CMapManager::Update()
 	
 	/* Change to galaxy view */
 	double zoom = GetGameClass()->GetMapManager()->GetZoomLevel();
-	std::cout << lastZoomDirection_ << std::endl;
-	if ( lastZoomDirection_ == -1 && zoom < 0.1 && zoom > 0.02 ) {
+	if ( lastZoomDirection_ == -1 && zoom < 0.15f && zoom > 0.02f ) {
 		this->Zoom ( -1 );
+		viewMode_ = GALAXY;
 	}
-	if ( lastZoomDirection_ == 1 && zoom < 0.1 ) {
-		this->Zoom ( 1, false );
+	if ( lastZoomDirection_ == 1 && zoom < 0.10f ) {
+		this->Zoom ( 1, false, false );
+		
+	}
+	if ( lastZoomDirection_ == 1 && zoom > 0.14f ) {
+		viewMode_ = SYSTEM;
 	}
 }
 
 
 bool CMapManager::MouseClick ( const int mouseX, const int mouseY, const sf::Mouse::Button button )
 {
-	int x = this->ConvertCoords ( mouseX );
-	int y = this->ConvertCoords ( mouseY );
 	
 	switch ( button ) {
 		case sf::Mouse::Left:
@@ -126,27 +130,31 @@ bool CMapManager::MouseClick ( const int mouseX, const int mouseY, const sf::Mou
 			std::vector < CSystem* >::iterator sysIter = systems_.begin();
 			std::vector < CSystem* >::iterator sysIterEnd = systems_.end();
 			for ( ; sysIter != sysIterEnd ; ++sysIter ) {
-
-				std::vector < sprite::CSprite* >::iterator iter = (*sysIter)->GetSprites().begin();
-				std::vector < sprite::CSprite* >::iterator iterEnd = (*sysIter)->GetSprites().end();
-				for ( ; iter != iterEnd ; ++iter ) {
-
-					if ( !settings::GetSelect() ) {
-						settings::SetSelect();
-						selectedRect_.Left = selectedRect_.Right = mouseX;
-						selectedRect_.Top = selectedRect_.Bottom = mouseY;
-					} else {
+				
+				if ( !settings::GetSelect() ) {
+					settings::SetSelect();
+					selectedRect_.Left = selectedRect_.Right = mouseX;
+					selectedRect_.Top = selectedRect_.Bottom = mouseY;
+				} else {
+					selectedRect_.Right = mouseX;
+					selectedRect_.Bottom = mouseY;
 					
-						selectedRect_.Right = mouseX;
-						selectedRect_.Bottom = mouseY;
+					/* Test only the sun-sprites in galaxy view */
+					if ( this->GetViewMode() == GALAXY ) {
 					
-						sf::Rect< float > selectedRectInGameCoord = this->ConvertCoords ( selectedRect_ );
-						if ( ( *iter )->GetDimension().Intersects ( selectedRectInGameCoord ) ) {
-							selectedSpriteList_.push_back ( *iter );
+					
+					} else { /* Iterate all sprite */
+						std::vector < sprite::CSprite* >::iterator iter = (*sysIter)->GetSprites().begin();
+						std::vector < sprite::CSprite* >::iterator iterEnd = (*sysIter)->GetSprites().end();
+						for ( ; iter != iterEnd ; ++iter ) {
+							sf::Rect< float > selectedRectInGameCoord = this->ConvertCoords ( selectedRect_ );
+							if ( ( *iter )->GetDimension().Intersects ( selectedRectInGameCoord ) ) {
+								selectedSpriteList_.push_back ( *iter );
+							}
+					
+							if ( this->GetSpecialWidget ( "MINI_OBJECT" ) )
+								this->GetSpecialWidget ( "MINI_OBJECT" )->Call();
 						}
-					
-						if ( this->GetSpecialWidget ( "MINI_OBJECT" ) )
-							this->GetSpecialWidget ( "MINI_OBJECT" )->Call();
 					}
 				}
 			}
@@ -158,39 +166,19 @@ bool CMapManager::MouseClick ( const int mouseX, const int mouseY, const sf::Mou
 
 bool CMapManager::MouseClickReleased ( const int mouseX, const int mouseY, const sf::Mouse::Button button )
 {
-	std::vector < sprite::CSprite* >::iterator iter = spriteList_.begin();
-	std::vector < sprite::CSprite* >::iterator iterEnd = spriteList_.end();
-	
-	int x = this->ConvertCoords ( mouseX );
-	int y = this->ConvertCoords ( mouseY );
-	
+	int x = this->ConvertCoordsX ( mouseX );
+	int y = this->ConvertCoordsY ( mouseY );
 	
 	sf::Rect< float > selectedRectInGameCoord = this->ConvertCoords ( selectedRect_ );
 
-	
 	switch ( button ) {
 		case sf::Mouse::Left:
 			settings::SetSelect ( false );
-// 			selectedRect_.Left = selectedRect_.Right = 0;
-// 			selectedSpriteList_.clear();
-			
-			for ( ; iter != iterEnd ; ++iter ) {
-				/* Select rect was formed... find out which sprites selected */
-// 				if ( settings::GetSelect() ) {
-// // 					if ( selectedRect_.Contains ( ( *iter)->GetCenter() ) ) {
-// 					if ( ( *iter )->GetDimension().Intersects ( selectedRectInGameCoord ) ) {
-// 						selectedSpriteList_.push_back ( *iter );
-// 					}
-// 					this->GetSpecialWidget( "MINI_OBJECT" )->Call();
-// 				}
-				if ( ( *iter )->GetDimension().Contains( x, y ) ) {
-				}
-				
-
-			}
-			
-			
 			selectedRect_.Left = selectedRect_.Top = 0;
+			
+			if ( this->GetViewMode() == GALAXY ) {
+				this->Zoom ( 1 );
+			}
 
 			break;
 			
@@ -198,33 +186,46 @@ bool CMapManager::MouseClickReleased ( const int mouseX, const int mouseY, const
 }
 
 
-void CMapManager::MoveZoomStep ( double step )
+bool CMapManager::MouseHover ( const int mouseX, const int mouseY )
 {
-// 	zoomStep_ += step;
+	int x = this->ConvertCoordsX ( mouseX );
+	int y = this->ConvertCoordsY ( mouseY );
 	
-// 	std::cout << "2: " << zoomStep_ << std::endl;
+	std::vector < CSystem* >::iterator sysIter = systems_.begin();
+	std::vector < CSystem* >::iterator sysIterEnd = systems_.end();
+	for ( ; sysIter != sysIterEnd ; ++sysIter ) {
+		/* When we are on galaxy view... */
+		if ( this->GetViewMode() == GALAXY ) {
+			/* ... and the mouse is over a sun... */
+			if ( (*sysIter)->GetDimension().Contains( x, y ) ) {
+				/* ... then show tooltip */
+				if ( GetGameClass()->GetSpecialWindow ( "GALAXY_TOOLTIP" ) ) {
+					dynamic_cast< gui::CTooltip* > ( GetGameClass()->GetSpecialWindow ( "GALAXY_TOOLTIP" ) )->SetText ( (*sysIter)->GetInfoText() );
+							
+					GetGameClass()->GetSpecialWindow ( "GALAXY_TOOLTIP" )->SetShow ( true );
+					GetGameClass()->GetSpecialWindow ( "GALAXY_TOOLTIP" )->AdjustSize();
+					GetGameClass()->GetSpecialWindow ( "GALAXY_TOOLTIP" )->SetPosition( sf::Vector2f (mouseX+20, mouseY) );
+					
+					/* and show glow of the sun */
+					(*sysIter)->GetSun().ShowGlow();
+					
+					lastMarkedSystem_ = (*sysIter);
+				}
+			}
+		}
+	}
 	
-// 	if ( zoomStep_ <= 0.005 )
-// 		zoomStep_ = 0.005;
-// 	else if ( zoomStep_ > 0.2f )
-// 		zoomStep_ = 0.2f;
+	return true;
 }
 
 
-
-void CMapManager::Zoom ( int direction, bool fade )
+void CMapManager::Zoom ( int direction, bool fade, bool deltaMove )
 {
 	static const sf::Input* input = &GetGameClass()->GetApp()->GetInput();
 	static double zoomStep = 0.02f;
 	static int deltaX, deltaY;
 	double zoom = 1/ GetGameClass()->GetMapManager()->GetZoomLevel() * (0.03);
 	
-
-// 		zoomStep = 0.05f;
-// 	else if ( zoom < 0.2 )
-// 		zoomStep = 0.1f;
-// 	else
-// 		zoomStep = 0.01f;
 	
 	if ( !fade ) {
 		deltaX = input->GetMouseX() - (GetGameClass()->GetApp()->GetWidth()  * 0.5f);
@@ -238,15 +239,21 @@ void CMapManager::Zoom ( int direction, bool fade )
 	lastZoomDirection_ = direction;
 	
 	if ( direction == 1 ) {
-		if ( this->GetZoomLevel() < 6 ) { /* maximum zoom level */
+		if ( this->GetZoomLevel() < 6.f ) { /* maximum zoom level */
 			GetGameClass()->GetViewPoint()->Zoom ( 1 + zoomStep*(zoomed_*0.05) );
-			GetGameClass()->GetViewPoint()->Move ( deltaX * zoom, deltaY * zoom );
+			
+			if ( this->GetViewMode() == GALAXY && lastMarkedSystem_ ) {
+				GetGameClass()->GetViewPoint()->Move ( (lastMarkedSystem_->GetPositionX() + lastMarkedSystem_->GetSun().GetPositionX() - GetGameClass()->GetViewPoint()->GetCenter().x ) / 10.f,
+								       (lastMarkedSystem_->GetPositionY() + lastMarkedSystem_->GetSun().GetPositionY() - GetGameClass()->GetViewPoint()->GetCenter().y ) / 10.f );
+			} else if ( deltaMove ) {
+				GetGameClass()->GetViewPoint()->Move ( deltaX * zoom, deltaY * zoom );
+			}
 		}
 	} else if ( direction == -1 ) {
-// 		if ( this->GetZoomLevel() > 0.05 ) { /* minimum zoom level */
+		if ( this->GetZoomLevel() > 0.006f ) { /* minimum zoom level */
 			GetGameClass()->GetViewPoint()->Zoom ( 1 - zoomStep*(zoomed_*0.05f) );
 			GetGameClass()->GetViewPoint()->Move ( deltaX * 0.5f * zoom, deltaY * 0.5f * zoom );
-// 		}
+		}
 	}
 }
 
@@ -267,9 +274,9 @@ void CMapManager::Move ( sf::Vector2f newPos )
 }
 
 
-CSystem* CMapManager::CreateSystem()
+CSystem* CMapManager::CreateSystem ( std::string name )
 {
-	CSystem* system = new CSystem;
+	CSystem* system = new CSystem ( name );
 	
 	if ( !systems_.empty() ) {
 		CSystem* lastSystem = *(systems_.end()-1);
@@ -329,6 +336,16 @@ void CMapManager::UnSetPos()
 }
 
 
+VIEWMODE CMapManager::GetViewMode()
+{
+	return viewMode_;
+}
+
+
+
+/* PRIVATE */
+
+
 sf::Rect< float > CMapManager::ConvertCoords ( sf::Rect< float > rect )
 {
 	static sf::RenderWindow* app = GetGameClass()->GetApp();
@@ -359,10 +376,17 @@ sf::Vector2f CMapManager::ConvertCoords ( sf::Vector2f vector )
 }
 
 
-float CMapManager::ConvertCoords ( float f )
+float CMapManager::ConvertCoordsX ( float f )
 {
 	static sf::RenderWindow* app = GetGameClass()->GetApp();
 	return app->ConvertCoords ( f, 0, GetGameClass()->GetViewPoint() ).x;
+}
+
+
+float CMapManager::ConvertCoordsY ( float f )
+{
+	static sf::RenderWindow* app = GetGameClass()->GetApp();
+	return app->ConvertCoords ( 0, f, GetGameClass()->GetViewPoint() ).y;
 }
 
 

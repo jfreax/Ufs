@@ -57,7 +57,7 @@ void SetInitProgress ( int p )
 {
 	progress = p;
 	
-	if ( p == 100 ) {
+	if ( p >= 100 ) {
 		GetGameClass()->SetGameType( START );
 	}
 }
@@ -71,6 +71,9 @@ void Initialize ( void* UserData )
 	
 	/* Export functions */
 	luabind::module ( luaState ) [
+		luabind::def ( "quit", QuitGame ),
+		luabind::def ( "width", settings::GetWidth ),
+		luabind::def ( "height", settings::GetHeight ),
 		luabind::def ( "setLoadProgress", SetInitProgress),
 		luabind::def ( "log", GetLog ),
 		luabind::def ( "path", settings::GetPath ),
@@ -80,10 +83,14 @@ void Initialize ( void* UserData )
 	/* Export our class with LuaBind */
 	luabind::module ( luaState ) [
 		luabind::class_ <sf::Drawable> ( "Drawable" ),
+		luabind::class_ <sf::Color> ( "Color" )
+			.def ( luabind::constructor<>() )
+			.def ( luabind::constructor<sf::Uint8,sf::Uint8,sf::Uint8,sf::Uint8>() ),
 			
 		luabind::class_ <CSystem, sf::Drawable> ( "System" )
-			.def ( luabind::constructor<>() )
+			.def ( luabind::constructor<std::string>() )
 			.def ( "addSprite", &CSystem::AddSprite )
+			.def ( "getSun", &CSystem::GetSun )
 			.property ( "x", &CSystem::GetPositionX, &CSystem::SetPositionX )
 			.property ( "y", &CSystem::GetPositionY, &CSystem::SetPositionY ),
 			
@@ -97,9 +104,10 @@ void Initialize ( void* UserData )
 			.def ( luabind::constructor<>() ),
 			
 		luabind::class_ <sprite::CSun, luabind::bases<sprite::CSprite, sf::Drawable> > ( "Sun" )
-			.def ( luabind::constructor<>() ),
+			.def ( luabind::constructor<>() )
+			.property ( "color", &sprite::CSun::GetColor, &sprite::CSun::SetColor ),
 			
-			luabind::class_ <sprite::CShip, luabind::bases<sprite::CSprite, sf::Drawable> > ( "Ship" )
+		luabind::class_ <sprite::CShip, luabind::bases<sprite::CSprite, sf::Drawable> > ( "Ship" )
 			.def ( luabind::constructor<>() ),
 			
 		luabind::class_ <CMapManager> ("MapManager" )
@@ -162,6 +170,13 @@ CMapManager* GetMapManager()
 {
 	return GetGameClass()->GetMapManager();
 }
+
+
+void QuitGame()
+{
+	GetGameClass()->Stop();
+}
+
 
 	
 	

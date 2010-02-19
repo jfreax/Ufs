@@ -36,8 +36,10 @@
 #include "gui/window/error.hpp"
 #include "gui/window/select.hpp"
 #include "gui/window/terminal.hpp"
+#include "gui/window/tooltip.hpp"
 
 #include "gui/button/titlebar.hpp"
+#include "sprite/ship.hpp"
 
 
 
@@ -197,27 +199,25 @@ bool CGame::Start()
 	guiManager_.AddWindow ( specialWindow_["LOADING"] = new gui::CLoadWindow );
 	guiManager_.AddWindow ( specialWindow_["QUIT"] = new gui::CQuitWindow );
 	guiManager_.AddWindow ( specialWindow_["TERMINAL"] = new gui::CTerminalWindow );
+	guiManager_.AddWindow ( specialWindow_["GALAXY_TOOLTIP"] = new gui::CTooltip ( NULL, "TEST" ) );
 	guiManager_.AddWindow ( new gui::CHeaderWindow );
 	guiManager_.AddWindow ( new gui::CSelectWindow );
 
 	/* Set view point */
 	viewPoint_ = new sf::View( sf::FloatRect ( 0, 0, settings::GetWidth(), settings::GetHeight() ) );
 
+	/* Start loading screen */
+	this->SetGameType ( LOADING );
+	
 	/* Initialize lua (in a new thread!) */
 	sf::Thread luaThread ( &script::Initialize );
 	luaThread.Launch();
-
-	/* Start loading screen */
-	this->SetGameType ( LOADING );
 	
 	/* Start game loop */
 	while ( run_ ) {
 		
 		/* Keyboard and mouse input */
 		input_.Events();
-		
-		/* Calculate error window, pause window, ... */
-		this->CalcSpecialWindow();
 
 		/* Berechnenung des Spielablaufs */
 		if ( this->GetGameType() == SINGLEPLAYER || this->GetGameType() == MULTIPLAYER )
@@ -225,6 +225,9 @@ bool CGame::Start()
 
 		/* Zeichnen der GUI und Spielinhalte */
 		this->Render();
+		
+		/* Calculate error window, pause window, ... */
+		this->CalcSpecialWindow();
 	}
 
 	return true;
@@ -370,6 +373,17 @@ sf::View* CGame::GetViewPoint()
 }
 
 
+gui::CWindow* CGame::GetSpecialWindow ( std::string windowName )
+{
+	std::map < std::string, gui::CWindow* >::iterator iter = specialWindow_.find( windowName );
+	if ( iter == specialWindow_.end() )
+		return NULL;
+	else
+		return (*iter).second;
+}
+
+
+
 /* --- PRIVATE --- */
 
 bool CGame::IsVideoModeValid() /* TODO in CGame::initialize und settings::setHeight() ! */
@@ -379,16 +393,17 @@ bool CGame::IsVideoModeValid() /* TODO in CGame::initialize und settings::setHei
 }
 
 
-
 void CGame::Render()
 {
 	// Bildschirm säubern
 	app_.Clear();
 	
 	// Gamegraphic
-	app_.SetView ( *viewPoint_ );
-	mapManager_.Update();
-	mapManager_.Render();
+	if ( gametype_ != LOADING ) {
+		app_.SetView ( *viewPoint_ );
+		mapManager_.Update();
+		mapManager_.Render();
+	}
 	
 	// GUI
 	app_.SetView ( app_.GetDefaultView() );
@@ -419,6 +434,8 @@ void CGame::CalcSpecialWindow()
 	static float alpha = 230;
 	static sf::Clock clock;
 	
+	GetGameClass()->GetSpecialWindow( "GALAXY_TOOLTIP" )->SetShow( false );
+	
 	switch ( gametype_ ) {
 		case LOADING:
 			if ( alpha < 230 )
@@ -431,8 +448,6 @@ void CGame::CalcSpecialWindow()
 			blackWindow->ChangeTransparency ( alpha );
 			guiManager_.BringToFront ( blackWindow );
 			guiManager_.BringToFront ( specialWindow_ [ "LOADING" ] );
-			
-			specialWindow_ [ "LOADING" ]->SetShow();
 			return;
 		case QUIT:
 			if ( alpha < 230 )

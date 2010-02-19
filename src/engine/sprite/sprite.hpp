@@ -17,14 +17,19 @@
 #ifndef SPRITE_HPP
 #define SPRITE_HPP
 
-#include <iostream>
-#include <SFML/Graphics.hpp>
-
 #include "../../animation.hpp"
 
 
 namespace sprite
 {
+	
+	
+enum SPRITETYPE
+{
+	PLANET,
+	SUN,
+	SHIP
+};
 
 
 class CSprite : public sf::Drawable
@@ -39,6 +44,8 @@ class CSprite : public sf::Drawable
 		virtual void DrawMarker();
 		
 		virtual void Update();
+		virtual void UpdateLogic();
+		
 		virtual void UpdateMarker();
 		
 		virtual void CalcGFX();
@@ -50,6 +57,7 @@ class CSprite : public sf::Drawable
 		void SetPositionY ( float y );
 		
 		unsigned int GetId() const;
+		SPRITETYPE GetType() const;
 		
 		unsigned int GetPlayer() const;
 		void SetPlayer ( unsigned int player );
@@ -67,9 +75,10 @@ class CSprite : public sf::Drawable
 
 	protected:
 		unsigned int id_;
-		unsigned int player_;
+		SPRITETYPE spriteType_;
+		bool initialized_;
 		
-		bool initialized;
+		unsigned int player_;
 		
 		sf::Sprite backgroundStatic_;
 		CAnimation* background_;
@@ -78,12 +87,14 @@ class CSprite : public sf::Drawable
 		sf::Shape mask_;
 		
 		sf::Shape* gfxMarker_;
-		float markerRotation_;
+		float markerWidth_;
 		
 		float zoomLevel_;
 		float zoomFactor_;
 		
 		double oldZoom_;
+		
+		int alpha_; /* Overall opacity */
 };
 
 

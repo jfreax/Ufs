@@ -1,0 +1,25 @@
+function example_iterator()
+	 list_iter = mapManager().selectedSprites
+	 for one_sprite in list_iter do
+		  return "Player ID of selected sprite is " .. one_sprite.player
+	 end
+end
+
+
+function example_class_useage()
+	 b = Sprite()
+	 b.player = 1
+	 return "Player: ".. b.player
+end
+
+
+function example_move_selectedSprite(x, y)
+	 list_iter = mapManager().selectedSprites
+	 for sprite in list_iter do
+		print( "Player ID: " .. sprite.player );
+		print( "Old position: " .. sprite.x .."x" .. sprite.y )
+		sprite.x = sprite.x + x;
+		sprite.y = sprite.y + y;
+		print( "New position: " .. sprite.x .."x" .. sprite.y )
+	 end
+end

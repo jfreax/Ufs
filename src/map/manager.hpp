@@ -22,6 +22,13 @@
 #include "../engine/ui/widget.hpp"
 #include "system.hpp"
 
+
+enum VIEWMODE
+{
+	SYSTEM,
+	GALAXY
+};
+
 class CMapManager
 {
 	public:
@@ -35,14 +42,14 @@ class CMapManager
 		
 		bool MouseClick ( const int mouseX, const int mouseY, const sf::Mouse::Button button );
 		bool MouseClickReleased ( const int mouseX, const int mouseY, const sf::Mouse::Button button );
+		bool MouseHover ( const int mouseX, const int mouseY );
 		
-		void MoveZoomStep ( double step );
-		void Zoom ( int direction, bool fade = false );
+		void Zoom ( int direction, bool fade = false, bool deltaMove = true );
 		double GetZoomLevel() const;
 		
 		void Move ( sf::Vector2f newPos );
 
-		CSystem* CreateSystem();
+		CSystem* CreateSystem ( std::string name );
 		sprite::CSprite* AddSprite (  int systemID, sprite::CSprite* sprite );
 		std::vector < sprite::CSprite* >& GetSelectedSprites();
 		
@@ -51,17 +58,17 @@ class CMapManager
 		
 		void UnSetPos();
 		
-		sf::Rect<float> ConvertCoords ( sf::Rect<float> rect );
-		sf::Vector2f ConvertCoords ( sf::Vector2f vector );
-		float ConvertCoords ( float f );
+		VIEWMODE GetViewMode();
 		
 	private:
-// 		void DrawMarked();
+		sf::Rect<float> ConvertCoords ( sf::Rect<float> rect );
+		sf::Vector2f ConvertCoords ( sf::Vector2f vector );
+		float ConvertCoordsX ( float f );
+		float ConvertCoordsY ( float f );
 		
 
 	private:
 		std::vector < CSystem* > systems_;
-		std::vector < sprite::CSprite* > spriteList_;
 		std::vector < sprite::CSprite* > selectedSpriteList_;
 		
 		sf::Vector2f lastPos_;
@@ -73,6 +80,10 @@ class CMapManager
 		
 		double zoomed_;
 		int lastZoomDirection_;
+		
+		VIEWMODE viewMode_;
+		
+		CSystem* lastMarkedSystem_;
 		
 };
 

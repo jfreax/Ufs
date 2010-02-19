@@ -75,7 +75,7 @@ class CGame
 		sf::String* GetFpsStr();
 		
 		sf::View* GetViewPoint();
-		void ShowSpecialWindow ( std::string windowName );
+		gui::CWindow* GetSpecialWindow ( std::string windowName );
 		
 	private:
 		bool IsVideoModeValid();
@@ -91,8 +91,6 @@ class CGame
 		const int argc_;
 		int arg_;
 		const char* const * const argv_;
-		
-
 		
 		bool run_;
 		GAMETYPE gametype_;

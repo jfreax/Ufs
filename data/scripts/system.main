@@ -23,20 +23,24 @@ function test2()
 	 end
 end
 
+-- include lists --
+include ( "../lists/system_pre" );
+include ( "../lists/system_post" );
+
 -- include files --
-include ( "system.functions.map" )
-include ( "system.enum" )
+include ( "system.functions.map" );
+include ( "system.enum" );
 
-include ( "lib.main" )
-include ( "map.main" )
-include ( "universe.main" )
+include ( "lib.main" );
+include ( "map.main" );
+include ( "universe.main" );
 
 
-include ( "game.main" ) -- @TODO Include by cpp at the right time!
-include ( "examples" ) -- @TODO only test data
+include ( "game.main" ); -- @TODO Include by cpp at the right time!
+include ( "examples" ) ;-- @TODO only test data
 
 -- last include ! --
-include ( "system.functions" )
+include ( "system.functions" );
 
 
 

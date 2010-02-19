@@ -199,17 +199,17 @@ bool CInput::Events()
 
 	/* Live mouse-Events */
 	if ( input->IsMouseButtonDown ( sf::Mouse::Left ) ) {
-		if ( settings::GetSelect() || !guiManager->MouseClick ( input->GetMouseX(), input->GetMouseY(), sf::Mouse::Left ) ) {
+		if ( settings::GetSelect() || !guiManager->MouseClick ( input->GetMouseX(), input->GetMouseY(), sf::Mouse::Left ) )
 			/* No gui element was clicked */
 			mapManager->MouseClick ( input->GetMouseX(), input->GetMouseY(), sf::Mouse::Left );
-		}
-		
 	} else if ( input->IsMouseButtonDown ( sf::Mouse::Right ) ) {
 		guiManager->MouseClick ( input->GetMouseX(), input->GetMouseY(), sf::Mouse::Right );
 	} else if ( input->IsMouseButtonDown ( sf::Mouse::Middle ) ) {
 		guiManager->MouseClick ( input->GetMouseX(), input->GetMouseY(), sf::Mouse::Middle );
 	} else {
-		guiManager->MouseHover ( input->GetMouseX(), input->GetMouseY() );
+		if ( !guiManager->MouseHover ( input->GetMouseX(), input->GetMouseY() ) )
+			mapManager->MouseHover ( input->GetMouseX(), input->GetMouseY() );
+		
 	}
 
 

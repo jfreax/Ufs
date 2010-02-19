@@ -40,6 +40,8 @@ lua_State* GetLuaState();
 std::string GetLog ( int i = 10 );
 
 CMapManager* GetMapManager();
+
+void QuitGame();
 	
 } /* namespace script */
 

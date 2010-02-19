@@ -19,6 +19,10 @@
 
 #include "../engine/sprite/sprite.hpp"
 #include "../particle.hpp"
+#include "../engine/ui/window.hpp"
+#include "../gui/window/quit.hpp"
+#include "../map/system.hpp"
+
 
 namespace sprite
 {
@@ -32,15 +36,20 @@ class CSun : public CSprite
 		void Render ( sf::RenderTarget& Target ) const;
 
 		void Update();
-
+		void CalcGFX();
+		
+		sf::Color GetColor();
+		void SetColor ( sf::Color color );
+		
+		void ShowGlow();
 	private:
 		sf::Sprite glow_;
 		sf::Sprite brightness_;
+		
+		double showGlow_;
+		sf::Shape* galaxyGlow_;
 
 		uint8_t alpha_;
-
-// 		CParticleManager particle;
-
 };
 
 

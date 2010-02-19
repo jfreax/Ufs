@@ -22,20 +22,27 @@
 
 #include "../engine/sprite/sprite.hpp"
 
-#include <SFML/Graphics/Drawable.hpp>
-#include <bits/stl_vector.h>
+namespace sprite {
+class CSun;
+}
 
 
 class CSystem : public sf::Drawable
 {
 	public:
-		CSystem ();
+		CSystem ( std::string name );
 		
 		void Render ( sf::RenderTarget& Target ) const;
 		void Update();
 		
 		sprite::CSprite* AddSprite ( sprite::CSprite* sprite );
 		std::vector < sprite::CSprite* >& GetSprites();
+		sprite::CSun& GetSun();
+		
+		std::string GetInfoText();
+		
+		sf::Rect<float> GetDimension() const;
+// 		sf::Rect<float> GetDimensionOfSun() const;
 		
 		float GetPositionX() const;
 		float GetPositionY() const;
@@ -47,10 +54,16 @@ class CSystem : public sf::Drawable
 		float GetSizeY() const;
 		
 	private:
+		sprite::CSun* sun_;
 		std::vector < sprite::CSprite* >  spriteList_;
 		
 		sf::Vector2f size_;
 		
+		std::string infoText_;
+		std::string name_;
+		
 };
+
+
 
 #endif // SYSTEM_HPP

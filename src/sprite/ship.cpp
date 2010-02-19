@@ -25,6 +25,9 @@ namespace sprite
 
 CShip::CShip()
 {
+	alpha_ = 255;
+	spriteType_ = SHIP;
+	
 	/* Imageresourcen manager */
 	CImageResource* imageResource = GetGameClass()->GetImgResource();
 
@@ -38,19 +41,8 @@ CShip::CShip()
 	this->SetZoomFactor( 0.04 );
 	this->SetZoomLevel ( 1 );
 	
-	/* Testwerte! */
-// 	nbShield_ = 4;
-	
-// 	gfxShields_ = new sf::Shape[nbShield_];
-// 	shieldPos_ = new int[nbShield_];
-// 	shieldPos_[0] = 45;
-// 	shieldPos_[1] = 90;
-// 	shieldPos_[2] = 135;
-// 	shieldPos_[3] = 180;
-// 	shieldRotation_ = 45; /* rotation */
-	
+	markerWidth_ = this->GetDimension().GetHeight() * 2.2f;
 	this->CalcGFX();
-	
 }
 
 
@@ -64,25 +56,26 @@ void CShip::Render ( sf::RenderTarget& Target ) const
 
 void CShip::Update()
 {
-	/* run updater from sprite-class */
-	CSprite::Update();
-	
 	double zoom = GetGameClass()->GetMapManager()->GetZoomLevel();
-	if ( oldZoom_ != zoom && zoom < 0.4 ) {
-		static int alpha;
-		
+	if ( oldZoom_ != zoom && zoom < 0.6 ) {
 		oldZoom_ = zoom;
 		static sf::Color oldColor;
 		oldColor = backgroundStatic_.GetColor();
 		
-		alpha = ( (zoom-0.2f)*1275.f );
-		alpha = alpha < 0 ? 0 : alpha;
-		oldColor.a = alpha;
+		alpha_ = ( (zoom-0.4f)*1275.f );
+		alpha_ = alpha_ < 0 ? 0 : alpha_;
+		oldColor.a = alpha_;
+		backgroundStatic_.SetColor ( oldColor );
 		
-		std::cout << (int)oldColor.a  << std::endl;
-		
-		backgroundStatic_.SetColor ( oldColor );	
+		oldColor = gfxMarker_->GetColor();
+		alpha_ = ( (zoom-0.4f)*1275.f );
+		alpha_ = alpha_ < 0 ? 0 : alpha_;
+		oldColor.a = alpha_;
+		gfxMarker_->SetColor ( oldColor );
 	}
+	
+	/* run updater from sprite-class */
+	CSprite::Update();
 }
 
 

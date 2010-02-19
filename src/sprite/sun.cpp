@@ -25,6 +25,8 @@ namespace sprite
 
 CSun::CSun ()
 {
+	spriteType_ = SUN;
+	
 	/* Imageresourcen manager */
 	CImageResource* imageResource = GetGameClass()->GetImgResource();
 
@@ -55,40 +57,16 @@ CSun::CSun ()
 	glow_.SetCenter ( GetCenter() );
 	brightness_.SetCenter ( GetCenter() );
 	
-	/* Particlesystem */
-// 	particle.set_Material ( imageResource->Get ( "images/sun/fire.png"  ) );
-// 	particle.set_Dimension ( sf::Vector2i ( 8, 8 ) );
-// 	
-// 
-// 	
-// 	CEmitter nEmit ( 500, 6.2f, sf::Vector3f ( 0, 0, 0.f ) );
-// 	nEmit.set_Velocity ( 2.f, 22.f );
-// 	nEmit.set_Direction ( 90, 5.f );
-// 	nEmit.set_Position( sf::Vector3f ( 50,50,1) );
-// 	
-// 	particle.AddEmitter ( nEmit );
-
-// 	particle.set_Material ( imageResource->Get ( "images/star.png" ) );
-// 	particle.set_Dimension ( sf::Vector2i ( 500, 500 ) );
-
-	/* Neuen Emitter erstellen */
-// 	CEmitter emitter ( 100 );
-	
-	/* Emittereigenschaften setzen */
-// 	emitter.SetLife ( 10.f );
-// 	emitter.SetPosition ( sf::Vector3f ( 0, 0, 2 ) );	
-// 	emitter.SetVelocity ( 0.f, 2.f );
-// 	emitter.SetDirection ( 45, 50.f );
-	
-	/* Dem Partikelsystem den Emitter hinzufügen */
-// 	particle.AddEmitter ( emitter );
-
-// 	particle.Initialization ( 100, sf::Vector2f ( 10, 20 ), sf::Vector3f ( 100, 100, 0 ), sf::Vector2f ( 100000,300000 ), sf::Vector2f ( 40, 90 ), sf::Vector2f ( 10, 20 ), sf::Color::White );
-
-
 	/* Set properties */
 	this->SetZoomFactor( 0.4 );
 	this->SetZoomLevel ( 0.02 );
+	
+	showGlow_ = 0;
+	galaxyGlow_ = NULL;
+	
+	markerWidth_ = this->GetDimension().GetWidth() * 0.7;
+	this->CalcGFX();
+	
 }
 
 
@@ -102,11 +80,8 @@ void CSun::Render ( sf::RenderTarget& Target ) const
 	/* draw sun glow */
 	Target.Draw ( glow_ );
 	
-	/* render particlesystem */
-// 	particle.Draw();
-// 
-// 	Target.Draw ( brightness_ );
-// 	particle.Draw();
+	if ( showGlow_ )
+		Target.Draw ( *galaxyGlow_ );
 }
 
 
@@ -114,22 +89,86 @@ void CSun::Update ( void )
 {
 	/* Run updater from sprite-class */
 	CSprite::Update();
+	
+	if ( showGlow_ > 0.f ) {
+		showGlow_ -= GetGameClass()->GetApp()->GetFrameTime() * 1000;
+		galaxyGlow_->SetColor( sf::Color ( 255, 255, 255, showGlow_ ) );
+	}
+	if ( showGlow_ < 0.f )
+		showGlow_ = 0.f;
+	
 	double zoom = GetGameClass()->GetMapManager()->GetZoomLevel();
 	if ( oldZoom_ != zoom && zoom < 0.2f ) {
+		sf::Color oldColor = gfxMarker_->GetColor();
+		oldColor.a = 0;
+		gfxMarker_->SetColor( oldColor );
 		
-// 		std::cout << zoom + 1.8f << std::endl;
 		this->Scale ( zoom + 1.8f );
+	} else {
+		sf::Color oldColor = gfxMarker_->GetColor();
+		oldColor.a = 255;
+		gfxMarker_->SetColor( oldColor );
 	}
 	
-	/* Helligkeitsflimmern reinbringen */
-// 	alpha_++;
-// 	brightness_.SetColor ( sf::Color ( 255, 255, 255, alpha_ ) );
-
-	/* Partikelsystem akualisieren */
-// 	particle.Draw ( );
-// 	particle.Update();
-	
 }
+
+
+void CSun::CalcGFX()
+{
+	sprite::CSprite::CalcGFX();
+	
+	sf::Rect< float > dim;
+	sf::Vector2f offset;
+	double angle, gap;
+	float width = markerWidth_ * 2.f;
+	
+	gap = 500.f;
+	
+	sf::Color color = sf::Color ( 130, 130, 50, 255 ); 
+	sf::Vector2f center ( 0, 0 );
+	
+	/* Calc marker */
+	delete galaxyGlow_;
+	galaxyGlow_ = new sf::Shape();
+	galaxyGlow_->EnableFill ( false );
+	galaxyGlow_->EnableOutline ( true );
+	galaxyGlow_->SetOutlineWidth ( gap * 0.1f );
+	
+	for ( int j = 5; j; --j ) {
+		width -= gap * 0.1f;
+		color.a = j*40;
+		
+		for ( int i = 0; i < 180; ++i ) {
+			angle = i * 2 * 3.141592654f / 180;
+			offset = sf::Vector2f ( cos ( angle ), sin ( angle ) );
+			
+			galaxyGlow_->AddPoint ( center + offset * width, color, color );
+		}
+	}
+}
+
+
+sf::Color CSun::GetColor()
+{
+	return background_->GetColor();
+}
+
+
+void CSun::SetColor ( sf::Color color )
+{
+	background_->SetColor ( color );
+	glow_.SetColor ( color );
+}
+
+
+void CSun::ShowGlow()
+{
+	if ( showGlow_ < 255 )
+		showGlow_ += GetGameClass()->GetApp()->GetFrameTime() * 2000.f;
+	if ( showGlow_ > 255 )
+		showGlow_ = 255;
+}
+
 
 
 } /* namespace sprite */

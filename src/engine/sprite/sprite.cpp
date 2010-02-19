@@ -29,14 +29,17 @@ CSprite::CSprite()
 	id_ = ++globalId;
 	
 	player_ = 0; /* "NATURE" */
+	alpha_ = 255;
 	
 	background_ = NULL;
 	miniImage_  = NULL;
 	gfxMarker_ = NULL;
 	
-	initialized = false;
+	initialized_ = false;
 	
 	this->SetZoomFactor ( 1.f );
+	
+	markerWidth_ = this->GetDimension().GetWidth() * 1.3;
 	this->CalcGFX();
 	
 }
@@ -96,7 +99,7 @@ void CSprite::Update()
 		this->UpdateMarker();
 	}
 	
-	if ( !initialized ) {
+	if ( !initialized_ ) {
 		if ( background_ ) {	
 			this->SetCenter ( background_->GetSize().x * 0.5f,
 					  background_->GetSize().y * 0.5f );
@@ -107,7 +110,7 @@ void CSprite::Update()
 					  backgroundStatic_.GetSize().y * 0.5f );
 			 backgroundStatic_.SetCenter( this->GetCenter() );
 		}
-		initialized = true;
+		initialized_ = true;
 	}
 	
 	/* Animation berechnen */
@@ -115,23 +118,21 @@ void CSprite::Update()
 		background_->Update();
 	
 	/* Fade out */
-	if ( oldZoom_ != zoom && zoom < 0.4f ) {
+	if ( oldZoom_ != zoom && zoom < 0.6f ) {
 		static int alpha;
 		
 		static sf::Color oldColor;
-		oldColor = gfxMarker_->GetColor();
-		
-		alpha = ( (zoom-0.2f)*1275.f );
-		alpha = alpha < 0 ? 0 : alpha;
-		oldColor.a = alpha;
-		
-		gfxMarker_->SetColor ( oldColor );	
+	
 	}
 	
 	/* Rotate the marker */
-	markerRotation_ += GetGameClass()->GetApp()->GetFrameTime() * 0.5f;
-	gfxMarker_->Rotate ( markerRotation_ );
-	
+	gfxMarker_->Rotate ( GetGameClass()->GetApp()->GetFrameTime() * 120 );
+}
+
+
+void CSprite::UpdateLogic()
+{
+	/* TODO */
 }
 
 
@@ -149,17 +150,17 @@ void CSprite::CalcGFX()
 {
 	sf::Rect< float > dim;
 	sf::Vector2f offset;
-	double angle;
-	float width, gap;
+	double angle, gap;
+	float width = markerWidth_;
 	
 	dim = this->GetDimension();
-	width = this->GetDimension().GetWidth() * 1.3;
-	gap = width - this->GetDimension().GetWidth() * 1.2;
+	gap = 25;
 	
 	sf::Color color = sf::Color ( 30, 30, 50, 255 ); /* TODO Player color */
 	sf::Vector2f center ( 0, 0 );
 	
 	/* Calc marker */
+	delete gfxMarker_;
 	gfxMarker_ = new sf::Shape();
 	gfxMarker_->EnableFill ( false );
 	gfxMarker_->EnableOutline ( true );
@@ -220,6 +221,12 @@ unsigned int CSprite::GetId() const
 }
 
 
+SPRITETYPE CSprite::GetType() const
+{
+	return spriteType_;
+}
+
+
 unsigned int CSprite::GetPlayer() const
 {
 	return player_;
@@ -240,7 +247,7 @@ sf::Rect<float> CSprite::GetDimension() const
 	if ( background_ )
 		offset = background_->GetSize();
 	else
-		offset = sf::Vector2f ( backgroundStatic_.GetSize() );
+		offset = backgroundStatic_.GetSize();
 	
 	return sf::Rect<float> ( GetPosition().x - GetCenter().x * this->GetScale().x * 2.f, GetPosition().y - GetCenter().y * this->GetScale().y * 2.f,
 				 GetPosition().x - GetCenter().x * this->GetScale().x + offset.x * this->GetScale().x * 0.5f, GetPosition().y - GetCenter().y * this->GetScale().y + offset.y * this->GetScale().y * 0.5f );

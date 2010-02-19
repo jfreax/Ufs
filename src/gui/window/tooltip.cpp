@@ -48,10 +48,6 @@ CTooltip::CTooltip ( CWidget* motherWidget, std::string text ) :
 
 CTooltip::~CTooltip()
 {
-// 	delete formWin_;
-// 	delete formWinBorder_;
-// 	delete formTitlebar_;
-// 	delete titlebarImage_;
 // 	
 	std::vector< gui::CWidget* >::iterator endIter = widgetList_.end();
 	std::vector< gui::CWidget* >::iterator iter = widgetList_.begin();
@@ -67,8 +63,9 @@ CTooltip::~CTooltip()
 
 void CTooltip::Update()
 {
-	this->SetPosition ( sf::Vector2f ( motherWidget_->GetDimensionInScreen().Left - ( motherWidget_->GetDimension().GetWidth() * 0.5f ),
-	                                   motherWidget_->GetPosition().y + motherWidget_->GetDimension().GetHeight() + 2 ) );
+	if ( motherWidget_ != NULL )
+		this->SetPosition ( sf::Vector2f ( motherWidget_->GetDimensionInScreen().Left - ( motherWidget_->GetDimension().GetWidth() * 0.5f ),
+						   motherWidget_->GetPosition().y + motherWidget_->GetDimension().GetHeight() + 2 ) );
 }
 
 
@@ -86,6 +83,12 @@ void CTooltip::ChangeTransparency ( unsigned int alpha )
 // 	}
 	
  	label_->GetText()->SetColor ( textColor_ );
+}
+
+
+void CTooltip::SetText ( std::string string )
+{
+	label_->SetText ( string );
 }
 
 

@@ -26,6 +26,8 @@ namespace sprite
 
 CPlanet::CPlanet()
 {
+	spriteType_ = PLANET;
+	
 	/* Imageresourcen manager */
 	CImageResource* imageResource = GetGameClass()->GetImgResource();
 	
@@ -57,6 +59,10 @@ CPlanet::CPlanet()
 	/* Set properties */
 	this->SetZoomFactor( 0.1 );
 	this->SetZoomLevel ( 0.2 );
+	
+	
+	markerWidth_ = this->GetDimension().GetWidth() * 0.7;
+	this->CalcGFX();
 }
 
 
@@ -80,11 +86,32 @@ void CPlanet::Render ( sf::RenderTarget& Target ) const
 
 void CPlanet::Update ( void )
 {
+	double zoom = GetGameClass()->GetMapManager()->GetZoomLevel();
+	if ( oldZoom_ != zoom && zoom < 0.4 ) {
+		static sf::Color oldColor;
+		oldZoom_ = zoom;
+		
+		alpha_ = ( (zoom-0.2f)*1275.f );
+		alpha_ = alpha_ < 0 ? 0 : alpha_;
+		
+		oldColor = backgroundStatic_.GetColor();
+		oldColor.a = alpha_;
+		
+		backgroundStatic_.SetColor ( oldColor );
+		atmosphere_.SetColor ( oldColor );
+		cloud1_.SetColor ( oldColor );
+		cloud2_.SetColor ( oldColor );
+		gfxMarker_->SetColor ( oldColor );
+		
+		oldColor = shadow_.GetColor();
+		oldColor.a = alpha_ == 0 ? 0 : 255;
+		shadow_.SetColor ( oldColor );
+	}
+	
 	/* Run updater from sprite-class */
 	CSprite::Update();
 	
 	double frame = GetGameClass()->GetApp()->GetFrameTime();
-	double zoom = GetGameClass()->GetMapManager()->GetZoomLevel();
 	
 	/* Let rotate the whole planet */
 	backgroundStatic_.Rotate ( 2.f * frame );
@@ -92,37 +119,6 @@ void CPlanet::Update ( void )
 	/* Rotate the clouds */
 	cloud1_.Rotate ( 1.4f * frame );
 	cloud2_.Rotate ( -1.4f * frame );
-	
-	if ( oldZoom_ != zoom && zoom < 0.4 ) {
-		oldZoom_ = zoom;
-		
-		static sf::Color oldColor;
-		static int alpha;
-		
-		alpha = ( (zoom-0.2f)*1275.f );
-		alpha = alpha < 0 ? 0 : alpha;
-		
-		oldColor = backgroundStatic_.GetColor();
-		oldColor.a = alpha;
-		backgroundStatic_.SetColor ( oldColor );
-		
-		oldColor = atmosphere_.GetColor();
-		oldColor.a = alpha;
-		atmosphere_.SetColor ( oldColor );
-		
-		oldColor = shadow_.GetColor();
-		oldColor.a = alpha == 0 ? 0 : 255;
-		shadow_.SetColor ( oldColor );
-		
-		oldColor = cloud1_.GetColor();
-		oldColor.a = alpha;
-		cloud1_.SetColor ( oldColor );
-		
-		oldColor = cloud2_.GetColor();
-		oldColor.a = alpha;
-		cloud2_.SetColor ( oldColor );
-
-	}
 }
 
 

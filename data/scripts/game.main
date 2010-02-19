@@ -7,18 +7,72 @@
 -- include files --
 include ( "game.start" )
 
+-- systems = {}
+-- systems[0] = mapManager():createSystem( "Test1" );
+-- systems[1] = mapManager():createSystem( "Test2" ); systems[1].x = 10000;
+
+-- sun = Sun();
+-- mapManager():addSprite( 0, sun )
+-- sun.x = 20
+-- sun.y = 0
+-- 
+-- plan = Planet();
+-- mapManager():addSprite( 0, plan )
+-- plan.y = 1200
+
+-- ship = Ship();
+-- mapManager():addSprite( 0, ship )
+-- ship.x = 500
+-- 
+-- sun2 = Sun();
+-- mapManager():addSprite( 1, sun2 )
+
+
+
+-- 80 Systems with 10000 ships --
+---------------------------------
+-- Galaxy mode: 11%
+-- System mode: 50% (~20-30 fps)
+
+
+-- Only 80 systems --
+-- time #1: 0m0.986s
+-- time #2: 0m0.977s
+-- timw #3: 
+nb_system_name_pre  = #system_pre
+nb_system_name_post = #system_post
+
+nb_systems = 50;
 systems = {}
-systems[0] = mapManager():createSystem();
-systems[1] = mapManager():createSystem();
+for i=0,nb_systems do 
+	 name = system_pre [ math.random(1,nb_system_name_pre) ] .. " " .. system_post [ math.random(1,nb_system_name_post) ]
 
-sun = Sun();
-mapManager():addSprite( 0, sun )
-plan = Planet();
-mapManager():addSprite( 0, plan )
-plan.y = 1200
-ship = Ship();
-mapManager():addSprite( 0, ship )
-ship.x = 500
+	 systems[i] = mapManager():createSystem( name );
+	 systems[i].x = math.random( -width() *80, width() *80 );
+	 systems[i].y = math.random( -height()*80, height()*80 );
 
-sun2 = Sun();
-mapManager():addSprite( 1, sun2 )
+	 color = Color ( math.random(100,255), math.random(180,255), math.random(180,255), 255 );
+	 systems[i]:getSun().color = color;
+end
+
+-- quit()
+
+setLoadProgress ( 5 )
+
+
+setLoadProgress ( 10 )
+
+-- ships = {}
+-- for i=0,10000 do 
+-- 	 setLoadProgress ( i / 110 + 9 )
+-- 	 ships[i] = Ship()
+-- 	 ships[i].x = math.random(-4000,4000)
+-- 	 ships[i].y = math.random(-4000,4000)
+-- 	 mapManager():addSprite( math.random(-0,nb_systems), ships[i] )
+-- end
+
+
+
+
+
+
