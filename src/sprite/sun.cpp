@@ -139,7 +139,7 @@ void CSun::CalcGFX()
 		color.a = j*40;
 		
 		for ( int i = 0; i < 180; ++i ) {
-			angle = i * 2 * 3.141592654f / 180;
+			angle = i * 2 * 3.141592654f / 180.f;
 			offset = sf::Vector2f ( cos ( angle ), sin ( angle ) );
 			
 			galaxyGlow_->AddPoint ( center + offset * width, color, color );

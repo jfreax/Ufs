@@ -256,7 +256,7 @@ bool CInput::Events()
 				if ( guiManager->MouseClickReleased ( input->GetMouseX(), input->GetMouseY(), event.MouseButton.Button ) )
 					settings::SetSelect ( false );
 				else
-					mapManager->MouseClickReleased ( input->GetMouseX(), input->GetMouseY(), sf::Mouse::Left );
+					mapManager->MouseClickReleased ( input->GetMouseX(), input->GetMouseY(), event.MouseButton.Button );
 				
 				break;
 			case sf::Event::MouseWheelMoved:

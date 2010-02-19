@@ -106,7 +106,7 @@ void CMapManager::Update()
 	
 	/* Change to galaxy view */
 	double zoom = GetGameClass()->GetMapManager()->GetZoomLevel();
-	if ( lastZoomDirection_ == -1 && zoom < 0.15f && zoom > 0.02f ) {
+	if ( lastZoomDirection_ == -1 && zoom < 0.15f && zoom > 0.01f ) {
 		this->Zoom ( -1 );
 		viewMode_ = GALAXY;
 	}
@@ -188,6 +188,7 @@ bool CMapManager::MouseClickReleased ( const int mouseX, const int mouseY, const
 
 bool CMapManager::MouseHover ( const int mouseX, const int mouseY )
 {
+	double zoom = GetGameClass()->GetMapManager()->GetZoomLevel();
 	int x = this->ConvertCoordsX ( mouseX );
 	int y = this->ConvertCoordsY ( mouseY );
 	
@@ -195,7 +196,7 @@ bool CMapManager::MouseHover ( const int mouseX, const int mouseY )
 	std::vector < CSystem* >::iterator sysIterEnd = systems_.end();
 	for ( ; sysIter != sysIterEnd ; ++sysIter ) {
 		/* When we are on galaxy view... */
-		if ( this->GetViewMode() == GALAXY ) {
+		if ( this->GetViewMode() == GALAXY && zoom < 0.006f ) {
 			/* ... and the mouse is over a sun... */
 			if ( (*sysIter)->GetDimension().Contains( x, y ) ) {
 				/* ... then show tooltip */
@@ -238,10 +239,12 @@ void CMapManager::Zoom ( int direction, bool fade, bool deltaMove )
 	
 	lastZoomDirection_ = direction;
 	
+	/* Zoom out */
 	if ( direction == 1 ) {
 		if ( this->GetZoomLevel() < 6.f ) { /* maximum zoom level */
-			GetGameClass()->GetViewPoint()->Zoom ( 1 + zoomStep*(zoomed_*0.05) );
+			GetGameClass()->GetViewPoint()->Zoom ( 1 + zoomStep* ( zoomed_*0.05f ) );
 			
+			/* If we are in galaxy view, then zoom to system */
 			if ( this->GetViewMode() == GALAXY && lastMarkedSystem_ ) {
 				GetGameClass()->GetViewPoint()->Move ( (lastMarkedSystem_->GetPositionX() + lastMarkedSystem_->GetSun().GetPositionX() - GetGameClass()->GetViewPoint()->GetCenter().x ) / 10.f,
 								       (lastMarkedSystem_->GetPositionY() + lastMarkedSystem_->GetSun().GetPositionY() - GetGameClass()->GetViewPoint()->GetCenter().y ) / 10.f );
@@ -249,10 +252,21 @@ void CMapManager::Zoom ( int direction, bool fade, bool deltaMove )
 				GetGameClass()->GetViewPoint()->Move ( deltaX * zoom, deltaY * zoom );
 			}
 		}
+	/* Zoom in */
 	} else if ( direction == -1 ) {
 		if ( this->GetZoomLevel() > 0.006f ) { /* minimum zoom level */
-			GetGameClass()->GetViewPoint()->Zoom ( 1 - zoomStep*(zoomed_*0.05f) );
-			GetGameClass()->GetViewPoint()->Move ( deltaX * 0.5f * zoom, deltaY * 0.5f * zoom );
+			static int j = 50;
+			GetGameClass()->GetViewPoint()->Zoom ( 1 - zoomStep* ( zoomed_*0.05f ) );
+
+			/* If we are in galaxy view, then center the camera */
+			if ( this->GetViewMode() == GALAXY ) {
+				j = --j<1 ? 1 : j;
+				GetGameClass()->GetViewPoint()->Move ( ( - GetGameClass()->GetViewPoint()->GetCenter().x / j * zoom ),
+								       ( - GetGameClass()->GetViewPoint()->GetCenter().y / j * zoom ));
+			} else {
+				j = 50;
+				GetGameClass()->GetViewPoint()->Move ( deltaX * 0.5f * zoom, deltaY * 0.5f * zoom );
+			}
 		}
 	}
 }
