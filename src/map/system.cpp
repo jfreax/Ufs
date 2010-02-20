@@ -92,6 +92,8 @@ sprite::CSprite* CSystem::AddSprite ( sprite::CSprite* sprite )
 		spriteList_.push_back ( sprite );
 	}
 	
+	sprite->SetMotherSystem ( this );
+	
 	return sprite;
 }
 

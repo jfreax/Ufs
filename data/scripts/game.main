@@ -22,7 +22,13 @@ include ( "game.start" )
 
 -- ship = Ship();
 -- mapManager():addSprite( 0, ship )
--- ship.x = 500
+-- ship.x = 3000
+-- ship.y = 3000
+-- 
+-- ship3 = Ship();
+-- mapManager():addSprite( 1, ship3 )
+-- ship3.x = 3000
+-- ship3.y = 3000
 -- 
 -- sun2 = Sun();
 -- mapManager():addSprite( 1, sun2 )
@@ -55,10 +61,6 @@ include ( "game.start" )
 ---------------------------------
 
 
--- Only 80 systems --
--- time #1: 0m0.986s
--- time #2: 0m0.977s
--- timw #3: 
 nb_system_name_pre  = #system_pre
 nb_system_name_post = #system_post
 

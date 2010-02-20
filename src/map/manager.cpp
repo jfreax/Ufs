@@ -127,34 +127,29 @@ bool CMapManager::MouseClick ( const int mouseX, const int mouseY, const sf::Mou
 		case sf::Mouse::Left:
 			selectedSpriteList_.clear();
 			
-			std::vector < CSystem* >::iterator sysIter = systems_.begin();
-			std::vector < CSystem* >::iterator sysIterEnd = systems_.end();
-			for ( ; sysIter != sysIterEnd ; ++sysIter ) {
-				
-				if ( !settings::GetSelect() ) {
-					settings::SetSelect();
-					selectedRect_.Left = selectedRect_.Right = mouseX;
-					selectedRect_.Top = selectedRect_.Bottom = mouseY;
-				} else {
-					selectedRect_.Right = mouseX;
-					selectedRect_.Bottom = mouseY;
+			if ( !settings::GetSelect() ) {
+				settings::SetSelect();
+				selectedRect_.Left = selectedRect_.Right = mouseX;
+				selectedRect_.Top = selectedRect_.Bottom = mouseY;
+			} else {
+				selectedRect_.Right = mouseX;
+				selectedRect_.Bottom = mouseY;
 					
-					/* Test only the sun-sprites in galaxy view */
-					if ( this->GetViewMode() == GALAXY ) {
+				/* Test only the sun-sprites in galaxy view */
+				if ( this->GetViewMode() == GALAXY ) {
 					
 					
-					} else { /* Iterate all sprite */
-						std::vector < sprite::CSprite* >::iterator iter = (*sysIter)->GetSprites().begin();
-						std::vector < sprite::CSprite* >::iterator iterEnd = (*sysIter)->GetSprites().end();
-						for ( ; iter != iterEnd ; ++iter ) {
-							sf::Rect< float > selectedRectInGameCoord = this->ConvertCoords ( selectedRect_ );
-							if ( ( *iter )->GetDimension().Intersects ( selectedRectInGameCoord ) ) {
-								selectedSpriteList_.push_back ( *iter );
-							}
-					
-							if ( this->GetSpecialWidget ( "MINI_OBJECT" ) )
-								this->GetSpecialWidget ( "MINI_OBJECT" )->Call();
+				} else { /* Iterate all sprite */
+					std::vector < sprite::CSprite* >::iterator iter = currentSystem_->GetSprites().begin();
+					std::vector < sprite::CSprite* >::iterator iterEnd = currentSystem_->GetSprites().end();
+					for ( ; iter != iterEnd ; ++iter ) {
+						sf::Rect< float > selectedRectInGameCoord = this->ConvertCoords ( selectedRect_ );
+						if ( ( *iter )->GetDimensionInGalaxy().Intersects ( selectedRectInGameCoord ) ) {
+							selectedSpriteList_.push_back ( *iter );
 						}
+					
+						if ( this->GetSpecialWidget ( "MINI_OBJECT" ) )
+							this->GetSpecialWidget ( "MINI_OBJECT" )->Call();
 					}
 				}
 			}

@@ -33,6 +33,7 @@ CSprite::CSprite()
 	
 	markerRotation_ = 0;
 	
+	motherSystem_ = NULL;
 	background_ = NULL;
 	miniImage_  = NULL;
 	
@@ -137,11 +138,11 @@ void CSprite::UpdateLogic()
 void CSprite::UpdateMarker()
 {
 	static sf::Rect< float > dim;
-	dim = this->GetDimension();
+	dim = this->GetDimensionInGalaxy();
 	
 	/* Set color */
 	double zoom = GetGameClass()->GetMapManager()->GetZoomLevel();
-	if ( oldZoom_ != zoom && zoom < 0.6 ) {
+	if ( zoom < 0.6 ) {
 		static sf::Color color = GetGfxMarker().GetColor();
 		
 		alpha_ = ( (zoom-0.4f)*1275.f );
@@ -159,6 +160,13 @@ void CSprite::UpdateMarker()
 	markerRotation_ += GetGameClass()->GetApp()->GetFrameTime() * 50;
 	GetGfxMarker().SetRotation ( markerRotation_ );
 }
+
+
+void CSprite::SetMotherSystem ( CSystem* sys )
+{
+	motherSystem_ = sys;
+}
+
 
 
 float CSprite::GetPositionX() const
@@ -222,6 +230,17 @@ sf::Rect<float> CSprite::GetDimension() const
 	return sf::Rect<float> ( GetPosition().x - GetCenter().x * this->GetScale().x * 2.f, GetPosition().y - GetCenter().y * this->GetScale().y * 2.f,
 				 GetPosition().x - GetCenter().x * this->GetScale().x + offset.x * this->GetScale().x * 0.5f, GetPosition().y - GetCenter().y * this->GetScale().y + offset.y * this->GetScale().y * 0.5f );
 }
+
+
+sf::Rect< float > CSprite::GetDimensionInGalaxy() const
+{
+	if ( !motherSystem_ )
+		return GetDimension();
+	
+	return sf::Rect<float> ( GetDimension().Left + motherSystem_->GetPositionX(), GetDimension().Top + motherSystem_->GetPositionY(),
+				 GetDimension().Right + motherSystem_->GetPositionX(), GetDimension().Bottom + motherSystem_->GetPositionY() );
+}
+
 
 
 sf::Image* CSprite::GetMiniImage() const

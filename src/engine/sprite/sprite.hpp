@@ -19,6 +19,7 @@
 
 #include "../../animation.hpp"
 
+class CSystem;
 
 namespace sprite
 {
@@ -45,8 +46,9 @@ class CSprite : public sf::Drawable
 		
 		virtual void Update();
 		virtual void UpdateLogic();
-		
 		virtual void UpdateMarker();
+		
+		void SetMotherSystem ( CSystem* sys );
 		
 		float GetPositionX() const;
 		void SetPositionX ( float x );
@@ -61,6 +63,8 @@ class CSprite : public sf::Drawable
 		void SetPlayer ( unsigned int player );
 		
 		sf::Rect<float> GetDimension() const;
+		sf::Rect<float> GetDimensionInGalaxy() const;
+		
 		sf::Image* GetMiniImage() const;
 		
 		void Scale ( double scale );
@@ -75,6 +79,8 @@ class CSprite : public sf::Drawable
 		unsigned int id_;
 		SPRITETYPE spriteType_;
 		bool initialized_;
+		
+		CSystem* motherSystem_;
 		
 		unsigned int player_;
 		
