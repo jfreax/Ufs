@@ -48,8 +48,6 @@ class CSprite : public sf::Drawable
 		
 		virtual void UpdateMarker();
 		
-		virtual void CalcGFX();
-		
 		float GetPositionX() const;
 		void SetPositionX ( float x );
 		
@@ -86,16 +84,27 @@ class CSprite : public sf::Drawable
 		sf::Image* miniImage_;
 		sf::Shape mask_;
 		
-		sf::Shape* gfxMarker_;
-		float markerWidth_;
-		
 		float zoomLevel_;
 		float zoomFactor_;
 		
 		double oldZoom_;
 		
 		int alpha_; /* Overall opacity */
+		
+		double markerRotation_;
+		
+		/* STATIC */
+// 	public:
+// 		static void CalcGFX();
+		
+// 	protected:
+// 		static sf::Shape* gfxMarker_;
+// 		float markerWidth_;
 };
+
+
+void Initialize();
+sf::Shape& GetGfxMarker();
 
 
 } /* namespace sprite */

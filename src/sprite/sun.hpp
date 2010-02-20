@@ -36,12 +36,13 @@ class CSun : public CSprite
 		void Render ( sf::RenderTarget& Target ) const;
 
 		void Update();
+		
 		void CalcGFX();
+		void ShowGlow();
 		
 		sf::Color GetColor();
 		void SetColor ( sf::Color color );
 		
-		void ShowGlow();
 	private:
 		sf::Sprite glow_;
 		sf::Sprite brightness_;
@@ -50,6 +51,11 @@ class CSun : public CSprite
 		sf::Shape* galaxyGlow_;
 
 		uint8_t alpha_;
+		
+		/* STATIC */
+// 	public:
+// 		static void CalcGFX();
+		
 };
 
 

@@ -61,8 +61,8 @@ CPlanet::CPlanet()
 	this->SetZoomLevel ( 0.2 );
 	
 	
-	markerWidth_ = this->GetDimension().GetWidth() * 0.7;
-	this->CalcGFX();
+// 	markerWidth_ = this->GetDimension().GetWidth() * 0.7;
+// 	this->CalcGFX();
 }
 
 
@@ -101,7 +101,7 @@ void CPlanet::Update ( void )
 		atmosphere_.SetColor ( oldColor );
 		cloud1_.SetColor ( oldColor );
 		cloud2_.SetColor ( oldColor );
-		gfxMarker_->SetColor ( oldColor );
+		GetGfxMarker().SetColor ( oldColor );
 		
 		oldColor = shadow_.GetColor();
 		oldColor.a = alpha_ == 0 ? 0 : 255;

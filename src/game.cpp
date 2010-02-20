@@ -182,6 +182,7 @@ bool CGame::Start()
 	
 	/* Leere Karte initialisieren */
 	mapManager_.Initialize();
+	sprite::Initialize();
 	
 	/* Load for errorsystem */
 	blackWindow = guiManager_.AddWindow ( new gui::CWindow () );
@@ -436,6 +437,7 @@ void CGame::CalcSpecialWindow()
 	
 	GetGameClass()->GetSpecialWindow( "GALAXY_TOOLTIP" )->SetShow( false );
 	
+
 	switch ( gametype_ ) {
 		case LOADING:
 			if ( alpha < 230 )

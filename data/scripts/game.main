@@ -31,8 +31,28 @@ include ( "game.start" )
 
 -- 80 Systems with 10000 ships --
 ---------------------------------
+--- Update #1 ---
 -- Galaxy mode: 11%
 -- System mode: 50% (~20-30 fps)
+-- RAM: ~980 MB
+
+--- Update #2 ---
+-- Galaxy mode: 11%
+-- System mode: 30%
+-- RAM: ~980 MB
+
+--- Update #3 ---
+-- Galaxy mode: 6%
+-- System mode: 4%
+-- RAM: ~980 MB
+
+--- Update #4 ---
+-- Galaxy mode: 6%
+-- System mode: 3%
+-- RAM: ~53 MG (!)
+
+
+---------------------------------
 
 
 -- Only 80 systems --
@@ -62,14 +82,14 @@ setLoadProgress ( 5 )
 
 setLoadProgress ( 10 )
 
--- ships = {}
--- for i=0,10000 do 
--- 	 setLoadProgress ( i / 110 + 9 )
--- 	 ships[i] = Ship()
--- 	 ships[i].x = math.random(-4000,4000)
--- 	 ships[i].y = math.random(-4000,4000)
--- 	 mapManager():addSprite( math.random(-0,nb_systems), ships[i] )
--- end
+ships = {}
+for i=0,10000 do 
+	 setLoadProgress ( i / 110 + 9 )
+	 ships[i] = Ship()
+	 ships[i].x = math.random(-4000,4000)
+	 ships[i].y = math.random(-4000,4000)
+	 mapManager():addSprite( math.random(-0,nb_systems), ships[i] )
+end
 
 
 

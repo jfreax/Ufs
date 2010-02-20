@@ -42,7 +42,7 @@ CMapManager::~CMapManager()
 
 void CMapManager::Initialize()
 {
-// 	lastMarkedSystem_ = NULL;
+	currentSystem_ = NULL;
 	
 	viewMode_ = SYSTEM;
 	zoomed_ = 0;
@@ -210,7 +210,7 @@ bool CMapManager::MouseHover ( const int mouseX, const int mouseY )
 					/* and show glow of the sun */
 					(*sysIter)->GetSun().ShowGlow();
 					
-					lastMarkedSystem_ = (*sysIter);
+					currentSystem_ = (*sysIter);
 				}
 			}
 		}
@@ -245,9 +245,9 @@ void CMapManager::Zoom ( int direction, bool fade, bool deltaMove )
 			GetGameClass()->GetViewPoint()->Zoom ( 1 + zoomStep* ( zoomed_*0.05f ) );
 			
 			/* If we are in galaxy view, then zoom to system */
-			if ( this->GetViewMode() == GALAXY && lastMarkedSystem_ ) {
-				GetGameClass()->GetViewPoint()->Move ( (lastMarkedSystem_->GetPositionX() + lastMarkedSystem_->GetSun().GetPositionX() - GetGameClass()->GetViewPoint()->GetCenter().x ) / 10.f,
-								       (lastMarkedSystem_->GetPositionY() + lastMarkedSystem_->GetSun().GetPositionY() - GetGameClass()->GetViewPoint()->GetCenter().y ) / 10.f );
+			if ( this->GetViewMode() == GALAXY && currentSystem_ ) {
+				GetGameClass()->GetViewPoint()->Move ( (currentSystem_->GetPositionX() + currentSystem_->GetSun().GetPositionX() - GetGameClass()->GetViewPoint()->GetCenter().x ) / 10.f,
+								       (currentSystem_->GetPositionY() + currentSystem_->GetSun().GetPositionY() - GetGameClass()->GetViewPoint()->GetCenter().y ) / 10.f );
 			} else if ( deltaMove ) {
 				GetGameClass()->GetViewPoint()->Move ( deltaX * zoom, deltaY * zoom );
 			}
@@ -299,10 +299,18 @@ CSystem* CMapManager::CreateSystem ( std::string name )
 	}
 	
 	systems_.push_back ( system );	
+	
+	if ( currentSystem_ == NULL )
+		currentSystem_ = system;
 
 	return system;
 }
 
+
+CSystem& CMapManager::GetCurrentSystem()
+{
+	return *currentSystem_;
+}
 
 
 sprite::CSprite* CMapManager::AddSprite ( int systemID, sprite::CSprite* sprite )
@@ -317,6 +325,9 @@ sprite::CSprite* CMapManager::AddSprite ( int systemID, sprite::CSprite* sprite 
 			return NULL;
 		}
 	}
+	
+	/* Update sprite for first time */
+	sprite->Update();
 	
 	return sprite;
 }

@@ -50,6 +50,8 @@ class CMapManager
 		void Move ( sf::Vector2f newPos );
 
 		CSystem* CreateSystem ( std::string name );
+		CSystem& GetCurrentSystem();
+		
 		sprite::CSprite* AddSprite (  int systemID, sprite::CSprite* sprite );
 		std::vector < sprite::CSprite* >& GetSelectedSprites();
 		
@@ -83,7 +85,7 @@ class CMapManager
 		
 		VIEWMODE viewMode_;
 		
-		CSystem* lastMarkedSystem_;
+		CSystem* currentSystem_;
 		
 };
 

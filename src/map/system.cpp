@@ -38,10 +38,20 @@ CSystem::CSystem ( std::string name ) :
 
 void CSystem::Render ( sf::RenderTarget& Target ) const
 {
+	/* Or when we are on galaxy view */
+	if ( GetGameClass()->GetMapManager()->GetViewMode() == GALAXY ) {
+		Target.Draw ( *sun_ );
+		return;
+	}
+	
+	/* End, if this is not our current system */
+	if ( &(GetGameClass()->GetMapManager()->GetCurrentSystem()) != this )
+		return;
+	
+	/* Draw the sun */
 	Target.Draw ( *sun_ );
 	
-	if ( GetGameClass()->GetMapManager()->GetViewMode() == GALAXY )
-		return;
+
 	
 	/* Draw sprites */
 	for ( int i = 0; spriteList_.end() != spriteList_.begin()+i; ++i ) {
@@ -54,8 +64,15 @@ void CSystem::Update()
 {
 	sun_->Update();
 	
+	/* End when we are on galaxy view */
 	if ( GetGameClass()->GetMapManager()->GetViewMode() == GALAXY )
 		return;
+	
+	/* Or end, when this is not our current system */
+	if ( &(GetGameClass()->GetMapManager()->GetCurrentSystem()) != this )
+		return;
+	
+
 	
 	/* Update all other sprites */
 	std::vector < sprite::CSprite* >::iterator iter = spriteList_.begin();

@@ -64,7 +64,7 @@ CSun::CSun ()
 	showGlow_ = 0;
 	galaxyGlow_ = NULL;
 	
-	markerWidth_ = this->GetDimension().GetWidth() * 0.7;
+// 	markerWidth_ = this->GetDimension().GetWidth() * 0.7;
 	this->CalcGFX();
 	
 }
@@ -99,15 +99,15 @@ void CSun::Update ( void )
 	
 	double zoom = GetGameClass()->GetMapManager()->GetZoomLevel();
 	if ( oldZoom_ != zoom && zoom < 0.2f ) {
-		sf::Color oldColor = gfxMarker_->GetColor();
+		sf::Color oldColor = GetGfxMarker().GetColor();
 		oldColor.a = 0;
-		gfxMarker_->SetColor( oldColor );
+		GetGfxMarker().SetColor( oldColor );
 		
 		this->Scale ( zoom + 1.8f );
 	} else {
-		sf::Color oldColor = gfxMarker_->GetColor();
+		sf::Color oldColor = GetGfxMarker().GetColor();
 		oldColor.a = 255;
-		gfxMarker_->SetColor( oldColor );
+		GetGfxMarker().SetColor( oldColor );
 	}
 	
 }
@@ -115,12 +115,12 @@ void CSun::Update ( void )
 
 void CSun::CalcGFX()
 {
-	sprite::CSprite::CalcGFX();
+// 	sprite::CSprite::CalcGFX();
 	
-	sf::Rect< float > dim;
+// 	sf::Rect< float > dim;
 	sf::Vector2f offset;
 	double angle, gap;
-	float width = markerWidth_ * 2.f;
+	float width = this->GetDimension().GetWidth() * 1.8f;
 	
 	gap = 500.f;
 	
