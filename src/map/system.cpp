@@ -40,6 +40,13 @@ CSystem::CSystem ( std::string name ) :
 }
 
 
+void CSystem::Initialize()
+{
+	tooltip_->Initialize();
+}
+
+
+
 void CSystem::Render ( sf::RenderTarget& Target ) const
 {
 	/* Or when we are on galaxy view */
@@ -96,10 +103,15 @@ sprite::CSprite* CSystem::AddSprite ( sprite::CSprite* sprite )
 {
 	if ( !sprite )
 		return NULL;
-	else {
-		spriteList_.push_back ( sprite );
-	}
+
+	/* Add sprite to list */
+	spriteList_.push_back ( sprite );
 	
+	if ( sprite->GetType() == sprite::PLANET ) {
+		tooltip_->AddPlanetButton ( dynamic_cast< sprite::CPlanet* > ( sprite ) );
+	}
+
+	/* Register this sprite in system */
 	sprite->SetMotherSystem ( this );
 	
 	return sprite;

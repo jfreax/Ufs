@@ -27,7 +27,7 @@ namespace gui
 CHeaderMainButton::CHeaderMainButton()
 {
 	this->SetSize ( sf::Vector2f ( 32, 32 ) );
-	this->SetBackground ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/buttons/header_home.png" ) );
+	this->SetBackground ( GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/buttons/header_home.png" ) );
 	
 	this->ActivateTooltip ( TOOLTIP, "HOME" );
 	
@@ -40,7 +40,7 @@ CHeaderMainButton::CHeaderMainButton()
 CHeaderResearchButton::CHeaderResearchButton()
 {
 	this->SetSize ( sf::Vector2f ( 32, 32 ) );
-	this->SetBackground ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/buttons/header_research.png" ) );
+	this->SetBackground ( GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/buttons/header_research.png" ) );
 	
 	this->ActivateTooltip( TOOLTIP, "RESEARCH" );
 	
@@ -53,7 +53,7 @@ CHeaderResearchButton::CHeaderResearchButton()
 CHeaderPlanetsButton::CHeaderPlanetsButton()
 {
 	this->SetSize ( sf::Vector2f ( 32, 32 ) );
-	this->SetBackground ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/buttons/header_planets.png" ) );
+	this->SetBackground ( GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/buttons/header_planets.png" ) );
 	
 	this->ActivateTooltip ( TOOLTIP, "PLANET" );
 }
@@ -65,7 +65,7 @@ CHeaderPlanetsButton::CHeaderPlanetsButton()
 CHeaderEmpireButton::CHeaderEmpireButton()
 {
 	this->SetSize ( sf::Vector2f ( 32, 32 ) );
-	this->SetBackground ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/buttons/header_empire.png" ) );
+	this->SetBackground ( GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/buttons/header_empire.png" ) );
 	
 	this->ActivateTooltip ( TOOLTIP, "EMPIRE" );
 	
@@ -79,7 +79,7 @@ CHeaderEmpireButton::CHeaderEmpireButton()
 CHeaderSpyButton::CHeaderSpyButton()
 {
 	this->SetSize ( sf::Vector2f ( 32, 32 ) );
-	this->SetBackground ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/buttons/header_spy.png" ) );
+	this->SetBackground ( GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/buttons/header_spy.png" ) );
 	
 	this->ActivateTooltip ( TOOLTIP, "SPY" );
 	
@@ -92,7 +92,7 @@ CHeaderSpyButton::CHeaderSpyButton()
 CHeaderStatsButton::CHeaderStatsButton()
 {
 	this->SetSize ( sf::Vector2f ( 32, 32 ) );
-	this->SetBackground ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/buttons/header_stats.png" ) );
+	this->SetBackground ( GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/buttons/header_stats.png" ) );
 	
 	this->ActivateTooltip ( TOOLTIP, "STATS" );
 	
@@ -105,7 +105,7 @@ CHeaderStatsButton::CHeaderStatsButton()
 CHeaderQuitButton::CHeaderQuitButton()
 {
 	this->SetSize ( sf::Vector2f ( 32, 32 ) );
-	this->SetBackground ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/buttons/header_quit.png" ) );
+	this->SetBackground ( GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/buttons/header_quit.png" ) );
 	
 	this->ActivateTooltip ( TOOLTIP, "QUIT" );
 	

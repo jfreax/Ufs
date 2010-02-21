@@ -71,26 +71,26 @@ CPlanet::CPlanet()
 void CPlanet::Update ( void )
 {
 	double zoom = GetGameClass()->GetMapManager()->GetZoomLevel();
-	if ( oldZoom_ != zoom && zoom < 0.4 ) {
-		static sf::Color oldColor;
-		oldZoom_ = zoom;
-		
-		alpha_ = ( (zoom-0.2f)*1275.f );
-		alpha_ = alpha_ < 0 ? 0 : alpha_;
-		
-		oldColor = backgroundStatic_->GetColor();
-		oldColor.a = alpha_;
-		
-		backgroundStatic_->SetColor ( oldColor );
-		atmosphere_->SetColor ( oldColor );
-		cloud1_->SetColor ( oldColor );
-		cloud2_->SetColor ( oldColor );
-		GetGfxMarker().SetColor ( oldColor );
-		
-		oldColor = shadow_->GetColor();
-		oldColor.a = alpha_ == 0 ? 0 : 255;
-		shadow_->SetColor ( oldColor );
-	}
+// 	if ( oldZoom_ != zoom && zoom < 0.4 ) {
+// 		static sf::Color oldColor;
+// 		oldZoom_ = zoom;
+// 		
+// 		alpha_ = ( (zoom-0.2f)*1275.f );
+// 		alpha_ = alpha_ < 0 ? 0 : alpha_;
+// 		
+// 		oldColor = backgroundStatic_->GetColor();
+// 		oldColor.a = alpha_;
+// 		
+// 		backgroundStatic_->SetColor ( oldColor );
+// 		atmosphere_->SetColor ( oldColor );
+// 		cloud1_->SetColor ( oldColor );
+// 		cloud2_->SetColor ( oldColor );
+// 		GetGfxMarker().SetColor ( oldColor );
+// 		
+// 		oldColor = shadow_->GetColor();
+// 		oldColor.a = alpha_ == 0 ? 0 : 255;
+// 		shadow_->SetColor ( oldColor );
+// 	}
 	
 	/* Run updater from sprite-class */
 	CSprite::Update();

@@ -103,7 +103,7 @@ bool CWidget::Update ( bool doIt )
 
 	/* Hintergrundbild, oder... */
 	if ( background_.GetSize().x != 1.f ) {
-		background_.Resize ( curSize_ );
+// 		background_.Resize ( curSize_ );
 		background_.SetCenter ( background_.GetSize() * 0.5f );
 		
 		/* Bei der Positionsberechnung die Skalierung beachten (weil Center ist local!) */
@@ -274,16 +274,11 @@ void CWidget::SetDrawBackground ( bool ison )
 }
 
 
-void CWidget::SetBackground ( sf::Sprite background )
+void CWidget::SetBackground ( sf::Sprite* background )
 {
-	background_ = background;
+	background_.Clear();
+	background_.Add ( background );
 	this->Update();
-}
-
-
-sf::Sprite* CWidget::GetBackground()
-{
-	return &background_;
 }
 
 
@@ -292,11 +287,21 @@ void CWidget::SetBackground ( sf::Image* background )
 	if ( background == NULL )
 		return;
 	
-	/* Image setzen */
-	background_.SetImage ( *background );
-	
-	/* Größe vom Sprite anpassen */
-	background_.Resize( background->GetWidth(), background->GetHeight() );
+	background_.Clear();
+	background_.Add ( background )->Resize( background->GetWidth(), background->GetHeight() );
+}
+
+
+void CWidget::SetBackground ( CGraphic* background )
+{
+	background_ = *background;
+}
+
+
+
+CGraphic* CWidget::GetBackground()
+{
+	return &background_;
 }
 
 

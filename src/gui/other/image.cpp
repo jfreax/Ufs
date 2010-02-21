@@ -35,7 +35,7 @@ CImage::CImage ( std::string filename, int frames, double timePerFrame ) :
 	if ( frames_ > 1 ) {
 		animation_ = new CAnimation ( img, frames_, frames_ );
 	} else {
-		background_.SetImage ( *img );
+		background_.Add ( img );
 		this->SetSize ( background_.GetSize() );
 	}
 }

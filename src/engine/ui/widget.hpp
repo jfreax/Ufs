@@ -22,8 +22,8 @@
 
 #include "../../util/util.hpp"
 #include "../../settings/locale.hpp"
+#include "../../gfx/graphic.hpp"
 #include "util.hpp"
-
 
 
 namespace gui
@@ -67,9 +67,11 @@ class CWidget
 
 		void SetDrawBackground ( bool ison );
 
-		void SetBackground ( sf::Sprite background );
-		sf::Sprite* GetBackground();
+		void SetBackground ( sf::Sprite* background );
 		void SetBackground ( sf::Image* background );
+		void SetBackground ( CGraphic* background );
+		
+		CGraphic* GetBackground();
 		
 		void SetBackgroundColor ( sf::Color color );
 		sf::Color GetBackgroundColor();
@@ -131,7 +133,9 @@ class CWidget
 		sf::Vector2f curSize_;
 
 		bool drawBackground_;
-		sf::Sprite background_;
+		CGraphic background_;
+// 		sf::Sprite background_;
+
 		sf::Color backgroundColor_;
 // 		sf::Shape form_;
 

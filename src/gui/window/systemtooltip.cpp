@@ -36,6 +36,11 @@ namespace gui
 CSystemTooltip::CSystemTooltip ( CSystem* sys, std::string text ) :
 	system_ ( sys ), CWindow ( false )
 {
+	
+	if ( system_ == NULL )
+		return;
+
+	
 	this->SetLayout ( HORIZONTAL, 5 );
 		
 	/* Text properties */
@@ -48,22 +53,11 @@ CSystemTooltip::CSystemTooltip ( CSystem* sys, std::string text ) :
 	this->SetTitlebar ( 0 );
 // 	backgroundColor_ = sf::Color ( 200,220,0,0 ); /* TODO find a nice color */
 	
-	this->AddWidget( new CSpacer ( VERTICAL, label_->GetText()->GetRect().GetHeight() + 3 ) );
-	this->SetLayout ( HORIZONTAL, 3 );
-	
+	this->AddWidget( new CSpacer ( VERTICAL, label_->GetText()->GetRect().GetHeight() + 14 ) );
+	this->AddWidget( new CSpacer ( HORIZONTAL, 10 ) );
+// 	this->SetLayout ( HORIZONTAL, 3 );
+
 	this->AdjustSize();
-
-// 	buttons_ = new CButton[10];
-// 	for ( int i = 0; i < 10; ++i ) {
-// // 		buttons_[i].SetShow ( false );
-// 		buttons_[i].SetSize ( sf::Vector2f ( 16.f, 16.f ) );
-// 		this->AddWidget( &buttons_[i] );
-// 	}
-
-
-// 	this->AddWidget( new CButton() );
-// 	this->AddWidget( new CButton() );
-// 	this->AddWidget( new CButton() );
 }
 
 
@@ -78,6 +72,25 @@ CSystemTooltip::~CSystemTooltip()
 	
 	delete label_;
 }
+
+
+// void CSystemTooltip::Initialize()
+// {
+// 	std::vector < sprite::CSprite* >::iterator iter = system_->GetSprites().begin();
+// 	std::vector < sprite::CSprite* >::iterator iterEnd = system_->GetSprites().end();
+// 	for ( int i = 0; iter != iterEnd ; ++iter ) {
+// 		if ( (*iter)->GetType() == sprite::PLANET ) {
+// 			CButton* button = new CButton;
+// 			button->SetBackground ( (*iter)->GetBackground() );
+// 			
+// 			this->AddWidget ( button );
+// 		}
+// 	}
+// 	
+// 	
+// 	this->AdjustSize();
+// }
+
 	
 	
 void CSystemTooltip::Update()
@@ -88,10 +101,25 @@ void CSystemTooltip::Update()
 	if ( showClock_.GetElapsedTime() > 0.2f ) {
 		show_ = false;
 	}
-// 	if ( system_ != NULL )
-// 		this->SetPosition ( sf::Vector2f ( system_->GetDimensionInScreen().Left - ( motherWidget_->GetDimension().GetWidth() * 0.5f ),
-// 						   system_->GetPosition().y + motherWidget_->GetDimension().GetHeight() + 2 ) );
 }
+
+
+void CSystemTooltip::AddPlanetButton ( sprite::CPlanet* planet )
+{
+	CButton* button = new CButton;
+	
+	button->SetBackground ( &planet->GetImage() );
+	
+	
+	button->GetBackground()->Scale ( 16.f / button->GetBackground()->GetSize().x, 16.f / button->GetBackground()->GetSize().y );
+// 	button->GetBackground()->SetPosition ( button->GetPosition() );
+	
+	this->AddWidget ( button );
+	
+	button->SetSize ( sf::Vector2f ( 28.f, 16.f ) );
+	button->AdjustSize();
+}
+
 
 
 void CSystemTooltip::Show ( const int x, const int y )

@@ -67,13 +67,7 @@ CSprite::~CSprite()
 
 void CSprite::Render ( sf::RenderTarget& Target ) const
 {
-// 	Target.Draw ( mask_ );
 
-	/* Calc the static background if an image exists */
-// 	if ( !background_ )
-// 		Target.Draw ( backgroundStatic_ );		
-// 	else
-// 		Target.Draw ( *background_ );
 	Target.Draw ( graphics_ );
 }
 
@@ -239,6 +233,13 @@ sf::Rect< float > CSprite::GetDimensionInGalaxy() const
 	return sf::Rect<float> ( GetDimension().Left + motherSystem_->GetPositionX(), GetDimension().Top + motherSystem_->GetPositionY(),
 				 GetDimension().Right + motherSystem_->GetPositionX(), GetDimension().Bottom + motherSystem_->GetPositionY() );
 }
+
+
+CGraphic& CSprite::GetImage()
+{
+	return graphics_;
+}
+
 
 
 sf::Sprite* CSprite::GetBackground()

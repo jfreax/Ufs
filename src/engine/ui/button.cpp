@@ -25,11 +25,12 @@ CButton::CButton()
 {
 	CTheme* theme = GetGameClass()->GetGuiManager()->GetTheme();
 
-	background_.SetImage ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/" + theme->button_.background ) );
+	sf::Sprite* sprite = new sf::Sprite ( *GetGameClass()->GetImgResource()->Get ( "/themes/" + settings::GetTheme() + "/" + theme->button_.background ) );
+	background_.Add ( sprite );
 
 	this->SetBackgroundColor ( theme->button_.backgroundColor );
 	this->SetFontSize ( theme->button_.fontSize );
-	this->SetSize ( background_.GetSize() );
+	this->SetSize ( sprite->GetSize() );
 	
 	WaitOnHoverMouse = 0.0f;
 }

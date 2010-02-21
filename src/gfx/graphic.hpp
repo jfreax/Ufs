@@ -29,14 +29,23 @@
 class CGraphic : public sf::Drawable
 {
 	public:
+		CGraphic();
+		~CGraphic();
+		
 		virtual void Render ( sf::RenderTarget& Target ) const;
 		
+		void Clear();
+		
+		sf::Sprite* Add ( sf::Image* image );
+		sf::Sprite* Add ( sf::Sprite* object );
 		sf::Drawable* Add ( sf::Drawable* object );
-// 		sf::Shape* Add ( sf::Shape* object );
-// 		CAnimation* Add ( CAnimation* object );
+		
+		sf::Vector2f GetSize() const;
 	
 	private:
 		std::vector < sf::Drawable* > objects_;
+		
+		sf::Vector2f size_;
 	
 };
 

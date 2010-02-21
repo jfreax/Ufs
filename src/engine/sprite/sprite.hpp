@@ -66,6 +66,7 @@ class CSprite : public sf::Drawable
 		sf::Rect<float> GetDimension() const;
 		sf::Rect<float> GetDimensionInGalaxy() const;
 		
+		CGraphic& GetImage();
 		sf::Sprite* GetBackground();
 		sf::Image* GetMiniImage() const;
 		
@@ -100,14 +101,6 @@ class CSprite : public sf::Drawable
 		int alpha_; /* Overall opacity */
 		
 		double markerRotation_;
-		
-		/* STATIC */
-// 	public:
-// 		static void CalcGFX();
-		
-// 	protected:
-// 		static sf::Shape* gfxMarker_;
-// 		float markerWidth_;
 };
 
 

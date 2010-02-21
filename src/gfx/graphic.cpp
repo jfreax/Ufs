@@ -20,6 +20,22 @@
 #include "graphic.hpp"
 
 
+CGraphic::CGraphic()
+{
+	size_.x = size_.y = 0.f;
+}
+
+
+CGraphic::~CGraphic()
+{
+	for ( int i = 0; objects_.end() != objects_.begin()+i; ++i ) {
+		delete *(objects_.begin()+i);
+	}
+}
+
+
+
+
 void CGraphic::Render ( sf::RenderTarget& Target ) const
 {
 	for ( int i = 0; objects_.end() != objects_.begin()+i; ++i ) {
@@ -28,11 +44,36 @@ void CGraphic::Render ( sf::RenderTarget& Target ) const
 }
 
 
-// sf::Shape* CGraphic::Add ( sf::Shape* object )
-// {
-// 
-// }
+void CGraphic::Clear()
+{
+	for ( int i = 0; objects_.end() != objects_.begin()+i; ++i ) {
+		delete *(objects_.begin()+i);
+	}
+	objects_.clear();
+}
 
+
+sf::Sprite* CGraphic::Add ( sf::Image* image )
+{
+	sf::Sprite* sprite = new sf::Sprite ( *image );
+	this->Add ( sprite );
+}
+
+
+sf::Sprite* CGraphic::Add ( sf::Sprite* object )
+{
+	if ( !object )
+		return NULL;
+	
+	/* Adjust size */
+	if ( object->GetSize().x > size_.x )
+		size_.x = object->GetSize().x;
+	if ( object->GetSize().y > size_.y )
+		size_.y = object->GetSize().y;
+	
+	objects_.push_back ( object );
+	return object;
+}
 
 
 sf::Drawable* CGraphic::Add ( sf::Drawable* object )
@@ -45,8 +86,9 @@ sf::Drawable* CGraphic::Add ( sf::Drawable* object )
 }
 
 
-// CAnimation* CGraphic::Add ( CAnimation* object )
-// {
-// 
-// }
+sf::Vector2f CGraphic::GetSize() const
+{
+	return size_;
+}
+
 

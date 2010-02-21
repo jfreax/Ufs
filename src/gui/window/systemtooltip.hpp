@@ -38,6 +38,8 @@ class CSystemTooltip : public CWindow
 		
 		void Update();
 		
+		void AddPlanetButton ( sprite::CPlanet* planet );
+		
 		void Show ( const int x, const int y );
 		
 		void CalcBackground();

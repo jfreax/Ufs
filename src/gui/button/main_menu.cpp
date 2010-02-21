@@ -27,7 +27,7 @@ CSingleplayerButton::CSingleplayerButton()
 {
 	/* Neuen Hintergrundsprite anlegen */
 	sf::Image* buttonImg = GetGameClass()->GetImgResource()->Get( "themes/default/buttons/main_button1.png" );
-	sf::Sprite buttonSprite ( *buttonImg );
+// 	sf::Sprite buttonSprite ( *buttonImg );
 	
 	/* Verhältnis der Originalhintergrundgröße mit der jetzigen */
 	double verh = settings::GetWidth() / 1024.f;
@@ -39,7 +39,7 @@ CSingleplayerButton::CSingleplayerButton()
 	this->SetSize ( sf::Vector2f ( buttonImg->GetWidth() * verh, buttonImg->GetHeight() * verh ) );
 	
 	/* Sprite als Hintergrund zuweisen */
-	this->SetBackground ( buttonSprite );
+	this->SetBackground ( buttonImg );
 	
 	/* Position setzen */
 	this->SetPosition( sf::Vector2f ( 482.f * verh, 139.f * verh ) );

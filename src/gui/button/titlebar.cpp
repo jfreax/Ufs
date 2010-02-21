@@ -42,7 +42,7 @@ CCloseButton::CCloseButton ( void )
 	this->SetPosition ( closeButtonPosition );
 	this->SetSize ( closeButtonSize );
 	
-	this->SetBackground ( *game->GetImgResource()->Get ( settings::GetThemePath() + "icons/close.png" ) );
+	this->SetBackground ( game->GetImgResource()->Get ( settings::GetThemePath() + "icons/close.png" ) );
 
 }
 
@@ -72,7 +72,7 @@ CMinimizeButton::CMinimizeButton ( void )
 	
 	this->SetSize ( minimizeButtonSize );
 	this->SetPosition ( minimizeButtonPosition );
-	this->SetBackground ( *game->GetImgResource()->Get ( settings::GetThemePath() + "icons/minimize.png" ) );
+	this->SetBackground ( game->GetImgResource()->Get ( settings::GetThemePath() + "icons/minimize.png" ) );
 
 	/* Aktionen alle erstmal AUS */
 	doMinimize_ = doMaximize_ = false;
@@ -170,7 +170,7 @@ CHideButton::CHideButton ( CButton* minimizeButton ) : minimizeButton_ ( minimiz
 	
 	this->SetSize ( minimizeButtonSize );
 	this->SetPosition ( minimizeButtonPosition );
-	this->SetBackground ( *game->GetImgResource()->Get ( settings::GetThemePath() + "icons/hide.png" ) );
+	this->SetBackground ( game->GetImgResource()->Get ( settings::GetThemePath() + "icons/hide.png" ) );
 	
 	/* Aktionen alle erstmal AUS */
 	doHide_ = doShow_ = finish_ = false;
