@@ -7,6 +7,7 @@ add_subdirectory ( sprite )
 add_subdirectory ( util )
 add_subdirectory ( script )
 add_subdirectory ( map )
+add_subdirectory ( gfx )
 
 ADD_EXECUTABLE ( ufs 
   main.cpp
@@ -15,7 +16,7 @@ ADD_EXECUTABLE ( ufs
   collision.cpp
   parser.cpp
   input.cpp
-  animation.cpp
+#   animation.cpp
   game.cpp
  # mapmanager.cpp
 
@@ -31,9 +32,9 @@ TARGET_LINK_LIBRARIES ( ufs
   ufs_engine
   ufs_engine_sprite
   ufs_engine_ui
-#   ufs_engine_model
   ufs_gui_window
   ufs_gui_button
   ufs_gui_other
   ufs_script
+  ufs_gfx
 )

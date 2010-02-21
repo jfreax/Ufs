@@ -44,7 +44,7 @@ class CAnimation : public sf::Drawable
 		sf::Clock timer_;
 		int startAt_;
 
-		sf::Image* image_;
+		sf::Image* image_;		
 		sf::IntRect clipArea_;
 
 		int frameWidth_;

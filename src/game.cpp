@@ -19,10 +19,12 @@
 
 #include "action.hpp"
 #include "resource.hpp"
-#include "animation.hpp"
 #include "game.hpp"
 
+#include "gfx/animation.hpp"
+
 #include "util/util.hpp"
+
 #include "settings/settings.hpp"
 
 #include "engine/ui/window.hpp"
@@ -41,8 +43,6 @@
 
 #include "gui/button/titlebar.hpp"
 #include "sprite/ship.hpp"
-
-
 
 
 CGame* game = NULL;

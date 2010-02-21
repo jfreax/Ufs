@@ -15,6 +15,7 @@
 */
 
 
+#include "../gfx/graphic.hpp"
 #include "../game.hpp"
 #include "sun.hpp"
 
@@ -34,28 +35,37 @@ CSun::CSun ()
 	background_ = new CAnimation ( imageResource->Get( "images/sun/001.png" ), 0, 0.05f );
 	
 	this->SetCenter ( background_->GetSize().x * 0.5, background_->GetSize().y * 0.5 );
-	backgroundStatic_.SetCenter ( GetCenter() );
+	
+	backgroundStatic_ = new sf::Sprite;
+	backgroundStatic_->SetCenter ( GetCenter() );
 	
 	/* Set blendmode */
 	background_->SetBlendMode ( sf::Blend::Multiply );
 
 	/* Bild wird nur auf diesem Bereich gezeichnet */
-	mask_ = sf::Shape::Circle ( 250, 250, 250, sf::Color ( 255, 255, 255 ) );
+	mask_ = new sf::Shape ( sf::Shape::Circle ( 250, 250, 250, sf::Color ( 255, 255, 255 ) ) );
 	
 	/* picture of sun glow */
-	glow_.SetImage( *imageResource->Get ( "images/sun/sun_glow.png" ) );
-	glow_.SetPosition( -83, -83 );
+	glow_ = new sf::Sprite ( *imageResource->Get ( "images/sun/sun_glow.png" ) );
+	glow_->SetPosition( -83, -83 );
 	
 	/* storm picture */
-	brightness_.SetImage( *imageResource->Get ( "images/sun/sun_storm.png" ) );
-	brightness_.SetPosition( 10, 10 );	
+	brightness_ = new sf::Sprite ( *imageResource->Get ( "images/sun/sun_storm.png" ) );
+	brightness_->SetPosition( 10, 10 );	
 
-	brightness_.SetColor( sf::Color ( 255, 255, 255, 100 ) );
-	brightness_.SetBlendMode( sf::Blend::Alpha );
+	brightness_->SetColor( sf::Color ( 255, 255, 255, 100 ) );
+	brightness_->SetBlendMode( sf::Blend::Alpha );
 	
 	/* Set center of sprites */
-	glow_.SetCenter ( GetCenter() );
-	brightness_.SetCenter ( GetCenter() );
+	glow_->SetCenter ( GetCenter() );
+	brightness_->SetCenter ( GetCenter() );
+	mask_->SetCenter( this->GetCenter() );
+	
+	/* Add to graphic list */
+	graphics_.Add ( mask_ );
+	graphics_.Add ( brightness_ );
+	graphics_.Add ( background_ );
+	graphics_.Add ( glow_ );
 	
 	/* Set properties */
 	this->SetZoomFactor( 0.4 );
@@ -64,7 +74,6 @@ CSun::CSun ()
 	showGlow_ = 0;
 	galaxyGlow_ = NULL;
 	
-// 	markerWidth_ = this->GetDimension().GetWidth() * 0.7;
 	this->CalcGFX();
 	
 }
@@ -76,9 +85,6 @@ void CSun::Render ( sf::RenderTarget& Target ) const
 {
 	/* run sprite renderer */
 	CSprite::Render( Target );
-	
-	/* draw sun glow */
-	Target.Draw ( glow_ );
 	
 	if ( showGlow_ )
 		Target.Draw ( *galaxyGlow_ );
@@ -115,9 +121,6 @@ void CSun::Update ( void )
 
 void CSun::CalcGFX()
 {
-// 	sprite::CSprite::CalcGFX();
-	
-// 	sf::Rect< float > dim;
 	sf::Vector2f offset;
 	double angle, gap;
 	float width = this->GetDimension().GetWidth() * 1.8f;
@@ -157,7 +160,7 @@ sf::Color CSun::GetColor()
 void CSun::SetColor ( sf::Color color )
 {
 	background_->SetColor ( color );
-	glow_.SetColor ( color );
+	glow_->SetColor ( color );
 }
 
 

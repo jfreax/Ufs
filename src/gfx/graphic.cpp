@@ -17,33 +17,36 @@
 
 */
 
-#ifndef PLANET_HPP
-#define PLANET_HPP
+#include "graphic.hpp"
 
-#include "../engine/sprite/sprite.hpp"
 
-namespace sprite
+void CGraphic::Render ( sf::RenderTarget& Target ) const
 {
-	
+	for ( int i = 0; objects_.end() != objects_.begin()+i; ++i ) {
+		Target.Draw ( **(objects_.begin()+i) );
+	}
+}
 
-class CPlanet : public CSprite
+
+// sf::Shape* CGraphic::Add ( sf::Shape* object )
+// {
+// 
+// }
+
+
+
+sf::Drawable* CGraphic::Add ( sf::Drawable* object )
 {
-	public:
-		CPlanet();
+	if ( !object )
+		return NULL;
 	
-		void Update ( void );
-
-	private:
-		sf::Color planetColor_;
-		
-		sf::Sprite* atmosphere_;
-		sf::Sprite* shadow_;
-		sf::Sprite* cloud1_;
-		sf::Sprite* cloud2_;
-};
+	objects_.push_back ( object );
+	return object;
+}
 
 
-} /* namespace sprite */
+// CAnimation* CGraphic::Add ( CAnimation* object )
+// {
+// 
+// }
 
-
-#endif // PLANET_HPP

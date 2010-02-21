@@ -32,51 +32,39 @@ CPlanet::CPlanet()
 	CImageResource* imageResource = GetGameClass()->GetImgResource();
 	
 	/* load pictures */
-	backgroundStatic_.SetImage( *imageResource->Get ( "images/planet/002.png" ) );
+	backgroundStatic_ = new sf::Sprite ( *imageResource->Get ( "images/planet/002.png" ) );
 
-	this->SetCenter ( backgroundStatic_.GetSize().x * 0.5, backgroundStatic_.GetSize().y * 0.5 );
-	backgroundStatic_.SetCenter ( GetCenter() );
+	this->SetCenter ( backgroundStatic_->GetSize().x * 0.5, backgroundStatic_->GetSize().y * 0.5 );
+	backgroundStatic_->SetCenter ( GetCenter() );
 	
-	shadow_.SetImage( *imageResource->Get ( "images/planet/shadow.png" ) );
-	shadow_.SetCenter ( GetCenter() );
+	shadow_ = new sf::Sprite ( *imageResource->Get ( "images/planet/shadow.png" ) );
+	shadow_->SetCenter ( GetCenter() );
 	
-	cloud1_.SetImage( *imageResource->Get ( "images/planet/clouds_001.png" ) );
-	cloud1_.SetCenter ( GetCenter() );
-	cloud2_.SetImage( *imageResource->Get ( "images/planet/clouds_002.png" ) );
-	cloud2_.SetCenter ( GetCenter() );
+	cloud1_ = new sf::Sprite ( *imageResource->Get ( "images/planet/clouds_001.png" ) );
+	cloud1_->SetCenter ( GetCenter() );
 	
-	atmosphere_.SetImage( *imageResource->Get ( "images/planet/atmosphere_001.png" ) );
-	atmosphere_.SetCenter ( GetCenter() );
+	cloud2_ = new sf::Sprite ( *imageResource->Get ( "images/planet/clouds_002.png" ) );
+	cloud2_->SetCenter ( GetCenter() );
+	
+	atmosphere_ = new sf::Sprite ( *imageResource->Get ( "images/planet/atmosphere_001.png" ) );
+	atmosphere_->SetCenter ( GetCenter() );
 	
 	/* Set color of planet TODO EXAMPLE DATA! */
 	planetColor_ = sf::Color ( 160, 220, 255, 255 );
 	
-	backgroundStatic_.SetColor ( planetColor_ );
-	atmosphere_.SetColor ( planetColor_ );
+	backgroundStatic_->SetColor ( planetColor_ );
+	atmosphere_->SetColor ( planetColor_ );
 	
-// 	cloud1_.SetColor( sf::Color ( 255, 255, 255, 60 ) );
+	/* Add to graphic list */
+	graphics_.Add ( backgroundStatic_ );
+	graphics_.Add ( atmosphere_ );
+	graphics_.Add ( cloud1_ );
+	graphics_.Add ( cloud2_ );
+	graphics_.Add ( shadow_ );
 	
 	/* Set properties */
 	this->SetZoomFactor( 0.1 );
 	this->SetZoomLevel ( 0.2 );
-}
-
-
-void CPlanet::Render ( sf::RenderTarget& Target ) const
-{
-	/* Run sprite renderer */
-	sprite::CSprite::Render ( Target );
-
-	/* Render the atmosphere */
-	Target.Draw ( atmosphere_ );
-	
-	/* Draw clouds */
-	Target.Draw ( cloud1_ );
-	Target.Draw ( cloud2_ );
-	
-	/* Draw shadow */
-	Target.Draw ( shadow_ );
-	
 }
 
 
@@ -90,18 +78,18 @@ void CPlanet::Update ( void )
 		alpha_ = ( (zoom-0.2f)*1275.f );
 		alpha_ = alpha_ < 0 ? 0 : alpha_;
 		
-		oldColor = backgroundStatic_.GetColor();
+		oldColor = backgroundStatic_->GetColor();
 		oldColor.a = alpha_;
 		
-		backgroundStatic_.SetColor ( oldColor );
-		atmosphere_.SetColor ( oldColor );
-		cloud1_.SetColor ( oldColor );
-		cloud2_.SetColor ( oldColor );
+		backgroundStatic_->SetColor ( oldColor );
+		atmosphere_->SetColor ( oldColor );
+		cloud1_->SetColor ( oldColor );
+		cloud2_->SetColor ( oldColor );
 		GetGfxMarker().SetColor ( oldColor );
 		
-		oldColor = shadow_.GetColor();
+		oldColor = shadow_->GetColor();
 		oldColor.a = alpha_ == 0 ? 0 : 255;
-		shadow_.SetColor ( oldColor );
+		shadow_->SetColor ( oldColor );
 	}
 	
 	/* Run updater from sprite-class */
@@ -110,11 +98,11 @@ void CPlanet::Update ( void )
 	double frame = GetGameClass()->GetApp()->GetFrameTime();
 	
 	/* Let rotate the whole planet */
-	backgroundStatic_.Rotate ( 2.f * frame );
+	backgroundStatic_->Rotate ( 2.f * frame );
 	
 	/* Rotate the clouds */
-	cloud1_.Rotate ( 1.4f * frame );
-	cloud2_.Rotate ( -1.4f * frame );
+	cloud1_->Rotate ( 1.4f * frame );
+	cloud2_->Rotate ( -1.4f * frame );
 }
 
 

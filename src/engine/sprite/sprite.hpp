@@ -17,7 +17,8 @@
 #ifndef SPRITE_HPP
 #define SPRITE_HPP
 
-#include "../../animation.hpp"
+#include "../../gfx/animation.hpp"
+#include "../../gfx/graphic.hpp"
 
 class CSystem;
 
@@ -85,11 +86,11 @@ class CSprite : public sf::Drawable
 		
 		unsigned int player_;
 		
-		sf::Sprite backgroundStatic_;
+		CGraphic graphics_;
+		sf::Sprite* backgroundStatic_;
 		CAnimation* background_;
 		
 		sf::Image* miniImage_;
-		sf::Shape mask_;
 		
 		float zoomLevel_;
 		float zoomFactor_;

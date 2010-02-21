@@ -44,8 +44,9 @@ class CSun : public CSprite
 		void SetColor ( sf::Color color );
 		
 	private:
-		sf::Sprite glow_;
-		sf::Sprite brightness_;
+		sf::Sprite* glow_;
+		sf::Sprite* brightness_;
+		sf::Shape* mask_;
 		
 		double showGlow_;
 		sf::Shape* galaxyGlow_;

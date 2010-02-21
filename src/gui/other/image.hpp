@@ -20,7 +20,7 @@
 #ifndef GUI_IMAGE_HPP
 #define GUI_IMAGE_HPP
 
-#include "../../animation.hpp"
+#include "../../gfx/animation.hpp"
 #include "../../engine/ui/widget.hpp"
 
 

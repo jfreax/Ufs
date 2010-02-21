@@ -16,7 +16,7 @@
 
 #include <iostream>
 
-#include "game.hpp"
+#include "../game.hpp"
 #include "animation.hpp"
 
 
@@ -29,7 +29,6 @@ CAnimation::CAnimation ( sf::Image* image, int frames, double timePerFrame ) :
 		frameDiff_ ( 1 ),
 		blur_ ( 1 )
 {
-
 	if ( frames_ )
 	{
 		perPixel_ = false;
@@ -48,7 +47,7 @@ CAnimation::CAnimation ( sf::Image* image, int frames, double timePerFrame ) :
 }
 
 
-void CAnimation::Render ( sf::RenderTarget& ) const
+void CAnimation::Render ( sf::RenderTarget& Target ) const
 {
 	if ( run_ )
 	{

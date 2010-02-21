@@ -52,7 +52,6 @@ CSprite::CSprite ( const sprite::CSprite& instance ) : Drawable ( instance )
 	background_ = NULL;
 	
 	player_ = instance.player_;
-	mask_ = instance.mask_;
 	zoomLevel_ = instance.zoomLevel_;
 	
 }
@@ -68,13 +67,14 @@ CSprite::~CSprite()
 
 void CSprite::Render ( sf::RenderTarget& Target ) const
 {
-	Target.Draw ( mask_ );
+// 	Target.Draw ( mask_ );
 
 	/* Calc the static background if an image exists */
-	if ( !background_ )
-		Target.Draw ( backgroundStatic_ );		
-	else
-		Target.Draw ( *background_ );
+// 	if ( !background_ )
+// 		Target.Draw ( backgroundStatic_ );		
+// 	else
+// 		Target.Draw ( *background_ );
+	Target.Draw ( graphics_ );
 }
 
 
@@ -106,11 +106,10 @@ void CSprite::Update()
 			this->SetCenter ( background_->GetSize().x * 0.5f,
 					  background_->GetSize().y * 0.5f );
 			background_->SetCenter( this->GetCenter() );
-			mask_.SetCenter( this->GetCenter() );
 		} else {
-			this->SetCenter ( backgroundStatic_.GetSize().x * 0.5f,
-					  backgroundStatic_.GetSize().y * 0.5f );
-			 backgroundStatic_.SetCenter( this->GetCenter() );
+			this->SetCenter ( backgroundStatic_->GetSize().x * 0.5f,
+					  backgroundStatic_->GetSize().y * 0.5f );
+					  backgroundStatic_->SetCenter( this->GetCenter() );
 		}
 		initialized_ = true;
 	}
@@ -224,8 +223,8 @@ sf::Rect<float> CSprite::GetDimension() const
 	
 	if ( background_ )
 		offset = background_->GetSize();
-	else
-		offset = backgroundStatic_.GetSize();
+	else if ( backgroundStatic_ )
+		offset = backgroundStatic_->GetSize();
 	
 	return sf::Rect<float> ( GetPosition().x - GetCenter().x * this->GetScale().x * 2.f, GetPosition().y - GetCenter().y * this->GetScale().y * 2.f,
 				 GetPosition().x - GetCenter().x * this->GetScale().x + offset.x * this->GetScale().x * 0.5f, GetPosition().y - GetCenter().y * this->GetScale().y + offset.y * this->GetScale().y * 0.5f );
@@ -244,7 +243,7 @@ sf::Rect< float > CSprite::GetDimensionInGalaxy() const
 
 sf::Sprite* CSprite::GetBackground()
 {
-	return &backgroundStatic_;
+	return backgroundStatic_;
 }
 
 

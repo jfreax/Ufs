@@ -25,10 +25,9 @@
 
 #include "input.hpp"
 #include "resource.hpp"
-#include "animation.hpp"
 
+#include "gfx/animation.hpp"
 #include "map/manager.hpp"
-
 #include "settings/locale.hpp"
 
 

@@ -17,33 +17,27 @@
 
 */
 
-#ifndef PLANET_HPP
-#define PLANET_HPP
+#include <vector>
 
-#include "../engine/sprite/sprite.hpp"
+#include <SFML/Graphics.hpp>
+#include "animation.hpp"
 
-namespace sprite
-{
-	
+#ifndef GFX_GRAPHIC_HPP
+#define GFX_GRAPHIC_HPP
 
-class CPlanet : public CSprite
+
+class CGraphic : public sf::Drawable
 {
 	public:
-		CPlanet();
-	
-		void Update ( void );
-
-	private:
-		sf::Color planetColor_;
+		virtual void Render ( sf::RenderTarget& Target ) const;
 		
-		sf::Sprite* atmosphere_;
-		sf::Sprite* shadow_;
-		sf::Sprite* cloud1_;
-		sf::Sprite* cloud2_;
+		sf::Drawable* Add ( sf::Drawable* object );
+// 		sf::Shape* Add ( sf::Shape* object );
+// 		CAnimation* Add ( CAnimation* object );
+	
+	private:
+		std::vector < sf::Drawable* > objects_;
+	
 };
 
-
-} /* namespace sprite */
-
-
-#endif // PLANET_HPP
+#endif // GRAPHIC_HPP

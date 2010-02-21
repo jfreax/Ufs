@@ -33,17 +33,14 @@ CShip::CShip()
 
 	/* Load picture of the ship model TODO example! */
 	miniImage_ = imageResource->Get( "images/ship/human/hunter-001.png" );
-	backgroundStatic_.SetImage ( *(imageResource->Get( "images/ship/human/hunter-001.png" )) );
-// 	background_ = new CAnimation ( imageResource->Get( "images/ship/human/hunter-001.png" ), 1, 0.05f );
-
-// 	background_->SetCenter ( GetCenter() );
+	backgroundStatic_ = new sf::Sprite (  *(imageResource->Get( "images/ship/human/hunter-001.png" )) );
+	
+	/* Add to graphic list */
+	graphics_.Add ( backgroundStatic_ );
 	
 	/* Set properties */
 	this->SetZoomFactor( 0.04 );
 	this->SetZoomLevel ( 1 );
-	
-// 	markerWidth_ = this->GetDimension().GetHeight() * 2.2f;
-// 	this->CalcGFX();
 }
 
 
@@ -61,18 +58,12 @@ void CShip::Update()
 	if ( oldZoom_ != zoom && zoom < 0.6 ) {
 		oldZoom_ = zoom;
 		static sf::Color oldColor;
-		oldColor = backgroundStatic_.GetColor();
+		oldColor = backgroundStatic_->GetColor();
 		
 		alpha_ = ( (zoom-0.4f)*1275.f );
 		alpha_ = alpha_ < 0 ? 0 : alpha_;
 		oldColor.a = alpha_;
-		backgroundStatic_.SetColor ( oldColor );
-		
-// 		oldColor = GetGfxMarker().GetColor();
-// 		alpha_ = ( (zoom-0.4f)*1275.f );
-// 		alpha_ = alpha_ < 0 ? 0 : alpha_;
-// 		oldColor.a = alpha_;
-// 		GetGfxMarker().SetColor ( oldColor );
+		backgroundStatic_->SetColor ( oldColor );
 	}
 	
 	/* run updater from sprite-class */
