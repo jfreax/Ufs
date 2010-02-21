@@ -1,19 +1,19 @@
 /*
-<one line to give the program's name and a brief idea of what it does.>
-Copyright (C) <year>  <name of author>
+    <one line to give the program's name and a brief idea of what it does.>
+    Copyright (C) <year>  <name of author>
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
@@ -26,13 +26,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "../button/quit.hpp"
 #include "../../game.hpp"
 
+#include "systemtooltip.hpp"
+
 namespace gui
 {
 	
+
 	
-CTooltip::CTooltip ( CWidget* motherWidget, std::string text ) :
-motherWidget_ ( motherWidget ),
-CWindow ( false )
+CSystemTooltip::CSystemTooltip ( CSystem* sys, std::string text ) :
+	system_ ( sys ), CWindow ( false )
 {
 	this->SetLayout ( HORIZONTAL, 5 );
 		
@@ -46,15 +48,26 @@ CWindow ( false )
 	this->SetTitlebar ( 0 );
 // 	backgroundColor_ = sf::Color ( 200,220,0,0 ); /* TODO find a nice color */
 	
-	this->AdjustSize();
-	
 	this->AddWidget( new CSpacer ( VERTICAL, label_->GetText()->GetRect().GetHeight() + 3 ) );
-	
 	this->SetLayout ( HORIZONTAL, 3 );
+	
+	this->AdjustSize();
+
+// 	buttons_ = new CButton[10];
+// 	for ( int i = 0; i < 10; ++i ) {
+// // 		buttons_[i].SetShow ( false );
+// 		buttons_[i].SetSize ( sf::Vector2f ( 16.f, 16.f ) );
+// 		this->AddWidget( &buttons_[i] );
+// 	}
+
+
+// 	this->AddWidget( new CButton() );
+// 	this->AddWidget( new CButton() );
+// 	this->AddWidget( new CButton() );
 }
 
 
-CTooltip::~CTooltip()
+CSystemTooltip::~CSystemTooltip()
 {
 	std::vector< gui::CWidget* >::iterator endIter = widgetList_.end();
 	std::vector< gui::CWidget* >::iterator iter = widgetList_.begin();
@@ -67,15 +80,43 @@ CTooltip::~CTooltip()
 }
 	
 	
-void CTooltip::Update()
+void CSystemTooltip::Update()
 {
-	if ( motherWidget_ != NULL )
-		this->SetPosition ( sf::Vector2f ( motherWidget_->GetDimensionInScreen().Left - ( motherWidget_->GetDimension().GetWidth() * 0.5f ),
-						   motherWidget_->GetPosition().y + motherWidget_->GetDimension().GetHeight() + 2 ) );
+	if ( showClock_.GetElapsedTime() > 0.f ) {
+		this->ChangeTransparency ( 120 - showClock_.GetElapsedTime() * 600 );
+	}
+	if ( showClock_.GetElapsedTime() > 0.2f ) {
+		show_ = false;
+	}
+// 	if ( system_ != NULL )
+// 		this->SetPosition ( sf::Vector2f ( system_->GetDimensionInScreen().Left - ( motherWidget_->GetDimension().GetWidth() * 0.5f ),
+// 						   system_->GetPosition().y + motherWidget_->GetDimension().GetHeight() + 2 ) );
 }
 
 
-void CTooltip::CalcBackground()
+void CSystemTooltip::Show ( const int x, const int y )
+{
+	showClock_.Reset();
+	
+	this->SetShow ( true );
+	this->AdjustSize();
+	this->SetPosition( sf::Vector2f ( x + 20, y) );
+	
+// 	std::vector < sprite::CSprite* >::iterator iter = sprites.begin();
+// 	std::vector < sprite::CSprite* >::iterator iterEnd = sprites.end();
+// 	for ( int i = 0; iter != iterEnd ; ++iter ) {
+// 		if ( (*iter)->GetType() == sprite::PLANET ) {
+// 			buttons_[i].SetBackground ( *(*iter)->GetBackground() );
+// // 		( *iter )->Get;
+// 			++i;
+// 		}
+// 	}
+	
+}
+
+
+
+void CSystemTooltip::CalcBackground()
 {
 //     gui::CWindow::CalcBackground();
 
@@ -131,7 +172,7 @@ void CTooltip::CalcBackground()
 
 	
 	
-void CTooltip::ChangeTransparency ( unsigned int alpha )
+void CSystemTooltip::ChangeTransparency ( unsigned int alpha )
 {
 	CWindow::ChangeTransparency ( alpha );
 	// 	backgroundColor_.a = alpha;
@@ -148,10 +189,11 @@ void CTooltip::ChangeTransparency ( unsigned int alpha )
 }
 
 
-void CTooltip::SetText ( std::string string )
+void CSystemTooltip::SetText ( std::string string )
 {
 	label_->SetText ( string );
 }
 
 
+	
 } /* namespace gui */

@@ -123,6 +123,7 @@ bool CWidget::Update ( bool doIt )
 	/* Change tooltip behavior */
 	if ( hasTooltip_ )
 		toolTip_->Update();
+	
 
 	return true;
 }

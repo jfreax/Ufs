@@ -1,33 +1,35 @@
 -- @version 0001
 -- @author "JDieskau" <JDieskau _at_ web _dot_ de>
 
-function spawn ( type, coordX, coordY )
+i = 0;
+sprites = {};
+
+function spawn ( type, sys, coordX, coordY )
+	 i = i + 1;
+
 	return switch(type) : caseof {
-		  [window] = function (x)
-
-			   end,
 		  [ship] = function (x) 
-			   new = Ship();
-			   new.x = coordX;
-			   new.y = coordY;
+			   sprites[i] = Ship();
+			   sprites[i].x = coordX;
+			   sprites[i].y = coordY;
 
-			   return mapManager():addSprite ( new );
+			   return mapManager():addSprite ( sys, sprites[i] );
 
 			   end,
 		  [sun] = function (x) 
-			   new = Sun();
-			   new.x = coordX;
-			   new.y = coordY;
+			   sprites[i] = Sun();
+			   sprites[i].x = coordX;
+			   sprites[i].y = coordY;
 
-			   return mapManager():addSprite ( new );
+			   return mapManager():addSprite ( sys, sprites[i] );
 
 			   end,
 		  [planet] = function (x) 
-			   new = Planet();
-			   new.x = coordX;
-			   new.y = coordY;
+			   sprites[i] = Planet();
+			   sprites[i].x = coordX;
+			   sprites[i].y = coordY;
 
-			   return mapManager():addSprite ( new );
+			   return mapManager():addSprite ( sys, sprites[i] );
 
 
 			   end,

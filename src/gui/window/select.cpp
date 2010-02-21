@@ -60,7 +60,7 @@ void CSelectWindow::CalcBackground()
 	int x = this->GetPosition().x;
 	int y = this->GetPosition().y;
 	int height = this->GetSize().y;
-	int length = this->GetSize().y;
+	int length = this->GetSize().x;
 	
 	borderColor_ = sf::Color ( 180, 180, 180, 80 );
 	formWin_->AddPoint( sf::Vector2f ( x              , y          ), borderColor_ );

@@ -29,10 +29,14 @@ CSystem::CSystem ( std::string name ) :
 {
 	this->SetSize ( 6000, 6000 );
 	
-	infoText_ = "<b>" + name + "</b>" + "\nandere gesülz";
+	infoText_ = name;
 	
+	/* Create the sun */
 	sun_ = new sprite::CSun();
-	sun_->SetPosition ( this->GetSizeX() * 0.5, this->GetSizeY() * 0.5f );
+	sun_->SetPosition ( this->GetSizeX() * 0.5f, this->GetSizeY() * 0.5f );
+	
+	/* Create the tooltip window */
+	tooltip_ = new gui::CSystemTooltip ( this, name );
 }
 
 
@@ -41,6 +45,10 @@ void CSystem::Render ( sf::RenderTarget& Target ) const
 	/* Or when we are on galaxy view */
 	if ( GetGameClass()->GetMapManager()->GetViewMode() == GALAXY ) {
 		Target.Draw ( *sun_ );
+		
+		GetGameClass()->GetApp()->SetView( GetGameClass()->GetApp()->GetDefaultView() );
+		tooltip_->Render();
+		GetGameClass()->GetApp()->SetView( *GetGameClass()->GetViewPoint() );
 		return;
 	}
 	
@@ -108,6 +116,13 @@ sprite::CSun& CSystem::GetSun()
 {
 	return *sun_;
 }
+
+
+gui::CSystemTooltip* CSystem::GetTooltip()
+{
+	return tooltip_;
+}
+
 
 
 

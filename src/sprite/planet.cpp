@@ -59,10 +59,6 @@ CPlanet::CPlanet()
 	/* Set properties */
 	this->SetZoomFactor( 0.1 );
 	this->SetZoomLevel ( 0.2 );
-	
-	
-// 	markerWidth_ = this->GetDimension().GetWidth() * 0.7;
-// 	this->CalcGFX();
 }
 
 

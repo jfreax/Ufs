@@ -154,7 +154,7 @@ void CSprite::UpdateMarker()
 	
 	/* Set position and size */
 	GetGfxMarker().SetPosition ( dim.Left + dim.GetWidth() * 0.5f, dim.Top + dim.GetHeight() * 0.5f );
-	GetGfxMarker().SetScale ( this->GetScale().x * this->GetDimension().GetWidth(), this->GetScale().y * this->GetDimension().GetWidth() );
+	GetGfxMarker().SetScale ( this->GetDimension().GetWidth() * 0.01f, this->GetDimension().GetWidth() * 0.01f );
 	
  	/* Rotate */
 	markerRotation_ += GetGameClass()->GetApp()->GetFrameTime() * 50;
@@ -242,6 +242,12 @@ sf::Rect< float > CSprite::GetDimensionInGalaxy() const
 }
 
 
+sf::Sprite* CSprite::GetBackground()
+{
+	return &backgroundStatic_;
+}
+
+
 
 sf::Image* CSprite::GetMiniImage() const
 {
@@ -287,8 +293,8 @@ void Initialize()
 {
 	sf::Vector2f offset;
 	double angle, gap;
-	float width = 15.f;
-	gap = 1.5f;
+	float width = 100.f;
+	gap = 10.f;
 	
 	sf::Color color = sf::Color ( 30, 30, 50, 255 ); /* TODO Player color */
 	sf::Vector2f center ( 0, 0 );

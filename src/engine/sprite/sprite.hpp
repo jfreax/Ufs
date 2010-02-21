@@ -65,6 +65,7 @@ class CSprite : public sf::Drawable
 		sf::Rect<float> GetDimension() const;
 		sf::Rect<float> GetDimensionInGalaxy() const;
 		
+		sf::Sprite* GetBackground();
 		sf::Image* GetMiniImage() const;
 		
 		void Scale ( double scale );

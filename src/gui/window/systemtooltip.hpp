@@ -17,42 +17,47 @@
 
 */
 
-#ifndef TOOLTIP_HPP
-#define TOOLTIP_HPP
+#ifndef SYSTEMTOOLTIP_HPP
+#define SYSTEMTOOLTIP_HPP
+
 
 #include "../../engine/ui/window.hpp"
 #include "../../engine/ui/widget.hpp"
 
 #include "../../engine/sprite/sprite.hpp"
 
-
 namespace gui
 {
 class CButton;
 
-
-class CTooltip : public CWindow
+class CSystemTooltip : public CWindow
 {
 	public:
-		CTooltip ( CWidget* motherWidget, std::string text );
-		~CTooltip();
+		CSystemTooltip ( CSystem* sys, std::string text );
+		~CSystemTooltip();
 		
 		void Update();
+		
+		void Show ( const int x, const int y );
 		
 		void CalcBackground();
 		void ChangeTransparency ( unsigned int alpha );
 		
 		void SetText ( std::string string );
-
+		
 	private:
-		CWidget* motherWidget_;
+		CSystem* system_;
 		
 		CWidget* label_;
 		sf::Color textColor_;
+		
+		sf::Clock showClock_;
+		
+		std::vector < CButton* > buttons_;
+// 		CButton* buttons_;
 };
+
 
 } /* namespace gui */
 
-
-
-#endif // TOOLTIP_HPP
+#endif // SYSTEMTOOLTIP_HPP

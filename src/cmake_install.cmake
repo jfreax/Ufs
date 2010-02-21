@@ -32,3 +32,15 @@ IF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
   SET(CMAKE_INSTALL_SO_NO_EXE "0")
 ENDIF(NOT DEFINED CMAKE_INSTALL_SO_NO_EXE)
 
+IF(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for each subdirectory.
+  INCLUDE("/home/jens/C++/ufs/src/engine/cmake_install.cmake")
+  INCLUDE("/home/jens/C++/ufs/src/gui/cmake_install.cmake")
+  INCLUDE("/home/jens/C++/ufs/src/settings/cmake_install.cmake")
+  INCLUDE("/home/jens/C++/ufs/src/sprite/cmake_install.cmake")
+  INCLUDE("/home/jens/C++/ufs/src/util/cmake_install.cmake")
+  INCLUDE("/home/jens/C++/ufs/src/script/cmake_install.cmake")
+  INCLUDE("/home/jens/C++/ufs/src/map/cmake_install.cmake")
+
+ENDIF(NOT CMAKE_INSTALL_LOCAL_ONLY)
+

@@ -50,6 +50,7 @@ CQuitWindow::CQuitWindow()
 	this->SetPosition ( CENTER, CENTER );
 	
 	this->SetShow ( false );
+	this->CalcBackground();
 }
 
 	

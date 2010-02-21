@@ -70,6 +70,7 @@ class CWidget
 		void SetBackground ( sf::Sprite background );
 		sf::Sprite* GetBackground();
 		void SetBackground ( sf::Image* background );
+		
 		void SetBackgroundColor ( sf::Color color );
 		sf::Color GetBackgroundColor();
 

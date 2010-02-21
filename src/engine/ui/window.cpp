@@ -80,6 +80,7 @@ CWindow::CWindow ( bool withTitlebarPossible )
 	}
 
 	this->NoUpdate ( false );
+	this->CalcBackground();
 }
 
 
@@ -138,7 +139,7 @@ void CWindow::Update()
 
 	/* ... ansonsten Backgroundshape berechnen lassen */
 	else {
-		this->CalcBackground();
+// 		this->CalcBackground();
 	}
 
 	/* Inhalte ebenfalls aktualisieren */
@@ -507,12 +508,14 @@ void CWindow::Rotate ( double angle )
 	}
 
 	this->Update();
+	this->CalcBackground();
 }
 
 
 void CWindow::SetAngle ( double angle )
 {
 	angle_ = angle;
+	this->CalcBackground();
 }
 
 
@@ -564,9 +567,12 @@ void CWindow::AdjustSize()
 }
 
 
-void CWindow::SetSize ( sf::Vector2f size_, bool force )
+void CWindow::SetSize ( sf::Vector2f size, bool force )
 {
-	curSize_ = size_;
+	if ( curSize_ == size )
+		return;
+	
+	curSize_ = size;
 	sf::Vector2f minSize = minSize_;
 
 	/* Egal welche min. Einstellungen es gibt,
@@ -595,6 +601,7 @@ void CWindow::SetSize ( sf::Vector2f size_, bool force )
 	}
 
 	this->Update();
+	this->CalcBackground();
 }
 
 
@@ -612,6 +619,9 @@ sf::Vector2f CWindow::GetSize() const
 
 void CWindow::SetPosition ( sf::Vector2f position )
 {
+	if ( position == position_ )
+		return;
+	
 	if ( position.x != -1 )
 		position_.x = position.x;
 	if ( position.y != -1 )
@@ -633,6 +643,10 @@ void CWindow::SetPosition ( sf::Vector2f position )
 
 	this->Update();
 	this->UpdateWidgets();
+	
+	formWin_->SetPosition( GetPosition() );
+	formWinBorder_->SetPosition( GetPosition() );
+	formTitlebar_->SetPosition( GetPosition() );
 }
 
 
@@ -780,12 +794,14 @@ void CWindow::SetTitlebar ( unsigned int titlebar )
 		titlebarLength_ = 0;
 
 	this->Update();
+	this->CalcBackground();
 }
 
 
 void CWindow::SetNoRoundTitlebar ( bool ison )
 {
 	noRoundTitlebar_ = ison;
+	this->CalcBackground();
 }
 
 

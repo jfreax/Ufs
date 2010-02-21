@@ -37,9 +37,11 @@
 #include "gui/window/select.hpp"
 #include "gui/window/terminal.hpp"
 #include "gui/window/tooltip.hpp"
+#include "gui/window/systemtooltip.hpp"
 
 #include "gui/button/titlebar.hpp"
 #include "sprite/ship.hpp"
+
 
 
 
@@ -200,7 +202,7 @@ bool CGame::Start()
 	guiManager_.AddWindow ( specialWindow_["LOADING"] = new gui::CLoadWindow );
 	guiManager_.AddWindow ( specialWindow_["QUIT"] = new gui::CQuitWindow );
 	guiManager_.AddWindow ( specialWindow_["TERMINAL"] = new gui::CTerminalWindow );
-	guiManager_.AddWindow ( specialWindow_["GALAXY_TOOLTIP"] = new gui::CTooltip ( NULL, "TEST" ) );
+	guiManager_.AddWindow ( specialWindow_["GALAXY_TOOLTIP"] = new gui::CSystemTooltip ( NULL, "TEST" ) );
 	guiManager_.AddWindow ( new gui::CHeaderWindow );
 	guiManager_.AddWindow ( new gui::CSelectWindow );
 

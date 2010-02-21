@@ -20,7 +20,7 @@
 #include "../sprite/ship.hpp"
 
 #include "../engine/ui/window.hpp"
-#include "../gui/window/tooltip.hpp"
+#include "../gui/window/systemtooltip.hpp"
 #include "../game.hpp"
 #include "manager.hpp"
 
@@ -196,11 +196,13 @@ bool CMapManager::MouseHover ( const int mouseX, const int mouseY )
 			if ( (*sysIter)->GetDimension().Contains( x, y ) ) {
 				/* ... then show tooltip */
 				if ( GetGameClass()->GetSpecialWindow ( "GALAXY_TOOLTIP" ) ) {
-					dynamic_cast< gui::CTooltip* > ( GetGameClass()->GetSpecialWindow ( "GALAXY_TOOLTIP" ) )->SetText ( (*sysIter)->GetInfoText() );
+					(*sysIter)->GetTooltip()->Show ( mouseX, mouseY );
+// 					dynamic_cast< gui::CSystemTooltip* > ( GetGameClass()->GetSpecialWindow ( "GALAXY_TOOLTIP" ) )->GalaxyView ( (*sysIter)->GetInfoText(), mouseX, mouseY, (*sysIter)->GetSprites() );
+// 					dynamic_cast< gui::CTooltip* > ( GetGameClass()->GetSpecialWindow ( "GALAXY_TOOLTIP" ) )->SetText ( (*sysIter)->GetInfoText() );
 							
-					GetGameClass()->GetSpecialWindow ( "GALAXY_TOOLTIP" )->SetShow ( true );
-					GetGameClass()->GetSpecialWindow ( "GALAXY_TOOLTIP" )->AdjustSize();
-					GetGameClass()->GetSpecialWindow ( "GALAXY_TOOLTIP" )->SetPosition( sf::Vector2f (mouseX+20, mouseY) );
+// 					GetGameClass()->GetSpecialWindow ( "GALAXY_TOOLTIP" )->SetShow ( true );
+// 					GetGameClass()->GetSpecialWindow ( "GALAXY_TOOLTIP" )->AdjustSize();
+// 					GetGameClass()->GetSpecialWindow ( "GALAXY_TOOLTIP" )->SetPosition( sf::Vector2f (mouseX+20, mouseY) );
 					
 					/* and show glow of the sun */
 					(*sysIter)->GetSun().ShowGlow();
