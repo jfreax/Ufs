@@ -34,6 +34,8 @@ class CGraphic : public sf::Drawable
 		
 		virtual void Render ( sf::RenderTarget& Target ) const;
 		
+		void MovePosition ( const sf::Vector2f& Position );
+		
 		void Clear();
 		
 		sf::Sprite* Add ( sf::Image* image );

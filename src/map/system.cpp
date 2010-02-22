@@ -40,22 +40,11 @@ CSystem::CSystem ( std::string name ) :
 }
 
 
-void CSystem::Initialize()
-{
-	tooltip_->Initialize();
-}
-
-
-
 void CSystem::Render ( sf::RenderTarget& Target ) const
 {
 	/* Or when we are on galaxy view */
 	if ( GetGameClass()->GetMapManager()->GetViewMode() == GALAXY ) {
 		Target.Draw ( *sun_ );
-		
-		GetGameClass()->GetApp()->SetView( GetGameClass()->GetApp()->GetDefaultView() );
-		tooltip_->Render();
-		GetGameClass()->GetApp()->SetView( *GetGameClass()->GetViewPoint() );
 		return;
 	}
 	
@@ -65,10 +54,8 @@ void CSystem::Render ( sf::RenderTarget& Target ) const
 	
 	/* Draw the sun */
 	Target.Draw ( *sun_ );
-	
-
-	
-	/* Draw sprites */
+		
+	/* Draw all other sprites */
 	for ( int i = 0; spriteList_.end() != spriteList_.begin()+i; ++i ) {
 		Target.Draw( **(spriteList_.begin()+i) );
 	}

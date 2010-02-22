@@ -17,48 +17,31 @@
 
 */
 
-#ifndef SYSTEMTOOLTIP_HPP
-#define SYSTEMTOOLTIP_HPP
+#ifndef PLANETBUTTON_HPP
+#define PLANETBUTTON_HPP
 
+#include "../../engine/ui/button.hpp"
+#include "../../sprite/planet.hpp"
 
-#include "../../engine/ui/window.hpp"
-#include "../../engine/ui/widget.hpp"
-
-#include "../../engine/sprite/sprite.hpp"
 
 namespace gui
 {
-class CButton;
-
-class CSystemTooltip : public CWindow
+	
+	
+class CPlanetButton : public CButton
 {
 	public:
-		CSystemTooltip ( CSystem* sys, std::string text );
-		~CSystemTooltip();
+		CPlanetButton();
 		
-		bool onUnHoverMouse();
+		bool onLeftClick();
 		
-		void Update();
-		
-		void AddPlanetButton ( sprite::CPlanet* planet );
-		
-		void Show ( const int x, const int y );
-		
-		void CalcBackground();
-		void ChangeTransparency ( unsigned int alpha );
-		
-		void SetText ( std::string string );
-		
-	private:
-		CSystem* system_;
-		
-		CWidget* label_;
-		sf::Color textColor_;
-		
-		sf::Clock showClock_;
+		sprite::CPlanet* planet;
+	
 };
+
 
 
 } /* namespace gui */
 
-#endif // SYSTEMTOOLTIP_HPP
+
+#endif // PLANETBUTTON_HPP

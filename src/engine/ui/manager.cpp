@@ -216,9 +216,14 @@ bool CManager::MouseHover ( const int x, const int y )
 	std::vector< CWindow* >::iterator iterBegin = windowList_.begin();
 
 	for ( ;currentWindow + 1 != iterBegin; --currentWindow ) {
-		if ( ( *currentWindow )->GetWindowDimension().Contains ( x, y ) ||
+		if ( ( *currentWindow )->GetShow() && ( *currentWindow )->GetWindowDimension().Contains ( x, y ) ||
 		                ( *currentWindow )->GetTitlebarDimension().Contains ( x, y ) ) {
+			
 			highestMouseScope = WINDOW > highestMouseScope ? WINDOW : highestMouseScope;
+			previousMouseScope_ = WINDOW;
+
+			/* Call hover event of the window */
+			( *currentWindow )->onUnHoverMouse();
 
 			std::vector< gui::CWidget* >* widgetList = ( *currentWindow )->GetWidgetList();
 			gui::CWidget* currentWidget = NULL;
@@ -227,9 +232,8 @@ bool CManager::MouseHover ( const int x, const int y )
 				currentWidget = widgetList->at ( i - 1 );
 
 				/* Wenn Widget angezeigt werden soll und die Maus an der richtigen Position ist, dann Aktion ausführen */
-
 				if ( currentWidget->GetShow() && currentWidget->GetDimensionInScreen().Contains ( x, y ) ) {
-					previousMouseScope_ = NONE;
+					previousMouseScope_ = WINDOW;
 					currentWidget->onHoverMouse();
 
 				}
@@ -238,6 +242,11 @@ bool CManager::MouseHover ( const int x, const int y )
 	}
 
 	settings::SetMouseScope ( highestMouseScope );
+	
+	if ( previousMouseScope_ == NONE )
+		return false;
+	else
+		return true;
 }
 
 

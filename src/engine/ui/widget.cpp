@@ -35,6 +35,7 @@ CWidget::CWidget ( )
 {
 	static unsigned int globalId = 0;
 	id_ = ++globalId;
+	type_ = widget;
 
 	CTheme* theme = GetGameClass()->GetGuiManager()->GetTheme();
 
@@ -127,6 +128,13 @@ bool CWidget::Update ( bool doIt )
 
 	return true;
 }
+
+
+WIDGET_TYPE CWidget::GetType() const
+{
+	return type_;
+}
+
 
 
 void CWidget::Render()

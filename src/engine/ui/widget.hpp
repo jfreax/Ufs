@@ -29,6 +29,12 @@
 namespace gui
 {
 	
+enum WIDGET_TYPE {
+	widget,
+	button,
+	planetbutton
+};
+	
 class CWidget
 {
 	public:
@@ -36,6 +42,7 @@ class CWidget
 		~CWidget();
 		
 		unsigned int GetId() { return id_; }
+		WIDGET_TYPE GetType() const;
 
 		virtual void Render();
 		virtual bool Update ( bool doIt = false );
@@ -108,6 +115,8 @@ class CWidget
 		/* --- Data variables --- */
 		unsigned int id_;
 		class CWindow* motherWin_;
+		
+		WIDGET_TYPE type_;
 		
 		bool update_;
 

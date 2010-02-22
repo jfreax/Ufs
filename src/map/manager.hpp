@@ -62,7 +62,6 @@ class CMapManager
 		
 		VIEWMODE GetViewMode();
 		
-	private:
 		sf::Rect<float> ConvertCoords ( sf::Rect<float> rect );
 		sf::Vector2f ConvertCoords ( sf::Vector2f vector );
 		float ConvertCoordsX ( float f );
@@ -86,6 +85,7 @@ class CMapManager
 		VIEWMODE viewMode_;
 		
 		CSystem* currentSystem_;
+		sprite::CSprite* zoomTo_;
 		
 };
 

@@ -37,6 +37,8 @@ class CWindow
 
 		virtual void Call();
 		
+		virtual bool onUnHoverMouse() {};
+		
 		void Update();
 		void UpdateWidgets();
 

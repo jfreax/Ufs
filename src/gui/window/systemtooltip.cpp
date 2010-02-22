@@ -19,12 +19,12 @@
 
 #include "tooltip.hpp"
 
+#include "../../game.hpp"
 #include "../../engine/ui/window.hpp"
+#include "../button/planetbutton.hpp"
 #include "../other/label.hpp"
 #include "../other/spacer.hpp"
-#include "../../engine/ui/button.hpp"
-#include "../button/quit.hpp"
-#include "../../game.hpp"
+
 
 #include "systemtooltip.hpp"
 
@@ -53,9 +53,8 @@ CSystemTooltip::CSystemTooltip ( CSystem* sys, std::string text ) :
 	this->SetTitlebar ( 0 );
 // 	backgroundColor_ = sf::Color ( 200,220,0,0 ); /* TODO find a nice color */
 	
-	this->AddWidget( new CSpacer ( VERTICAL, label_->GetText()->GetRect().GetHeight() + 14 ) );
-	this->AddWidget( new CSpacer ( HORIZONTAL, 10 ) );
-// 	this->SetLayout ( HORIZONTAL, 3 );
+	this->AddWidget( new CSpacer ( VERTICAL, label_->GetText()->GetRect().GetHeight() + 2 ) );
+// 	this->AddWidget( new CSpacer ( HORIZONTAL, 10 ) );
 
 	this->AdjustSize();
 }
@@ -74,80 +73,57 @@ CSystemTooltip::~CSystemTooltip()
 }
 
 
-// void CSystemTooltip::Initialize()
-// {
-// 	std::vector < sprite::CSprite* >::iterator iter = system_->GetSprites().begin();
-// 	std::vector < sprite::CSprite* >::iterator iterEnd = system_->GetSprites().end();
-// 	for ( int i = 0; iter != iterEnd ; ++iter ) {
-// 		if ( (*iter)->GetType() == sprite::PLANET ) {
-// 			CButton* button = new CButton;
-// 			button->SetBackground ( (*iter)->GetBackground() );
-// 			
-// 			this->AddWidget ( button );
-// 		}
-// 	}
-// 	
-// 	
-// 	this->AdjustSize();
-// }
+bool CSystemTooltip::onUnHoverMouse()
+{
+	showClock_.Reset();
+	
+}
 
-	
-	
+
 void CSystemTooltip::Update()
 {
+	CWindow::Update();
+	
 	if ( showClock_.GetElapsedTime() > 0.f ) {
-		this->ChangeTransparency ( 120 - showClock_.GetElapsedTime() * 600 );
+		this->ChangeTransparency ( 120 - showClock_.GetElapsedTime() * 400 );
 	}
-	if ( showClock_.GetElapsedTime() > 0.2f ) {
-		show_ = false;
+	if ( showClock_.GetElapsedTime() > 0.3f ) {
+		this->SetShow ( false );
 	}
 }
 
 
 void CSystemTooltip::AddPlanetButton ( sprite::CPlanet* planet )
 {
-	CButton* button = new CButton;
+	CPlanetButton* button = new CPlanetButton;
 	
 	button->SetBackground ( &planet->GetImage() );
-	
-	
 	button->GetBackground()->Scale ( 16.f / button->GetBackground()->GetSize().x, 16.f / button->GetBackground()->GetSize().y );
-// 	button->GetBackground()->SetPosition ( button->GetPosition() );
+	button->GetBackground()->MovePosition ( sf::Vector2f ( 300.f, 500.f ) );
+	button->planet = planet;
 	
 	this->AddWidget ( button );
 	
-	button->SetSize ( sf::Vector2f ( 28.f, 16.f ) );
-	button->AdjustSize();
+	button->SetSize ( sf::Vector2f ( 16.f, 16.f ) );
+	this->AdjustSize();
 }
 
 
 
 void CSystemTooltip::Show ( const int x, const int y )
 {
+	if ( showClock_.GetElapsedTime() > 0.3f )
+		this->SetPosition ( sf::Vector2f ( x, y) );
+	
 	showClock_.Reset();
 	
 	this->SetShow ( true );
-	this->AdjustSize();
-	this->SetPosition( sf::Vector2f ( x + 20, y) );
-	
-// 	std::vector < sprite::CSprite* >::iterator iter = sprites.begin();
-// 	std::vector < sprite::CSprite* >::iterator iterEnd = sprites.end();
-// 	for ( int i = 0; iter != iterEnd ; ++iter ) {
-// 		if ( (*iter)->GetType() == sprite::PLANET ) {
-// 			buttons_[i].SetBackground ( *(*iter)->GetBackground() );
-// // 		( *iter )->Get;
-// 			++i;
-// 		}
-// 	}
-	
 }
 
 
 
 void CSystemTooltip::CalcBackground()
 {
-//     gui::CWindow::CalcBackground();
-
 	/* alte Shapes löschen */
 	delete formWin_;
 	formWin_ = new sf::Shape();
@@ -184,15 +160,7 @@ void CSystemTooltip::CalcBackground()
 	formWinBorder_->AddPoint( sf::Vector2f ( x + length     , y + height ), borderColor_, yellow );
 	formWinBorder_->AddPoint( sf::Vector2f ( x + 8          , y + height ), borderColor_, yellow );
 	formWinBorder_->AddPoint( sf::Vector2f ( x              , y + height - 8 ), borderColor_, yellow );
-	
-// 	formWinBorder_->AddPoint( sf::Vector2f ( x + 5          , y + 5           ), sf::Color ( 0, 0, 0, 190 ) );
-// 	formWinBorder_->AddPoint( sf::Vector2f ( x + length - 22, y + 5           ), sf::Color ( 0, 0, 0, 180 ) );
-// 	formWinBorder_->AddPoint( sf::Vector2f ( x + length - 5 , y + 22          ), sf::Color ( 0, 0, 0, 160 ) );
-// 	formWinBorder_->AddPoint( sf::Vector2f ( x + length - 5 , y + height - 20 ), sf::Color ( 0, 0, 0, 170 ) );
-// 	formWinBorder_->AddPoint( sf::Vector2f ( x + length - 5 , y + height - 5  ), sf::Color ( 0, 0, 0, 160 ) );
-// 	formWinBorder_->AddPoint( sf::Vector2f ( x + 20         , y + height - 5  ), sf::Color ( 0, 0, 0, 160 ) );
-// 	formWinBorder_->AddPoint( sf::Vector2f ( x + 5          , y + height - 20 ), sf::Color ( 0, 0, 0, 180 ) );
-	
+
 	/* Positionen anpassen */
 	formWin_->SetPosition ( GetPosition() );
 	formWinBorder_->SetPosition ( GetPosition() );
@@ -213,7 +181,7 @@ void CSystemTooltip::ChangeTransparency ( unsigned int alpha )
 			// 		formWin_->SetPointColor ( i, nColor );
 			// 	}
 			
-		label_->GetText()->SetColor ( textColor_ );
+	label_->GetText()->SetColor ( textColor_ );
 }
 
 

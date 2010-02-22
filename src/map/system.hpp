@@ -34,8 +34,6 @@ class CSystem : public sf::Drawable
 	public:
 		CSystem ( std::string name );
 		
-		void Initialize();
-		
 		void Render ( sf::RenderTarget& Target ) const;
 		void Update();
 		

@@ -44,6 +44,15 @@ void CGraphic::Render ( sf::RenderTarget& Target ) const
 }
 
 
+void CGraphic::MovePosition ( const sf::Vector2f& Position )
+{
+	for ( int i = 0; objects_.end() != objects_.begin()+i; ++i ) {
+		( *(objects_.begin()+i) )->SetPosition ( ( *(objects_.begin()+i) )->GetPosition().x + Position.x, ( *(objects_.begin()+i) )->GetPosition().y + Position.y );
+	}
+}
+
+
+
 void CGraphic::Clear()
 {
 	for ( int i = 0; objects_.end() != objects_.begin()+i; ++i ) {

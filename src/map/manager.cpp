@@ -21,6 +21,7 @@
 
 #include "../engine/ui/window.hpp"
 #include "../gui/window/systemtooltip.hpp"
+#include "../gui/button/planetbutton.hpp"
 #include "../game.hpp"
 #include "manager.hpp"
 
@@ -43,6 +44,7 @@ CMapManager::~CMapManager()
 void CMapManager::Initialize()
 {
 	currentSystem_ = NULL;
+	zoomTo_ = NULL;
 	
 	viewMode_ = SYSTEM;
 	zoomed_ = 0;
@@ -172,7 +174,30 @@ bool CMapManager::MouseClickReleased ( const int mouseX, const int mouseY, const
 			selectedRect_.Left = selectedRect_.Top = 0;
 			
 			if ( this->GetViewMode() == GALAXY ) {
-				this->Zoom ( 1 );
+				
+				/* Mouse is over tooltip window */
+				gui::CWindow* tooltip = currentSystem_->GetTooltip();
+				if ( tooltip->GetShow() && tooltip->GetWindowDimension().Contains ( mouseX, mouseY ) ) {
+					
+					tooltip->onUnHoverMouse();
+					
+					/* Widgets prüfen */
+					std::vector< gui::CWidget* >* widgetList = tooltip->GetWidgetList();
+					gui::CWidget* currentWidget = NULL;
+					
+					for ( std::vector< gui::CWidget* >::size_type i = widgetList->size(); i; --i ) {
+						currentWidget = widgetList->at ( i - 1 );
+						
+						/* Wenn Widget angezeigt werden soll, minimale Klickzeitabstand vorbei ist
+						und die Maus an der richtigen Position ist, dann Aktion ausführen */
+						if ( currentWidget->GetShow() && currentWidget->GetDimensionInScreen().Contains ( mouseX, mouseY )  && currentWidget->GetType() ) {
+							zoomTo_ = (dynamic_cast< gui::CPlanetButton* > ( currentWidget ))->planet;
+							break;
+						}
+					}
+				}
+				
+				this->Zoom ( 1.f );
 			}
 
 			break;
@@ -192,23 +217,20 @@ bool CMapManager::MouseHover ( const int mouseX, const int mouseY )
 	for ( ; sysIter != sysIterEnd ; ++sysIter ) {
 		/* When we are on galaxy view... */
 		if ( this->GetViewMode() == GALAXY && zoom < 0.006f ) {
-			/* ... and the mouse is over a sun... */
-			if ( (*sysIter)->GetDimension().Contains( x, y ) ) {
+			
+			/* ... and mouse is over tooltip window */
+			gui::CWindow* tooltip = (*sysIter)->GetTooltip();
+			if ( tooltip->GetShow() && tooltip->GetWindowDimension().Contains ( mouseX, mouseY ) ) {
+				tooltip->onUnHoverMouse();
+			} else if ( (*sysIter)->GetDimension().Contains( x, y ) ) { /* ... or the mouse is over a sun... */
 				/* ... then show tooltip */
-				if ( GetGameClass()->GetSpecialWindow ( "GALAXY_TOOLTIP" ) ) {
-					(*sysIter)->GetTooltip()->Show ( mouseX, mouseY );
-// 					dynamic_cast< gui::CSystemTooltip* > ( GetGameClass()->GetSpecialWindow ( "GALAXY_TOOLTIP" ) )->GalaxyView ( (*sysIter)->GetInfoText(), mouseX, mouseY, (*sysIter)->GetSprites() );
-// 					dynamic_cast< gui::CTooltip* > ( GetGameClass()->GetSpecialWindow ( "GALAXY_TOOLTIP" ) )->SetText ( (*sysIter)->GetInfoText() );
-							
-// 					GetGameClass()->GetSpecialWindow ( "GALAXY_TOOLTIP" )->SetShow ( true );
-// 					GetGameClass()->GetSpecialWindow ( "GALAXY_TOOLTIP" )->AdjustSize();
-// 					GetGameClass()->GetSpecialWindow ( "GALAXY_TOOLTIP" )->SetPosition( sf::Vector2f (mouseX+20, mouseY) );
+				(*sysIter)->GetTooltip()->Show ( mouseX, mouseY );
+				
+				/* and show glow of the sun */
+				(*sysIter)->GetSun().ShowGlow();
 					
-					/* and show glow of the sun */
-					(*sysIter)->GetSun().ShowGlow();
-					
-					currentSystem_ = (*sysIter);
-				}
+				currentSystem_ = (*sysIter);
+				zoomTo_ = &currentSystem_->GetSun();
 			}
 		}
 	}
@@ -242,9 +264,9 @@ void CMapManager::Zoom ( int direction, bool fade, bool deltaMove )
 			GetGameClass()->GetViewPoint()->Zoom ( 1 + zoomStep* ( zoomed_*0.05f ) );
 			
 			/* If we are in galaxy view, then zoom to system */
-			if ( this->GetViewMode() == GALAXY && currentSystem_ ) {
-				GetGameClass()->GetViewPoint()->Move ( (currentSystem_->GetPositionX() + currentSystem_->GetSun().GetPositionX() - GetGameClass()->GetViewPoint()->GetCenter().x ) / 10.f,
-								       (currentSystem_->GetPositionY() + currentSystem_->GetSun().GetPositionY() - GetGameClass()->GetViewPoint()->GetCenter().y ) / 10.f );
+			if ( this->GetViewMode() == GALAXY && zoomTo_ ) {
+				GetGameClass()->GetViewPoint()->Move ( (currentSystem_->GetPositionX() + zoomTo_->GetPositionX() - GetGameClass()->GetViewPoint()->GetCenter().x ) / 10.f,
+								       (currentSystem_->GetPositionY() + zoomTo_->GetPositionY() - GetGameClass()->GetViewPoint()->GetCenter().y ) / 10.f );
 			} else if ( deltaMove ) {
 				GetGameClass()->GetViewPoint()->Move ( deltaX * zoom, deltaY * zoom );
 			}
@@ -362,10 +384,6 @@ VIEWMODE CMapManager::GetViewMode()
 {
 	return viewMode_;
 }
-
-
-
-/* PRIVATE */
 
 
 sf::Rect< float > CMapManager::ConvertCoords ( sf::Rect< float > rect )
