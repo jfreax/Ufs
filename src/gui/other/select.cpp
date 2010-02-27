@@ -109,8 +109,8 @@ void CSelectWidget::Calc()
 			
 		/* If one object is marked */
 		} else if ( spriteList_->size() == 1 ) {
-			if ( spriteList_->at ( 0 )->GetMiniImage() != NULL ) {
-				sprite::CSprite* sprite = spriteList_->at ( 0 );
+// 			if ( spriteList_->at ( 0 )->GetMiniImage() != NULL ) {
+				sprite::CSprite* sprite = *spriteList_->begin();
 				
 // 				sf::Sprite miniImg ( *sprite->GetMiniImage(), sf::Vector2f ( GetPositionInScreen().x+6, GetPositionInScreen().y ) );
 				
@@ -129,7 +129,7 @@ void CSelectWidget::Calc()
 // 			
 // 				data_.push_back ( daTmp );
 // 				toDraw_.push_back ( miniImg );
-			}
+// 			}
 		
 		/* Or more than one are marked */
 		} else if ( !spriteList_->empty() ) {

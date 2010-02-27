@@ -50,6 +50,9 @@ class CSprite : public sf::Drawable
 		virtual void UpdateMarker();
 		
 		void SetMotherSystem ( CSystem* sys );
+		CSystem& GetMotherSystem() const;
+		
+		sf::Vector2f GetPositionInGalaxy() const;
 		
 		float GetPositionX() const;
 		void SetPositionX ( float x );

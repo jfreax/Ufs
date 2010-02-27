@@ -33,6 +33,8 @@ class CPlanetButton : public CButton
 	public:
 		CPlanetButton();
 		
+		void Render();
+		
 		bool onLeftClick();
 		
 		sprite::CPlanet* planet;

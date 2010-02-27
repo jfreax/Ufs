@@ -82,39 +82,55 @@ void Initialize ( void* UserData )
 	
 	/* Export our class with LuaBind */
 	luabind::module ( luaState ) [
+		/* Vector */
+		luabind::class_ < sf::Vector2<float> > ( "Vec" )
+			.def ( luabind::constructor<>() )
+			.def ( luabind::constructor< float, float >() )
+			.def_readwrite( "x", &sf::Vector2<float>::x )
+			.def_readwrite( "y", &sf::Vector2<float>::y ),
+		
+		/* Drawable */
 		luabind::class_ <sf::Drawable> ( "Drawable" ),
 		luabind::class_ <sf::Color> ( "Color" )
-			.def ( luabind::constructor<>() )
 			.def ( luabind::constructor<sf::Uint8,sf::Uint8,sf::Uint8,sf::Uint8>() ),
 			
-		luabind::class_ <CSystem, sf::Drawable> ( "System" )
-			.def ( luabind::constructor<std::string>() )
-			.def ( "addSprite", &CSystem::AddSprite )
-			.def ( "getSun", &CSystem::GetSun )
-			.property ( "x", &CSystem::GetPositionX, &CSystem::SetPositionX )
-			.property ( "y", &CSystem::GetPositionY, &CSystem::SetPositionY ),
-			
+		/* Sprite */
 		luabind::class_ <sprite::CSprite, sf::Drawable> ( "Sprite" )
 			.def ( luabind::constructor<>() )
 			.property ( "x", &sprite::CSprite::GetPositionX, &sprite::CSprite::SetPositionX )
 			.property ( "y", &sprite::CSprite::GetPositionY, &sprite::CSprite::SetPositionY )
 			.property ( "player", &sprite::CSprite::GetPlayer, &sprite::CSprite::SetPlayer ),
 			
+		/* Sprite - Planet */
 		luabind::class_ <sprite::CPlanet, luabind::bases<sprite::CSprite, sf::Drawable> > ( "Planet" )
 			.def ( luabind::constructor<>() ),
-			
+		
+		/* Sprite - Sun */
 		luabind::class_ <sprite::CSun, luabind::bases<sprite::CSprite, sf::Drawable> > ( "Sun" )
 			.def ( luabind::constructor<>() )
 			.property ( "color", &sprite::CSun::GetColor, &sprite::CSun::SetColor ),
 			
+		/* Sprite - Ship */
 		luabind::class_ <sprite::CShip, luabind::bases<sprite::CSprite, sf::Drawable> > ( "Ship" )
 			.def ( luabind::constructor<>() ),
 			
+		/* MapManager */
 		luabind::class_ <CMapManager> ("MapManager" )
 			.def ( "createSystem", &CMapManager::CreateSystem )
 			.def ( "addSprite", &CMapManager::AddSprite )
+			.def ( "calcDistance", (float(CMapManager::*)(sf::Vector2f,sf::Vector2f))&CMapManager::CalcDistance )
+			.def ( "calcDistance", (float(CMapManager::*)(sf::Vector2f,sprite::CSprite*))&CMapManager::CalcDistance )
+			.def ( "calcDistance", (float(CMapManager::*)(sprite::CSprite*,sprite::CSprite*))&CMapManager::CalcDistance )
 			.def_readonly ( "zoomLevel", &CMapManager::GetZoomLevel )
-			.def_readonly ( "selectedSprites", &CMapManager::GetSelectedSprites, luabind::return_stl_iterator )
+			.def_readonly ( "selectedSprites", &CMapManager::GetSelectedSprites, luabind::return_stl_iterator ),
+			
+		/* System float CMapManager::CalcDistance ( sf::Vector2f vec1, sf::Vector2f vec2 )*/
+		luabind::class_ <CSystem, sf::Drawable> ( "System" )
+			.def ( luabind::constructor<std::string>() )
+			.property ( "x", &CSystem::GetPositionX, &CSystem::SetPositionX )
+			.property ( "y", &CSystem::GetPositionY, &CSystem::SetPositionY )
+			.def ( "addSprite", &CSystem::AddSprite )
+			.def ( "getSun", &CSystem::GetSun )
 	];
 	
 	

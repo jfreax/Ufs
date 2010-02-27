@@ -99,7 +99,6 @@ void CSystemTooltip::AddPlanetButton ( sprite::CPlanet* planet )
 	
 	button->SetBackground ( &planet->GetImage() );
 	button->GetBackground()->Scale ( 16.f / button->GetBackground()->GetSize().x, 16.f / button->GetBackground()->GetSize().y );
-	button->GetBackground()->MovePosition ( sf::Vector2f ( 300.f, 500.f ) );
 	button->planet = planet;
 	
 	this->AddWidget ( button );

@@ -53,7 +53,7 @@ class CMapManager
 		CSystem& GetCurrentSystem();
 		
 		sprite::CSprite* AddSprite (  int systemID, sprite::CSprite* sprite );
-		std::vector < sprite::CSprite* >& GetSelectedSprites();
+		std::list < sprite::CSprite* >& GetSelectedSprites();
 		
 		gui::CWidget* GetSpecialWidget ( std::string name );
 		void SetSpecialWidget ( std::string name, gui::CWidget* widget );
@@ -67,10 +67,16 @@ class CMapManager
 		float ConvertCoordsX ( float f );
 		float ConvertCoordsY ( float f );
 		
+		/* ---- For scripts ---- */
+		float CalcDistance ( sf::Vector2f vec1, sf::Vector2f vec2 );
+		float CalcDistance ( sf::Vector2f vec, sprite::CSprite* sprite );
+		float CalcDistance ( sprite::CSprite* sprite1, sprite::CSprite* sprite2 );
+		
+		sprite::CPlanet& FindNextPlanet ( sprite::CSprite* sprite );
 
 	private:
-		std::vector < CSystem* > systems_;
-		std::vector < sprite::CSprite* > selectedSpriteList_;
+		std::list < CSystem* > systems_;
+		std::list < sprite::CSprite* > selectedSpriteList_;
 		
 		sf::Vector2f lastPos_;
 		sf::Rect< float > selectedRect_;

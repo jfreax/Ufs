@@ -28,10 +28,21 @@ CPlanetButton::CPlanetButton()
 	type_ = planetbutton;
 }
 
+
+void CPlanetButton::Render()
+{
+	/* Yes, yes... its a hack :( */
+	this->GetBackground()->MovePosition ( sf::Vector2f ( 300.f, 500.f ) );
+	gui::CButton::Render();
+	this->GetBackground()->MovePosition ( sf::Vector2f ( -300.f, -500.f ) );
+	
+	
+}
+
+
 	
 bool CPlanetButton::onLeftClick()
 {
-	std::cout << "gut " << std::endl;
 }
 
 	

@@ -56,8 +56,10 @@ void CSystem::Render ( sf::RenderTarget& Target ) const
 	Target.Draw ( *sun_ );
 		
 	/* Draw all other sprites */
-	for ( int i = 0; spriteList_.end() != spriteList_.begin()+i; ++i ) {
-		Target.Draw( **(spriteList_.begin()+i) );
+	std::list < sprite::CSprite* >::const_iterator iter = spriteList_.begin();
+	std::list < sprite::CSprite* >::const_iterator iterEnd = spriteList_.end();
+	for ( ; iter != iterEnd ; ++iter ) {
+		Target.Draw( *(*iter) );
 	}
 }
 
@@ -74,11 +76,9 @@ void CSystem::Update()
 	if ( &(GetGameClass()->GetMapManager()->GetCurrentSystem()) != this )
 		return;
 	
-
-	
 	/* Update all other sprites */
-	std::vector < sprite::CSprite* >::iterator iter = spriteList_.begin();
-	std::vector < sprite::CSprite* >::iterator iterEnd = spriteList_.end();
+	std::list < sprite::CSprite* >::const_iterator iter = spriteList_.begin();
+	std::list < sprite::CSprite* >::const_iterator iterEnd = spriteList_.end();
 	for ( ; iter != iterEnd ; ++iter ) {
 		( *iter )->Update();
 	}
@@ -105,7 +105,7 @@ sprite::CSprite* CSystem::AddSprite ( sprite::CSprite* sprite )
 }
 
 
-std::vector< sprite::CSprite*, std::allocator< sprite::CSprite* > >& CSystem::GetSprites()
+std::list < sprite::CSprite* >& CSystem::GetSprites()
 {
 	return spriteList_;
 }

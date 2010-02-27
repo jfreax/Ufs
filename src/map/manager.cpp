@@ -28,8 +28,8 @@
 
 CMapManager::~CMapManager()
 {
-	std::vector < CSystem* >::iterator sysIter = systems_.begin();
-	std::vector < CSystem* >::iterator sysIterEnd = systems_.end();
+	std::list < CSystem* >::const_iterator sysIter = systems_.begin();
+	std::list < CSystem* >::const_iterator sysIterEnd = systems_.end();
 	for ( ; sysIter != sysIterEnd ; ++sysIter )
 		delete ( *sysIter );
 // 	std::vector < sprite::CSprite* >::iterator iter = spriteList_.begin();
@@ -71,14 +71,14 @@ void CMapManager::Render()
 	sf::RenderWindow* app = GetGameClass()->GetApp();
 
 	/* Draw sprites */
-	std::vector < CSystem* >::iterator sysIter = systems_.begin();
-	std::vector < CSystem* >::iterator sysIterEnd = systems_.end();
+	std::list < CSystem* >::const_iterator sysIter = systems_.begin();
+	std::list < CSystem* >::const_iterator sysIterEnd = systems_.end();
 	for ( ; sysIter != sysIterEnd ; ++sysIter )
 		app->Draw( **sysIter );
 
 	/* Draw a circle at selected sprites */
-	std::vector < sprite::CSprite* >::iterator iter = selectedSpriteList_.begin();
-	std::vector < sprite::CSprite* >::iterator iterEnd =selectedSpriteList_.end();
+	std::list < sprite::CSprite* >::const_iterator iter = selectedSpriteList_.begin();
+	std::list < sprite::CSprite* >::const_iterator iterEnd =selectedSpriteList_.end();
 	for ( ; iter != iterEnd ; ++iter ) {
 		(*iter)->DrawMarker();
 	}
@@ -95,8 +95,8 @@ void CMapManager::Render()
 
 void CMapManager::Update()
 {
-	std::vector < CSystem* >::iterator sysIter = systems_.begin();
-	std::vector < CSystem* >::iterator sysIterEnd = systems_.end();
+	std::list < CSystem* >::const_iterator sysIter = systems_.begin();
+	std::list < CSystem* >::const_iterator sysIterEnd = systems_.end();
 	for ( ; sysIter != sysIterEnd ; ++sysIter )
 		( *sysIter )->Update();
 	
@@ -142,8 +142,8 @@ bool CMapManager::MouseClick ( const int mouseX, const int mouseY, const sf::Mou
 					
 					
 				} else { /* Iterate all sprite */
-					std::vector < sprite::CSprite* >::iterator iter = currentSystem_->GetSprites().begin();
-					std::vector < sprite::CSprite* >::iterator iterEnd = currentSystem_->GetSprites().end();
+					std::list < sprite::CSprite* >::const_iterator iter = currentSystem_->GetSprites().begin();
+					std::list < sprite::CSprite* >::const_iterator iterEnd = currentSystem_->GetSprites().end();
 					for ( ; iter != iterEnd ; ++iter ) {
 						sf::Rect< float > selectedRectInGameCoord = this->ConvertCoords ( selectedRect_ );
 						if ( ( *iter )->GetDimensionInGalaxy().Intersects ( selectedRectInGameCoord ) ) {
@@ -212,8 +212,8 @@ bool CMapManager::MouseHover ( const int mouseX, const int mouseY )
 	int x = this->ConvertCoordsX ( mouseX );
 	int y = this->ConvertCoordsY ( mouseY );
 	
-	std::vector < CSystem* >::iterator sysIter = systems_.begin();
-	std::vector < CSystem* >::iterator sysIterEnd = systems_.end();
+	std::list < CSystem* >::const_iterator sysIter = systems_.begin();
+	std::list < CSystem* >::const_iterator sysIterEnd = systems_.end();
 	for ( ; sysIter != sysIterEnd ; ++sysIter ) {
 		/* When we are on galaxy view... */
 		if ( this->GetViewMode() == GALAXY && zoom < 0.006f ) {
@@ -312,7 +312,13 @@ CSystem* CMapManager::CreateSystem ( std::string name )
 	CSystem* system = new CSystem ( name );
 	
 	if ( !systems_.empty() ) {
-		CSystem* lastSystem = *(systems_.end()-1);
+		std::list < CSystem* >::const_iterator sysIterMin;;
+		std::list < CSystem* >::const_iterator sysIter = systems_.begin();
+		std::list < CSystem* >::const_iterator sysIterEnd = systems_.end();
+		for ( ; sysIter != sysIterEnd ; ++sysIter ) {
+			sysIterMin = sysIter;
+		}
+		CSystem* lastSystem = *(sysIterMin);
 		system->SetPositionX ( lastSystem->GetPositionX() + lastSystem->GetSizeX() );
 		system->SetPositionY ( lastSystem->GetPositionY() + lastSystem->GetSizeY() );
 	}
@@ -338,7 +344,13 @@ sprite::CSprite* CMapManager::AddSprite ( int systemID, sprite::CSprite* sprite 
 		return NULL;
 	else {
 		try {
-			systems_.at ( systemID )->AddSprite ( sprite );
+			std::list < CSystem* >::const_iterator sysIter = systems_.begin();
+			std::list < CSystem* >::const_iterator sysIterEnd = systems_.end();
+			for ( int i = 0; sysIter != sysIterEnd ; ++sysIter, ++i ) {
+				if ( i == systemID )
+					(*sysIter)->AddSprite ( sprite );
+			}
+// 			systems_.at ( systemID )->AddSprite ( sprite );
 		} catch ( std::out_of_range &e ) {
 			GetGameClass()->Error ( "Could not find 'system' with ID '" + util::lCast<std::string>( systemID ) + "'", __PRETTY_FUNCTION__, __FILE__, __LINE__ );
 			return NULL;
@@ -352,7 +364,7 @@ sprite::CSprite* CMapManager::AddSprite ( int systemID, sprite::CSprite* sprite 
 }
 
 
-std::vector< sprite::CSprite* >& CMapManager::GetSelectedSprites()
+std::list< sprite::CSprite* >& CMapManager::GetSelectedSprites()
 {
 	return selectedSpriteList_;
 }
@@ -429,4 +441,53 @@ float CMapManager::ConvertCoordsY ( float f )
 	return app->ConvertCoords ( 0, f, GetGameClass()->GetViewPoint() ).y;
 }
 
+
+/* ---- For scripts ---- */
+
+
+float CMapManager::CalcDistance ( sf::Vector2f vec1, sf::Vector2f vec2 )
+{
+	return  sqrt ( pow ( ( vec2.x - vec1.x ), 2 ) + pow ( ( vec2.y - vec1.y ), 2 ) );
+	
+}
+
+
+float CMapManager::CalcDistance ( sf::Vector2f vec, sprite::CSprite* sprite )
+{
+	this->CalcDistance ( vec, sf::Vector2f ( sprite->GetPositionX() + sprite->GetMotherSystem().GetPositionX(), sprite->GetPositionY() + sprite->GetMotherSystem().GetPositionY() ) );
+}
+
+
+float CMapManager::CalcDistance ( sprite::CSprite* sprite1, sprite::CSprite* sprite2 )
+{
+	this->CalcDistance ( sf::Vector2f ( sprite1->GetPositionInGalaxy().x, sprite1->GetPositionInGalaxy().y ) , 
+			     sf::Vector2f ( sprite2->GetPositionInGalaxy().x, sprite2->GetPositionInGalaxy().y ) );
+}
+
+
+sprite::CPlanet& CMapManager::FindNextPlanet ( sprite::CSprite* sprite )
+{
+	if ( sprite->GetType() == sprite::PLANET )
+		return *dynamic_cast < sprite::CPlanet* > (sprite);
+	
+	static float cur;
+	static sprite::CSprite* curPlanet;
+	curPlanet = NULL;
+	float min = 0.f;
+	
+	std::list < sprite::CSprite* >::const_iterator iter = sprite->GetMotherSystem().GetSprites().begin();
+	std::list < sprite::CSprite* >::const_iterator iterEnd = sprite->GetMotherSystem().GetSprites().end();
+	for ( ; iter != iterEnd ; ++iter ) {
+		if ( (*iter)->GetType() == sprite::PLANET ) {
+			cur = CalcDistance ( (*iter), sprite );
+			
+			if ( cur < min ) {
+				min = cur;
+				curPlanet = (*iter);
+			}
+		}
+	}
+	
+	return *dynamic_cast < sprite::CPlanet* > (curPlanet);
+}
 

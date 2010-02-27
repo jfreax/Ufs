@@ -50,7 +50,7 @@ class CSelectWidget : public CWidget
 		
 // 		std::vector < sf::Sprite > toDraw_;
 		std::vector < CImage* > images_;
-		std::vector < sprite::CSprite* >* spriteList_;
+		std::list < sprite::CSprite* >* spriteList_;
 		
 		CLabel* player_;
 	

@@ -425,7 +425,6 @@ void CGame::Render()
 }
 
 
-
 void CGame::Calc()
 {
 	

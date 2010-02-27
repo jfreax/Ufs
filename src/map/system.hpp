@@ -38,7 +38,7 @@ class CSystem : public sf::Drawable
 		void Update();
 		
 		sprite::CSprite* AddSprite ( sprite::CSprite* sprite );
-		std::vector < sprite::CSprite* >& GetSprites();
+		std::list < sprite::CSprite* >& GetSprites();
 		sprite::CSun& GetSun();
 		
 		gui::CSystemTooltip* GetTooltip();
@@ -46,7 +46,6 @@ class CSystem : public sf::Drawable
 		std::string GetInfoText();
 		
 		sf::Rect<float> GetDimension() const;
-// 		sf::Rect<float> GetDimensionOfSun() const;
 		
 		float GetPositionX() const;
 		float GetPositionY() const;
@@ -59,7 +58,7 @@ class CSystem : public sf::Drawable
 		
 	private:
 		sprite::CSun* sun_;
-		std::vector < sprite::CSprite* >  spriteList_;
+		std::list < sprite::CSprite* >  spriteList_;
 		
 		sf::Vector2f size_;
 		

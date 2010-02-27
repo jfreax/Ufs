@@ -161,6 +161,18 @@ void CSprite::SetMotherSystem ( CSystem* sys )
 }
 
 
+CSystem& CSprite::GetMotherSystem() const
+{
+	return *motherSystem_;
+}
+
+
+sf::Vector2f CSprite::GetPositionInGalaxy() const
+{
+	return sf::Vector2f ( this->GetPositionX() + this->GetMotherSystem().GetPositionX(), this->GetPositionY() + this->GetMotherSystem().GetPositionY() );
+}
+
+
 
 float CSprite::GetPositionX() const
 {
