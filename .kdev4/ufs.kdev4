@@ -3,12 +3,12 @@ BuildItems=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x01\x00\x00\x00\x0b\x00\x00\x
 Number of Builditems=0
 
 [CMake]
-BuildDirs=/home/jens/C++/UfS//build
+BuildDirs[$e]=$HOME/C++/ufs/build
 CMakeDir=/usr/share/cmake/Modules
 Current CMake Binary=file:///usr/bin/cmake
-CurrentBuildDir=file:///home/jens/C++/UfS//build
+CurrentBuildDir=file:///home/jens/C++/ufs/build
 CurrentBuildType=
-CurrentInstallDir=
+CurrentInstallDir=file:///usr/local
 ProjectRootRelative=./
 
 [Launch]
@@ -28,6 +28,9 @@ EnvironmentGroup=default
 Executable=file:///home/jens/C++/ufs/build/src/ufs
 Working Directory=file:///home/jens/C++/ufs
 isExecutable=true
+
+[MakeBuilder]
+Number Of Jobs=1
 
 [Project]
 VersionControlSupport=kdevgit

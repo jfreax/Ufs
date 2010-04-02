@@ -112,30 +112,6 @@ ufs/fast:
 	cd /home/jens/C++/ufs && $(MAKE) -f src/CMakeFiles/ufs.dir/build.make src/CMakeFiles/ufs.dir/build
 .PHONY : ufs/fast
 
-animation.o: animation.cpp.o
-.PHONY : animation.o
-
-# target to build an object file
-animation.cpp.o:
-	cd /home/jens/C++/ufs && $(MAKE) -f src/CMakeFiles/ufs.dir/build.make src/CMakeFiles/ufs.dir/animation.cpp.o
-.PHONY : animation.cpp.o
-
-animation.i: animation.cpp.i
-.PHONY : animation.i
-
-# target to preprocess a source file
-animation.cpp.i:
-	cd /home/jens/C++/ufs && $(MAKE) -f src/CMakeFiles/ufs.dir/build.make src/CMakeFiles/ufs.dir/animation.cpp.i
-.PHONY : animation.cpp.i
-
-animation.s: animation.cpp.s
-.PHONY : animation.s
-
-# target to generate assembly for a file
-animation.cpp.s:
-	cd /home/jens/C++/ufs && $(MAKE) -f src/CMakeFiles/ufs.dir/build.make src/CMakeFiles/ufs.dir/animation.cpp.s
-.PHONY : animation.cpp.s
-
 collision.o: collision.cpp.o
 .PHONY : collision.o
 
@@ -337,9 +313,6 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... ufs"
-	@echo "... animation.o"
-	@echo "... animation.i"
-	@echo "... animation.s"
 	@echo "... collision.o"
 	@echo "... collision.i"
 	@echo "... collision.s"

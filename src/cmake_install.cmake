@@ -41,6 +41,7 @@ IF(NOT CMAKE_INSTALL_LOCAL_ONLY)
   INCLUDE("/home/jens/C++/ufs/src/util/cmake_install.cmake")
   INCLUDE("/home/jens/C++/ufs/src/script/cmake_install.cmake")
   INCLUDE("/home/jens/C++/ufs/src/map/cmake_install.cmake")
+  INCLUDE("/home/jens/C++/ufs/src/gfx/cmake_install.cmake")
 
 ENDIF(NOT CMAKE_INSTALL_LOCAL_ONLY)
 

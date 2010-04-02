@@ -79,7 +79,7 @@ CGame::CGame ( int argc, char **argv ) :
 
 		if ( val.empty() ) {
 			continue;
-		} else if ( val == "-fps" | val == "--fps" ) {
+		} else if ( val == "-fps" || val == "--fps" ) {
 			settings::SetShowFps ( true );
 		} else if ( val == "-fs" || val == "--fullscreen" ) {
 			settings::SetFullscreen ( true );
@@ -398,21 +398,21 @@ bool CGame::IsVideoModeValid() /* TODO in CGame::initialize und settings::setHei
 
 void CGame::Render()
 {
-	// Bildschirm säubern
+	/* At first, clear all... */
 	app_.Clear();
 	
-	// Gamegraphic
+	/* Draw gamegraphic */
 	if ( gametype_ != LOADING ) {
 		app_.SetView ( *viewPoint_ );
 		mapManager_.Update();
 		mapManager_.Render();
 	}
 	
-	// GUI
+	/* ... and then the gui */
 	app_.SetView ( app_.GetDefaultView() );
 	guiManager_.Render();
 	
-	/* Ggf. FPS Anzeigen */
+	/* FPS counter */
 	this->CalcFPS();
 	
 	/* Mousecursor TODO extra klasse oder funktion zur verwaltung! */
@@ -420,7 +420,7 @@ void CGame::Render()
 	cursor_[settings::GetMouseScope() ]->Update();
 	app_.Draw ( *cursor_[settings::GetMouseScope() ] );
 	
-	/* Zeichnen! */
+	/* Draw all the content */
 	app_.Display();
 }
 
