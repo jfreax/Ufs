@@ -6,4 +6,4 @@ cmake_minimum_required(VERSION 2.6)
 find_package(Lua51 REQUIRED)
 
 
-ADD_SUBDIRECTORY ( src )
+add_subdirectory(src)

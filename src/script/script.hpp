@@ -23,7 +23,7 @@
 #include <luabind/luabind.hpp>
 
 #include "../map/manager.hpp"
-#include "../engine/ui/window.hpp"
+// #include "../engine/ui/window.hpp"
 #include "../engine/sprite/sprite.hpp"
 
 namespace script

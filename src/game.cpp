@@ -27,21 +27,21 @@
 
 #include "settings/settings.hpp"
 
-#include "engine/ui/window.hpp"
+// #include "engine/ui/window.hpp"
 #include "engine/ui/manager.hpp"
-#include "engine/ui/button.hpp"
-
-#include "gui/window/start.hpp"
-#include "gui/window/header_menu.hpp"
-#include "gui/window/load.hpp"
-#include "gui/window/quit.hpp"
-#include "gui/window/error.hpp"
-#include "gui/window/select.hpp"
-#include "gui/window/terminal.hpp"
-#include "gui/window/tooltip.hpp"
-#include "gui/window/systemtooltip.hpp"
-
-#include "gui/button/titlebar.hpp"
+// #include "engine/ui/button.hpp"
+// 
+// #include "gui/window/start.hpp"
+// #include "gui/window/header_menu.hpp"
+// #include "gui/window/load.hpp"
+// #include "gui/window/quit.hpp"
+// #include "gui/window/error.hpp"
+// #include "gui/window/select.hpp"
+// #include "gui/window/terminal.hpp"
+// #include "gui/window/tooltip.hpp"
+// #include "gui/window/systemtooltip.hpp"
+// 
+// #include "gui/button/titlebar.hpp"
 #include "sprite/ship.hpp"
 
 
@@ -376,14 +376,14 @@ sf::View* CGame::GetViewPoint()
 }
 
 
-gui::CWindow* CGame::GetSpecialWindow ( std::string windowName )
-{
-	std::map < std::string, gui::CWindow* >::iterator iter = specialWindow_.find( windowName );
-	if ( iter == specialWindow_.end() )
-		return NULL;
-	else
-		return (*iter).second;
-}
+// gui::CWindow* CGame::GetSpecialWindow ( std::string windowName )
+// {
+// 	std::map < std::string, gui::CWindow* >::iterator iter = specialWindow_.find( windowName );
+// 	if ( iter == specialWindow_.end() )
+// 		return NULL;
+// 	else
+// 		return (*iter).second;
+// }
 
 
 

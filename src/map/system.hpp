@@ -20,9 +20,11 @@
 #ifndef SYSTEM_HPP
 #define SYSTEM_HPP
 
+#include <list>
+
 #include "../engine/sprite/sprite.hpp"
 #include "../sprite/planet.hpp"
-#include "../gui/window/systemtooltip.hpp"
+// #include "../gui/window/systemtooltip.hpp"
 
 namespace sprite {
 class CSun;
@@ -41,7 +43,7 @@ class CSystem : public sf::Drawable
 		std::list < sprite::CSprite* >& GetSprites();
 		sprite::CSun& GetSun();
 		
-		gui::CSystemTooltip* GetTooltip();
+// 		gui::CSystemTooltip* GetTooltip();
 		
 		std::string GetInfoText();
 		
@@ -65,7 +67,7 @@ class CSystem : public sf::Drawable
 		std::string infoText_;
 		std::string name_;
 		
-		gui::CSystemTooltip* tooltip_;
+// 		gui::CSystemTooltip* tooltip_;
 		
 };
 

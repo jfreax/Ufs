@@ -1,5 +1,5 @@
 [Buildset]
-BuildItems=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x01\x00\x00\x00\x0b\x00\x00\x00\x00\x01\x00\x00\x00\x06\x00U\x00f\x00S)
+BuildItems=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x00)
 
 [CMake]
 BuildDirs=/home/jens/C++/ufs/build
@@ -38,3 +38,6 @@ Type=Native Application
 Project Target=UfS,src,ufs
 Working Directory=file:///home/jens/C++/ufs/build/src/
 isExecutable=false
+
+[Project]
+VersionControlSupport=kdevgit

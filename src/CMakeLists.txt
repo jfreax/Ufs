@@ -20,7 +20,7 @@ ADD_EXECUTABLE ( ufs
   game.cpp
  # mapmanager.cpp
 
-  engine/ui/button.cpp
+#   engine/ui/button.cpp
 )
 
 

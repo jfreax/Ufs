@@ -36,7 +36,7 @@ CGraphic::~CGraphic()
 
 
 
-void CGraphic::Render ( sf::RenderTarget& Target ) const
+void CGraphic::Render ( sf::RenderTarget& Target, sf::Renderer& renderer ) const
 {
 	for ( int i = 0; objects_.end() != objects_.begin()+i; ++i ) {
 		Target.Draw ( **(objects_.begin()+i) );

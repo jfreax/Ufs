@@ -20,6 +20,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "engine/ui/manager.hpp"
+#include "engine/ui/window.hpp"
 
 #include "script/script.hpp"
 
@@ -74,7 +75,7 @@ class CGame
 		sf::String* GetFpsStr();
 		
 		sf::View* GetViewPoint();
-		gui::CWindow* GetSpecialWindow ( std::string windowName );
+// 		gui::CWindow* GetSpecialWindow ( std::string windowName );
 		
 	private:
 		bool IsVideoModeValid();

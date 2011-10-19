@@ -95,7 +95,7 @@ sprite::CSprite* CSystem::AddSprite ( sprite::CSprite* sprite )
 	spriteList_.push_back ( sprite );
 	
 	if ( sprite->GetType() == sprite::PLANET ) {
-		tooltip_->AddPlanetButton ( dynamic_cast< sprite::CPlanet* > ( sprite ) );
+// 		tooltip_->AddPlanetButton ( dynamic_cast< sprite::CPlanet* > ( sprite ) );
 	}
 
 	/* Register this sprite in system */
@@ -117,12 +117,10 @@ sprite::CSun& CSystem::GetSun()
 }
 
 
-gui::CSystemTooltip* CSystem::GetTooltip()
-{
-	return tooltip_;
-}
-
-
+// gui::CSystemTooltip* CSystem::GetTooltip()
+// {
+// 	return tooltip_;
+// }
 
 
 std::string CSystem::GetInfoText()
